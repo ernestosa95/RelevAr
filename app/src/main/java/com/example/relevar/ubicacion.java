@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 public class ubicacion extends AppCompatActivity {
     private static final int REQUEST_CODE_POSITION = 1;
+    //agregue esta linea
     private TextView txtLatitud, txtLongitud;
     private EditText txtTelefono, txtCalle, txtNumero;
     private String telefono, calle, numero;
