@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    //probando las modificaciones de github
     private static final String TAG="MainActivity";
     private static final int REQUEST_CODE_POSITION = 1;
     private EditText DNI, Apellido, Nombre, Edad;
