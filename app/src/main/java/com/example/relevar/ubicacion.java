@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 public class ubicacion extends AppCompatActivity {
     private static final int REQUEST_CODE_POSITION = 1;
-    //agregue esta linea
     private TextView txtLatitud, txtLongitud;
     private EditText txtTelefono, txtCalle, txtNumero;
     private String telefono, calle, numero;
@@ -29,7 +28,7 @@ public class ubicacion extends AppCompatActivity {
     private String Latitud="S/D", Longitud="S/D";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); //evita la rotacion
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); //evita la rotacion
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ubicacion);
         txtLatitud=(TextView) findViewById(R.id.txtLatitud);
@@ -97,7 +96,7 @@ public class ubicacion extends AppCompatActivity {
             Intent Modif= new Intent (this, salud.class);
             Modif.putExtra("datos", pasar);
             startActivity(Modif);
-        //    finish();
+            finish();
         }
         else {Toast.makeText(getApplicationContext(),"Falta Ubicación",Toast.LENGTH_SHORT).show();} }
 }

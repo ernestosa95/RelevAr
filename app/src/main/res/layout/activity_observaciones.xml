@@ -24,7 +24,7 @@
         android:id="@+id/txtObservaciones"
         android:layout_width="310dp"
         android:layout_height="133dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="24dp"
         android:background="#4588BC"
         android:ems="10"
         android:gravity="start|top"
@@ -35,44 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="195dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.565"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9">
-
-        <RadioButton
-            android:id="@+id/SI"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="#fff"
-            android:orientation="horizontal"
-            android:text="SI"
-            android:textColor="#FDFDFD"
-            android:textSize="24sp" />
-
-        <RadioButton
-            android:id="@+id/NO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="#fff"
-            android:text="NO"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp" />
-    </RadioGroup>
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <TextView
         android:id="@+id/textView7"
@@ -92,11 +55,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="ENTREGA PROD. DE LIMPIEZA"
+        android:text="VACUNAS COLOCADAS"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="250dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        <CheckBox
+            android:id="@+id/VCN23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="VCN23"
+            android:textColor="#FFFFFF" />
+
+        <CheckBox
+            android:id="@+id/VCN13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="VCN13"
+            android:textColor="#FFFFFF" />
+
+        <CheckBox
+            android:id="@+id/ANTIGRIPAL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="ANTIGRIPAL"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

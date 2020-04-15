@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         Date = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            public void onDateSet(DatePicker datePicker,int  year, int month, int day) {
                 Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
                 String date=day+" - "+mes+" - "+year;
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date, year,month,day);
+        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date, 1955,month,day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }

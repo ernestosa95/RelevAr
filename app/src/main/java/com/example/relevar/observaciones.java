@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -17,33 +18,40 @@ import java.io.OutputStreamWriter;
 
 public class observaciones extends AppCompatActivity {
     private EditText Limpieza, Observaciones;
-    private String limpieza, observaciones;
+    private String vacuna, observaciones;
     private Button btn4;
-    private RadioButton rb1, rb2;
+    private CheckBox antigripal, vcn13, vcn23;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_observaciones);
         Observaciones=(EditText) findViewById(R.id.txtObservaciones);
         btn4=(Button) findViewById(R.id.btn4);
-        rb1 = (RadioButton) findViewById(R.id.SI);
-        rb2 = (RadioButton) findViewById(R.id.NO);
+        antigripal = (CheckBox) findViewById(R.id.ANTIGRIPAL);
+        vcn13 = (CheckBox) findViewById(R.id.VCN13);
+        vcn23 = (CheckBox) findViewById(R.id.VCN23);
     }
 
     public void Guardar(View view) {
+        //Estructura de datos
+        //apellido; nombre; dni; edad; unidad de la edad (meses años); domicilio (calle N°); latitud longitud; telefono; cant. personas grupo familiar; Efector de salud; factore de riesgo; antigripal; vcn13; vcn23; observaciones
         Bundle datos = this.getIntent().getExtras();
         String recuperada = datos.getString("datos");
-        if(rb1.isChecked() == true){
-            limpieza = "SI";
-        }else {limpieza = "NO";}
 
-        //if(Limpieza.getText().toString().length()!=0){
-        //    limpieza=Limpieza.getText().toString();}
-        //else {limpieza="S/D";}
+        if(antigripal.isChecked()){
+                vacuna=antigripal.getText().toString();}
+        else{vacuna="NO";}
+        if(vcn13.isChecked()){
+                vacuna+=";"+vcn13.getText().toString();}
+            else{vacuna+=";NO";}
+        if(vcn23.isChecked()){
+                vacuna+=";"+vcn23.getText().toString();}
+            else{vacuna+=";NO";}
+
         if(Observaciones.getText().toString().length()!=0){
             observaciones=Observaciones.getText().toString().replace("\n", " ");}
         else {observaciones="S/D";}
-        String guardar = recuperada + ";" + limpieza + ";" + observaciones+"\n";
+        String guardar = recuperada + ";" + vacuna + ";" + observaciones+"\n";
 
         // guardo los datos
         File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
@@ -60,7 +68,7 @@ public class observaciones extends AppCompatActivity {
             finish();
         } catch (IOException e){
             e.printStackTrace();
-            //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
         }
 
     }
