@@ -12,14 +12,15 @@
         android:layout_width="111dp"
         android:layout_height="39dp"
         android:layout_marginTop="4dp"
-        android:background="#4588BC"
+        android:background="#8BC34A"
         android:onClick="DatosObs"
-        android:text="SIGUIENTE"
+        android:text="LISTO"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRiesgo" />
+        app:layout_constraintTop_toBottomOf="@+id/txtRiesgo"
+        app:layout_constraintVertical_bias="0.17" />
 
     <EditText
         android:id="@+id/txtRiesgo"
@@ -32,109 +33,29 @@
         android:textColorHint="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.447"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
-    <Spinner
-        android:id="@+id/sp1"
-        android:layout_width="315dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="5dp"
-        android:background="#396F98"
-        android:backgroundTint="#4588BC"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="EFECTOR DE SALUD"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="334dp"
-        android:layout_height="293dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="359dp"
+        android:layout_height="148dp"
+        android:layout_marginTop="36dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.207"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12">
-
-        <CheckBox
-            android:id="@+id/C1"
-            android:layout_width="172dp"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="POR CALENDARIO"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C2"
-            android:layout_width="126dp"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="EMBARAZO"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="PUERPERIO"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="PERSONAL DE SALUD"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="PERSONAL ESENCIAL"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="VIAJEROS"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="ASPLÉNICOS"
-            android:textColor="#FFFFFF" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/divider5">
 
         <CheckBox
             android:id="@+id/C7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#4588BC"
             android:buttonTint="#fff"
             android:text="INMUNOCOMPROMETIDO"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/C15"
@@ -142,17 +63,36 @@
             android:layout_height="wrap_content"
             android:buttonTint="#fff"
             android:text="CONVIVIENTE CON INMUNOCOMPROMETIDO"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:buttonTint="#fff"
+            android:text="PERSONAL DE SALUD"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="PERSONAL ESENCIAL"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="170dp"
-        android:layout_height="255dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="192dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12">
@@ -161,41 +101,11 @@
             android:id="@+id/C9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#4588BC"
             android:buttonTint="#fff"
             android:text="RESPIRATORIO"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="DIABÉTICOS"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="PREMATUROS"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="OBESIDAD MORBIDA"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/C14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#fff"
-            android:text="INMUNODEFICIENCIA"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/C8"
@@ -203,7 +113,37 @@
             android:layout_height="wrap_content"
             android:buttonTint="#fff"
             android:text="CARDIOLOGICO"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:buttonTint="#fff"
+            android:text="DIABÉTICOS"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="OBESIDAD MORBIDA"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:buttonTint="#fff"
+            android:text="INMUNODEFICIENCIA"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -211,27 +151,90 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:text="FACTORES DE RIESGO"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEfector" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/txtEfector"
-        android:layout_width="313dp"
-        android:layout_height="37dp"
-        android:ems="10"
-        android:hint="OTRO"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textSize="14sp"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="165dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout">
+
+        <CheckBox
+            android:id="@+id/C1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:buttonTint="#fff"
+            android:text="POR CALENDARIO"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="EMBARAZO"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:buttonTint="#fff"
+            android:text="PREMATUROS"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="PUERPERIO"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:buttonTint="#fff"
+            android:text="VIAJEROS"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/C12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#fff"
+            android:text="ASPLÉNICOS"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="290dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="28dp"
+        android:background="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp1" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

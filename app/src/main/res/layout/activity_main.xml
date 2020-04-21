@@ -8,120 +8,234 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn1"
-        android:layout_width="150dp"
+        android:id="@+id/AGREGARPERSONA"
+        android:layout_width="219dp"
         android:layout_height="39dp"
+        android:layout_marginBottom="16dp"
         android:background="#4588BC"
-        android:onClick="DatosUbicacion"
-        android:text="SIGUIENTE"
+        android:onClick="NuevaPersona"
+        android:text="AGREGAR PERSONA"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fecha"
-        app:layout_constraintVertical_bias="0.915" />
+        app:layout_constraintTop_toBottomOf="@+id/list1"
+        app:layout_constraintVertical_bias="0.1" />
 
     <EditText
-        android:id="@+id/txtDNI"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:id="@+id/CALLE"
+        android:layout_width="180dp"
+        android:layout_height="41dp"
         android:ems="10"
-        android:hint="DNI"
-        android:inputType="number"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#4588BC"
-        android:textColorHint="#FFFFFF"
-        android:textColorLink="#4588BC"
-        android:textCursorDrawable="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/txtApellido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:ems="10"
-        android:hint="APELLIDO"
+        android:hint="CALLE"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#4588BC"
         android:textColorHint="#FFFFFF"
         android:textColorLink="#4588BC"
         android:textCursorDrawable="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
-
-    <EditText
-        android:id="@+id/txtNombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:cursorVisible="true"
-        android:ems="10"
-        android:hint="NOMBRE"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#4588BC"
-        android:textColorHint="#FFFFFF"
-        android:textColorLink="#4588BC"
-        android:textCursorDrawable="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtApellido" />
+        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DATOS PERSONALES"
+        android:text="GRUPO FAMILIAR"
         android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <EditText
+        android:id="@+id/NUMERO"
+        android:layout_width="101dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:hint="N°"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/txtDNI"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/CALLE"
+        app:layout_constraintTop_toBottomOf="@+id/CALLE" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="62dp"
+        android:layout_height="81dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.444" />
+        app:layout_constraintTop_toTopOf="@+id/CALLE"
+        app:srcCompat="@drawable/ubicacion" />
+
+    <Button
+        android:id="@+id/BTNUBICACION"
+        android:layout_width="77dp"
+        android:layout_height="45dp"
+        android:background="#4588BC"
+        android:onClick="LatLong"
+        android:text="OBTENER UBICACIÓN"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.819"
+        app:layout_constraintStart_toEndOf="@+id/textView16"
+        app:layout_constraintTop_toTopOf="@+id/LATITUD" />
 
     <TextView
-        android:id="@+id/fecha"
+        android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:clickable="true"
-        android:focusable="false"
-        android:onClick="Fecha"
-        android:text="DD - MM - YYYY"
+        android:text="LATITUD:"
         android:textColor="#FFFFFF"
-        android:textColorHighlight="#4588BC"
-        android:textColorLink="#4588BC"
-        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/NUMERO"
+        app:layout_constraintTop_toBottomOf="@+id/NUMERO" />
+
+    <TextView
+        android:id="@+id/LATITUD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000000"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="LONGITUD:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/textView14"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/LONGITUD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="000000"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/textView16"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/LATITUD"
+        app:layout_constraintTop_toBottomOf="@+id/LATITUD" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="290dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="84dp"
+        android:layout_height="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombre" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/familia" />
+
+    <EditText
+        android:id="@+id/GRUPOFAMILIAR"
+        android:layout_width="62dp"
+        android:layout_height="43dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="28dp"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="00"
+        android:inputType="number"
+        android:textColorHint="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/BTNUBICACION" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FECHA DE NACIMIENTO"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:text="MIEMBROS G. FAMILIAR"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/fecha"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/divider4"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="1dp"
+        android:layout_height="120dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/CALLE"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="1dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/divider3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/divider3"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="26dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombre"
-        app:layout_constraintVertical_bias="0.759" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/globo" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="32dp"
+        android:layout_height="28dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/textView8"
+        app:srcCompat="@drawable/red" />
+
+    <ListView
+        android:id="@+id/list1"
+        android:layout_width="352dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="20dp"
+        android:background="#4588BC"
+        app:layout_constraintEnd_toEndOf="@+id/divider"
+        app:layout_constraintStart_toStartOf="@+id/divider"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

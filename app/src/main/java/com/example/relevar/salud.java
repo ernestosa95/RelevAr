@@ -16,10 +16,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class salud extends AppCompatActivity {
-    private EditText Efector, Grupo, Enfermedades, OtroRiesgo;
+    private EditText Grupo, Enfermedades, OtroRiesgo;
     private String efector, grupo, enfermedad, riesgo="S/D";
     private Button btn3;
-    private Spinner Sp1;
     private ArrayList<String> categorias = new ArrayList<>();
     private CheckBox c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15;
     private TextView riesgos;
@@ -28,17 +27,10 @@ public class salud extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salud);
-        //Efector=(EditText) findViewById(R.id.txtEfector);
-        //Grupo=(EditText) findViewById(R.id.txtGrupo);
-        OtroRiesgo=(EditText) findViewById(R.id.txtRiesgo);
-        Efector=(EditText) findViewById(R.id.txtEfector);
-        //Enfermedades=(EditText) findViewById(R.id.txtEnfermedades);
-        btn3=(Button) findViewById(R.id.btn3);
 
-        Sp1 = (Spinner) findViewById(R.id.sp1);
-        categorias.add("CAPs D'ANGELO");
-        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, categorias);//Cargo el spinner con los datos
-        Sp1.setAdapter(comboAdapter);
+        OtroRiesgo=(EditText) findViewById(R.id.txtRiesgo);
+
+        btn3=(Button) findViewById(R.id.btn3);
 
         c1 = (CheckBox) findViewById(R.id.C1);
         c2 = (CheckBox) findViewById(R.id.C2);
@@ -62,10 +54,6 @@ public class salud extends AppCompatActivity {
     public void DatosObs(View view){
         Bundle datos = this.getIntent().getExtras();
         String recuperada = datos.getString("datos");
-        efector = Sp1.getSelectedItem().toString();
-        if (Efector.getText().toString().length()!=0){
-            efector = Efector.getText().toString();
-        }
 
         if(c1.isChecked()){
             if (riesgo==null){
