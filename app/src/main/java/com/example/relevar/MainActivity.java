@@ -1,5 +1,6 @@
 package com.example.relevar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -53,10 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private int STORAGE_PERMISSION_CODE =1;
     private String Latitud, Longitud, dni, apellido, nombre, edad, unidadedad;
     private DatePickerDialog.OnDateSetListener Date;
-
+    private ArrayList<String> names = new ArrayList<String>();
+    private ArrayList<ArrayList<String>> InfoPersonas = new ArrayList<ArrayList<String>>();
     // Defino la lisa de personas
     private ListView lv1;
     private ArrayList<String> personas = new ArrayList<>();
+    private String DNIreturn, Nombrereturn, Apellidoreturn, Edadreturn ,Unidadedadreturn ,Efectorreturn ,Factoresreturn ,Codigofactoresreturn ,
+    Vacunasreturn ,Contactoreturn ,Observacionesreturn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +124,18 @@ public class MainActivity extends AppCompatActivity {
                     unidadedad="AÑOS";}
             }else edad="S/D";}
         };*/
+
+    }
+
+    //@Override
+    protected void onStart() {
+        //todo esto pa actualizr la listview
+        super.onStart();
+        ListeVer();
+        //if(DNIreturn.length()!=0){
+        //names.add(DNIreturn);}
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
+        //lv1.setAdapter(adapter);
     }
 
     public void LatLong(View view){
@@ -171,40 +187,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*public void DatosUbicacion(View view){
-
-        if(DNI.getText().toString().length()!=0){
-            if(edad!=null){
-            dni=DNI.getText().toString();
-            DNI.setText("");
-            if(Apellido.getText().toString().length()!=0){
-                apellido=Apellido.getText().toString();
-                Apellido.setText("");}
-            else {apellido="S/D";}
-            if(Nombre.getText().toString().length()!=0){
-                nombre=Nombre.getText().toString();
-                Nombre.setText("");}
-            else {nombre="S/D";}
-            fecha.setText("DD - MM - YYYY");
-            String Id =apellido+";"+nombre+";"+dni+";"+edad+";"+unidadedad;
-            edad=null;
-            Intent Modif= new Intent (this, ubicacion.class);
-            Modif.putExtra("identificacion", Id);
-            startActivity(Modif);}
-            else {Toast.makeText(getApplicationContext(),"Falta Fecha de Nacimiento",Toast.LENGTH_SHORT).show();}}
-        else Toast.makeText(getApplicationContext(),"Falta DNI",Toast.LENGTH_SHORT).show();
-    }*/
-
-    /*public void Fecha(View view){
-        Calendar cal=Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date, 1955,month,day);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-    }*/
     private void AgregarCabecera(){
         // Agrego la cabecera en .csv
         File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
@@ -249,15 +231,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void NuevaPersona(View view){
         Intent Modif= new Intent (this, persona.class);
-        startActivity(Modif);}
+        startActivityForResult(Modif, 1);}
 
     private void ListeVer(){
-        //nombres = Leer();
-        //nombres1.clear();
-        //nombres1 = quitarguion(nombres);
-        ArrayList<String> names = new ArrayList<String>();
-        names.add("DNI: 30777333 Cosme Fulano");
-        names.add("DNI: 77456345 LA LA");
+        //names.add("DNI: 30777333 Cosme Fulano");
+        //names.add("DNI: 77456345 LA LA");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
         lv1.setAdapter(adapter);
 
@@ -271,4 +249,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            if(resultCode== RESULT_OK){
+                ArrayList<String> CamposPersona = new ArrayList<String>();
+                //DNIreturn=getIntent().getStringExtra("DNI");
+                DNIreturn = data.getStringExtra("DNI");
+                Nombrereturn = data.getStringExtra("NOMBRE");
+                Apellidoreturn = data.getStringExtra("APELLIDO");
+                Edadreturn = data.getStringExtra("EDAD");
+                Unidadedadreturn = data.getStringExtra("UNIDADEDAD");
+                Efectorreturn = data.getStringExtra("EFECTOR");
+                Factoresreturn = data.getStringExtra("FACTORES");
+                Codigofactoresreturn = data.getStringExtra("CODIGOFACTORES");
+                Vacunasreturn = data.getStringExtra("VACUNAS");
+                Contactoreturn = data.getStringExtra("CONTACTO");
+                Observacionesreturn = data.getStringExtra("OBSERVACIONES");
+                // Lleno el Array de personas con datos
+                CamposPersona.add(DNIreturn);
+                CamposPersona.add(Apellidoreturn);
+                CamposPersona.add(Nombrereturn);
+                CamposPersona.add(Edadreturn);
+                CamposPersona.add(Unidadedadreturn);
+                CamposPersona.add(Edadreturn);
+                CamposPersona.add(Factoresreturn);
+                CamposPersona.add(Codigofactoresreturn);
+                CamposPersona.add(Vacunasreturn);
+                CamposPersona.add(Contactoreturn);
+                CamposPersona.add(Observacionesreturn);
+
+                InfoPersonas.add(CamposPersona);
+
+                Toast.makeText(this, DNIreturn, Toast.LENGTH_SHORT).show();
+                names.add("DNI: "+DNIreturn+" "+Apellidoreturn+" "+Nombrereturn);
+            }
+        }
     }
+
+}
+

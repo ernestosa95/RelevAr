@@ -107,15 +107,16 @@
         app:layout_constraintTop_toBottomOf="@+id/fecha" />
 
     <Button
-        android:id="@+id/SALUD"
+        android:id="@+id/RIESGO"
         android:layout_width="125dp"
         android:layout_height="90dp"
         android:background="#4588BC"
+        android:onClick="TipoFactores"
         android:text="FACTORES DE RIESGO"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/VACUNA"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/divider2"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
@@ -133,7 +134,7 @@
         app:srcCompat="@drawable/usuario" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/VACUNA"
         android:layout_width="125dp"
         android:layout_height="90dp"
         android:background="#4588BC"
@@ -141,30 +142,47 @@
         android:text="VACUNAS"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/divider2"
-        app:layout_constraintTop_toTopOf="@+id/SALUD" />
+        app:layout_constraintTop_toTopOf="@+id/RIESGO" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/OBSERVACION"
         android:layout_width="125dp"
         android:layout_height="90dp"
         android:layout_marginTop="24dp"
         android:background="#4588BC"
+        android:onClick="observaciones"
         android:text="NOTAS"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/divider2"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/VACUNA" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/OBSERVACION2"
+        android:layout_width="290dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="16dp"
+        android:background="#4588BC"
+        android:onClick="GuardarPersona"
+        android:text="GUARDAR PERSONA"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/OBSERVACION"
+        app:layout_constraintHorizontal_bias="0.472"
+        app:layout_constraintStart_toStartOf="@+id/CONTACTO"
+        app:layout_constraintTop_toBottomOf="@+id/OBSERVACION" />
+
+    <Button
+        android:id="@+id/CONTACTO"
         android:layout_width="125dp"
         android:layout_height="90dp"
         android:background="#4588BC"
+        android:onClick="Contactos"
         android:text="CONTACTO"
         android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/OBSERVACION"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/SALUD"
-        app:layout_constraintTop_toTopOf="@+id/button2" />
+        app:layout_constraintStart_toStartOf="@+id/RIESGO"
+        app:layout_constraintTop_toTopOf="@+id/OBSERVACION" />
 
     <View
         android:id="@+id/divider2"
@@ -241,20 +259,6 @@
         app:layout_constraintStart_toStartOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/imageView6"
         app:srcCompat="@drawable/hospital" />
-
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-        android:layout_width="125dp"
-        android:layout_height="9dp"
-        android:max="100"
-        android:progress="45"
-        android:progressBackgroundTint="#000"
-        android:progressTint="#fff"
-        android:scaleY="2"
-        app:layout_constraintEnd_toEndOf="@+id/button3"
-        app:layout_constraintStart_toStartOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

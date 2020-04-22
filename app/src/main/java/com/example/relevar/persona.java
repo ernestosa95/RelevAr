@@ -2,7 +2,6 @@ package com.example.relevar;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ButtonBarLayout;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -11,10 +10,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -35,15 +33,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.text.InputType.TYPE_CLASS_NUMBER;
+
 public class persona extends AppCompatActivity {
     private static final String TAG="MainActivity";
     private static final int REQUEST_CODE_POSITION = 1;
-    private EditText dni, apellido, Nombre, Edad;
+    private EditText dni, Apellido, Nombre, Edad;
     private TextView fecha;
-    private Button salud;
+    private Button Vacuna, Riesgo, Contacto, Observacion;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
     private int STORAGE_PERMISSION_CODE =1;
-    private String nombre, edad, unidadedad, vacunas;
+    private String telefonocelular, telefonofijo, direccionmail, nombre, edad, unidadedad, vacunas, riesgos, codigoriesgo, observaciones;
     private DatePickerDialog.OnDateSetListener Date;
     private Spinner Sp1;
     private ArrayList<String> categorias = new ArrayList<>();
@@ -55,10 +55,15 @@ public class persona extends AppCompatActivity {
 
         // Defino los widgets
         dni = (EditText) findViewById(R.id.DNI);
-        apellido = (EditText) findViewById(R.id.APELLIDO);
+        Apellido = (EditText) findViewById(R.id.APELLIDO);
         Nombre = (EditText) findViewById(R.id.NOMBRE);
 
-        salud = (Button) findViewById(R.id.SALUD);
+
+        Vacuna = (Button) findViewById(R.id.VACUNA);
+        Riesgo = (Button) findViewById(R.id.RIESGO);
+        Contacto = (Button) findViewById(R.id.CONTACTO);
+        Observacion = (Button) findViewById(R.id.OBSERVACION);
+
         fecha=(TextView) findViewById(R.id.fecha);
 
         Sp1 = (Spinner) findViewById(R.id.efector);
@@ -113,123 +118,6 @@ public class persona extends AppCompatActivity {
         DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date, 1955,month,day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
-    }
-
-    /*@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void Salud (View view){
-        Intent Modif= new Intent (this, salud.class);
-        startActivity(Modif);
-    }*/
-
-    public void Vacunas (View view){
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        View mView = getLayoutInflater().inflate(R.layout.vacunas, null);
-        mBuilder.setView(mView);
-        mBuilder.setTitle("VACUNAS");
-        //mBuilder.setMultiChoiceItems()
-        Button listoVacunas = (Button) mView.findViewById(R.id.btnVacunas);
-        // Defino los checklist de las vacunas
-        /*final CheckBox hepaA = (CheckBox) findViewById(R.id.HEPA);
-        final CheckBox hepaB = (CheckBox) findViewById(R.id.HEPB);
-        final CheckBox bcg = (CheckBox) findViewById(R.id.BCG);
-        final CheckBox rotavirus = (CheckBox) findViewById(R.id.ROTAVIRUS);
-        final CheckBox quintuple = (CheckBox) findViewById(R.id.QUINTIPLE);
-        final CheckBox tripleviral = (CheckBox) findViewById(R.id.TRIPLEVIRAL);
-        final CheckBox varicela = (CheckBox) findViewById(R.id.VARICELA);
-        final CheckBox dtp = (CheckBox) findViewById(R.id.DTP);
-        final CheckBox vph = (CheckBox) findViewById(R.id.VPH);
-        final CheckBox tripleacelular = (CheckBox) findViewById(R.id.TRIPLE);
-        final CheckBox dt = (CheckBox) findViewById(R.id.dT);
-        final CheckBox antigripal = (CheckBox) findViewById(R.id.ANTIGRIPAL);
-        final CheckBox vcn23 = (CheckBox) findViewById(R.id.VCN23);
-        final CheckBox vcn13 = (CheckBox) findViewById(R.id.VCN13);
-        final CheckBox meningococica = (CheckBox) findViewById(R.id.MENINGOCOCICA);
-        final CheckBox ipv = (CheckBox) findViewById(R.id.IPV);
-        final CheckBox sabin = (CheckBox) findViewById(R.id.SABIN);*/
-        String[] items = {"java","android","Data Structures","HTML","CSS"};
-        boolean[] checkedItems = {false, false, false, false, false,false};
-        final AlertDialog dialog = mBuilder.create();
-        dialog.show();
-
-        listoVacunas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Recupero el check seleccionado
-                /*if(hepaA.isChecked()) if (vacunas == null) {
-                    vacunas = "HEPATITIS A";
-                } else {
-                    vacunas += ",HEPATITIS A";
-                }*/
-                /*if(hepaB.isChecked()){
-                    if (vacunas==null){
-                        vacunas="HEPATITIS B";}
-                    else{vacunas+=",HEPATITIS B";}}
-                if(bcg.isChecked()){
-                    if (vacunas==null){
-                        vacunas="BCG";}
-                    else{vacunas+=",BCG";}}
-                if(rotavirus.isChecked()){
-                    if (vacunas==null){
-                        vacunas="ROTAVIRUS";}
-                    else{vacunas+=",ROTAVIRUS";}}
-                if(quintuple.isChecked()){
-                    if (vacunas==null){
-                        vacunas="QUINTUPLE";}
-                    else{vacunas+=",QUINTUPLE";}}
-                if(tripleviral.isChecked()){
-                    if (vacunas==null){
-                        vacunas="TRIPLE VIRAL";}
-                    else{vacunas+=",TRIPLE VIRAL";}}
-                if(varicela.isChecked()){
-                    if (vacunas==null){
-                        vacunas="VARICELA";}
-                    else{vacunas+=",VARICELA";}}
-                if(dtp.isChecked()){
-                    if (vacunas==null){
-                        vacunas="DTP";}
-                    else{vacunas+=",DTP";}}
-                if(vph.isChecked()){
-                    if (vacunas==null){
-                        vacunas="VPH";}
-                    else{vacunas+=",VPH";}}
-                if(tripleacelular.isChecked()){
-                    if (vacunas==null){
-                        vacunas="TRIPLE ACELULAR";}
-                    else{vacunas+=",TRIPLE ACELULAR";}}
-                if(dt.isChecked()){
-                    if (vacunas==null){
-                        vacunas="dT";}
-                    else{vacunas+=",dT";}}
-                if(antigripal.isChecked()){
-                    if (vacunas==null){
-                        vacunas="ANTIGRIPAL";}
-                    else{vacunas+=",ANTIGRIPAL";}}
-                if(vcn23.isChecked()){
-                    if (vacunas==null){
-                        vacunas="NEUMOCOCO POLISACARIDA 23V";}
-                    else{vacunas+=",NEUMOCOCO POLISACARIDA 23V";}}
-                if(vcn13.isChecked()){
-                    if (vacunas==null){
-                        vacunas="NEUMOCOCO CONJUGADA 13V";}
-                    else{vacunas+=",NEUMOCOCO CONJUGADA 13V";}}
-                if(meningococica.isChecked()){
-                    if (vacunas==null){
-                        vacunas="MENINGOCOCOCICA TETRAVALENTE";}
-                    else{vacunas+=",MENINGOCOCICA TETRAVALENTE";}}
-                if(ipv.isChecked()){
-                    if (vacunas==null){
-                        vacunas="POLIO IPV";}
-                    else{vacunas+=",POLIO IPV";}}
-                if(sabin.isChecked()){
-                    if (vacunas==null){
-                        vacunas="POLIO SABIN";}
-                    else{vacunas+=",POLIO SABIN";}}*/
-                vacunas="aca1";
-                Toast.makeText(getApplicationContext(),vacunas,Toast.LENGTH_SHORT).show();
-
-                dialog.cancel();
-            }
-        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -489,6 +377,7 @@ public class persona extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
+                vacunas=null;
                 if (hepaA.isChecked()){
                     if (vacunas==null){
                         vacunas="HEPATITIS A";
@@ -575,7 +464,7 @@ public class persona extends AppCompatActivity {
                     } else vacunas+=",POLIO - SABIN ORAL";
                 }
                 Toast.makeText(getApplicationContext(), vacunas, Toast.LENGTH_SHORT).show();
-                vacunas="";
+
             }
         });
         builder.setNegativeButton("CANCELAR", null);
@@ -591,9 +480,362 @@ public class persona extends AppCompatActivity {
         //bp.setLayoutParams (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));*/
     }
 
-    public void mostrar(View view){
-        Bundle datos = this.getIntent().getExtras();
-        String recuperada = datos.getString("VacunasAplicadas");
-        Toast.makeText(getApplicationContext(),recuperada,Toast.LENGTH_SHORT).show();
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void TipoFactores(View view){
+    // Defino las caracteristicas
+    int TamañoLetra = 20;
+    String ColorPares = "#4A4A4A";
+    String ColorImpares = "#4588BC";
+    int AltoContenedor = 80;
+
+    // Defino los contenedores
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+        TextView textView = new TextView(this);
+        textView.setText("VACUNAS");
+        textView.setPadding(20, 30, 20, 30);
+        textView.setTextSize(22F);
+        textView.setBackgroundColor(Color.parseColor("#4588BC"));
+        textView.setTextColor(Color.WHITE);
+        builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check
+        LinearLayout mainLayout       = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+
+        final CheckBox calendario = PersonalCheck(mainLayout,"POR CALENDARIO", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox embarazo = PersonalCheck(mainLayout,"EMBARAZO", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox puerperio = PersonalCheck(mainLayout,"PUERPERIO", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox personalsalud = PersonalCheck(mainLayout,"PERSONAL DE SALUD", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox personalesencial = PersonalCheck(mainLayout,"PERSONAL ESENCIAL", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox viajeros = PersonalCheck(mainLayout,"VIAJEROS", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox inmunocomprometidos = PersonalCheck(mainLayout,"INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox cadiologicos = PersonalCheck(mainLayout,"CARDIOLOGICOS", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox respiratorios = PersonalCheck(mainLayout,"RESPIRATORIOS", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox diabeticos = PersonalCheck(mainLayout,"DIABÉTICOS", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox prematuros = PersonalCheck(mainLayout,"PREMATUROS", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox asplenicos = PersonalCheck(mainLayout,"ASPLÉNICOS", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox obesidad = PersonalCheck(mainLayout,"OBESIDAD MORBIDA", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox inmunodeficiencia = PersonalCheck(mainLayout,"INMUNODEFICIENCIA", TamañoLetra, ColorImpares, AltoContenedor);
+        final CheckBox conviviente = PersonalCheck(mainLayout,"CONVIVIENTE INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
+        final CheckBox otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // Add OK and Cancel buttons
+        builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The user clicked OK
+                riesgos=null;
+                codigoriesgo=null;
+                if (calendario.isChecked()){
+                    if (riesgos==null){
+                        riesgos="POR CALENDARIO";
+                        codigoriesgo="1";
+                    } else {
+                        riesgos+=",POR CALENDARIO";
+                        codigoriesgo+=",1";}}
+                    if (embarazo.isChecked()){
+                        if (riesgos==null){
+                            riesgos="EMBARAZO";
+                            codigoriesgo="2";
+                        } else {
+                            riesgos+=",EMBARAZO";
+                            codigoriesgo+=",2";}}
+                if (puerperio.isChecked()){
+                    if (riesgos==null){
+                        riesgos="PUERPERIO";
+                        codigoriesgo="3";
+                    } else {
+                        riesgos+=",PUERPERIO";
+                        codigoriesgo+=",3";}}
+                if (personalsalud.isChecked()){
+                    if (riesgos==null){
+                        riesgos="PERSONAL DE SALUD";
+                        codigoriesgo="4";
+                    } else {
+                        riesgos+=",PERSONAL DE SALUD";
+                        codigoriesgo+=",4";}}
+                if (personalesencial.isChecked()){
+                    if (riesgos==null){
+                        riesgos="PERSONAL ESENCIAL";
+                        codigoriesgo="5";
+                    } else {
+                        riesgos+=",PERSONAL ESENCIAL";
+                        codigoriesgo+=",5";}}
+                if (viajeros.isChecked()){
+                    if (riesgos==null){
+                        riesgos="VIAJEROS";
+                        codigoriesgo="6";
+                    } else {
+                        riesgos+=",VIAJEROS";
+                        codigoriesgo+=",6";}}
+                if (inmunocomprometidos.isChecked()){
+                    if (riesgos==null){
+                        riesgos="INMUNOCOMPROMETIDOS";
+                        codigoriesgo="7";
+                    } else {
+                        riesgos+=",INMUNOCOMPROMETIDOS";
+                        codigoriesgo+=",7";}}
+                if (cadiologicos.isChecked()){
+                    if (riesgos==null){
+                        riesgos="CARDIOLOGICOS";
+                        codigoriesgo="8";
+                    } else {
+                        riesgos+=",CARDIOLOGICOS";
+                        codigoriesgo+=",8";}}
+                if (respiratorios.isChecked()){
+                    if (riesgos==null){
+                        riesgos="RESPIRATORIOS";
+                        codigoriesgo="9";
+                    } else {
+                        riesgos+=",RESPIRATORIOS";
+                        codigoriesgo+=",9";}}
+                if (diabeticos.isChecked()){
+                    if (riesgos==null){
+                        riesgos="DIABETICOS";
+                        codigoriesgo="10";
+                    } else {
+                        riesgos+=",DIABETICOS";
+                        codigoriesgo+=",10";}}
+                if (prematuros.isChecked()){
+                    if (riesgos==null){
+                        riesgos="PREMATURO";
+                        codigoriesgo="11";
+                    } else {
+                        riesgos+=",PREMATURO";
+                        codigoriesgo+=",11";}}
+                if (asplenicos.isChecked()){
+                    if (riesgos==null){
+                        riesgos="ASPLENICOS";
+                        codigoriesgo="12";
+                    } else {
+                        riesgos+=",ASPLENICOS";
+                        codigoriesgo+=",12";}}
+                if (obesidad.isChecked()){
+                    if (riesgos==null){
+                        riesgos="OBESIDAD MORBIDA";
+                        codigoriesgo="13";
+                    } else {
+                        riesgos+=",OBESIDAD MORBIDA";
+                        codigoriesgo+=",13";}}
+                if (inmunodeficiencia.isChecked()){
+                    if (riesgos==null){
+                        riesgos="INMUNODEFICIENCIA";
+                        codigoriesgo="14";
+                    } else {
+                        riesgos+=",INMUNODEFICIENCIA";
+                        codigoriesgo+=",14";}}
+                if (conviviente.isChecked()){
+                    if (riesgos==null){
+                        riesgos="CONVIVIENTE INMUNOCOMPROMETIDOS";
+                        codigoriesgo="15";
+                    } else {
+                        riesgos+=",CONVIVIENTE INMUNOCOMPROMETIDOS";
+                        codigoriesgo+=",15";}}
+                if (otros.isChecked()){
+                    if (riesgos==null){
+                        riesgos="OTROS";
+                        codigoriesgo="16";
+                    } else {
+                        riesgos+=",OTROS";
+                        codigoriesgo+=",16";}}
+                Toast.makeText(getApplicationContext(), riesgos, Toast.LENGTH_SHORT).show();
+                if (riesgos!=null){
+                    Riesgo.setBackgroundColor(Color.parseColor("#8BC34A"));
+                }
+
+            }
+        });
+        builder.setNegativeButton("CANCELAR", null);
+
+        // Defino un ScrollView para visualizar todos
+        ScrollView sv = new ScrollView(this);
+        sv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        sv.setVerticalScrollBarEnabled(true);
+        sv.addView(mainLayout);
+
+        builder.setView(sv);
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private final CheckBox PersonalCheck (LinearLayout Contenedor, String Texto, int TamañoLetra, String ColorPares, int AltoContenedor){
+        // 16 POLIO - SABIN ORAL
+        LinearLayout layout16       = new LinearLayout(this);
+        layout16.setOrientation(LinearLayout.HORIZONTAL);
+        layout16.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final CheckBox sabin = new CheckBox(getApplicationContext());
+        sabin.setText(Texto);
+        sabin.setTextSize(TamañoLetra);
+        sabin.setTextColor(Color.WHITE);
+        sabin.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+        layout16.addView(sabin);
+        layout16.setBackgroundColor(Color.parseColor(ColorPares));
+        layout16.setMinimumHeight(AltoContenedor);
+        Contenedor.addView(layout16);
+        return sabin;}
+
+    public void Contactos(View view){
+        // Defino los contenedores
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+        TextView textView = new TextView(this);
+        textView.setText("CONTACTO");
+        textView.setPadding(20, 30, 20, 30);
+        textView.setTextSize(22F);
+        textView.setBackgroundColor(Color.parseColor("#4588BC"));
+        textView.setTextColor(Color.WHITE);
+        builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check
+        LinearLayout mainLayout       = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        // Defino los parametros
+        int TamañoLetra =20;
+
+        // Defino los EditText
+        // Telefono Celular
+        LinearLayout layout0       = new LinearLayout(this);
+        layout0.setOrientation(LinearLayout.HORIZONTAL);
+        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final EditText celular = new EditText(getApplicationContext());
+        //sabin.setText(Texto);
+        celular.setHint("TELEFONO CELULAR");
+        celular.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        celular.setHintTextColor(Color.WHITE);
+        celular.setTextSize(TamañoLetra);
+        celular.setTextColor(Color.WHITE);
+        celular.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout0.addView(celular);
+        // Telefono Fijo
+        LinearLayout layout1       = new LinearLayout(this);
+        layout1.setOrientation(LinearLayout.HORIZONTAL);
+        layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final EditText fijo = new EditText(getApplicationContext());
+        //sabin.setText(Texto);
+        fijo.setHint("TELEFONO FIJO");
+        fijo.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        fijo.setHintTextColor(Color.WHITE);
+        fijo.setTextSize(TamañoLetra);
+        fijo.setTextColor(Color.WHITE);
+        fijo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout1.addView(fijo);
+        // Mail
+        LinearLayout layout2       = new LinearLayout(this);
+        layout2.setOrientation(LinearLayout.HORIZONTAL);
+        layout2.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final EditText mail = new EditText(getApplicationContext());
+        //sabin.setText(Texto);
+        mail.setHint("MAIL");
+        mail.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        mail.setHintTextColor(Color.WHITE);
+        mail.setTextSize(TamañoLetra);
+        mail.setTextColor(Color.WHITE);
+        mail.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout2.addView(mail);
+
+        mainLayout.addView(layout0);
+        mainLayout.addView(layout1);
+        mainLayout.addView(layout2);
+
+        // Add OK and Cancel buttons
+        builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The user clicked OK
+                telefonofijo=null;
+                telefonocelular=null;
+                direccionmail=null;
+                telefonocelular = celular.getText().toString();
+                telefonofijo = fijo.getText().toString();
+                direccionmail = mail.getText().toString();
+                Toast.makeText(getApplicationContext(), telefonocelular+telefonofijo+direccionmail, Toast.LENGTH_SHORT).show();
+                direccionmail=telefonocelular+","+telefonofijo+","+direccionmail;
+                if (telefonocelular.length()!=0){
+                    Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+                }
+
+            }
+        });
+        builder.setNegativeButton("CANCELAR", null);
+        builder.setView(mainLayout);
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    public void observaciones(View view){
+        // Defino los contenedores
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+        TextView textView = new TextView(this);
+        textView.setText("OBSERVACIONES");
+        textView.setPadding(20, 30, 20, 30);
+        textView.setTextSize(22F);
+        textView.setBackgroundColor(Color.parseColor("#4588BC"));
+        textView.setTextColor(Color.WHITE);
+        builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check
+        LinearLayout mainLayout       = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        // Defino los parametros
+        int TamañoLetra =20;
+
+        // Defino los EditText
+        // Telefono Celular
+        LinearLayout layout0       = new LinearLayout(this);
+        layout0.setOrientation(LinearLayout.HORIZONTAL);
+        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final EditText obs = new EditText(getApplicationContext());
+        //sabin.setText(Texto);
+        obs.setHint("OBSERVACIONES");
+        obs.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        obs.setHintTextColor(Color.WHITE);
+        obs.setTextSize(TamañoLetra);
+        obs.setTextColor(Color.WHITE);
+        obs.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout0.setMinimumHeight(500);
+        layout0.addView(obs);
+
+        mainLayout.addView(layout0);
+
+        // Add OK and Cancel buttons
+        builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The user clicked OK
+                observaciones=null;
+                observaciones = obs.getText().toString();
+                Toast.makeText(getApplicationContext(), observaciones, Toast.LENGTH_SHORT).show();
+                if (observaciones!=null){
+                    Observacion.setBackgroundColor(Color.parseColor("#8BC34A"));
+                }
+
+            }
+        });
+        builder.setNegativeButton("CANCELAR", null);
+        builder.setView(mainLayout);
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void GuardarPersona(View view){
+        Intent Modif1= new Intent (this, MainActivity.class);
+        Modif1.putExtra("NOMBRE" , Nombre.getText().toString());
+        Modif1.putExtra("APELLIDO" , Apellido.getText().toString());
+        Modif1.putExtra("DNI" , dni.getText().toString());
+        Modif1.putExtra("EDAD" , edad);
+        Modif1.putExtra("UNIDADEDAD" , unidadedad);
+        Modif1.putExtra("EFECTOR" , Sp1.getSelectedItem().toString());
+        Modif1.putExtra("FACTORES" , riesgos);
+        Modif1.putExtra("CODIGOFACTORES" , codigoriesgo);
+        Modif1.putExtra("VACUNAS" , vacunas);
+        Modif1.putExtra("CONTACTO" , direccionmail);
+        Modif1.putExtra("OBSERVACIONES" , observaciones);
+
+        setResult(RESULT_OK, Modif1);
+        finish();
     }
 }
