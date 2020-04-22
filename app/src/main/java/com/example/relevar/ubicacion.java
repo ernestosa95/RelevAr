@@ -78,7 +78,7 @@ public class ubicacion extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
-    public void DatosSalud(View view){
+    /*public void DatosSalud(View view){
         Bundle datos = this.getIntent().getExtras();
         String recuperada = datos.getString("identificacion");
 
@@ -98,5 +98,5 @@ public class ubicacion extends AppCompatActivity {
             startActivity(Modif);
             finish();
         }
-        else {Toast.makeText(getApplicationContext(),"Falta Ubicación",Toast.LENGTH_SHORT).show();} }
+        else {Toast.makeText(getApplicationContext(),"Falta Ubicación",Toast.LENGTH_SHORT).show();} }*/
 }
