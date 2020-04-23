@@ -750,7 +750,7 @@ public class persona extends AppCompatActivity {
                 telefonofijo = fijo.getText().toString();
                 direccionmail = mail.getText().toString();
                 Toast.makeText(getApplicationContext(), telefonocelular+telefonofijo+direccionmail, Toast.LENGTH_SHORT).show();
-                direccionmail=telefonocelular+","+telefonofijo+","+direccionmail;
+                direccionmail=telefonocelular+";"+telefonofijo+";"+direccionmail;
                 if (telefonocelular.length()!=0){
                     Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
                 }
@@ -808,7 +808,7 @@ public class persona extends AppCompatActivity {
                 observaciones=null;
                 observaciones = obs.getText().toString();
                 Toast.makeText(getApplicationContext(), observaciones, Toast.LENGTH_SHORT).show();
-                if (observaciones!=null){
+                if (observaciones.length()!=0){
                     Observacion.setBackgroundColor(Color.parseColor("#8BC34A"));
                 }
 
@@ -823,17 +823,28 @@ public class persona extends AppCompatActivity {
 
     public void GuardarPersona(View view){
         Intent Modif1= new Intent (this, MainActivity.class);
-        Modif1.putExtra("NOMBRE" , Nombre.getText().toString());
-        Modif1.putExtra("APELLIDO" , Apellido.getText().toString());
+        String nombre, apellido, Edad="S/D", Unidadedad="S/D", codigofactores="S/D", contacto="S/D", obs1="S/D";
+        if(Nombre.getText().toString()==null){nombre="S/D";}else{nombre=Nombre.getText().toString();}
+        if(Apellido.getText().toString()==null){apellido="S/D";}else{apellido=Apellido.getText().toString();}
+        if(edad==null){Edad="S/D";}else{Edad=edad;}
+        if(unidadedad==null){Unidadedad="S/D";}else{Unidadedad=edad;}
+        if(codigoriesgo==null){codigofactores="S/D";}else{codigofactores=codigoriesgo;}
+        if(direccionmail==null){contacto="S/D";}else{contacto=direccionmail;}
+        if(observaciones==null){obs1="S/D";}else{obs1=observaciones;}
+
+        if(dni.getText().toString()!=null && riesgos!=null && vacunas!=null){
+        Modif1.putExtra("NOMBRE" , nombre);
+        Modif1.putExtra("APELLIDO" , apellido);
         Modif1.putExtra("DNI" , dni.getText().toString());
-        Modif1.putExtra("EDAD" , edad);
+        Modif1.putExtra("EDAD" , Edad);
         Modif1.putExtra("UNIDADEDAD" , unidadedad);
         Modif1.putExtra("EFECTOR" , Sp1.getSelectedItem().toString());
         Modif1.putExtra("FACTORES" , riesgos);
         Modif1.putExtra("CODIGOFACTORES" , codigoriesgo);
         Modif1.putExtra("VACUNAS" , vacunas);
         Modif1.putExtra("CONTACTO" , direccionmail);
-        Modif1.putExtra("OBSERVACIONES" , observaciones);
+        Modif1.putExtra("OBSERVACIONES" , observaciones);}
+        else{Toast.makeText(this, "FALTAN DATOS", Toast.LENGTH_SHORT).show();}
 
         setResult(RESULT_OK, Modif1);
         finish();

@@ -9,18 +9,36 @@
 
     <Button
         android:id="@+id/AGREGARPERSONA"
-        android:layout_width="219dp"
+        android:layout_width="352dp"
         android:layout_height="39dp"
+        android:layout_marginTop="2sp"
         android:layout_marginBottom="16dp"
-        android:background="#4588BC"
+        android:background="#396F98"
         android:onClick="NuevaPersona"
         android:text="AGREGAR PERSONA"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/list1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/list1"
         app:layout_constraintTop_toBottomOf="@+id/list1"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/TERMINAR"
+        android:layout_width="352dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="28sp"
+        android:background="#8BC34A"
+        android:onClick="Guardar"
+        android:text="TERMINAR GRUPO FAMILIAR"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/AGREGARPERSONA"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/AGREGARPERSONA"
+        app:layout_constraintTop_toBottomOf="@+id/AGREGARPERSONA"
+        app:layout_constraintVertical_bias="0.529" />
 
     <EditText
         android:id="@+id/CALLE"
@@ -231,7 +249,7 @@
         android:id="@+id/list1"
         android:layout_width="352dp"
         android:layout_height="155dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="#4588BC"
         app:layout_constraintEnd_toEndOf="@+id/divider"
         app:layout_constraintStart_toStartOf="@+id/divider"
