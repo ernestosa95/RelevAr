@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -68,6 +69,12 @@ public class persona extends AppCompatActivity {
 
         Sp1 = (Spinner) findViewById(R.id.efector);
         categorias.add("CAPs D'ANGELO");
+        categorias.add("CAPs ANTARTIDA (CIC)");
+        categorias.add("CAPs SAN MARTIN");
+        categorias.add("CRR CARRILLO");
+        categorias.add("HOSP. SAN ROQUE");
+        categorias.add("HOSP. SAN MARTIN");
+        categorias.add("HOSP. BAXADA");
         ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, categorias);//Cargo el spinner con los datos
         Sp1.setAdapter(comboAdapter);
 
@@ -464,6 +471,9 @@ public class persona extends AppCompatActivity {
                     } else vacunas+=",POLIO - SABIN ORAL";
                 }
                 Toast.makeText(getApplicationContext(), vacunas, Toast.LENGTH_SHORT).show();
+                if (vacunas.length()!=0){
+                    Vacuna.setBackgroundColor(Color.parseColor("#8BC34A"));
+                }
 
             }
         });
@@ -782,8 +792,8 @@ public class persona extends AppCompatActivity {
         // Defino los parametros
         int TamañoLetra =20;
 
-        // Defino los EditText
-        // Telefono Celular
+
+        // OBSERVACIONES
         LinearLayout layout0       = new LinearLayout(this);
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
@@ -795,8 +805,9 @@ public class persona extends AppCompatActivity {
         obs.setTextSize(TamañoLetra);
         obs.setTextColor(Color.WHITE);
         obs.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout0.setMinimumHeight(500);
+        layout0.setMinimumHeight(200);
         layout0.addView(obs);
+
 
         mainLayout.addView(layout0);
 
@@ -832,7 +843,7 @@ public class persona extends AppCompatActivity {
         if(direccionmail==null){contacto="S/D";}else{contacto=direccionmail;}
         if(observaciones==null){obs1="S/D";}else{obs1=observaciones;}
 
-        if(dni.getText().toString()!=null && riesgos!=null && vacunas!=null){
+        if(dni.getText().toString()!=null){ //&& riesgos!=null && vacunas!=null){
         Modif1.putExtra("NOMBRE" , nombre);
         Modif1.putExtra("APELLIDO" , apellido);
         Modif1.putExtra("DNI" , dni.getText().toString());

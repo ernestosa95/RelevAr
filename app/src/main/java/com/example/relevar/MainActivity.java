@@ -53,6 +53,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
+import static android.widget.Toast.*;
 
 public class MainActivity extends AppCompatActivity {
     //probando las modificaciones de github
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> personas = new ArrayList<>();
     private String DNIreturn, Nombrereturn, Apellidoreturn, Edadreturn ,Unidadedadreturn ,Efectorreturn ,Factoresreturn ,Codigofactoresreturn ,
     Vacunasreturn ,Contactoreturn ,Observacionesreturn;
+    ArrayAdapter<String> adapter;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         //todo esto pa actualizr la listview
         super.onStart();
         ListeVer();
+        AgregarCabecera();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -241,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         // guardo los datos
         //Toast.makeText(this, strLine+"1", Toast.LENGTH_SHORT).show();
         if(strLine.equals("CALLE")!=true){
-        String cabecera = "CALLE; NUMERO; COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;FACTORES DE RIESGO;CODIGO SISA FACTOR DE RIESGO;VACUNA;TELEFONO CELULAR; TELEFONO FIJO; MAIL;OBSERVACION\n";
+        String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;EFECTOR DE SALUD;FACTORES DE RIESGO;CODIGO SISA FACTOR DE RIESGO;VACUNA;TELEFONO CELULAR; TELEFONO FIJO; MAIL;OBSERVACION\n";
         try {
             FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
             // que se agreguen los datos al final sin perder los datos anteriores
@@ -264,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     private void ListeVer(){
         //names.add("DNI: 30777333 Cosme Fulano");
         //names.add("DNI: 77456345 LA LA");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
         lv1.setAdapter(adapter);
 
         //realizar accion con el listview
@@ -302,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 CamposPersona.add(Nombrereturn);
                 CamposPersona.add(Edadreturn);
                 CamposPersona.add(Unidadedadreturn);
+                CamposPersona.add(Efectorreturn);
                 CamposPersona.add(Factoresreturn);
                 CamposPersona.add(Codigofactoresreturn);
                 CamposPersona.add(Vacunasreturn);
@@ -310,44 +315,103 @@ public class MainActivity extends AppCompatActivity {
 
                 InfoPersonas.add(CamposPersona);
 
-                Toast.makeText(this, DNIreturn, Toast.LENGTH_SHORT).show();
+                makeText(this, DNIreturn, LENGTH_SHORT).show();
                 names.add("DNI: "+DNIreturn+" "+Apellidoreturn+" "+Nombrereturn);
             }
         }
     }
 
-    public void Guardar(View view){
-        // Agrego la cabecera en .csv
-        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
-        nuevaCarpeta.mkdirs();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-"+fecha+".csv";
-        //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        File dir = new File(nuevaCarpeta, NombreArchivo);
-        if(Latitud!=null && Longitud!=null && grupofamiliar.getText().toString()!=null){
-            try {
-                FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
-                // que se agreguen los datos al final sin perder los datos anteriores
-                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-                String guardar = null;
-                for(int x=0; x<InfoPersonas.size(); x++){
-                    guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud+";"+grupofamiliar.getText().toString();
-                    for(int y=0; y<InfoPersonas.get(x).size(); y++){
-                        //guardar = "ACA1";
-                        guardar+=";"+InfoPersonas.get(x).get(y);}
-                myOutWriter.append(guardar);}
-                Toast.makeText(this, guardar, Toast.LENGTH_SHORT).show();
-                InfoPersonas=null;
-                myOutWriter.close();
-                fOut.close();
 
-            } catch (IOException e){
-                e.printStackTrace();
-                //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
-        }} else {Toast.makeText(this, "FALTAN DATOS UBICACIÓN", Toast.LENGTH_SHORT).show();}
-    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void Guardar(View view){
+        if (Latitud != null && Longitud != null && grupofamiliar.getText().toString() != null) {
+        // Defino los contenedores
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+        TextView textView = new TextView(this);
+        textView.setText("RelevAr");
+        textView.setPadding(20, 30, 20, 30);
+        textView.setTextSize(22F);
+        textView.setBackgroundColor(Color.parseColor("#4588BC"));
+        textView.setTextColor(Color.WHITE);
+        builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check
+        LinearLayout mainLayout       = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        // Defino los parametros
+        int TamañoLetra =18;
+
+        // Telefono Celular
+        LinearLayout layout0       = new LinearLayout(this);
+        layout0.setOrientation(LinearLayout.HORIZONTAL);
+        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final TextView descripcion = new TextView(getApplicationContext());
+        //sabin.setText(Texto);
+        descripcion.setText("¿Desea guardar los datos de este grupo familiar?");
+        //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
+        descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+        descripcion.setTextSize(TamañoLetra);
+        descripcion.setTextColor(Color.WHITE);
+        descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout0.setMinimumHeight(200);
+        layout0.addView(descripcion);
+
+        mainLayout.addView(layout0);
+
+        // Add OK and Cancel buttons
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The user clicked OK
+                // Agrego la cabecera en .csv
+                File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+                nuevaCarpeta.mkdirs();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Date date1 = new Date();
+                String fecha = dateFormat.format(date1);
+                String NombreArchivo = "RelevAr-" + fecha + ".csv";
+                //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+                File dir = new File(nuevaCarpeta, NombreArchivo);
+                    try {
+                        FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
+                        // que se agreguen los datos al final sin perder los datos anteriores
+                        OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                        String guardar = null;
+                        for (int x = 0; x < InfoPersonas.size(); x++) {
+                            guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + grupofamiliar.getText().toString();
+                            for (int y = 0; y < InfoPersonas.get(x).size(); y++) {
+                                //guardar = "ACA1";
+                                guardar += ";" + InfoPersonas.get(x).get(y);
+                            }
+                            guardar += "\n";
+                            myOutWriter.append(guardar);
+                        }
+
+                        InfoPersonas.clear();
+                        //Toast.makeText(this, InfoPersonas.get(0).get(0).toString(), Toast.LENGTH_SHORT).show();
+                        lv1.setAdapter(null);
+                        adapter.clear();
+                        calle.setText("");
+                        numero.setText("");
+                        grupofamiliar.setText("");
+                        myOutWriter.close();
+                        fOut.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
+                    }
+            }
+        });
+        builder.setNegativeButton("CANCELAR", null);
+        builder.setView(mainLayout);
+        //builder.setNegativeButton("CANCELAR", null);
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        } else {
+            makeText(this, "FALTAN DATOS UBICACIÓN", LENGTH_SHORT).show();
+        }}
 
 }
 
