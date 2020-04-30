@@ -35,6 +35,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+
 
 public class persona extends AppCompatActivity {
     private static final String TAG="MainActivity";
@@ -48,6 +51,13 @@ public class persona extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener Date;
     private Spinner Sp1;
     private ArrayList<String> categorias = new ArrayList<>();
+    CheckBox hepaA, hepaB, bcg, rotavirus, quintuple, tripleviral, varicela, dtp, vph, tripeacelular, dt, antigripal, vcn23, vcn13, tetravalente, ipv, sabin;
+    String date;
+    ArrayList<String> lista;
+    CheckBox calendario, embarazo, puerperio, personalsalud, personalesencial, viajeros, inmunocomprometidos, cadiologicos, respiratorios, diabeticos,
+    prematuros, asplenicos, obesidad, inmunodeficiencia, conviviente, otros;
+    EditText celular, fijo, mail, obs, lotevacuna;
+    TextView tipovacuna;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +94,7 @@ public class persona extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int  year, int month, int day) {
                 Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
-                String date=day+" - "+mes+" - "+year;
+                date=day+" - "+mes+" - "+year;
                 fecha.setText(date);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 Date date1 = new Date();
@@ -114,6 +124,50 @@ public class persona extends AppCompatActivity {
                 }else edad="S/D";}
         };
 
+        //Cargo los datos para que se pueda editar un registro que ya esta hecho
+        lista = (ArrayList<String>) getIntent().getSerializableExtra("DATOS");
+        if(lista!=null){
+        makeText(this, lista.get(8), LENGTH_SHORT).show();
+        dni.setText(lista.get(0));
+        Apellido.setText(lista.get(1));
+        Nombre.setText(lista.get(2));
+        Sp1.setSelection(ObtenerPosicion(Sp1, lista.get(5)));
+
+        // Para la fecha es necesario corroborar si ya hay un dato cargado
+        if(lista.get(11)!=""){
+        fecha.setText(lista.get(11));
+        edad=lista.get(3);
+        unidadedad=lista.get(4);
+        date=lista.get(12);
+        }
+        else{fecha.setText("DD - MM - AAAA");}
+
+        /*celular.setText(lista.get(0).get(9));
+        fijo.setText(lista.get(0).get(10));
+        mail.setText(lista.get(0).get(11));
+        obs.setText(lista.get(0).get(12));*/
+        riesgos = lista.get(6);
+        codigoriesgo = lista.get(7);
+        vacunas = lista.get(8);
+
+        }
+    }
+
+    //Funcion para obtener la posicion del efector seleccionado
+    public static int ObtenerPosicion(Spinner spinner, String efector) {
+        //Creamos la variable posicion y lo inicializamos en 0
+        int posicion = 0;
+        //Recorre el spinner en busca del ítem que coincida con el parametro `String fruta`
+        //que lo pasaremos posteriormente
+        for (int i = 0; i < spinner.getCount(); i++) {
+            //Almacena la posición del ítem que coincida con la búsqueda
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(efector)) {
+                posicion = i;
+            }
+        }
+        //Devuelve un valor entero (si encontro una coincidencia devuelve la
+        // posición 0 o N, de lo contrario devuelve 0 = posición inicial)
+        return posicion;
     }
 
     public void Fecha (View view){
@@ -129,6 +183,7 @@ public class persona extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void TiposVacuna(View view){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
         textView.setText("VACUNAS");
@@ -137,6 +192,14 @@ public class persona extends AppCompatActivity {
         textView.setBackgroundColor(Color.parseColor("#4588BC"));
         textView.setTextColor(Color.WHITE);
         builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check principal
+        LinearLayout mainLayout0       = new LinearLayout(this);
+        mainLayout0.setOrientation(LinearLayout.VERTICAL);
+
+        // Defino el Layaout que va a contener a los Check principal cabecera
+        LinearLayout mainLayout1       = new LinearLayout(this);
+        mainLayout1.setOrientation(LinearLayout.VERTICAL);
 
         // Defino el Layaout que va a contener a los Check
         LinearLayout mainLayout       = new LinearLayout(this);
@@ -147,229 +210,97 @@ public class persona extends AppCompatActivity {
         String ColorImpares = "#4588BC";
         int TamañoLetra =20;
         int AltoContenedor = 80;
-        // 0 HEPATITIS A
-        LinearLayout layout0       = new LinearLayout(this);
-        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        layout0.setOrientation(LinearLayout.HORIZONTAL);
-        final CheckBox hepaA = new CheckBox(getApplicationContext());
-        hepaA.setText("HEPATITIS A");
-        hepaA.setTextSize(TamañoLetra);
-        hepaA.setTextColor(Color.WHITE);
-        hepaA.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout0.addView(hepaA);
-        layout0.setBackgroundColor(Color.parseColor(ColorPares));
-        layout0.setMinimumHeight(AltoContenedor);
-        // 1 HEPATITIS B
-        LinearLayout layout1       = new LinearLayout(this);
-        layout1.setOrientation(LinearLayout.HORIZONTAL);
-        layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox hepaB = new CheckBox(getApplicationContext());
-        hepaB.setText("HEPATITIS B");
-        hepaB.setTextSize(TamañoLetra);
-        hepaB.setTextColor(Color.WHITE);
-        hepaB.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout1.addView(hepaB);
-        layout1.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout1.setMinimumHeight(AltoContenedor);
-        // 2 HEPATITIS BCG
-        LinearLayout layout2       = new LinearLayout(this);
-        layout2.setOrientation(LinearLayout.HORIZONTAL);
-        layout2.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox bcg = new CheckBox(getApplicationContext());
-        bcg.setText("BCG");
-        bcg.setTextSize(TamañoLetra);
-        bcg.setTextColor(Color.WHITE);
-        bcg.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout2.addView(bcg);
-        layout2.setBackgroundColor(Color.parseColor(ColorPares));
-        layout2.setMinimumHeight(AltoContenedor);
-        // 3 ROTAVIRUS
-        LinearLayout layout3       = new LinearLayout(this);
-        layout3.setOrientation(LinearLayout.HORIZONTAL);
-        layout3.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox rotavirus = new CheckBox(getApplicationContext());
-        rotavirus.setText("ROTAVIRUS");
-        rotavirus.setTextSize(TamañoLetra);
-        rotavirus.setTextColor(Color.WHITE);
-        rotavirus.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout3.addView(rotavirus);
-        layout3.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout3.setMinimumHeight(AltoContenedor);
-        // 4 QUINTUPLE
-        LinearLayout layout4       = new LinearLayout(this);
-        layout4.setOrientation(LinearLayout.HORIZONTAL);
-        layout4.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox quintuple = new CheckBox(getApplicationContext());
-        quintuple.setText("QUINTUPLE");
-        quintuple.setTextSize(TamañoLetra);
-        quintuple.setTextColor(Color.WHITE);
-        quintuple.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout4.addView(quintuple);
-        layout4.setBackgroundColor(Color.parseColor(ColorPares));
-        layout4.setMinimumHeight(AltoContenedor);
-        // 5 TRIPLE VIRAL
-        LinearLayout layout5       = new LinearLayout(this);
-        layout5.setOrientation(LinearLayout.HORIZONTAL);
-        layout5.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox tripleviral = new CheckBox(getApplicationContext());
-        tripleviral.setText("TRIPLE VIRAL");
-        tripleviral.setTextSize(TamañoLetra);
-        tripleviral.setTextColor(Color.WHITE);
-        tripleviral.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout5.addView(tripleviral);
-        layout5.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout5.setMinimumHeight(AltoContenedor);
-        // 6 VARICELA
-        LinearLayout layout6       = new LinearLayout(this);
-        layout6.setOrientation(LinearLayout.HORIZONTAL);
-        layout6.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox varicela = new CheckBox(getApplicationContext());
-        varicela.setText("VARICELA");
-        varicela.setTextSize(TamañoLetra);
-        varicela.setTextColor(Color.WHITE);
-        varicela.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout6.addView(varicela);
-        layout6.setBackgroundColor(Color.parseColor(ColorPares));
-        layout6.setMinimumHeight(AltoContenedor);
-        // 7 DTP
-        LinearLayout layout7       = new LinearLayout(this);
-        layout7.setOrientation(LinearLayout.HORIZONTAL);
-        layout7.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox dtp = new CheckBox(getApplicationContext());
-        dtp.setText("DTP");
-        dtp.setTextSize(TamañoLetra);
-        dtp.setTextColor(Color.WHITE);
-        dtp.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout7.addView(dtp);
-        layout7.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout7.setMinimumHeight(AltoContenedor);
-        // 8 VPH
-        LinearLayout layout8       = new LinearLayout(this);
-        layout8.setOrientation(LinearLayout.HORIZONTAL);
-        layout8.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox vph = new CheckBox(getApplicationContext());
-        vph.setText("VPH");
-        vph.setTextSize(TamañoLetra);
-        vph.setTextColor(Color.WHITE);
-        vph.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout8.addView(vph);
-        layout8.setBackgroundColor(Color.parseColor(ColorPares));
-        layout8.setMinimumHeight(AltoContenedor);
-        // 9 TRIPE ACELULAR
-        LinearLayout layout9       = new LinearLayout(this);
-        layout9.setOrientation(LinearLayout.HORIZONTAL);
-        layout9.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox tripeacelular = new CheckBox(getApplicationContext());
-        tripeacelular.setText("TRIPE ACELULAR dTpa");
-        tripeacelular.setTextSize(TamañoLetra);
-        tripeacelular.setTextColor(Color.WHITE);
-        tripeacelular.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout9.addView(tripeacelular);
-        layout9.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout9.setMinimumHeight(AltoContenedor);
-        // 10 dT
-        LinearLayout layout10       = new LinearLayout(this);
-        layout10.setOrientation(LinearLayout.HORIZONTAL);
-        layout10.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox dt = new CheckBox(getApplicationContext());
-        dt.setText("dT");
-        dt.setTextSize(TamañoLetra);
-        dt.setTextColor(Color.WHITE);
-        dt.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout10.addView(dt);
-        layout10.setBackgroundColor(Color.parseColor(ColorPares));
-        layout10.setMinimumHeight(AltoContenedor);
-        // 11 ANTIGRIPAL
-        LinearLayout layout11       = new LinearLayout(this);
-        layout11.setOrientation(LinearLayout.HORIZONTAL);
-        layout11.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox antigripal = new CheckBox(getApplicationContext());
-        antigripal.setText("ANTIGRIPAL");
-        antigripal.setTextSize(TamañoLetra);
-        antigripal.setTextColor(Color.WHITE);
-        antigripal.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout11.addView(antigripal);
-        layout11.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout11.setMinimumHeight(AltoContenedor);
-        // 12 NEUMOCOCO POLISACARIDA 23V
-        LinearLayout layout12       = new LinearLayout(this);
-        layout12.setOrientation(LinearLayout.HORIZONTAL);
-        layout12.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox vcn23 = new CheckBox(getApplicationContext());
-        vcn23.setText("NEUMOCOCO POLISACARIDA 23V");
-        vcn23.setTextSize(TamañoLetra);
-        vcn23.setTextColor(Color.WHITE);
-        vcn23.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout12.addView(vcn23);
-        layout12.setBackgroundColor(Color.parseColor(ColorPares));
-        layout12.setMinimumHeight(AltoContenedor);
-        // 13 NEUMOCOCO CONJUGADA 13V
-        LinearLayout layout13       = new LinearLayout(this);
-        layout13.setOrientation(LinearLayout.HORIZONTAL);
-        layout13.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox vcn13 = new CheckBox(getApplicationContext());
-        vcn13.setText("NEUMOCOCO CONJUGADA 13V");
-        vcn13.setTextSize(TamañoLetra);
-        vcn13.setTextColor(Color.WHITE);
-        vcn13.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout13.addView(vcn13);
-        layout13.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout13.setMinimumHeight(AltoContenedor);
-        // 14 MENINGOCOCICA TETRAVALENTE
-        LinearLayout layout14       = new LinearLayout(this);
-        layout14.setOrientation(LinearLayout.HORIZONTAL);
-        layout14.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox tetravalente = new CheckBox(getApplicationContext());
-        tetravalente.setText("MENINGOCOCICA TETRAVALENTE");
-        tetravalente.setTextSize(TamañoLetra);
-        tetravalente.setTextColor(Color.WHITE);
-        tetravalente.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout14.addView(tetravalente);
-        layout14.setBackgroundColor(Color.parseColor(ColorPares));
-        layout14.setMinimumHeight(AltoContenedor);
-        // 15 POLIO - IPV
-        LinearLayout layout15       = new LinearLayout(this);
-        layout15.setOrientation(LinearLayout.HORIZONTAL);
-        layout15.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox ipv = new CheckBox(getApplicationContext());
-        ipv.setText("POLIO - IPV");
-        ipv.setTextSize(TamañoLetra);
-        ipv.setTextColor(Color.WHITE);
-        ipv.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout15.addView(ipv);
-        layout15.setBackgroundColor(Color.parseColor(ColorImpares));
-        layout15.setMinimumHeight(AltoContenedor);
-        // 16 POLIO - SABIN ORAL
-        LinearLayout layout16       = new LinearLayout(this);
-        layout16.setOrientation(LinearLayout.HORIZONTAL);
-        layout16.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final CheckBox sabin = new CheckBox(getApplicationContext());
-        sabin.setText("POLIO - SABIN ORAL");
-        sabin.setTextSize(TamañoLetra);
-        sabin.setTextColor(Color.WHITE);
-        sabin.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-        layout16.addView(sabin);
-        layout16.setBackgroundColor(Color.parseColor(ColorPares));
-        layout16.setMinimumHeight(AltoContenedor);
 
-        // Añadir todos los Check
-        mainLayout.addView(layout0);
-        mainLayout.addView(layout1);
-        mainLayout.addView(layout2);
-        mainLayout.addView(layout3);
-        mainLayout.addView(layout4);
-        mainLayout.addView(layout5);
-        mainLayout.addView(layout6);
-        mainLayout.addView(layout7);
-        mainLayout.addView(layout8);
-        mainLayout.addView(layout9);
-        mainLayout.addView(layout10);
-        mainLayout.addView(layout11);
-        mainLayout.addView(layout12);
-        mainLayout.addView(layout13);
-        mainLayout.addView(layout14);
-        mainLayout.addView(layout15);
-        mainLayout.addView(layout16);
+        // Lote de la vacuna
+        LinearLayout layoutvacuna       = new LinearLayout(this);
+        layoutvacuna.setOrientation(LinearLayout.HORIZONTAL);
+        layoutvacuna.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        lotevacuna = new EditText(getApplicationContext());
+        lotevacuna.setHint("LOTE VACUNA");
+        //lotevacuna.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        lotevacuna.setHintTextColor(Color.WHITE);
+        lotevacuna.setTextSize(TamañoLetra);
+        lotevacuna.setTextColor(Color.WHITE);
+        lotevacuna.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layoutvacuna.addView(lotevacuna);
+        mainLayout1.addView(layoutvacuna);
+
+        // Tipos de vacuna aplicada
+        LinearLayout layoutvacunaaplicada       = new LinearLayout(this);
+        layoutvacunaaplicada.setOrientation(LinearLayout.HORIZONTAL);
+        layoutvacunaaplicada.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        layoutvacunaaplicada.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+        tipovacuna = new TextView(getApplicationContext());
+        tipovacuna.setText("VACUNA A APLICAR");
+        tipovacuna.setGravity(Gravity.CENTER_HORIZONTAL);
+        tipovacuna.setBackgroundColor(Color.parseColor("#396F98"));
+        tipovacuna.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        tipovacuna.setHintTextColor(Color.WHITE);
+        tipovacuna.setTextSize(16);
+        tipovacuna.setTextColor(Color.WHITE);
+        tipovacuna.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layoutvacunaaplicada.addView(tipovacuna);
+        mainLayout1.addView(layoutvacunaaplicada);
+
+        // 0 HEPATITIS A
+        hepaA = PersonalCheck(mainLayout,"HEPATITIS A", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 1 HEPATITIS B
+        hepaB = PersonalCheck(mainLayout,"HEPATITIS B", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 2 HEPATITIS BCG
+        bcg = PersonalCheck(mainLayout,"BCG", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 3 ROTAVIRUS
+        rotavirus = PersonalCheck(mainLayout,"ROTAVIRUS", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 4 QUINTUPLE
+        quintuple = PersonalCheck(mainLayout,"QUINTUPLE", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 5 TRIPLE VIRAL
+        tripleviral = PersonalCheck(mainLayout,"TRIPLE VIRAL", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 6 VARICELA
+        varicela = PersonalCheck(mainLayout,"VARICELA", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 7 DTP
+        dtp = PersonalCheck(mainLayout,"DTP", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 8 VPH
+        vph = PersonalCheck(mainLayout,"VPH", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 9 TRIPE ACELULAR
+        tripeacelular = PersonalCheck(mainLayout,"TRIPE ACELULAR dTpa", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 10 dT
+        dt = PersonalCheck(mainLayout,"dT", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 11 ANTIGRIPAL
+        antigripal = PersonalCheck(mainLayout,"ANTIGRIPAL", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 12 NEUMOCOCO POLISACARIDA 23V
+        vcn23 = PersonalCheck(mainLayout,"NEUMOCOCO POLISACARIDA 23V", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 13 NEUMOCOCO CONJUGADA 13V
+        vcn13 = PersonalCheck(mainLayout,"NEUMOCOCO CONJUGADA 13V", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 14 MENINGOCOCICA TETRAVALENTE
+        tetravalente = PersonalCheck(mainLayout,"MENINGOCOCICA TETRAVALENTE", TamañoLetra, ColorPares, AltoContenedor);
+
+        // 15 POLIO - IPV
+        ipv = PersonalCheck(mainLayout,"POLIO - IPV", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // 16 POLIO - SABIN ORAL
+        sabin = PersonalCheck(mainLayout,"POLIO - SABIN ORAL", TamañoLetra, ColorPares, AltoContenedor);
+
+
+        // En el caso de editar un registro
+        // Necesito que me ponga seleccionado todos aquellos que ya se habian seleeccionado antes
+        // para que los pueda editar
+        if(lista!=null){
+            //Necesito activar los check que ya habia seleccionado antes
+            CheckSeleccionadosVacunas(lista.get(8));
+        }
 
         // Defino un ScrollView para visualizar todos
         ScrollView sv = new ScrollView(this);
@@ -377,7 +308,11 @@ public class persona extends AppCompatActivity {
         sv.setVerticalScrollBarEnabled(true);
         sv.addView(mainLayout);
 
-        builder.setView(sv);
+        mainLayout0.addView(mainLayout1);
+        mainLayout0.addView(sv);
+        builder.setView(mainLayout0);
+
+
 
         // Add OK and Cancel buttons
         builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
@@ -479,7 +414,7 @@ public class persona extends AppCompatActivity {
         });
         builder.setNegativeButton("CANCELAR", null);
 
-// Create and show the alert dialog
+        // Create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
         /*Button bn = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
@@ -488,6 +423,63 @@ public class persona extends AppCompatActivity {
         Button bp = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
         bp.setBackgroundColor(Color.parseColor(ColorImpares));
         //bp.setLayoutParams (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));*/
+    }
+
+    private void CheckSeleccionadosVacunas(String Vacunas){
+        String[] vac =Vacunas.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals("HEPATITIS A")){
+                hepaA.setChecked(true);
+            }
+            if (vac[x].equals("HEPATITIS B")){
+                hepaB.setChecked(true);
+            }
+            if (vac[x].equals("BCG")){
+                bcg.setChecked(true);
+            }
+            if (vac[x].equals("ROTAVIRUS")){
+                rotavirus.setChecked(true);
+            }
+            if (vac[x].equals("QUINTUPLE")){
+                quintuple.setChecked(true);
+            }
+            if (vac[x].equals("TRIPLE VIRAL")){
+                tripleviral.setChecked(true);
+            }
+            if (vac[x].equals("VARICELA")){
+                varicela.setChecked(true);
+            }
+            if (vac[x].equals("DTP")){
+                dtp.setChecked(true);
+            }
+            if (vac[x].equals("VPH")){
+                vph.setChecked(true);
+            }
+            if (vac[x].equals("TRIPLE ACELULAR dTpa")){
+                tripeacelular.setChecked(true);
+            }
+            if (vac[x].equals("dT")){
+                dt.setChecked(true);
+            }
+            if (vac[x].equals("ANTIGRIPAL")){
+                antigripal.setChecked(true);
+            }
+            if (vac[x].equals("NEUMOCOCO POLISACARIDA 23V")){
+                vcn23.setChecked(true);
+            }
+            if (vac[x].equals("NEUMOCOCO CONJUGADA 13V")){
+                vcn13.setChecked(true);
+            }
+            if (vac[x].equals("MENINGOCOCICA TETRAVALENTE")){
+                tetravalente.setChecked(true);
+            }
+            if (vac[x].equals("POLIO - IPV")){
+                ipv.setChecked(true);
+            }
+            if (vac[x].equals("POLIO - SABIN ORAL")){
+                sabin.setChecked(true);
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -512,22 +504,30 @@ public class persona extends AppCompatActivity {
         LinearLayout mainLayout       = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
 
-        final CheckBox calendario = PersonalCheck(mainLayout,"POR CALENDARIO", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox embarazo = PersonalCheck(mainLayout,"EMBARAZO", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox puerperio = PersonalCheck(mainLayout,"PUERPERIO", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox personalsalud = PersonalCheck(mainLayout,"PERSONAL DE SALUD", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox personalesencial = PersonalCheck(mainLayout,"PERSONAL ESENCIAL", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox viajeros = PersonalCheck(mainLayout,"VIAJEROS", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox inmunocomprometidos = PersonalCheck(mainLayout,"INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox cadiologicos = PersonalCheck(mainLayout,"CARDIOLOGICOS", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox respiratorios = PersonalCheck(mainLayout,"RESPIRATORIOS", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox diabeticos = PersonalCheck(mainLayout,"DIABÉTICOS", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox prematuros = PersonalCheck(mainLayout,"PREMATUROS", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox asplenicos = PersonalCheck(mainLayout,"ASPLÉNICOS", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox obesidad = PersonalCheck(mainLayout,"OBESIDAD MORBIDA", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox inmunodeficiencia = PersonalCheck(mainLayout,"INMUNODEFICIENCIA", TamañoLetra, ColorImpares, AltoContenedor);
-        final CheckBox conviviente = PersonalCheck(mainLayout,"CONVIVIENTE INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
-        final CheckBox otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorImpares, AltoContenedor);
+        calendario = PersonalCheck(mainLayout,"POR CALENDARIO", TamañoLetra, ColorPares, AltoContenedor);
+        embarazo = PersonalCheck(mainLayout,"EMBARAZO", TamañoLetra, ColorImpares, AltoContenedor);
+        puerperio = PersonalCheck(mainLayout,"PUERPERIO", TamañoLetra, ColorPares, AltoContenedor);
+        personalsalud = PersonalCheck(mainLayout,"PERSONAL DE SALUD", TamañoLetra, ColorImpares, AltoContenedor);
+        personalesencial = PersonalCheck(mainLayout,"PERSONAL ESENCIAL", TamañoLetra, ColorPares, AltoContenedor);
+        viajeros = PersonalCheck(mainLayout,"VIAJEROS", TamañoLetra, ColorImpares, AltoContenedor);
+        inmunocomprometidos = PersonalCheck(mainLayout,"INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
+        cadiologicos = PersonalCheck(mainLayout,"CARDIOLOGICOS", TamañoLetra, ColorImpares, AltoContenedor);
+        respiratorios = PersonalCheck(mainLayout,"RESPIRATORIOS", TamañoLetra, ColorPares, AltoContenedor);
+        diabeticos = PersonalCheck(mainLayout,"DIABÉTICOS", TamañoLetra, ColorImpares, AltoContenedor);
+        prematuros = PersonalCheck(mainLayout,"PREMATUROS", TamañoLetra, ColorPares, AltoContenedor);
+        asplenicos = PersonalCheck(mainLayout,"ASPLÉNICOS", TamañoLetra, ColorImpares, AltoContenedor);
+        obesidad = PersonalCheck(mainLayout,"OBESIDAD MORBIDA", TamañoLetra, ColorPares, AltoContenedor);
+        inmunodeficiencia = PersonalCheck(mainLayout,"INMUNODEFICIENCIA", TamañoLetra, ColorImpares, AltoContenedor);
+        conviviente = PersonalCheck(mainLayout,"CONVIVIENTE INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
+        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorImpares, AltoContenedor);
+
+        // En el caso de editar un registro
+        // Necesito que me ponga seleccionado todos aquellos que ya se habian seleeccionado antes
+        // para que los pueda editar
+        if(lista!=null){
+            //Necesito activar los check que ya habia seleccionado antes
+            CheckSeleccionadosFactores(lista.get(6));
+        }
 
         // Add OK and Cancel buttons
         builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
@@ -669,6 +669,63 @@ public class persona extends AppCompatActivity {
         dialog.show();
     }
 
+    private void CheckSeleccionadosFactores(String Vacunas){
+        String[] vac =Vacunas.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals("POR CALENDARIO")){
+                calendario.setChecked(true);
+            }
+            if (vac[x].equals("EMBARAZO")){
+                embarazo.setChecked(true);
+            }
+            if (vac[x].equals("PUERPERIO")){
+                puerperio.setChecked(true);
+            }
+            if (vac[x].equals("PERSONAL DE SALUD")){
+                personalsalud.setChecked(true);
+            }
+            if (vac[x].equals("PERSONAL ESENCIAL")){
+                personalesencial.setChecked(true);
+            }
+            if (vac[x].equals("VIAJEROS")){
+                viajeros.setChecked(true);
+            }
+            if (vac[x].equals("INMUNOCOMPROMETIDOS")){
+                inmunocomprometidos.setChecked(true);
+            }
+            if (vac[x].equals("CARDIOLOGICOS")){
+                cadiologicos.setChecked(true);
+            }
+            if (vac[x].equals("RESPIRATORIOS")){
+                respiratorios.setChecked(true);
+            }
+            if (vac[x].equals("DIABÉTICOS")){
+                diabeticos.setChecked(true);
+            }
+            if (vac[x].equals("PREMATUROS")){
+                prematuros.setChecked(true);
+            }
+            if (vac[x].equals("ASPLÉNICOS")){
+                asplenicos.setChecked(true);
+            }
+            if (vac[x].equals("OBESIDAD MORBIDA")){
+                obesidad.setChecked(true);
+            }
+            if (vac[x].equals("INMUNODEFICIENCIA")){
+                inmunodeficiencia.setChecked(true);
+            }
+            if (vac[x].equals("CONVIVIENTE INMUNOCOMPROMETIDOS")){
+                conviviente.setChecked(true);
+            }
+            if (vac[x].equals("OTROS")){
+                otros.setChecked(true);
+            }
+            if (vac[x].equals("PREMATUROS")){
+                prematuros.setChecked(true);
+            }
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private final CheckBox PersonalCheck (LinearLayout Contenedor, String Texto, int TamañoLetra, String ColorPares, int AltoContenedor){
         // 16 POLIO - SABIN ORAL
@@ -708,7 +765,7 @@ public class persona extends AppCompatActivity {
         LinearLayout layout0       = new LinearLayout(this);
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final EditText celular = new EditText(getApplicationContext());
+        celular = new EditText(getApplicationContext());
         //sabin.setText(Texto);
         celular.setHint("TELEFONO CELULAR");
         celular.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
@@ -721,7 +778,7 @@ public class persona extends AppCompatActivity {
         LinearLayout layout1       = new LinearLayout(this);
         layout1.setOrientation(LinearLayout.HORIZONTAL);
         layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final EditText fijo = new EditText(getApplicationContext());
+        fijo = new EditText(getApplicationContext());
         //sabin.setText(Texto);
         fijo.setHint("TELEFONO FIJO");
         fijo.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
@@ -734,7 +791,7 @@ public class persona extends AppCompatActivity {
         LinearLayout layout2       = new LinearLayout(this);
         layout2.setOrientation(LinearLayout.HORIZONTAL);
         layout2.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final EditText mail = new EditText(getApplicationContext());
+        mail = new EditText(getApplicationContext());
         //sabin.setText(Texto);
         mail.setHint("MAIL");
         mail.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
@@ -797,7 +854,7 @@ public class persona extends AppCompatActivity {
         LinearLayout layout0       = new LinearLayout(this);
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final EditText obs = new EditText(getApplicationContext());
+        obs = new EditText(getApplicationContext());
         //sabin.setText(Texto);
         obs.setHint("OBSERVACIONES");
         obs.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
@@ -854,7 +911,8 @@ public class persona extends AppCompatActivity {
         Modif1.putExtra("CODIGOFACTORES" , codigoriesgo);
         Modif1.putExtra("VACUNAS" , vacunas);
         Modif1.putExtra("CONTACTO" , direccionmail);
-        Modif1.putExtra("OBSERVACIONES" , observaciones);}
+        Modif1.putExtra("OBSERVACIONES" , observaciones);
+        Modif1.putExtra("NACIMIENTO" , date);}
         else{Toast.makeText(this, "FALTAN DATOS", Toast.LENGTH_SHORT).show();}
 
         setResult(RESULT_OK, Modif1);

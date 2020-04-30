@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv1;
     private ArrayList<String> personas = new ArrayList<>();
     private String DNIreturn, Nombrereturn, Apellidoreturn, Edadreturn ,Unidadedadreturn ,Efectorreturn ,Factoresreturn ,Codigofactoresreturn ,
-    Vacunasreturn ,Contactoreturn ,Observacionesreturn;
+    Vacunasreturn ,Contactoreturn ,Observacionesreturn, Nacimiento;
     ArrayAdapter<String> adapter;
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,14 +87,14 @@ public class MainActivity extends AppCompatActivity {
         grupofamiliar = (EditText) findViewById(R.id.GRUPOFAMILIAR);
 
         btnagregarpersona = (Button) findViewById(R.id.AGREGARPERSONA);
-        btnubicacion = (Button) findViewById(R.id.BTNUBICACION);
+        //btnubicacion = (Button) findViewById(R.id.BTNUBICACION);
 
         lat = (TextView) findViewById(R.id.LATITUD);
         lon = (TextView) findViewById(R.id.LONGITUD);
 
         //Solicito los permisos de ubicación y escritura
         permisosPosicion();
-        permisosEscribir();
+
 
         // Agrego cabecera con lo nombres de las columnas al archivo
         AgregarCabecera();
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         // Muestro las personas cargadas
         ListeVer();
         Presentacion();
+
     }
 
     //@Override
@@ -112,9 +113,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         ListeVer();
         AgregarCabecera();
+        // Inicio la obtencion de datos de ubicacion del GPS
+        LatLong();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     private void Presentacion(){
         // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
@@ -141,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         descripcion.setText("Esta App permite cargar datos de salud personal, partiendo desde la ubicación del grupo familiar.\n\n- Los datos son almacenados en \nMEMORIA DEL TELEFONO->RelevAr." +
                 "\n\n- La App no utiliza Datos moviles para establecer la Longitud y Latitud.\n\nAnte cualquier duda comunicarse con los desarrolladores.");
         //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+        //descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
         descripcion.setTextSize(TamañoLetra);
         descripcion.setTextColor(Color.WHITE);
         descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -164,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void LatLong(View view){
+    private void LatLong(){
+    //public void LatLong(View view){
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -214,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void AgregarCabecera(){
+        permisosEscribir();
         // Agrego la cabecera en .csv
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
@@ -271,15 +276,79 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
         lv1.setAdapter(adapter);
 
+        // Elegir entre eliminar y editar
+
         //realizar accion con el listview
-        /*lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent Modif1= new Intent (this, MostrarDatos.class);
-                Modif1.putExtra("pasar_nombre" , nombres.get(position));
-                startActivity(Modif1);
+                //Elegir entre Eliminar y Editar
+                EliminarEditar(position);
             }
-        });*/
+        });
+    }
+
+    private void EliminarEditar(final int position){
+        // Defino los contenedores
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+        TextView textView = new TextView(this);
+        textView.setText("PERSONA");
+        textView.setPadding(20, 30, 20, 30);
+        textView.setTextSize(22F);
+        textView.setBackgroundColor(Color.parseColor("#4588BC"));
+        textView.setTextColor(Color.WHITE);
+        builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check
+        LinearLayout mainLayout       = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        // Defino los parametros
+        int TamañoLetra =18;
+
+        // Telefono Celular
+        LinearLayout layout0       = new LinearLayout(this);
+        layout0.setOrientation(LinearLayout.HORIZONTAL);
+        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final TextView descripcion = new TextView(getApplicationContext());
+        //sabin.setText(Texto);
+        descripcion.setText("DNI: "+ InfoPersonas.get(position).get(0)+"\n"+"Nombre: "+ InfoPersonas.get(position).get(1));
+        //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
+        //descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+        descripcion.setTextSize(TamañoLetra);
+        descripcion.setTextColor(Color.WHITE);
+        descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout0.setMinimumHeight(500);
+        layout0.addView(descripcion);
+
+        mainLayout.addView(layout0);
+
+        // Add OK and Cancel buttons
+        builder.setPositiveButton("EDITAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The user clicked OK
+                Intent Modif= new Intent (getBaseContext(), persona.class);
+                Modif.putExtra("DATOS" , InfoPersonas.get(position));
+                InfoPersonas.remove(position);
+                lv1.setAdapter(null);
+                adapter.clear();
+                ListeVer();
+                startActivityForResult(Modif, 1);
+            }
+        });
+        builder.setNegativeButton("ELIMINAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                InfoPersonas.remove(position);
+                lv1.setAdapter(null);
+                adapter.clear();
+                ListeVer();
+            }
+        });
+        builder.setView(mainLayout);
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -300,31 +369,37 @@ public class MainActivity extends AppCompatActivity {
                 Vacunasreturn = data.getStringExtra("VACUNAS");
                 Contactoreturn = data.getStringExtra("CONTACTO");
                 Observacionesreturn = data.getStringExtra("OBSERVACIONES");
+                Nacimiento = data.getStringExtra("NACIMIENTO");
                 // Lleno el Array de personas con datos
-                CamposPersona.add(DNIreturn);
-                CamposPersona.add(Apellidoreturn);
-                CamposPersona.add(Nombrereturn);
-                CamposPersona.add(Edadreturn);
-                CamposPersona.add(Unidadedadreturn);
-                CamposPersona.add(Efectorreturn);
-                CamposPersona.add(Factoresreturn);
-                CamposPersona.add(Codigofactoresreturn);
-                CamposPersona.add(Vacunasreturn);
-                CamposPersona.add(Contactoreturn);
-                CamposPersona.add(Observacionesreturn);
+                CamposPersona.add(DNIreturn);           //0
+                CamposPersona.add(Apellidoreturn);      //1
+                CamposPersona.add(Nombrereturn);        //2
+                CamposPersona.add(Edadreturn);          //3
+                CamposPersona.add(Unidadedadreturn);    //4
+                CamposPersona.add(Efectorreturn);       //5
+                CamposPersona.add(Factoresreturn);      //6
+                CamposPersona.add(Codigofactoresreturn);//7
+                CamposPersona.add(Vacunasreturn);       //8
+                CamposPersona.add(Contactoreturn);      //9,10,11
+                CamposPersona.add(Observacionesreturn); //12
+                CamposPersona.add(Nacimiento);          //12
 
                 InfoPersonas.add(CamposPersona);
 
                 makeText(this, DNIreturn, LENGTH_SHORT).show();
                 names.add("DNI: "+DNIreturn+" "+Apellidoreturn+" "+Nombrereturn);
+
+                ListeVer();
             }
         }
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     public void Guardar(View view){
-        if (Latitud != null && Longitud != null && grupofamiliar.getText().toString() != null) {
+        // Inicio la obtencion de datos de ubicacion del GPS
+        LatLong();
+        if(InfoPersonas.size()!=0){
+        if (Latitud != null && Longitud != null && grupofamiliar.getText().toString().length() != 0) {
         // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
@@ -349,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
         //sabin.setText(Texto);
         descripcion.setText("¿Desea guardar los datos de este grupo familiar?");
         //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+        //descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
         descripcion.setTextSize(TamañoLetra);
         descripcion.setTextColor(Color.WHITE);
         descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -379,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
                         String guardar = null;
                         for (int x = 0; x < InfoPersonas.size(); x++) {
                             guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + grupofamiliar.getText().toString();
-                            for (int y = 0; y < InfoPersonas.get(x).size(); y++) {
+                            for (int y = 0; y < InfoPersonas.get(x).size()-1; y++) {
                                 //guardar = "ACA1";
                                 guardar += ";" + InfoPersonas.get(x).get(y);
                             }
@@ -410,8 +485,8 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
         } else {
-            makeText(this, "FALTAN DATOS UBICACIÓN", LENGTH_SHORT).show();
-        }}
+            makeText(this, "FALTA LLENAR MIEMBROS G. FAMILIAR", LENGTH_SHORT).show();
+        }}else{ makeText(this, "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();} }
 
 }
 

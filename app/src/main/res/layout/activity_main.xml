@@ -9,20 +9,16 @@
 
     <Button
         android:id="@+id/AGREGARPERSONA"
-        android:layout_width="352dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="2sp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="90dp"
+        android:layout_height="48dp"
         android:background="#396F98"
         android:onClick="NuevaPersona"
         android:text="AGREGAR PERSONA"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/list1"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/list1"
-        app:layout_constraintTop_toBottomOf="@+id/list1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <Button
         android:id="@+id/TERMINAR"
@@ -34,16 +30,17 @@
         android:text="TERMINAR GRUPO FAMILIAR"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/AGREGARPERSONA"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/AGREGARPERSONA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AGREGARPERSONA"
-        app:layout_constraintVertical_bias="0.529" />
+        app:layout_constraintVertical_bias="0.51" />
 
     <EditText
         android:id="@+id/CALLE"
         android:layout_width="180dp"
         android:layout_height="41dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="CALLE"
         android:inputType="textPersonName"
@@ -54,9 +51,9 @@
         android:textCursorDrawable="@color/common_google_signin_btn_text_dark_default"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -64,10 +61,10 @@
         android:layout_height="wrap_content"
         android:text="GRUPO FAMILIAR"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.771"
+        app:layout_constraintStart_toEndOf="@+id/CALLE"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
@@ -92,19 +89,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/CALLE"
         app:srcCompat="@drawable/ubicacion" />
-
-    <Button
-        android:id="@+id/BTNUBICACION"
-        android:layout_width="77dp"
-        android:layout_height="45dp"
-        android:background="#4588BC"
-        android:onClick="LatLong"
-        android:text="OBTENER UBICACIÓN"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.819"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toTopOf="@+id/LATITUD" />
 
     <TextView
         android:id="@+id/textView14"
@@ -165,10 +149,11 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="84dp"
-        android:layout_height="70dp"
+        android:layout_width="59dp"
+        android:layout_height="53dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.693"
+        app:layout_constraintStart_toEndOf="@+id/CALLE"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/familia" />
 
@@ -177,9 +162,8 @@
         android:layout_width="62dp"
         android:layout_height="43dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="28dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:gravity="center_horizontal"
         android:hint="00"
@@ -187,10 +171,10 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/BTNUBICACION" />
+        app:layout_constraintTop_toBottomOf="@+id/LONGITUD" />
 
     <TextView
         android:id="@+id/textView8"
@@ -248,13 +232,38 @@
 
     <ListView
         android:id="@+id/list1"
-        android:layout_width="352dp"
-        android:layout_height="155dp"
+        android:layout_width="256dp"
+        android:layout_height="156dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:background="#4588BC"
         app:layout_constraintEnd_toEndOf="@+id/divider"
-        app:layout_constraintStart_toStartOf="@+id/divider"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="90dp"
+        android:layout_height="108dp"
+        android:background="#396F98"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list1"
+        app:layout_constraintTop_toTopOf="@+id/list1">
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="70dp"
+            android:layout_height="98dp"
+            android:background="#396F98"
+            android:clickable="true"
+            android:onClick="NuevaPersona"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/anadir" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
