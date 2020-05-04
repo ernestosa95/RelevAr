@@ -16,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.IDNA;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -53,58 +54,70 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
+import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.widget.Toast.*;
 
 public class MainActivity extends AppCompatActivity {
-    //probando las modificaciones de github
+    // DEFINICION DE VARIABLES GLOBALES
+    // Definicion de contantes que hacen al funcionamiento
     private static final String TAG="MainActivity";
     private static final int REQUEST_CODE_POSITION = 1;
-    private EditText calle, numero, grupofamiliar;
-    private TextView lat, lon, fecha;
-    private Button btnagregarpersona, btnubicacion;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
     private int STORAGE_PERMISSION_CODE =1;
-    private String Latitud, Longitud, dni, apellido, nombre, edad, unidadedad;
-    private DatePickerDialog.OnDateSetListener Date;
+
+    // Definicion de String para contener informacion
+    private String Latitud, Longitud, DNIreturn, Nombrereturn, Apellidoreturn, Edadreturn,
+            Unidadedadreturn ,Efectorreturn ,Factoresreturn ,Codigofactoresreturn, Vacunasreturn,
+            Contactoreturn ,Observacionesreturn, Nacimiento, Limpiezareturn, Lotereturn, IDencuestador;
+
+    // Definicion de EditText para ingresar info
+    private EditText calle, numero, grupofamiliar;
+
+    // Definicion de TextView para mostrar info
+    private TextView lat, lon;
+
+    // Definicion de los Button para realizar acciones
+    private Button btnagregarpersona, btnubicacion;
+
+    // Defino Arrays para almacenar datos
     private ArrayList<String> names = new ArrayList<String>();
     private ArrayList<ArrayList<String>> InfoPersonas = new ArrayList<ArrayList<String>>();
+    private ArrayList<ObjetoPersona> MiembrosFamiliares = new ArrayList<ObjetoPersona>();
+
     // Defino la lisa de personas
     private ListView lv1;
-    private ArrayList<String> personas = new ArrayList<>();
-    private String DNIreturn, Nombrereturn, Apellidoreturn, Edadreturn ,Unidadedadreturn ,Efectorreturn ,Factoresreturn ,Codigofactoresreturn ,
-    Vacunasreturn ,Contactoreturn ,Observacionesreturn, Nacimiento;
+
+    // Defino un Adaptador para el ListView
     ArrayAdapter<String> adapter;
-    //@RequiresApi(api = Build.VERSION_CODES.O)
+
+    // Objeto Persona
+    //ObjetoPersona Persona=new ObjetoPersona();
+
+    int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); //evita la rotacion
         setContentView(R.layout.activity_main);
 
-        //Definición de los widget
+        // Definición de los widget
         calle = (EditText) findViewById(R.id.CALLE);
         numero = (EditText) findViewById(R.id.NUMERO);
         grupofamiliar = (EditText) findViewById(R.id.GRUPOFAMILIAR);
-
         btnagregarpersona = (Button) findViewById(R.id.AGREGARPERSONA);
-        //btnubicacion = (Button) findViewById(R.id.BTNUBICACION);
-
         lat = (TextView) findViewById(R.id.LATITUD);
         lon = (TextView) findViewById(R.id.LONGITUD);
+        lv1 = (ListView) findViewById(R.id.list1);
 
         //Solicito los permisos de ubicación y escritura
         permisosPosicion();
 
-
         // Agrego cabecera con lo nombres de las columnas al archivo
         AgregarCabecera();
 
-        //
-        lv1 = (ListView) findViewById(R.id.list1);
         // Muestro las personas cargadas
-        ListeVer();
+        //ListeVer();
         Presentacion();
-
     }
 
     //@Override
@@ -117,12 +130,14 @@ public class MainActivity extends AppCompatActivity {
         LatLong();
     }
 
-    //@RequiresApi(api = Build.VERSION_CODES.O)
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // Defino la primer pantalla que aparece al iniciar la App
     private void Presentacion(){
         // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
-        textView.setText("RelevAr");
+        textView.setText("Encuestador");
         textView.setPadding(20, 30, 20, 30);
         textView.setTextSize(22F);
         textView.setBackgroundColor(Color.parseColor("#4588BC"));
@@ -132,11 +147,12 @@ public class MainActivity extends AppCompatActivity {
         // Defino el Layaout que va a contener a los Check
         LinearLayout mainLayout       = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
+
         // Defino los parametros
         int TamañoLetra =18;
 
-        // Telefono Celular
-        LinearLayout layout0       = new LinearLayout(this);
+        //
+        /*LinearLayout layout0       = new LinearLayout(this);
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
         final TextView descripcion = new TextView(getApplicationContext());
@@ -149,15 +165,44 @@ public class MainActivity extends AppCompatActivity {
         descripcion.setTextColor(Color.WHITE);
         descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         layout0.setMinimumHeight(500);
-        layout0.addView(descripcion);
+        layout0.addView(descripcion);*/
 
+        // EditText del nombre del encuestador
+        LinearLayout layout0       = new LinearLayout(this);
+        layout0.setOrientation(LinearLayout.HORIZONTAL);
+        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final EditText nombreencuestador = new EditText(getApplicationContext());
+        nombreencuestador.setHint("NOMBRE ENCUESTADOR");
+        nombreencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        nombreencuestador.setHintTextColor(Color.WHITE);
+        nombreencuestador.setTextSize(TamañoLetra);
+        nombreencuestador.setTextColor(Color.WHITE);
+        nombreencuestador.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout0.addView(nombreencuestador);
+
+        // EditText del apellido del encuestador
+        LinearLayout layout1       = new LinearLayout(this);
+        layout1.setOrientation(LinearLayout.HORIZONTAL);
+        layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final EditText apellidoencuestador = new EditText(getApplicationContext());
+        apellidoencuestador.setHint("APELLIDO ENCUESTADOR");
+        apellidoencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        apellidoencuestador.setHintTextColor(Color.WHITE);
+        apellidoencuestador.setTextSize(TamañoLetra);
+        apellidoencuestador.setTextColor(Color.WHITE);
+        apellidoencuestador.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout1.addView(apellidoencuestador);
+
+        // Incluyo los views
         mainLayout.addView(layout0);
+        mainLayout.addView(layout1);
 
         // Add OK and Cancel buttons
         builder.setPositiveButton("EMPEZAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
+                IDencuestador = nombreencuestador.getText().toString()+" "+apellidoencuestador.getText().toString();
             }
         });
         //builder.setNegativeButton("CANCELAR", null);
@@ -165,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         // Create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+
     }
 
     private void LatLong(){
@@ -250,7 +296,9 @@ public class MainActivity extends AppCompatActivity {
         // guardo los datos
         //Toast.makeText(this, strLine+"1", Toast.LENGTH_SHORT).show();
         if(strLine.equals("CALLE")!=true){
-        String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;EFECTOR DE SALUD;FACTORES DE RIESGO;CODIGO SISA FACTOR DE RIESGO;VACUNA;TELEFONO CELULAR; TELEFONO FIJO; MAIL;OBSERVACION\n";
+        String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
+                "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
+                "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA\n";
         try {
             FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
             // que se agreguen los datos al final sin perder los datos anteriores
@@ -271,8 +319,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(Modif, 1);}
 
     private void ListeVer(){
-        //names.add("DNI: 30777333 Cosme Fulano");
-        //names.add("DNI: 77456345 LA LA");
+
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
         lv1.setAdapter(adapter);
 
@@ -281,15 +328,20 @@ public class MainActivity extends AppCompatActivity {
         //realizar accion con el listview
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int p1, long id) {
                 //Elegir entre Eliminar y Editar
-                EliminarEditar(position);
+                position=p1;
+                EliminarEditar();
+                //makeText(getBaseContext(), Integer.toString(position), LENGTH_SHORT).show();
+                makeText(getBaseContext(), MiembrosFamiliares.get(0).DNI, LENGTH_SHORT).show();
             }
         });
     }
 
-    private void EliminarEditar(final int position){
+    // Eliminar o editar un registro de una persona
+    private void EliminarEditar(){
         // Defino los contenedores
+        //makeText(getBaseContext(), MiembrosFamiliares.get(position).DNI, LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
         textView.setText("PERSONA");
@@ -302,24 +354,28 @@ public class MainActivity extends AppCompatActivity {
         // Defino el Layaout que va a contener a los Check
         LinearLayout mainLayout       = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
+
         // Defino los parametros
         int TamañoLetra =18;
 
-        // Telefono Celular
+        // Informacion de la persona
         LinearLayout layout0       = new LinearLayout(this);
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
         final TextView descripcion = new TextView(getApplicationContext());
-        //sabin.setText(Texto);
-        descripcion.setText("DNI: "+ InfoPersonas.get(position).get(0)+"\n"+"Nombre: "+ InfoPersonas.get(position).get(1));
-        //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        //descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
+        String datospersonas = "DNI: "+ MiembrosFamiliares.get(position).DNI+"\nNombre: "+ MiembrosFamiliares.get(position).Nombre+
+        "\nApellido: "+MiembrosFamiliares.get(position).Apellido+"\nEdad: "+MiembrosFamiliares.get(position).Edad+" "+MiembrosFamiliares.get(position).UnidadEdad+
+                "\nFecha de nacimiento: " + MiembrosFamiliares.get(position).Nacimiento + "\nEfector: "+MiembrosFamiliares.get(position).Efector+"\nFactores de Riesgo: "+MiembrosFamiliares.get(position).FactoresDeRiesgo+"\nVacunas aplicadas: "+
+                MiembrosFamiliares.get(position).Vacunas+"\nLote de vacunas: "+MiembrosFamiliares.get(position).LoteVacuna+"\nCelular: "+
+                MiembrosFamiliares.get(position).Celular+"\nObservaciones: "+MiembrosFamiliares.get(position).Observaciones;
+        descripcion.setText(datospersonas);
         descripcion.setTextSize(TamañoLetra);
         descripcion.setTextColor(Color.WHITE);
         descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         layout0.setMinimumHeight(500);
         layout0.addView(descripcion);
 
+        // Añadir los view al Layout
         mainLayout.addView(layout0);
 
         // Add OK and Cancel buttons
@@ -328,78 +384,90 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
                 Intent Modif= new Intent (getBaseContext(), persona.class);
-                Modif.putExtra("DATOS" , InfoPersonas.get(position));
-                InfoPersonas.remove(position);
-                lv1.setAdapter(null);
-                adapter.clear();
+                Modif.putExtra("NOMBRE" , MiembrosFamiliares.get(position).Nombre);
+                Modif.putExtra("APELLIDO" , MiembrosFamiliares.get(position).Apellido);
+                Modif.putExtra("DNI" , MiembrosFamiliares.get(position).DNI);
+                Modif.putExtra("EDAD" ,  MiembrosFamiliares.get(position).Edad);
+                Modif.putExtra("UNIDADEDAD" ,  MiembrosFamiliares.get(position).UnidadEdad);
+                Modif.putExtra("EFECTOR" , MiembrosFamiliares.get(position).Efector);
+                Modif.putExtra("FACTORES" , MiembrosFamiliares.get(position).FactoresDeRiesgo);
+                Modif.putExtra("CODIGOFACTORES" ,  MiembrosFamiliares.get(position).CodfigoFactorRiesgo);
+                Modif.putExtra("VACUNAS" ,  MiembrosFamiliares.get(position).Vacunas);
+                Modif.putExtra("CELULAR" ,  MiembrosFamiliares.get(position).Celular);
+                Modif.putExtra("FIJO" ,  MiembrosFamiliares.get(position).Fijo);
+                Modif.putExtra("MAIL" ,  MiembrosFamiliares.get(position).Mail);
+                Modif.putExtra("OBSERVACIONES" , MiembrosFamiliares.get(position).Observaciones);
+                Modif.putExtra("NACIMIENTO" , MiembrosFamiliares.get(position).Nacimiento);
+                Modif.putExtra("LIMPIEZA" , MiembrosFamiliares.get(position).Limpieza);
+                Modif.putExtra("LOTE" , MiembrosFamiliares.get(position).LoteVacuna);
+                setResult(RESULT_OK, Modif);
+                MiembrosFamiliares.remove(position);
+                names.remove(position);
+
                 ListeVer();
                 startActivityForResult(Modif, 1);
+
             }
         });
         builder.setNegativeButton("ELIMINAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                InfoPersonas.remove(position);
-                lv1.setAdapter(null);
-                adapter.clear();
+                MiembrosFamiliares.remove(position);
+                names.remove(position);
                 ListeVer();
             }
         });
+        builder.setNeutralButton("VOLVER", null);
         builder.setView(mainLayout);
+
         // Create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    // Recibir los datos de la carga de personas
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1){
             if(resultCode== RESULT_OK){
+                ObjetoPersona Persona=new ObjetoPersona();
                 ArrayList<String> CamposPersona = new ArrayList<String>();
-                //DNIreturn=getIntent().getStringExtra("DNI");
-                DNIreturn = data.getStringExtra("DNI");
-                Nombrereturn = data.getStringExtra("NOMBRE");
-                Apellidoreturn = data.getStringExtra("APELLIDO");
-                Edadreturn = data.getStringExtra("EDAD");
-                Unidadedadreturn = data.getStringExtra("UNIDADEDAD");
-                Efectorreturn = data.getStringExtra("EFECTOR");
-                Factoresreturn = data.getStringExtra("FACTORES");
-                Codigofactoresreturn = data.getStringExtra("CODIGOFACTORES");
-                Vacunasreturn = data.getStringExtra("VACUNAS");
-                Contactoreturn = data.getStringExtra("CONTACTO");
-                Observacionesreturn = data.getStringExtra("OBSERVACIONES");
-                Nacimiento = data.getStringExtra("NACIMIENTO");
-                // Lleno el Array de personas con datos
-                CamposPersona.add(DNIreturn);           //0
-                CamposPersona.add(Apellidoreturn);      //1
-                CamposPersona.add(Nombrereturn);        //2
-                CamposPersona.add(Edadreturn);          //3
-                CamposPersona.add(Unidadedadreturn);    //4
-                CamposPersona.add(Efectorreturn);       //5
-                CamposPersona.add(Factoresreturn);      //6
-                CamposPersona.add(Codigofactoresreturn);//7
-                CamposPersona.add(Vacunasreturn);       //8
-                CamposPersona.add(Contactoreturn);      //9,10,11
-                CamposPersona.add(Observacionesreturn); //12
-                CamposPersona.add(Nacimiento);          //12
 
-                InfoPersonas.add(CamposPersona);
+                Persona.DNI = data.getStringExtra("DNI");
+                Persona.Nombre = data.getStringExtra("NOMBRE");
+                Persona.Apellido = data.getStringExtra("APELLIDO");
+                Persona.Edad = data.getStringExtra("EDAD");
+                Persona.UnidadEdad = data.getStringExtra("UNIDADEDAD");
+                Persona.Efector = data.getStringExtra("EFECTOR");
+                Persona.FactoresDeRiesgo = data.getStringExtra("FACTORES");
+                Persona.CodfigoFactorRiesgo = data.getStringExtra("CODIGOFACTORES");
+                Persona.Vacunas = data.getStringExtra("VACUNAS");
+                Persona.Celular = data.getStringExtra("CELULAR");
+                Persona.Fijo = data.getStringExtra("FIJO");
+                Persona.Mail = data.getStringExtra("MAIL");
+                Persona.Observaciones = data.getStringExtra("OBSERVACIONES");
+                Persona.Nacimiento = data.getStringExtra("NACIMIENTO");
+                Persona.Limpieza = data.getStringExtra("LIMPIEZA");
+                Persona.LoteVacuna = data.getStringExtra("LOTE");
 
-                makeText(this, DNIreturn, LENGTH_SHORT).show();
-                names.add("DNI: "+DNIreturn+" "+Apellidoreturn+" "+Nombrereturn);
+                //Agrego la persona como miembro de la familia
+                MiembrosFamiliares.add(Persona);
+
+                //makeText(this, Persona.Nombre, LENGTH_SHORT).show();
+                names.add("DNI: "+Persona.DNI+" "+Persona.Apellido+" "+Persona.Nombre);}
 
                 ListeVer();
-            }
         }
     }
-
+    // Guardar datos del grupo familiar
     //@RequiresApi(api = Build.VERSION_CODES.O)
     public void Guardar(View view){
         // Inicio la obtencion de datos de ubicacion del GPS
         LatLong();
-        if(InfoPersonas.size()!=0){
-        if (Latitud != null && Longitud != null && grupofamiliar.getText().toString().length() != 0) {
+        if(MiembrosFamiliares.size()!=0){
+        if (Latitud != null && Longitud != null && grupofamiliar.getText().toString().length()!= 0) {
         // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
@@ -452,18 +520,14 @@ public class MainActivity extends AppCompatActivity {
                         // que se agreguen los datos al final sin perder los datos anteriores
                         OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
                         String guardar = null;
-                        for (int x = 0; x < InfoPersonas.size(); x++) {
+                        for (int x = 0; x < MiembrosFamiliares.size(); x++) {
                             guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + grupofamiliar.getText().toString();
-                            for (int y = 0; y < InfoPersonas.get(x).size()-1; y++) {
-                                //guardar = "ACA1";
-                                guardar += ";" + InfoPersonas.get(x).get(y);
-                            }
+                            guardar+=";"+MiembrosFamiliares.get(x).FormatoGuardar();
                             guardar += "\n";
                             myOutWriter.append(guardar);
                         }
 
                         InfoPersonas.clear();
-                        //Toast.makeText(this, InfoPersonas.get(0).get(0).toString(), Toast.LENGTH_SHORT).show();
                         lv1.setAdapter(null);
                         adapter.clear();
                         calle.setText("");
@@ -474,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (IOException e) {
                         e.printStackTrace();
-                        //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
+
                     }
             }
         });
@@ -488,5 +552,11 @@ public class MainActivity extends AppCompatActivity {
             makeText(this, "FALTA LLENAR MIEMBROS G. FAMILIAR", LENGTH_SHORT).show();
         }}else{ makeText(this, "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();} }
 
+    // Desactivo el boton de volver atras
+    @Override
+    public void onBackPressed()
+    {
+        //thats it
+    }
 }
 
