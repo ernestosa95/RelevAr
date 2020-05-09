@@ -23,6 +23,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.Layout;
 import android.text.format.DateFormat;
@@ -40,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
@@ -66,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private int STORAGE_PERMISSION_CODE =1;
 
     // Definicion de String para contener informacion
-    private String Latitud, Longitud, DNIreturn, Nombrereturn, Apellidoreturn, Edadreturn,
-            Unidadedadreturn ,Efectorreturn ,Factoresreturn ,Codigofactoresreturn, Vacunasreturn,
-            Contactoreturn ,Observacionesreturn, Nacimiento, Limpiezareturn, Lotereturn, IDencuestador;
+    private String Latitud, Longitud, IDencuestador="";
 
     // Definicion de EditText para ingresar info
     private EditText calle, numero, grupofamiliar;
@@ -115,9 +116,8 @@ public class MainActivity extends AppCompatActivity {
         // Agrego cabecera con lo nombres de las columnas al archivo
         AgregarCabecera();
 
-        // Muestro las personas cargadas
-        //ListeVer();
-        Presentacion();
+        // Solicito los datos del encuestador
+        //Presentacion();
     }
 
     //@Override
@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    // SOLICIUD DE LOS DATOS DEL ENCUESTADOR
+
     // Defino la primer pantalla que aparece al iniciar la App
     private void Presentacion(){
         // Defino los contenedores
@@ -151,29 +153,13 @@ public class MainActivity extends AppCompatActivity {
         // Defino los parametros
         int TamañoLetra =18;
 
-        //
-        /*LinearLayout layout0       = new LinearLayout(this);
-        layout0.setOrientation(LinearLayout.HORIZONTAL);
-        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final TextView descripcion = new TextView(getApplicationContext());
-        //sabin.setText(Texto);
-        descripcion.setText("Esta App permite cargar datos de salud personal, partiendo desde la ubicación del grupo familiar.\n\n- Los datos son almacenados en \nMEMORIA DEL TELEFONO->RelevAr." +
-                "\n\n- La App no utiliza Datos moviles para establecer la Longitud y Latitud.\n\nAnte cualquier duda comunicarse con los desarrolladores.");
-        //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        //descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
-        descripcion.setTextSize(TamañoLetra);
-        descripcion.setTextColor(Color.WHITE);
-        descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout0.setMinimumHeight(500);
-        layout0.addView(descripcion);*/
-
         // EditText del nombre del encuestador
         LinearLayout layout0       = new LinearLayout(this);
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
         final EditText nombreencuestador = new EditText(getApplicationContext());
         nombreencuestador.setHint("NOMBRE ENCUESTADOR");
-        nombreencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        //nombreencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
         nombreencuestador.setHintTextColor(Color.WHITE);
         nombreencuestador.setTextSize(TamañoLetra);
         nombreencuestador.setTextColor(Color.WHITE);
@@ -186,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
         final EditText apellidoencuestador = new EditText(getApplicationContext());
         apellidoencuestador.setHint("APELLIDO ENCUESTADOR");
-        apellidoencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        //apellidoencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
         apellidoencuestador.setHintTextColor(Color.WHITE);
         apellidoencuestador.setTextSize(TamañoLetra);
         apellidoencuestador.setTextColor(Color.WHITE);
@@ -198,11 +184,13 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(layout1);
 
         // Add OK and Cancel buttons
-        builder.setPositiveButton("EMPEZAR", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("LISTO!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
                 IDencuestador = nombreencuestador.getText().toString()+" "+apellidoencuestador.getText().toString();
+                // Obtener la posicion cada 10 segundos
+                ejecutar();
             }
         });
         //builder.setNegativeButton("CANCELAR", null);
@@ -212,6 +200,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
     }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // OBTENCION DE LOS DATOS DE LONGTUD Y LATITUD
 
     private void LatLong(){
     //public void LatLong(View view){
@@ -237,8 +229,60 @@ public class MainActivity extends AppCompatActivity {
 
 // Register the listener with the Location Manager to receive location updates
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
+
+    // Guardar el recorrido de las persona
+    private void ejecutar(){
+        final Handler handler= new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LatLong();
+                GuardarRecorrido();
+                handler.postDelayed(this,10000);//se ejecutara cada 10 segundos
+            }
+        },0);//empezara a ejecutarse después de 5 milisegundos
+    }
+
+    private void GuardarRecorrido(){
+        permisosEscribir();
+        // Agrego la cabecera en .csv
+        File ReleVar = new File(Environment.getExternalStorageDirectory() +
+                "/RelevAr");
+        File nuevaCarpeta = new File(ReleVar, "RECORRIDOS");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "Recorridos-"+fecha+".csv";
+
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        Calendar calendario = new GregorianCalendar();
+        int hora, minutos, segundos;
+        hora =calendario.get(Calendar.HOUR_OF_DAY);
+        minutos = calendario.get(Calendar.MINUTE);
+        segundos = calendario.get(Calendar.SECOND);
+
+        String cabecera = Integer.toString(hora)+":"+Integer.toString(minutos)+":"+Integer.toString(segundos)+";"+Latitud+" "+Longitud+";"+IDencuestador+"\n";
+        try {
+                FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
+                // que se agreguen los datos al final sin perder los datos anteriores
+                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                myOutWriter.append(cabecera);
+                myOutWriter.close();
+                fOut.close();
+
+        } catch (IOException e){
+                e.printStackTrace();
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SOLICITUD DE PERMISOS
 
     private void permisosEscribir(){
         // Check whether this app has write external storage permission or not.
@@ -262,6 +306,10 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_POSITION);
         }
     }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // AGREGAR CABECERA POR UNICA VEZ A LOS ARCHIVOS DE DATOS
 
     private void AgregarCabecera(){
         permisosEscribir();
@@ -294,19 +342,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             }
         // guardo los datos
-        //Toast.makeText(this, strLine+"1", Toast.LENGTH_SHORT).show();
         if(strLine.equals("CALLE")!=true){
         String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
                 "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
-                "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA\n";
+                "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;ENCUESTADOR\n";
         try {
+
             FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
             // que se agreguen los datos al final sin perder los datos anteriores
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            //BufferedWriter writer = null;
+            //writer = new BufferedWriter( new OutputStreamWriter(
+            //        new FileOutputStream( dir ),"UTF-8"));
             myOutWriter.append(cabecera);
             myOutWriter.close();
             fOut.close();
-           // Toast.makeText(this, strLine+"2", Toast.LENGTH_SHORT).show();
+           //Toast.makeText(this, strLine+"2", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e){
             e.printStackTrace();
@@ -314,6 +365,9 @@ public class MainActivity extends AppCompatActivity {
         }}
     }
 
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
         Intent Modif= new Intent (this, persona.class);
         startActivityForResult(Modif, 1);}
@@ -333,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                 position=p1;
                 EliminarEditar();
                 //makeText(getBaseContext(), Integer.toString(position), LENGTH_SHORT).show();
-                makeText(getBaseContext(), MiembrosFamiliares.get(0).DNI, LENGTH_SHORT).show();
+                //makeText(getBaseContext(), MiembrosFamiliares.get(0).DNI, LENGTH_SHORT).show();
             }
         });
     }
@@ -426,7 +480,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Recibir los datos de la carga de personas
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -461,13 +514,18 @@ public class MainActivity extends AppCompatActivity {
                 ListeVer();
         }
     }
-    // Guardar datos del grupo familiar
-    //@RequiresApi(api = Build.VERSION_CODES.O)
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // GUARDAR GRUPO FAMILIAR
+
     public void Guardar(View view){
         // Inicio la obtencion de datos de ubicacion del GPS
         LatLong();
         if(MiembrosFamiliares.size()!=0){
-        if (Latitud != null && Longitud != null && grupofamiliar.getText().toString().length()!= 0) {
+            if(IDencuestador.length()!=1){
+                //makeText(this, Integer.toString(IDencuestador.length()), LENGTH_SHORT).show();
+                if (Latitud != null && Longitud != null && grupofamiliar.getText().toString().length()!= 0) {
         // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
@@ -519,15 +577,18 @@ public class MainActivity extends AppCompatActivity {
                         FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
                         // que se agreguen los datos al final sin perder los datos anteriores
                         OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                        /*BufferedWriter writer = null;
+                        writer = new BufferedWriter( new OutputStreamWriter(
+                                new FileOutputStream( dir ),"UTF-8"));*/
                         String guardar = null;
                         for (int x = 0; x < MiembrosFamiliares.size(); x++) {
                             guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + grupofamiliar.getText().toString();
                             guardar+=";"+MiembrosFamiliares.get(x).FormatoGuardar();
-                            guardar += "\n";
+                            guardar += ";"+IDencuestador+"\n";
                             myOutWriter.append(guardar);
                         }
 
-                        InfoPersonas.clear();
+                        MiembrosFamiliares.clear();
                         lv1.setAdapter(null);
                         adapter.clear();
                         calle.setText("");
@@ -550,7 +611,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
         } else {
             makeText(this, "FALTA LLENAR MIEMBROS G. FAMILIAR", LENGTH_SHORT).show();
-        }}else{ makeText(this, "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();} }
+        }}
+            else{ Presentacion();}}
+            else{ makeText(this, "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
+    }
 
     // Desactivo el boton de volver atras
     @Override

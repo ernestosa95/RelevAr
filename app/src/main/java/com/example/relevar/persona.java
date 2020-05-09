@@ -71,7 +71,7 @@ public class persona extends AppCompatActivity {
             dt, antigripal, vcn23, vcn13, tetravalente, ipv, sabin;
     CheckBox calendario, embarazo, puerperio, personalsalud, personalesencial, viajeros,
             inmunocomprometidos, cadiologicos, respiratorios, diabeticos, prematuros, asplenicos,
-            obesidad, inmunodeficiencia, conviviente, otros;
+            obesidad, inmunodeficiencia, conviviente,HTA, otros;
 
     // Defino el Interfaz para ingresar la fecha
     private DatePickerDialog.OnDateSetListener Date;
@@ -574,7 +574,7 @@ public class persona extends AppCompatActivity {
     // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
-        textView.setText("VACUNAS");
+        textView.setText("FACTORES DE RIESGO");
         textView.setPadding(20, 30, 20, 30);
         textView.setTextSize(22F);
         textView.setBackgroundColor(Color.parseColor("#4588BC"));
@@ -600,7 +600,8 @@ public class persona extends AppCompatActivity {
         obesidad = PersonalCheck(mainLayout,"OBESIDAD MORBIDA", TamañoLetra, ColorPares, AltoContenedor);
         inmunodeficiencia = PersonalCheck(mainLayout,"INMUNODEFICIENCIA", TamañoLetra, ColorImpares, AltoContenedor);
         conviviente = PersonalCheck(mainLayout,"CONVIVIENTE INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
-        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorImpares, AltoContenedor);
+        HTA = PersonalCheck(mainLayout,"HIPERTENSO", TamañoLetra, ColorImpares, AltoContenedor);
+        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorPares, AltoContenedor);
 
         // En el caso de editar un registro
         // Necesito que me ponga seleccionado todos aquellos que ya se habian seleeccionado antes
@@ -721,6 +722,14 @@ public class persona extends AppCompatActivity {
                     } else {
                         riesgos+=",CONVIVIENTE INMUNOCOMPROMETIDOS";
                         codigoriesgo+=",15";}}
+                if (HTA.isChecked()){
+                    if (riesgos==null){
+                        riesgos="HIPERTENSO";
+                        //codigoriesgo="";
+                    } else {
+                        riesgos+=",HIPERTENSO";
+                        //codigoriesgo+="";
+                        }}
                 if (otros.isChecked()){
                     if (riesgos==null){
                         riesgos="OTROS";
