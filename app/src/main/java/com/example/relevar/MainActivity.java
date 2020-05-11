@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> names = new ArrayList<String>();
     private ArrayList<ArrayList<String>> InfoPersonas = new ArrayList<ArrayList<String>>();
     private ArrayList<ObjetoPersona> MiembrosFamiliares = new ArrayList<ObjetoPersona>();
+    private double[] latitude = new double[3];
+    private double[] longitude = new double[3];
 
     // Defino la lisa de personas
     private ListView lv1;
@@ -117,7 +119,10 @@ public class MainActivity extends AppCompatActivity {
         AgregarCabecera();
 
         // Solicito los datos del encuestador
-        //Presentacion();
+        Presentacion();
+
+        // Inicio el guardado del recorrido
+        ejecutar();
     }
 
     //@Override
@@ -158,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
         final EditText nombreencuestador = new EditText(getApplicationContext());
-        nombreencuestador.setHint("NOMBRE ENCUESTADOR");
+        nombreencuestador.setHint("NOMBRE Y APELLIDO");
         //nombreencuestador.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
         nombreencuestador.setHintTextColor(Color.WHITE);
         nombreencuestador.setTextSize(TamañoLetra);
@@ -166,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         nombreencuestador.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         layout0.addView(nombreencuestador);
 
-        // EditText del apellido del encuestador
+        /*// EditText del apellido del encuestador
         LinearLayout layout1       = new LinearLayout(this);
         layout1.setOrientation(LinearLayout.HORIZONTAL);
         layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
@@ -177,18 +182,18 @@ public class MainActivity extends AppCompatActivity {
         apellidoencuestador.setTextSize(TamañoLetra);
         apellidoencuestador.setTextColor(Color.WHITE);
         apellidoencuestador.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout1.addView(apellidoencuestador);
+        layout1.addView(apellidoencuestador);*/
 
         // Incluyo los views
         mainLayout.addView(layout0);
-        mainLayout.addView(layout1);
+        //mainLayout.addView(layout1);
 
         // Add OK and Cancel buttons
         builder.setPositiveButton("LISTO!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
-                IDencuestador = nombreencuestador.getText().toString()+" "+apellidoencuestador.getText().toString();
+                IDencuestador = nombreencuestador.getText().toString();
                 // Obtener la posicion cada 10 segundos
                 ejecutar();
             }
@@ -218,6 +223,18 @@ public class MainActivity extends AppCompatActivity {
                 Longitud=Double.toString(location.getLongitude());
                 lat.setText(Latitud);
                 lon.setText(Longitud);
+
+                /*double LatPromedio=0;
+                latitude [0] = latitude [1];
+                latitude [1] = latitude [2];
+                latitude [2] = location.getLatitude();
+
+                if(latitude[0]!=0 && latitude[1]!=0){
+                LatPromedio = (latitude[0]+latitude[1])/2;}
+                if(LatPromedio!=0 && latitude[2]!=0){
+                    LatPromedio = (LatPromedio+latitude[2])/2;
+                    Toast.makeText(getBaseContext(), Double.toString(LatPromedio), Toast.LENGTH_SHORT).show();
+                }*/
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -241,13 +258,13 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 LatLong();
                 GuardarRecorrido();
-                handler.postDelayed(this,10000);//se ejecutara cada 10 segundos
+                handler.postDelayed(this,20000);//se ejecutara cada 20 segundos
             }
         },0);//empezara a ejecutarse después de 5 milisegundos
     }
 
     private void GuardarRecorrido(){
-        permisosEscribir();
+        //permisosEscribir();
         // Agrego la cabecera en .csv
         File ReleVar = new File(Environment.getExternalStorageDirectory() +
                 "/RelevAr");
@@ -266,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
         minutos = calendario.get(Calendar.MINUTE);
         segundos = calendario.get(Calendar.SECOND);
 
+        if(Latitud!=null && Longitud!=null){
         String cabecera = Integer.toString(hora)+":"+Integer.toString(minutos)+":"+Integer.toString(segundos)+";"+Latitud+" "+Longitud+";"+IDencuestador+"\n";
         try {
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
@@ -277,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (IOException e){
                 e.printStackTrace();
-        }
+        }}
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -520,12 +538,13 @@ public class MainActivity extends AppCompatActivity {
     // GUARDAR GRUPO FAMILIAR
 
     public void Guardar(View view){
+        final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
         // Inicio la obtencion de datos de ubicacion del GPS
         LatLong();
         if(MiembrosFamiliares.size()!=0){
-            if(IDencuestador.length()!=1){
+            if(IDencuestador.length()!=0){
                 //makeText(this, Integer.toString(IDencuestador.length()), LENGTH_SHORT).show();
-                if (Latitud != null && Longitud != null && grupofamiliar.getText().toString().length()!= 0) {
+                if (CantidadGrupoFamiliar.length()!= 0) {
         // Defino los contenedores
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
         TextView textView = new TextView(this);
@@ -582,7 +601,7 @@ public class MainActivity extends AppCompatActivity {
                                 new FileOutputStream( dir ),"UTF-8"));*/
                         String guardar = null;
                         for (int x = 0; x < MiembrosFamiliares.size(); x++) {
-                            guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + grupofamiliar.getText().toString();
+                            guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + CantidadGrupoFamiliar;
                             guardar+=";"+MiembrosFamiliares.get(x).FormatoGuardar();
                             guardar += ";"+IDencuestador+"\n";
                             myOutWriter.append(guardar);

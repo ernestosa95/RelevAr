@@ -1218,7 +1218,7 @@ public class persona extends AppCompatActivity {
         layout0.setOrientation(LinearLayout.HORIZONTAL);
         layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
         final TextView descripcion = new TextView(getApplicationContext());
-        descripcion.setText("VOLVER, sin guardar cambios");
+        descripcion.setText("Salir y eliminar registro");
         descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
         descripcion.setTextSize(TamañoLetra);
         descripcion.setTextColor(Color.WHITE);
@@ -1233,14 +1233,14 @@ public class persona extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
-                if(Persona.DNI!=""){
-                GuardarPersona();}
+                //if(Persona.DNI!=""){
+                //GuardarPersona();}
                 finish();
             }
         }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+                //finish();
             }
         });
 
