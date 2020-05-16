@@ -58,7 +58,7 @@ public class persona extends AppCompatActivity {
     private String telefonocelular="", telefonofijo="", direccionmail="", date="DD-MM-AAAA";
 
     // Defino de manera global los EditText para ingresar informacion
-    private EditText dni, Apellido, Nombre, Edad, celular, fijo, mail, obs, lotevacuna;
+    private EditText dni, Apellido, Nombre, Efector, celular, fijo, mail, obs, lotevacuna;
 
     // Defino de manera global los TextView para mostrar informacion
     private TextView fecha, tipovacuna, limp, Riesgo, AvRiesgo, Vacuna, Contacto, Observacion, AvVacuna, AvContacto, AvObs;
@@ -99,6 +99,7 @@ public class persona extends AppCompatActivity {
         dni = (EditText) findViewById(R.id.DNI);
         Apellido = (EditText) findViewById(R.id.APELLIDO);
         Nombre = (EditText) findViewById(R.id.NOMBRE);
+        Efector = (EditText) findViewById(R.id.EFECTOR);
         Vacuna = (TextView) findViewById(R.id.VACUNA);
         Riesgo = (TextView) findViewById(R.id.RIESGO);
         Contacto = (TextView) findViewById(R.id.CONTACTO);
@@ -110,7 +111,7 @@ public class persona extends AppCompatActivity {
         AvObs=(TextView) findViewById(R.id.AvanceObservaciones);
 
         // Defino el Spinner de los efectores
-        Sp1 = (Spinner) findViewById(R.id.efector);
+        /*Sp1 = (Spinner) findViewById(R.id.efector);
         categorias.add("CAPs D'ANGELO");
         categorias.add("CAPs ANTARTIDA (CIC)");
         categorias.add("CAPs SAN MARTIN");
@@ -119,7 +120,7 @@ public class persona extends AppCompatActivity {
         categorias.add("HOSP. SAN MARTIN");
         categorias.add("HOSP. BAXADA");
         ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, categorias);//Cargo el spinner con los datos
-        Sp1.setAdapter(comboAdapter);
+        Sp1.setAdapter(comboAdapter);*/
 
         // Construyo el widget para la fecha
         Date = new DatePickerDialog.OnDateSetListener() {
@@ -1118,7 +1119,7 @@ public class persona extends AppCompatActivity {
         if(Nombre.getText().toString()!=null){Persona.Nombre=Nombre.getText().toString();}
         if(Apellido.getText().toString()!=null){Persona.Apellido=Apellido.getText().toString();}
         if(dni.getText().toString()!=null){Persona.DNI=dni.getText().toString();}
-        if(Sp1.getSelectedItem().toString()!=null){Persona.Efector=Sp1.getSelectedItem().toString();}
+        if(Efector.getText().toString()!=null){Persona.Efector=Efector.getText().toString();}
 
         // Si uno de los campos listados abajo es nulo lo reemplazo por S/D
         if(Persona.Edad==null){Persona.Edad="";}
