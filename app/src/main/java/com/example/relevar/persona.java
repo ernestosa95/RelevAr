@@ -126,37 +126,13 @@ public class persona extends AppCompatActivity {
         Date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int  year, int month, int day) {
-                Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
+                //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
                 date=day+"-"+mes+"-"+year;
-                fecha.setText(date);
+                fecha.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
                 Persona.Nacimiento = date;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                Date date1 = new Date();
-                String fecha1 = dateFormat.format(date1);
-                String[] partes = fecha1.split("-");
-                int anioactual = Integer.parseInt(partes[0]);
-                int mesactual = Integer.parseInt(partes[1]);
-                int diaactual = Integer.parseInt(partes[2]);
-                java.util.Date Actual = new Date(anioactual, mesactual, diaactual);
-                if(fecha.getText().toString()!="DD-MM-YYYY"){
-                    java.util.Date Nacimiento = new Date(year, month, day);
-                    long diferencia = Actual.getTime() - Nacimiento.getTime();
-                    long segsMilli = 1000;
-                    long minsMilli = segsMilli * 60;
-                    long horasMilli = minsMilli * 60;
-                    long diasMilli = horasMilli * 24;
-                    long mesesMillo = diasMilli * 30;
-                    long añosMilli = diasMilli * 365;
-                    long AñosTranscurridos = diferencia / añosMilli;
-                    if(AñosTranscurridos<2){
-                        long MesesTranscurridos = diferencia / mesesMillo;
-                        Persona.Edad=Long.toString(MesesTranscurridos);
-                        Persona.UnidadEdad="MESES";
-                    }
-                    else {Persona.Edad=Long.toString(AñosTranscurridos);
-                        Persona.UnidadEdad="AÑOS";}
-                }else Persona.Edad="";}
+                Persona.CalcularEdad(year, month, day);
+                }
         };
 
         // Cargo los datos para que se pueda editar un registro que ya esta hecho

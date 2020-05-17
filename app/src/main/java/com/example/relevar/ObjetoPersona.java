@@ -1,5 +1,9 @@
 package com.example.relevar;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ObjetoPersona {
     public String Nombre;
     public String Apellido;
@@ -31,7 +35,6 @@ public class ObjetoPersona {
         Celular="";
         Fijo="";
         Mail="";
-        Nacimiento="";
         Edad="";
         FactoresDeRiesgo="";
         Vacunas="";
@@ -49,6 +52,35 @@ public class ObjetoPersona {
                 ";"+FactoresDeRiesgo+";"+CodfigoFactorRiesgo+";"+Vacunas+";"+LoteVacuna+";"+Celular+
                 ";"+Fijo+";"+Mail+";"+Observaciones+";"+Limpieza;
         return guardar;
+    }
+
+    public void CalcularEdad(int year, int month, int day){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha1 = dateFormat.format(date1);
+        String[] partes = fecha1.split("-");
+        int anioactual = Integer.parseInt(partes[0]);
+        int mesactual = Integer.parseInt(partes[1]);
+        int diaactual = Integer.parseInt(partes[2]);
+        java.util.Date Actual = new Date(anioactual, mesactual, diaactual);
+        if(Nacimiento!="mm dd, aaaa"){
+            java.util.Date Nacimiento = new Date(year, month, day);
+            long diferencia = Actual.getTime() - Nacimiento.getTime();
+            long segsMilli = 1000;
+            long minsMilli = segsMilli * 60;
+            long horasMilli = minsMilli * 60;
+            long diasMilli = horasMilli * 24;
+            long mesesMillo = diasMilli * 30;
+            long añosMilli = diasMilli * 365;
+            long AñosTranscurridos = diferencia / añosMilli;
+            if(AñosTranscurridos<2){
+                long MesesTranscurridos = diferencia / mesesMillo;
+                Edad=Long.toString(MesesTranscurridos);
+                UnidadEdad="MESES";
+            }
+            else {Edad=Long.toString(AñosTranscurridos);
+                UnidadEdad="AÑOS";}
+        }else Edad="";
     }
 }
 
