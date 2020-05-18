@@ -20,41 +20,47 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/NUEVOENCUESTADOR"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button1"
-        android:text="NUEVO"
-        android:textColor="#4A4A4A"
-        app:layout_constraintBottom_toBottomOf="@+id/BTNCANCELANE"
-        app:layout_constraintEnd_toStartOf="@+id/BTNCANCELANE"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/ENCUESTADOR"
-        app:layout_constraintTop_toTopOf="@+id/BTNCANCELANE" />
-
-    <Button
         android:id="@+id/BTNCANCELANE"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button1"
-        android:text="INGRESAR"
+        android:text="CANCELAR"
         android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/ENCUESTADOR"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ENCUESTADOR" />
+        app:layout_constraintEnd_toEndOf="@+id/EditNuevoEncuestador"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/EditNuevoEncuestador"
+        app:layout_constraintTop_toBottomOf="@+id/EditNuevoEncuestador" />
 
-    <Spinner
-        android:id="@+id/ENCUESTADOR"
-        android:layout_width="300dp"
+    <Button
+        android:id="@+id/BTNNUEVOENCUESTADOR2"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:popupBackground="@drawable/edit_text_1"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button1"
+        android:text="GUARDAR"
+        android:textColor="#4A4A4A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/EditNuevoEncuestador"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EditNuevoEncuestador" />
+
+    <EditText
+        android:id="@+id/EditNuevoEncuestador"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_1"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="APELLIDO NOMBRE"
+        android:textColor="#4A4A4A"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
