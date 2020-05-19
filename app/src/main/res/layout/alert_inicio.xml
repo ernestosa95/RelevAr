@@ -11,29 +11,27 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="150dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/button1"
+        android:onClick="NextMenuPrincipal"
         android:text="EMPEZAR"
         android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:text="RELEVAMIENTO | GEOREFERENCIACIÓN"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EMPEZAR"
-        app:layout_constraintVertical_bias="0.351" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/divider5"

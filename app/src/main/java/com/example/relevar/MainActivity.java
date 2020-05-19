@@ -2,6 +2,7 @@ package com.example.relevar;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -84,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> names = new ArrayList<String>();
     private ArrayList<ArrayList<String>> InfoPersonas = new ArrayList<ArrayList<String>>();
     private ArrayList<ObjetoPersona> MiembrosFamiliares = new ArrayList<ObjetoPersona>();
-    private double[] latitude = new double[3];
-    private double[] longitude = new double[3];
 
     // Defino la lisa de personas
     private ListView lv1;
@@ -103,26 +102,30 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); //evita la rotacion
         setContentView(R.layout.activity_main);
 
+        // Seteo el titulo de la action bar del activity
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Familia");
+
         // Definición de los widget
-        calle = (EditText) findViewById(R.id.CALLE);
-        numero = (EditText) findViewById(R.id.NUMERO);
-        grupofamiliar = (EditText) findViewById(R.id.GRUPOFAMILIAR);
+        //calle = (EditText) findViewById(R.id.CALLE);
+        //numero = (EditText) findViewById(R.id.NUMERO);
+        //grupofamiliar = (EditText) findViewById(R.id.GRUPOFAMILIAR);
         btnagregarpersona = (Button) findViewById(R.id.AGREGARPERSONA);
-        lat = (TextView) findViewById(R.id.LATITUD);
-        lon = (TextView) findViewById(R.id.LONGITUD);
+        //lat = (TextView) findViewById(R.id.LATITUD);
+        //lon = (TextView) findViewById(R.id.LONGITUD);
         lv1 = (ListView) findViewById(R.id.list1);
 
         //Solicito los permisos de ubicación y escritura
-        permisosPosicion();
+        //permisosPosicion();
 
         // Agrego cabecera con lo nombres de las columnas al archivo
-        AgregarCabecera();
+        //AgregarCabecera();
 
         // Solicito los datos del encuestador
-        Presentacion();
+        //Presentacion();
 
         // Inicio el guardado del recorrido
-        ejecutar();
+        //ejecutar();
     }
 
     //@Override
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         //todo esto pa actualizr la listview
         super.onStart();
         ListeVer();
-        AgregarCabecera();
+        //AgregarCabecera();
         // Inicio la obtencion de datos de ubicacion del GPS
         LatLong();
     }
@@ -221,20 +224,8 @@ public class MainActivity extends AppCompatActivity {
                 // Called when a new location is found by the network location provider.
                 Latitud=Double.toString(location.getLatitude());
                 Longitud=Double.toString(location.getLongitude());
-                lat.setText(Latitud);
-                lon.setText(Longitud);
-
-                /*double LatPromedio=0;
-                latitude [0] = latitude [1];
-                latitude [1] = latitude [2];
-                latitude [2] = location.getLatitude();
-
-                if(latitude[0]!=0 && latitude[1]!=0){
-                LatPromedio = (latitude[0]+latitude[1])/2;}
-                if(LatPromedio!=0 && latitude[2]!=0){
-                    LatPromedio = (LatPromedio+latitude[2])/2;
-                    Toast.makeText(getBaseContext(), Double.toString(LatPromedio), Toast.LENGTH_SHORT).show();
-                }*/
+                //lat.setText(Latitud);
+                //lon.setText(Longitud);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -636,10 +627,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Desactivo el boton de volver atras
-    @Override
+    /*@Override
     public void onBackPressed()
     {
         //thats it
-    }
+    }*/
 }
 
