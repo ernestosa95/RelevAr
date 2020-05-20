@@ -110,22 +110,11 @@ public class MainActivity extends AppCompatActivity {
         //calle = (EditText) findViewById(R.id.CALLE);
         //numero = (EditText) findViewById(R.id.NUMERO);
         //grupofamiliar = (EditText) findViewById(R.id.GRUPOFAMILIAR);
-        btnagregarpersona = (Button) findViewById(R.id.AGREGARPERSONA);
+        //btnagregarpersona = (Button) findViewById(R.id.AGREGARPERSONA);
         //lat = (TextView) findViewById(R.id.LATITUD);
         //lon = (TextView) findViewById(R.id.LONGITUD);
         lv1 = (ListView) findViewById(R.id.list1);
 
-        //Solicito los permisos de ubicación y escritura
-        //permisosPosicion();
-
-        // Agrego cabecera con lo nombres de las columnas al archivo
-        //AgregarCabecera();
-
-        // Solicito los datos del encuestador
-        //Presentacion();
-
-        // Inicio el guardado del recorrido
-        //ejecutar();
     }
 
     //@Override
@@ -133,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         //todo esto pa actualizr la listview
         super.onStart();
         ListeVer();
-        //AgregarCabecera();
+
         // Inicio la obtencion de datos de ubicacion del GPS
         LatLong();
     }
@@ -383,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void ListeVer(){
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, names);
+        adapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, names);
         lv1.setAdapter(adapter);
 
         // Elegir entre eliminar y editar

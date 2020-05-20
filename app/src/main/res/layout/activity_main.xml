@@ -8,67 +8,73 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/AGREGARPERSONA"
-        android:layout_width="90dp"
-        android:layout_height="48dp"
-        android:background="#396F98"
-        android:onClick="NuevaPersona"
-        android:text="AGREGAR PERSONA"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <Button
         android:id="@+id/TERMINAR"
-        android:layout_width="352dp"
+        android:layout_width="300dp"
         android:layout_height="41dp"
-        android:layout_marginTop="28sp"
-        android:background="#8BC34A"
-        android:onClick="Guardar"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button1"
         android:text="TERMINAR GRUPO FAMILIAR"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AGREGARPERSONA"
-        app:layout_constraintVertical_bias="0.51" />
-
-    <ListView
-        android:id="@+id/list1"
-        android:layout_width="256dp"
-        android:layout_height="156dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:background="#4588BC"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="90dp"
-        android:layout_height="108dp"
-        android:background="#396F98"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/list1"
-        app:layout_constraintTop_toTopOf="@+id/list1">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ListView
+            android:id="@+id/list1"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="#4588BC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="-4dp">
+
+        </ListView>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4588BC"
+            android:gravity="center_horizontal"
+            android:text="PERSONAS CARGADAS"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="70dp"
-            android:layout_height="98dp"
-            android:background="#396F98"
-            android:clickable="true"
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_redondo"
             android:onClick="NuevaPersona"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/anadir" />
+            app:srcCompat="@drawable/more" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="409dp"
+        android:layout_height="433dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/TERMINAR"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"></LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

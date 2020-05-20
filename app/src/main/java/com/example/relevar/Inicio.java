@@ -1,12 +1,15 @@
 package com.example.relevar;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,15 @@ public class Inicio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert_inicio);
 
+        // Eliminar el action bar
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.hide();
+
+        // Evitar la rotacion
+        if(this.getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        }
+
         empezar = (Button) findViewById(R.id.EMPEZAR);
 
         // Solicito multiples permisos
@@ -49,6 +61,7 @@ public class Inicio extends AppCompatActivity {
 
         // Creo un archivo y lo inicializo con la cabecera predefinida
         AgregarCabecera();
+
     }
 
     @Override

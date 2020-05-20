@@ -10,9 +10,12 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -82,6 +85,11 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
 
+        // Evitar la rotacion
+        if(this.getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        }
+
         // String
 
 
@@ -98,6 +106,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         latLng = new LatLng(-60, -30);
         // Inicio de la App
         Encuestador();
+
 
     }
 
@@ -122,7 +131,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     map.getUiSettings().setMapToolbarEnabled(false);
 
     final Polyline ruta = map.addPolyline(new PolylineOptions()
-                        .clickable(true));
+                        .clickable(true).color(Color.parseColor("#69A4D1")));
     // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
         // Acquire a reference to the system Location Manager
         final LocationManager locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -138,6 +147,9 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),17));
                 recorrido.add(new LatLng(location.getLatitude(), location.getLongitude()));
                 ruta.setPoints(recorrido);
+
+                if (encuestador.getID().length()!=0){
+                encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));}
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -150,7 +162,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         // Register the listener with the Location Manager to receive location updates
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 10, locationListenerEncuestador);
+        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, locationListenerEncuestador);
 
     }
 
@@ -240,6 +252,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
             public void onClick(View view) {
                 if (encuestadores.getAdapter().getCount()!=0){
             encuestador.setID(encuestadores.getSelectedItem().toString());
+            //makeText(getBaseContext(), encuestador.getID(), LENGTH_SHORT).show();
             dialog.dismiss();}
                 else {makeText(getBaseContext(), "NO HAY ENCUESTADORES", LENGTH_SHORT).show();}
             }
