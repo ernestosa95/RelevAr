@@ -6,6 +6,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +16,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.relevar.Recursos.ServicioGPS;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -56,12 +61,19 @@ public class Inicio extends AppCompatActivity {
         // Solicito multiples permisos
         ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.ACCESS_FINE_LOCATION},
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION},
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
         // Creo un archivo y lo inicializo con la cabecera predefinida
         AgregarCabecera();
+        //startService(new Intent(this, ServicioGPS.class));
+        IniciarServicio();
+    }
 
+    private void IniciarServicio(){
+    Intent intent = new Intent(this, ServicioGPS.class);
+    startService(intent);
     }
 
     @Override

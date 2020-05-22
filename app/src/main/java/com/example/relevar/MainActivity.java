@@ -30,16 +30,22 @@ import android.text.Layout;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.relevar.Recursos.Encuestador;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,6 +66,7 @@ import java.util.Locale;
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.widget.Toast.*;
+import static com.example.relevar.R.drawable.fondo1;
 
 public class MainActivity extends AppCompatActivity {
     // DEFINICION DE VARIABLES GLOBALES
@@ -72,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
     // Definicion de String para contener informacion
     private String Latitud, Longitud, IDencuestador="";
 
-    // Definicion de EditText para ingresar info
-    private EditText calle, numero, grupofamiliar;
-
+    // Encustador
+    Encuestador encuestador = new Encuestador();
     // Definicion de TextView para mostrar info
     private TextView lat, lon;
 
@@ -95,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
     // Objeto Persona
     //ObjetoPersona Persona=new ObjetoPersona();
 
-    int position;
+    int position, NumerosPersonas;
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         // Seteo el titulo de la action bar del activity
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Familia");
-
+        encuestador.setID((String) getIntent().getStringExtra("IDENCUESTADOR"));
         // Definición de los widget
         //calle = (EditText) findViewById(R.id.CALLE);
         //numero = (EditText) findViewById(R.id.NUMERO);
@@ -114,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
         //lat = (TextView) findViewById(R.id.LATITUD);
         //lon = (TextView) findViewById(R.id.LONGITUD);
         lv1 = (ListView) findViewById(R.id.list1);
+
+        LinearLayout botones = (LinearLayout) findViewById(R.id.BOTONERA);
+        //botones.setBackground(ContextCompat.getDrawable(this, fondo1));
 
     }
 
@@ -126,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
         // Inicio la obtencion de datos de ubicacion del GPS
         LatLong();
     }
-
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // SOLICIUD DE LOS DATOS DEL ENCUESTADOR
@@ -516,103 +525,91 @@ public class MainActivity extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR
-
     public void Guardar(View view){
-        final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
+        //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
         // Inicio la obtencion de datos de ubicacion del GPS
-        LatLong();
+        //LatLong();
         if(MiembrosFamiliares.size()!=0){
-            if(IDencuestador.length()!=0){
-                //makeText(this, Integer.toString(IDencuestador.length()), LENGTH_SHORT).show();
-                if (CantidadGrupoFamiliar.length()!= 0) {
-        // Defino los contenedores
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
-        TextView textView = new TextView(this);
-        textView.setText("RelevAr");
-        textView.setPadding(20, 30, 20, 30);
-        textView.setTextSize(22F);
-        textView.setBackgroundColor(Color.parseColor("#4588BC"));
-        textView.setTextColor(Color.WHITE);
-        builder.setCustomTitle(textView);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                LayoutInflater Inflater = getLayoutInflater();
+                View view_alert = Inflater.inflate(R.layout.alert_guardar_familia, null);
+                builder.setView(view_alert);
+                builder.setCancelable(false);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
 
-        // Defino el Layaout que va a contener a los Check
-        LinearLayout mainLayout       = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-        // Defino los parametros
-        int TamañoLetra =18;
+                Button cancelar = view_alert.findViewById(R.id.CANCELAR1);
+                cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
-        // Telefono Celular
-        LinearLayout layout0       = new LinearLayout(this);
-        layout0.setOrientation(LinearLayout.HORIZONTAL);
-        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final TextView descripcion = new TextView(getApplicationContext());
-        //sabin.setText(Texto);
-        descripcion.setText("¿Desea guardar los datos de este grupo familiar?");
-        //descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        //descripcion.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
-        descripcion.setTextSize(TamañoLetra);
-        descripcion.setTextColor(Color.WHITE);
-        descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout0.setMinimumHeight(200);
-        layout0.addView(descripcion);
+                final EditText calle = view_alert.findViewById(R.id.CALLE);
+                final EditText numero = view_alert.findViewById(R.id.NUMERO);
+                final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
+                NumerosPersonas = MiembrosFamiliares.size();
+                cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
-        mainLayout.addView(layout0);
+                ImageView mas = view_alert.findViewById(R.id.MAS);
+                mas.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        NumerosPersonas+=1;
+                        cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
+                    }
+                });
 
-        // Add OK and Cancel buttons
-        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The user clicked OK
-                // Agrego la cabecera en .csv
-                File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
-                nuevaCarpeta.mkdirs();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                Date date1 = new Date();
-                String fecha = dateFormat.format(date1);
-                String NombreArchivo = "RelevAr-" + fecha + ".csv";
-                //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-                File dir = new File(nuevaCarpeta, NombreArchivo);
-                    try {
-                        FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
-                        // que se agreguen los datos al final sin perder los datos anteriores
-                        OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                ImageView menos = view_alert.findViewById(R.id.MENOS);
+                menos.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (NumerosPersonas!=MiembrosFamiliares.size()){
+                        NumerosPersonas-=1;
+                        cantidadintegrantes.setText(Integer.toString(NumerosPersonas));}
+                    }
+                });
+
+                Button guardar = view_alert.findViewById(R.id.GUARDAR1);
+                guardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // The user clicked OK
+                        // Agrego la cabecera en .csv
+                        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+                        nuevaCarpeta.mkdirs();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        Date date1 = new Date();
+                        String fecha = dateFormat.format(date1);
+                        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+                        //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+                        File dir = new File(nuevaCarpeta, NombreArchivo);
+                        try {
+                            FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
+                            // que se agreguen los datos al final sin perder los datos anteriores
+                            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
                         /*BufferedWriter writer = null;
                         writer = new BufferedWriter( new OutputStreamWriter(
                                 new FileOutputStream( dir ),"UTF-8"));*/
-                        String guardar = null;
-                        for (int x = 0; x < MiembrosFamiliares.size(); x++) {
-                            guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + CantidadGrupoFamiliar;
-                            guardar+=";"+MiembrosFamiliares.get(x).FormatoGuardar();
-                            guardar += ";"+IDencuestador+"\n";
-                            myOutWriter.append(guardar);
-                        }
+                            String guardar = null;
+                            for (int x = 0; x < MiembrosFamiliares.size(); x++) {
+                                guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud + Longitud + ";" + Integer.toString(NumerosPersonas);
+                                guardar+=";"+MiembrosFamiliares.get(x).FormatoGuardar();
+                                guardar += ";"+encuestador.getID()+"\n";
+                                myOutWriter.append(guardar);
+                            }
 
-                        MiembrosFamiliares.clear();
-                        lv1.setAdapter(null);
-                        adapter.clear();
-                        calle.setText("");
-                        numero.setText("");
-                        grupofamiliar.setText("");
-                        myOutWriter.close();
-                        fOut.close();
-
+                            MiembrosFamiliares.clear();
+                            lv1.setAdapter(null);
+                            adapter.clear();
+                            myOutWriter.close();
+                            fOut.close();
+                            dialog.dismiss();
                     } catch (IOException e) {
-                        e.printStackTrace();
-
-                    }
-            }
-        });
-        builder.setNegativeButton("CANCELAR", null);
-        builder.setView(mainLayout);
-        //builder.setNegativeButton("CANCELAR", null);
-        // Create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        } else {
-            makeText(this, "FALTA LLENAR MIEMBROS G. FAMILIAR", LENGTH_SHORT).show();
-        }}
-            else{ Presentacion();}}
-            else{ makeText(this, "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
+                        e.printStackTrace();}
+                }});
+    } else {makeText(getBaseContext(), "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
     }
 
     // Desactivo el boton de volver atras

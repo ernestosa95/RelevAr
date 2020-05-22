@@ -1,6 +1,5 @@
 package com.example.relevar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -8,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -20,44 +20,30 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.relevar.Recursos.Encuestador;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
-import static android.os.Environment.getExternalStorageDirectory;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
-public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallback{
+public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final int REQUEST_CODE_POSITION = 1;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
@@ -67,7 +53,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     EditText Nencuestador;
 
     // Creo al encuestador
-    Encuestador encuestador= new Encuestador();
+    Encuestador encuestador = new Encuestador();
 
     // Mapa
     private MapView mapView;
@@ -76,7 +62,11 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     ArrayList<LatLng> recorrido = new ArrayList<>();
     // String
     private Double Latitud, Longitud;
-
+    Polyline ruta;
+    LocationManager locationManagerEncuestador;
+    LocationListener locationListenerEncuestador;
+    private BroadcastReceiver broadcastReceiver;
+    TextView txt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +76,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         actionbar.hide();
 
         // Evitar la rotacion
-        if(this.getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
 
@@ -96,8 +86,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         // Mapa
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
-
-        if(savedInstanceState!=null){
+        txt = (TextView) findViewById(R.id.txt1);
+        if (savedInstanceState != null) {
             mapBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
         mapView.onCreate(mapBundle);
@@ -107,14 +97,14 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         // Inicio de la App
         Encuestador();
 
-
     }
 
-//--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // NUEVA FAMILIA
-    public void NuevaFamilia(View view){
+    public void NuevaFamilia(View view) {
         Intent Modif = new Intent(this, MainActivity.class);
+        Modif.putExtra("IDENCUESTADOR", encuestador.getID());
         startActivityForResult(Modif, 1);
     }
 
@@ -125,14 +115,15 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(final GoogleMap map) {
 
-    //map.addMarker(new MarkerOptions().position(new LatLng(Latitud,Longitud)).title("aca toy"));
-    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-    map.setMyLocationEnabled(true);
-    map.getUiSettings().setMapToolbarEnabled(false);
+        //map.addMarker(new MarkerOptions().position(new LatLng(Latitud,Longitud)).title("aca toy"));
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMapToolbarEnabled(false);
 
-    final Polyline ruta = map.addPolyline(new PolylineOptions()
-                        .clickable(true).color(Color.parseColor("#69A4D1")));
-    // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
+        ruta = map.addPolyline(new PolylineOptions()
+                .clickable(true).color(Color.parseColor("#69A4D1")));
+
+        // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
         // Acquire a reference to the system Location Manager
         final LocationManager locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         // Define a listener that responds to location updates
@@ -194,7 +185,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-    }
+        }
+
 
     @Override
     public void onLowMemory() {
@@ -236,7 +228,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         encuestadores.setAdapter(comboAdapter);
 
         // Crear nuevo encuestador
-        Button nuevo = view.findViewById(R.id.NUEVOENCUESTADOR);
+        Button nuevo = view.findViewById(R.id.NUEVOENC);
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,7 +238,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         });
 
         // Ingresar con encuestador existente
-        Button ingresar = view.findViewById(R.id.BTNCANCELANE);
+        Button ingresar = view.findViewById(R.id.INGRESAR);
         ingresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -270,7 +262,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         dialog.show();
 
         Nencuestador = view.findViewById(R.id.EditNuevoEncuestador);
-        Button nuevo = view.findViewById(R.id.BTNNUEVOENCUESTADOR);
+        Button nuevo = view.findViewById(R.id.GUARDAR);
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -289,7 +281,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-        Button cancelar = view.findViewById(R.id.BTNCANCELANE);
+        Button cancelar = view.findViewById(R.id.CANCELAR);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

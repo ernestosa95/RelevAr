@@ -13,6 +13,7 @@
         android:layout_height="41dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/button1"
+        android:onClick="Guardar"
         android:text="TERMINAR GRUPO FAMILIAR"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,14 +68,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="409dp"
-        android:layout_height="433dp"
+        android:id="@+id/BOTONERA"
+        android:layout_width="410dp"
+        android:layout_height="210dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/TERMINAR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

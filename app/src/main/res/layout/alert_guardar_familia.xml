@@ -20,27 +20,34 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/BTNCANCELANE"
+        android:id="@+id/GUARDAR1"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/button1"
-        android:text="CANCELAR"
-        android:textColor="#4A4A4A"
-        app:layout_constraintBottom_toBottomOf="@+id/BTNNUEVOENCUESTADOR"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2" />
-
-    <Button
-        android:id="@+id/BTNNUEVOENCUESTADOR"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/button1"
         android:text="GUARDAR"
         android:textColor="#4A4A4A"
+        app:layout_constraintBottom_toBottomOf="@+id/CANCELAR1"
+        app:layout_constraintEnd_toEndOf="@+id/MAS"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/CANCELAR1"
+        app:layout_constraintTop_toTopOf="@+id/CANCELAR1"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/CANCELAR1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button1"
+        android:text="CANCELAR"
+        android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/BTNCANCELANE"
+        app:layout_constraintEnd_toEndOf="@+id/MAS"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+        app:layout_constraintStart_toStartOf="@+id/MENOS"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6"
+        app:layout_constraintVertical_bias="0.549" />
 
     <EditText
         android:id="@+id/CALLE"
@@ -103,8 +110,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView11"
+        <EditText
+            android:id="@+id/CANTIDADMIEMBROSFAMILIARES"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00"
@@ -117,23 +124,25 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/MAS"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/button_redondo"
         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout6"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout6"
         app:srcCompat="@drawable/more" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/MENOS"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/button_redondo"
         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout6"
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
+        app:layout_constraintHorizontal_bias="0.535"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout6"
         app:srcCompat="@drawable/menos" />
