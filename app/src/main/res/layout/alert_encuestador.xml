@@ -27,10 +27,8 @@
         android:text="NUEVO"
         android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="@+id/INGRESAR"
-        app:layout_constraintEnd_toStartOf="@+id/BTNCANCELANE"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/ENCUESTADOR"
-        app:layout_constraintTop_toTopOf="@+id/BTNGUARDAR" />
+        app:layout_constraintTop_toTopOf="@+id/INGRESAR" />
 
     <Button
         android:id="@+id/INGRESAR"

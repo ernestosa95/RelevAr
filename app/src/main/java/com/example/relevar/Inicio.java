@@ -85,6 +85,7 @@ public class Inicio extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // PASAR AL MENU PPAL
     public void NextMenuPrincipal(View view) {
+
         Intent Modif = new Intent(this, MenuPrincipal.class);
         startActivityForResult(Modif, 1);
     }

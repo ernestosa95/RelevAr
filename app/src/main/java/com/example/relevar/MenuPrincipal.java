@@ -4,12 +4,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -21,6 +25,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,8 +33,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.relevar.Recursos.Encuestador;
+import com.example.relevar.Recursos.ServicioGPS;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -51,6 +58,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     boolean devolver = false;
     //
     EditText Nencuestador;
+    Button PararServicio;
 
     // Creo al encuestador
     Encuestador encuestador = new Encuestador();
@@ -80,8 +88,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
 
-        // String
-
+        //
 
         // Mapa
         mapView = (MapView) findViewById(R.id.MAPA);
@@ -96,10 +103,32 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         latLng = new LatLng(-60, -30);
         // Inicio de la App
         Encuestador();
+        PararServicio=(Button) findViewById(R.id.TERMINAR);
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("custom-event-name"));
     }
 
-    //--------------------------------------------------------------------------------------------------
+    // Our handler for received Intents. This will be called whenever an Intent
+// with an action named "custom-event-name" is broadcasted.
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            recorrido = intent.getParcelableArrayListExtra("RECORRIDO");
+            Log.d("receiver", Integer.toString(recorrido.size()));
+        }
+    };
+    /*private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            //String message = intent.getStringExtra("key");
+            recorrido = intent.getParcelableArrayListExtra("RECORRIDO");
+            Toast.makeText(context, recorrido.size(), Toast.LENGTH_SHORT).show();
+        }
+    };*/
+//--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // NUEVA FAMILIA
     public void NuevaFamilia(View view) {
@@ -108,6 +137,42 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         startActivityForResult(Modif, 1);
     }
 
+    // TERMINAR RECORRIDO
+    public void TerminarRecorrido(View view){
+        boolean estado = isMyServiceRunning(ServicioGPS.class);
+        Intent intent = new Intent(this, ServicioGPS.class);
+        //Toast.makeText(this, Boolean.toString(EstadoServicio()), Toast.LENGTH_SHORT).show();
+        if(estado==true){
+        //Intent intent = new Intent(this, ServicioGPS.class);
+        stopService(intent);
+        PararServicio.setText("REINICIAR RECORRIDO");
+        }
+        else{
+            //Intent intent = new Intent(this, ServicioGPS.class);
+            startService(intent);
+            PararServicio.setText("TERMINAR RECORRIDO");
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) { ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+        if (serviceClass.getName().equals(service.service.getClassName())) {
+            return true; } }
+    return false; }
+
+    /*private boolean EstadoServicio(){
+        boolean devolver=false;
+        Intent intent = new Intent(this, ServicioGPS.class);
+        ComponentName estado = startService(intent);
+        Toast.makeText(this, estado.toString(), Toast.LENGTH_SHORT).show();
+        if(estado!=null){
+            devolver=true;
+        }else{
+            devolver=false;
+            stopService(intent);
+        }
+        return devolver;
+    }*/
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // PARA EL MAPA
@@ -123,9 +188,22 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         ruta = map.addPolyline(new PolylineOptions()
                 .clickable(true).color(Color.parseColor("#69A4D1")));
 
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                //LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver, new IntentFilter("recorridos"));
+                ruta.setPoints(recorrido);
+                int ultimo = recorrido.size();
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
+                handler.postDelayed(this, 15000);
+            }
+
+        }, 40000);
+
         // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
         // Acquire a reference to the system Location Manager
-        final LocationManager locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        /*final LocationManager locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         // Define a listener that responds to location updates
         LocationListener locationListenerEncuestador = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -139,8 +217,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 recorrido.add(new LatLng(location.getLatitude(), location.getLongitude()));
                 ruta.setPoints(recorrido);
 
-                if (encuestador.getID().length()!=0){
-                encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));}
+                //if (encuestador.getID().length()!=0){
+                //encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));}
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -154,7 +232,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, locationListenerEncuestador);
-
+        */
     }
 
     @Override
@@ -167,6 +245,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     protected void onStart() {
         super.onStart();
         mapView.onStart();
+
     }
 
     @Override
@@ -179,6 +258,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
     }
 
     @Override

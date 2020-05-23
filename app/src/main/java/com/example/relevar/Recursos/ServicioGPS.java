@@ -11,16 +11,19 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.relevar.Inicio;
 import com.example.relevar.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,15 +31,18 @@ import static com.example.relevar.Recursos.App.CHANNEL_ID;
 
 public class ServicioGPS extends Service {
     int contador = 0;
-    TimerTask timerTask;
     LatLng latLng;
+    ArrayList<LatLng> recorrido = new ArrayList<>();
     String Latitud, Longitud;
+    LocationListener locationListenerEncuestador;
+    LocationManager locationManagerEncuestador;
+    Encuestador encuestador = new Encuestador();
     public ServicioGPS() {
     }
 
     @Override
     public void onCreate() {
-
+        encuestador.setID("");
         //System.out.println("El servicio a creado");
     }
 
@@ -51,9 +57,9 @@ public class ServicioGPS extends Service {
         //System.out.println("El servicio a Comenzado "+Integer.toString(contador));
         // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
         // Acquire a reference to the system Location Manager
-        final LocationManager locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         // Define a listener that responds to location updates
-        LocationListener locationListenerEncuestador = new LocationListener() {
+        locationListenerEncuestador = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 //Latitud=Double.toString(location.getLatitude());
@@ -62,12 +68,14 @@ public class ServicioGPS extends Service {
                 Longitud=Double.toString(location.getLongitude());
                 System.out.println("UBICACION AAAAAAAAAAAAAAAAAAA"+Latitud+Longitud);
                 latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),17));
-                //recorrido.add(new LatLng(location.getLatitude(), location.getLongitude()));
-                //ruta.setPoints(recorrido);
+                recorrido.add(latLng);
 
-                //if (encuestador.getID().length()!=0){
-                //    encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));}
+                Log.d("sender", "Broadcasting message");
+                Intent intent = new Intent("custom-event-name");
+                // You can also include some extra data.
+                intent.putParcelableArrayListExtra("RECORRIDO", recorrido);
+                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
+                encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -80,7 +88,7 @@ public class ServicioGPS extends Service {
         // Register the listener with the Location Manager to receive location updates
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListenerEncuestador);
+        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, locationListenerEncuestador);
 
         Intent notificationIntent = new Intent(this, Inicio.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -94,26 +102,13 @@ public class ServicioGPS extends Service {
                 .build();
         startForeground(1, notification);
 
-
-
-
-        /*Timer timer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("El servicio a Comenzado "+Integer.toString(contador));
-                contador+=1;
-            }
-            };
-
-        timer.scheduleAtFixedRate(timerTask, 0, 1000);*/
-
         return START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
         //timerTask.cancel();
+        locationManagerEncuestador.removeUpdates(locationListenerEncuestador);
         System.out.println("El servicio a terminado"+Integer.toString(contador));
     }
 }
