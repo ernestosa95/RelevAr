@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         //lon = (TextView) findViewById(R.id.LONGITUD);
         lv1 = (ListView) findViewById(R.id.list1);
 
-        LinearLayout botones = (LinearLayout) findViewById(R.id.BOTONERA);
+        //LinearLayout botones = (LinearLayout) findViewById(R.id.BOTONERA);
         //botones.setBackground(ContextCompat.getDrawable(this, fondo1));
 
     }
