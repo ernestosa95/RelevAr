@@ -2,25 +2,19 @@ package com.example.relevar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -33,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.relevar.Recursos.Encuestador;
 import com.example.relevar.Recursos.ServicioGPS;
@@ -93,7 +86,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         // Mapa
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
-        txt = (TextView) findViewById(R.id.txt1);
+        txt = (TextView) findViewById(R.id.COMPLETADOFACTORES);
         if (savedInstanceState != null) {
             mapBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
@@ -195,7 +188,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 //LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver, new IntentFilter("recorridos"));
                 ruta.setPoints(recorrido);
                 int ultimo = recorrido.size();
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
+                if(ultimo!=0){
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));}
                 handler.postDelayed(this, 15000);
             }
 

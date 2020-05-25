@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -122,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
         //lon = (TextView) findViewById(R.id.LONGITUD);
         lv1 = (ListView) findViewById(R.id.list1);
 
-        //LinearLayout botones = (LinearLayout) findViewById(R.id.BOTONERA);
-        //botones.setBackground(ContextCompat.getDrawable(this, fondo1));
+
 
     }
 

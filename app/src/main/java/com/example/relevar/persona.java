@@ -1,8 +1,12 @@
 package com.example.relevar;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -52,6 +56,7 @@ public class persona extends AppCompatActivity {
     private static final String TAG="MainActivity";
     private static final int REQUEST_CODE_POSITION = 1;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
+    private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 123 ;
     private int STORAGE_PERMISSION_CODE =1;
 
     // Defino de forma global los String para recibir y devolver la informacion
@@ -61,7 +66,7 @@ public class persona extends AppCompatActivity {
     private EditText dni, Apellido, Nombre, Efector, celular, fijo, mail, obs, lotevacuna;
 
     // Defino de manera global los TextView para mostrar informacion
-    private TextView fecha, tipovacuna, limp, Riesgo, AvRiesgo, Vacuna, Contacto, Observacion, AvVacuna, AvContacto, AvObs;
+    private TextView fecha, tipovacuna, limp;
 
     // Defino de manera global los Button para realizar acciones
     //private Button ;
@@ -86,6 +91,9 @@ public class persona extends AppCompatActivity {
     RadioButton rb1, rb2;
 
     ObjetoPersona Persona = new ObjetoPersona();
+    ConstraintLayout factores, contacto;
+    TextView avancefactores, avancecontacto;
+
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -99,16 +107,16 @@ public class persona extends AppCompatActivity {
         dni = (EditText) findViewById(R.id.DNI);
         Apellido = (EditText) findViewById(R.id.APELLIDO);
         Nombre = (EditText) findViewById(R.id.NOMBRE);
-        Efector = (EditText) findViewById(R.id.EFECTOR);
-        Vacuna = (TextView) findViewById(R.id.VACUNA);
-        Riesgo = (TextView) findViewById(R.id.RIESGO);
-        Contacto = (TextView) findViewById(R.id.CONTACTO);
-        Observacion = (TextView) findViewById(R.id.OBSERVACION);
+        //Efector = (EditText) findViewById(R.id.EFECTOR);
+        //Vacuna = (TextView) findViewById(R.id.VACUNA);
+        //Riesgo = (TextView) findViewById(R.id.RIESGO);
+        //Contacto = (TextView) findViewById(R.id.CONTACTO);
+        //Observacion = (TextView) findViewById(R.id.OBSERVACION);
         fecha=(TextView) findViewById(R.id.fecha);
-        AvRiesgo=(TextView) findViewById(R.id.AvanceRiesgo);
-        AvVacuna=(TextView) findViewById(R.id.AvanceVacunas);
-        AvContacto=(TextView) findViewById(R.id.AvanceContacto);
-        AvObs=(TextView) findViewById(R.id.AvanceObservaciones);
+        //AvRiesgo=(TextView) findViewById(R.id.AvanceRiesgo);
+        //AvVacuna=(TextView) findViewById(R.id.AvanceVacunas);
+        //AvContacto=(TextView) findViewById(R.id.AvanceContacto);
+        //AvObs=(TextView) findViewById(R.id.AvanceObservaciones);
 
         // Defino el Spinner de los efectores
         /*Sp1 = (Spinner) findViewById(R.id.efector);
@@ -166,19 +174,46 @@ public class persona extends AppCompatActivity {
 
         Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
         }
+
+        // PARA EL AVANCE DE LOS FACTORES
+        factores = (ConstraintLayout) findViewById(R.id.AVANCEFACTORES);
+        avancefactores = (TextView) findViewById(R.id.COMPLETADOFACTORES);
+
+        // PARA EL AVANCE DE LOS FACTORES
+        contacto = (ConstraintLayout) findViewById(R.id.AVANCECONTACTO);
+        avancecontacto = (TextView) findViewById(R.id.COMPLETADOCONTACTO);
     }
 
-    /*//@Override
+    //@Override
     protected void onStart() {
         //todo esto pa actualizr la listview
         super.onStart();
 
-        // Actualizo los colores de avance
-        //ColorAvanceContacto();
-        //ColorAvanceFactores();
-        //ColorAvanceVacunas();
-        //ColorAvanceObservaciones();
-    }*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+        if(requestCode==1){
+            //Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+            if(resultCode== RESULT_OK){
+
+
+                    //Toast.makeText(this, data.getStringExtra("DNI_ESCANEADO"), Toast.LENGTH_SHORT).show();
+                    dni.setText(data.getStringExtra("DNI_ESCANEADO"));
+                    Apellido.setText(data.getStringExtra("APELLIDO_ESCANEADO"));
+                    Nombre.setText(data.getStringExtra("NOMBRE_ESCANEADO"));
+                    fecha.setText(data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO"));
+
+            /*valor = "APELLIDO: " + extras.getString("APELLIDO_ESCANEADO", "")
+                    +"\n"+ "NOMBRE: "+extras.getString("NOMBRE_ESCANEADO", "")
+                    +"\n"+ "DNI: "+extras.getString("DNI_ESCANEADO", "")
+                    +"\n"+ "FECHA DE NACIMIENO: "+extras.getString("FECHA_NACIMIENTO_ESCANEADO", "")
+                    +"\n"+ "SEXO: "+extras.getString("SEXO_ESCANEADO", "");*/
+                    //+"\n"+extras.getString("ESCANEADO", "");
+
+            }}}
 
     // Funcion para obtener la posicion del efector seleccionado dentro del spinner
     public static int ObtenerPosicion(Spinner spinner, String efector) {
@@ -208,6 +243,13 @@ public class persona extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
+
+    // Leer QR
+    public void escanear(View view){
+        Intent Modif= new Intent (this, ScannerQR.class);
+        startActivityForResult(Modif, 1);
+    }
+
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -464,13 +506,13 @@ public class persona extends AppCompatActivity {
         if(avance==1){
             //Vacuna.setBackgroundColor(Color.parseColor("#FFA07A"));
             String aux = Integer.toString(avance)+"/2";
-            AvVacuna.setText(aux);
-            AvVacuna.setBackgroundColor(Color.parseColor("#FFA07A"));
+            //AvVacuna.setText(aux);
+            //AvVacuna.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
         if(avance==2){
             //Vacuna.setBackgroundColor(Color.parseColor("#8BC34A"));
-            AvVacuna.setText("2/2");
-            AvVacuna.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvVacuna.setText("2/2");
+            //AvVacuna.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
 
@@ -592,7 +634,7 @@ public class persona extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
-                String riesgos=null;
+                String riesgos="";
                 String codigoriesgo=null;
                 if (calendario.isChecked()){
                     if (riesgos==null){
@@ -716,7 +758,7 @@ public class persona extends AppCompatActivity {
                         codigoriesgo+=",16";}}
                 Persona.FactoresDeRiesgo=riesgos;
                 Persona.CodfigoFactorRiesgo=codigoriesgo;
-                //Toast.makeText(getApplicationContext(), riesgos, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), Persona.FactoresDeRiesgo, Toast.LENGTH_SHORT).show();
                 ColorAvanceFactores();
             }
         });
@@ -736,10 +778,14 @@ public class persona extends AppCompatActivity {
 
     // Cambia lo colores de avance de factores
     private void ColorAvanceFactores(){
-        if (Persona.FactoresDeRiesgo.length()!=0){
+
+        if (Persona.FactoresDeRiesgo!=""){
+            //Toast.makeText(getApplicationContext(), "ENTRO", Toast.LENGTH_SHORT).show();
             //Riesgo.setBackgroundColor(Color.parseColor("#8BC34A"));
-            AvRiesgo.setText("1/1");
-            AvRiesgo.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvRiesgo.setText("1/1");
+            //AvRiesgo.setBackgroundColor(Color.parseColor("#8BC34A"));
+            factores.setBackgroundResource(R.drawable.verde);
+            avancefactores.setText("Completado: 100%");
         }
     }
 
@@ -921,7 +967,7 @@ public class persona extends AppCompatActivity {
     // Cambia los colores de los botones de llenado de contacto
     private void ColorAvanceContacto(){
         // Cambio los colores de avance
-        int avance = 0;
+        float avance = 0;
         if (Persona.Celular.length()!=0){
             avance+=1;
         }
@@ -932,15 +978,20 @@ public class persona extends AppCompatActivity {
             avance+=1;
         }
         if(avance==1 || avance==2){
-            //Contacto.setBackgroundColor(Color.parseColor("#FFA07A"));
-            String aux = Integer.toString(avance)+"/3";
-            AvContacto.setText(aux);
-            AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
+            contacto.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/3)*100);
+            Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
+            String aux = "Completado: "+ Double.toString(porcentaje)+"%";
+            avancecontacto.setText(aux);
+            //AvContacto.setText(aux);
+            //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
         if(avance==3){
+            contacto.setBackgroundResource(R.drawable.verde);
+            avancecontacto.setText("Completado: 100%");
             //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
-            AvContacto.setText("3/3");
-            AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
 
@@ -1071,13 +1122,13 @@ public class persona extends AppCompatActivity {
         if(avance==1){
             //Observacion.setBackgroundColor(Color.parseColor("#FFA07A"));
             String aux = Integer.toString(avance)+"/2";
-            AvObs.setText(aux);
-            AvObs.setBackgroundColor(Color.parseColor("#FFA07A"));
+            //AvObs.setText(aux);
+            //AvObs.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
         if(avance==2){
             //Observacion.setBackgroundColor(Color.parseColor("#8BC34A"));
-            AvObs.setText("2/2");
-            AvObs.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvObs.setText("2/2");
+            //AvObs.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
 
