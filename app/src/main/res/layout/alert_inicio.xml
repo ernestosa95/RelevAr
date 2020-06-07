@@ -14,7 +14,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/button1"
         android:onClick="NextMenuPrincipal"
-        android:text="EMPEZAR"
+        android:text="CARGAR DATOS"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"

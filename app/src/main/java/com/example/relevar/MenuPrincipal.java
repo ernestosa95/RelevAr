@@ -1,5 +1,6 @@
 package com.example.relevar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -34,7 +35,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -47,6 +51,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final int REQUEST_CODE_POSITION = 1;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
+
     // Inicio de toma de ubicacion
     boolean devolver = false;
     //
@@ -61,6 +66,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     private GoogleMap map;
     LatLng latLng;
     ArrayList<LatLng> recorrido = new ArrayList<>();
+    ArrayList<LatLng> marcadores = new ArrayList<>();
     // String
     private Double Latitud, Longitud;
     Polyline ruta;
@@ -68,6 +74,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     LocationListener locationListenerEncuestador;
     private BroadcastReceiver broadcastReceiver;
     TextView txt;
+
+    private ArrayList<LatLng> latlngs = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +105,10 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         // Inicio de la App
         Encuestador();
         PararServicio=(Button) findViewById(R.id.TERMINAR);
-
+        boolean estado = isMyServiceRunning(ServicioGPS.class);
+        if(estado==true){
+            PararServicio.setText("TERMINAR RECORRIDO");
+        } else {PararServicio.setText("INICIAR RECORRIDO");}
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
     }
@@ -112,38 +123,120 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
             Log.d("receiver", Integer.toString(recorrido.size()));
         }
     };
-    /*private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            //String message = intent.getStringExtra("key");
-            recorrido = intent.getParcelableArrayListExtra("RECORRIDO");
-            Toast.makeText(context, recorrido.size(), Toast.LENGTH_SHORT).show();
-        }
-    };*/
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // NUEVA FAMILIA
     public void NuevaFamilia(View view) {
-        Intent Modif = new Intent(this, MainActivity.class);
-        Modif.putExtra("IDENCUESTADOR", encuestador.getID());
-        startActivityForResult(Modif, 1);
+        boolean estado = isMyServiceRunning(ServicioGPS.class);
+        if(estado==false){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater Inflater = getLayoutInflater();
+            View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
+            builder.setView(view1);
+            builder.setCancelable(false);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            TextView txt1 = view1.findViewById(R.id.CONSULTA);
+            txt1.setText("¿Iniciar recorrido?");
+
+            Button si = view1.findViewById(R.id.BTNSI);
+            si.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
+                    startService(intent);
+                    PararServicio.setText("TERMINAR RECORRIDO");
+                    dialog.dismiss();
+
+                    Intent Modif = new Intent(getBaseContext(), MainActivity.class);
+                    Modif.putExtra("IDENCUESTADOR", encuestador.getID());
+                    startActivityForResult(Modif, 1);
+                }
+            });
+
+            Button no = view1.findViewById(R.id.BTNNO);
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+        } else{
+            Intent Modif = new Intent(getBaseContext(), MainActivity.class);
+            Modif.putExtra("IDENCUESTADOR", encuestador.getID());
+            startActivityForResult(Modif, 1);
+        }
     }
 
     // TERMINAR RECORRIDO
     public void TerminarRecorrido(View view){
         boolean estado = isMyServiceRunning(ServicioGPS.class);
-        Intent intent = new Intent(this, ServicioGPS.class);
+        //Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
         //Toast.makeText(this, Boolean.toString(EstadoServicio()), Toast.LENGTH_SHORT).show();
         if(estado==true){
-        //Intent intent = new Intent(this, ServicioGPS.class);
-        stopService(intent);
-        PararServicio.setText("REINICIAR RECORRIDO");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater Inflater = getLayoutInflater();
+            View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
+            builder.setView(view1);
+            builder.setCancelable(false);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            TextView txt1 = view1.findViewById(R.id.CONSULTA);
+            txt1.setText("¿Terminar recorrido?");
+
+            Button si = view1.findViewById(R.id.BTNSI);
+            si.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
+                    stopService(intent);
+                    PararServicio.setText("REINICIAR RECORRIDO");
+                    dialog.dismiss();
+                }
+            });
+
+            Button no = view1.findViewById(R.id.BTNNO);
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
         }
+
         else{
-            //Intent intent = new Intent(this, ServicioGPS.class);
-            startService(intent);
-            PararServicio.setText("TERMINAR RECORRIDO");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater Inflater = getLayoutInflater();
+            View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
+            builder.setView(view1);
+            builder.setCancelable(false);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            TextView txt1 = view1.findViewById(R.id.CONSULTA);
+            txt1.setText("¿Iniciar recorrido?");
+
+            Button si = view1.findViewById(R.id.BTNSI);
+            si.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
+                    startService(intent);
+                    PararServicio.setText("TERMINAR RECORRIDO");
+                    dialog.dismiss();
+                }
+            });
+
+            Button no = view1.findViewById(R.id.BTNNO);
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
         }
     }
 
@@ -153,19 +246,16 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
             return true; } }
     return false; }
 
-    /*private boolean EstadoServicio(){
-        boolean devolver=false;
-        Intent intent = new Intent(this, ServicioGPS.class);
-        ComponentName estado = startService(intent);
-        Toast.makeText(this, estado.toString(), Toast.LENGTH_SHORT).show();
-        if(estado!=null){
-            devolver=true;
-        }else{
-            devolver=false;
-            stopService(intent);
-        }
-        return devolver;
-    }*/
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            if(resultCode== RESULT_OK){
+                Bundle bundle = data.getParcelableExtra("bundle");
+                LatLng position = bundle.getParcelable("from_position");
+                latlngs.add(position);
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            }}}
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // PARA EL MAPA
@@ -178,55 +268,34 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
 
-        ruta = map.addPolyline(new PolylineOptions()
-                .clickable(true).color(Color.parseColor("#69A4D1")));
-
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 //LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver, new IntentFilter("recorridos"));
-                ruta.setPoints(recorrido);
+                map.clear();
+                ruta = map.addPolyline(new PolylineOptions()
+                        .clickable(true).color(Color.parseColor("#69A4D1")));
                 int ultimo = recorrido.size();
                 if(ultimo!=0){
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));}
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
+                ruta.setPoints(recorrido);
+
+                if (encuestador.Marcadores().size()!=0){
+                    ArrayList<LatLng> marcadores = encuestador.Marcadores();
+                    for(int i=0; i<encuestador.Marcadores().size(); i++){
+                        MarkerOptions mo1 = new MarkerOptions();
+                        mo1.position(marcadores.get(i));
+                        mo1.title("REGISTRO "+Integer.toString(i+1));
+                        //mo1.icon(BitmapDescriptorFactory.fromResource(R.drawable.casa));
+                        map.addMarker(mo1);
+                    }
+                }}
+
                 handler.postDelayed(this, 15000);
             }
 
-        }, 40000);
-
-        // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
-        // Acquire a reference to the system Location Manager
-        /*final LocationManager locationManagerEncuestador = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        // Define a listener that responds to location updates
-        LocationListener locationListenerEncuestador = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                //Latitud=Double.toString(location.getLatitude());
-                //Longitud=Double.toString(location.getLongitude());
-                Latitud=location.getLatitude();
-                Longitud=location.getLongitude();
-                latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),17));
-                recorrido.add(new LatLng(location.getLatitude(), location.getLongitude()));
-                ruta.setPoints(recorrido);
-
-                //if (encuestador.getID().length()!=0){
-                //encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));}
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-        // Register the listener with the Location Manager to receive location updates
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, locationListenerEncuestador);
-        */
+        }, 0);
     }
 
     @Override

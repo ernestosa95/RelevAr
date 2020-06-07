@@ -21,6 +21,10 @@ public class ObjetoPersona {
     public String Efector;
     public String Observaciones;
     public String Limpieza;
+    public String NombreContacto;
+    public String TelefonoContacto;
+    public String ParentezcoContacto;
+    public String Ocupacion;
 
     public void setInfoPersonal(String nombre, String apellido, String dni){
         Nombre=nombre;
@@ -44,13 +48,18 @@ public class ObjetoPersona {
         Efector="";
         Observaciones="";
         Limpieza="";
+        NombreContacto="";
+        TelefonoContacto="";
+        ParentezcoContacto="";
+        Ocupacion="";
     }
 
     public String FormatoGuardar(){
         // DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA
         String guardar=DNI+";"+Apellido+";"+Nombre+";"+Edad+";"+UnidadEdad+";"+Nacimiento+";"+Efector+
                 ";"+FactoresDeRiesgo+";"+CodfigoFactorRiesgo+";"+Vacunas+";"+LoteVacuna+";"+Celular+
-                ";"+Fijo+";"+Mail+";"+Observaciones+";"+Limpieza;
+                ";"+Fijo+";"+Mail+";"+Observaciones+";"+Limpieza+";"+NombreContacto+";"+TelefonoContacto+
+                ";"+ParentezcoContacto+";"+Ocupacion;
         return guardar;
     }
 

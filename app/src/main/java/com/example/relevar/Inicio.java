@@ -68,8 +68,7 @@ public class Inicio extends AppCompatActivity {
 
         // Creo un archivo y lo inicializo con la cabecera predefinida
         AgregarCabecera();
-        //startService(new Intent(this, ServicioGPS.class));
-        IniciarServicio();
+
     }
 
     private void IniciarServicio(){
@@ -103,20 +102,15 @@ public class Inicio extends AppCompatActivity {
         Date date1 = new Date();
         String fecha = dateFormat.format(date1);
         String NombreArchivo = "RelevAr-" + fecha + ".csv";
-        //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
         File dir = new File(nuevaCarpeta, NombreArchivo);
         String strLine = "";
         // leer datos
         String myData = "";
-        //File myExternalFile = new File("assets/","log.txt");
         try {
             FileInputStream fis = new FileInputStream(dir);
             DataInputStream in = new DataInputStream(fis);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
-            //while ((strLine = br.readLine()) != null) {
-            //    myData = myData + strLine + "\n";
-            //}
             strLine = br.readLine().split(";")[0];
             //Toast.makeText(this, strLine, Toast.LENGTH_SHORT).show();
             br.close();
@@ -128,15 +122,14 @@ public class Inicio extends AppCompatActivity {
         if (strLine.equals("CALLE") != true) {
             String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
                     "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
-                    "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;ENCUESTADOR\n";
+                    "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;" +
+                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;ENCUESTADOR\n";
             try {
 
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
                 // que se agreguen los datos al final sin perder los datos anteriores
                 OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-                //BufferedWriter writer = null;
-                //writer = new BufferedWriter( new OutputStreamWriter(
-                //        new FileOutputStream( dir ),"UTF-8"));
+
                 myOutWriter.append(cabecera);
                 myOutWriter.close();
                 fOut.close();

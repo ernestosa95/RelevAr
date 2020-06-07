@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.relevar.Inicio;
+import com.example.relevar.MenuPrincipal;
 import com.example.relevar.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,16 +44,7 @@ public class ServicioGPS extends Service {
     @Override
     public void onCreate() {
         encuestador.setID("");
-        //System.out.println("El servicio a creado");
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+        System.out.println("El servicio a creado");
 
         //System.out.println("El servicio a Comenzado "+Integer.toString(contador));
         // Tomo la posicion cada 1 minuto o cada vez que me muevo 25 metros y muevo la camara
@@ -88,16 +80,27 @@ public class ServicioGPS extends Service {
         // Register the listener with the Location Manager to receive location updates
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, locationListenerEncuestador);
+        locationManagerEncuestador.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 5, locationListenerEncuestador);
 
-        Intent notificationIntent = new Intent(this, Inicio.class);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+        Intent notificationIntent = new Intent(this, MenuPrincipal.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Recorrido")
                 .setContentText("Estamos tomando datos GPS")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.icono_notificacion)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, notification);
@@ -108,7 +111,7 @@ public class ServicioGPS extends Service {
     @Override
     public void onDestroy() {
         //timerTask.cancel();
-        locationManagerEncuestador.removeUpdates(locationListenerEncuestador);
+        //locationManagerEncuestador.removeUpdates(locationListenerEncuestador);
         System.out.println("El servicio a terminado"+Integer.toString(contador));
     }
 }

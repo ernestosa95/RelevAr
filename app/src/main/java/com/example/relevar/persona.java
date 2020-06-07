@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -91,8 +92,8 @@ public class persona extends AppCompatActivity {
     RadioButton rb1, rb2;
 
     ObjetoPersona Persona = new ObjetoPersona();
-    ConstraintLayout factores, contacto;
-    TextView avancefactores, avancecontacto;
+    ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion;
+    TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion;
 
 
 //--------------------------------------------------------------------------------------------------
@@ -107,28 +108,7 @@ public class persona extends AppCompatActivity {
         dni = (EditText) findViewById(R.id.DNI);
         Apellido = (EditText) findViewById(R.id.APELLIDO);
         Nombre = (EditText) findViewById(R.id.NOMBRE);
-        //Efector = (EditText) findViewById(R.id.EFECTOR);
-        //Vacuna = (TextView) findViewById(R.id.VACUNA);
-        //Riesgo = (TextView) findViewById(R.id.RIESGO);
-        //Contacto = (TextView) findViewById(R.id.CONTACTO);
-        //Observacion = (TextView) findViewById(R.id.OBSERVACION);
         fecha=(TextView) findViewById(R.id.fecha);
-        //AvRiesgo=(TextView) findViewById(R.id.AvanceRiesgo);
-        //AvVacuna=(TextView) findViewById(R.id.AvanceVacunas);
-        //AvContacto=(TextView) findViewById(R.id.AvanceContacto);
-        //AvObs=(TextView) findViewById(R.id.AvanceObservaciones);
-
-        // Defino el Spinner de los efectores
-        /*Sp1 = (Spinner) findViewById(R.id.efector);
-        categorias.add("CAPs D'ANGELO");
-        categorias.add("CAPs ANTARTIDA (CIC)");
-        categorias.add("CAPs SAN MARTIN");
-        categorias.add("CRR CARRILLO");
-        categorias.add("HOSP. SAN ROQUE");
-        categorias.add("HOSP. SAN MARTIN");
-        categorias.add("HOSP. BAXADA");
-        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, categorias);//Cargo el spinner con los datos
-        Sp1.setAdapter(comboAdapter);*/
 
         // Construyo el widget para la fecha
         Date = new DatePickerDialog.OnDateSetListener() {
@@ -161,6 +141,10 @@ public class persona extends AppCompatActivity {
         Persona.Nacimiento = (String) getIntent().getStringExtra("NACIMIENTO");
         Persona.Limpieza = (String) getIntent().getStringExtra("LIMPIEZA");
         Persona.LoteVacuna = (String) getIntent().getStringExtra("LOTE");
+        Persona.NombreContacto = (String) getIntent().getStringExtra("NOMBRECONTACTO");
+        Persona.TelefonoContacto = (String) getIntent().getStringExtra("TELEFONOCONTACTO");
+        Persona.ParentezcoContacto = (String) getIntent().getStringExtra("PARENTEZCOCONTACTO");
+        Persona.Ocupacion = (String) getIntent().getStringExtra("OCUPACION");
 
         // Inicializo los campos de edicion
         dni.setText(Persona.DNI);
@@ -172,16 +156,35 @@ public class persona extends AppCompatActivity {
         fecha.setText(Persona.Nacimiento);}
         else {fecha.setText("DD-MM-AAAA");}
 
-        Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
+        //Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
         }
 
         // PARA EL AVANCE DE LOS FACTORES
         factores = (ConstraintLayout) findViewById(R.id.AVANCEFACTORES);
         avancefactores = (TextView) findViewById(R.id.COMPLETADOFACTORES);
 
-        // PARA EL AVANCE DE LOS FACTORES
+        // PARA EL AVANCE DE LOS CONTACTOS
         contacto = (ConstraintLayout) findViewById(R.id.AVANCECONTACTO);
         avancecontacto = (TextView) findViewById(R.id.COMPLETADOCONTACTO);
+
+        // PARA EL AVANCE DE LOS OBSERVACIONES
+        observaciones = (ConstraintLayout) findViewById(R.id.AVANCEOBSERVACIONES);
+        avanceobservaciones = (TextView) findViewById(R.id.COMPLETADOOBSERVACIONES);
+
+        // PARA EL AVANCE DE LOS EFECTOR
+        efector = (ConstraintLayout) findViewById(R.id.AVANCEEFECTOR);
+        avanceefector = (TextView) findViewById(R.id.COMPLETADOEFECTOR);
+
+        // PARA EL AVANCE DE LOS EFECTOR
+        layout_ocupacion = (ConstraintLayout) findViewById(R.id.AVANCETRABAJO);
+        avanceocupacion = (TextView) findViewById(R.id.COMPLETADOTRABAJO);
+
+        // inicar estado de carga
+        ColorAvanceFactores();
+        ColorAvanceContacto();
+        ColorAvanceObservaciones();
+        ColorAvanceEfector();
+        ColorAvanceOcupacion();
     }
 
     //@Override
@@ -194,24 +197,26 @@ public class persona extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-        if(requestCode==1){
-            //Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-            if(resultCode== RESULT_OK){
 
+        if(requestCode==1){
+
+            if(resultCode== RESULT_OK){
 
                     //Toast.makeText(this, data.getStringExtra("DNI_ESCANEADO"), Toast.LENGTH_SHORT).show();
                     dni.setText(data.getStringExtra("DNI_ESCANEADO"));
+                    Persona.DNI = data.getStringExtra("DNI_ESCANEADO");
                     Apellido.setText(data.getStringExtra("APELLIDO_ESCANEADO"));
+                    Persona.Apellido = data.getStringExtra("APELLIDO_ESCANEADO");
                     Nombre.setText(data.getStringExtra("NOMBRE_ESCANEADO"));
+                    Persona.Nombre = data.getStringExtra("NOMBRE_ESCANEADO");
                     fecha.setText(data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO"));
-
-            /*valor = "APELLIDO: " + extras.getString("APELLIDO_ESCANEADO", "")
-                    +"\n"+ "NOMBRE: "+extras.getString("NOMBRE_ESCANEADO", "")
-                    +"\n"+ "DNI: "+extras.getString("DNI_ESCANEADO", "")
-                    +"\n"+ "FECHA DE NACIMIENO: "+extras.getString("FECHA_NACIMIENTO_ESCANEADO", "")
-                    +"\n"+ "SEXO: "+extras.getString("SEXO_ESCANEADO", "");*/
-                    //+"\n"+extras.getString("ESCANEADO", "");
+                    Persona.Nacimiento = data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO");
+                    int año, mes, dia;
+                    String[] convertir = Persona.Nacimiento.split("/");
+                    dia = Integer.parseInt(convertir[0]);
+                    mes = Integer.parseInt(convertir[1]);
+                    año = Integer.parseInt(convertir[2]);
+                    Persona.CalcularEdad(año,mes,dia);
 
             }}}
 
@@ -634,7 +639,7 @@ public class persona extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
-                String riesgos="";
+                String riesgos=null;
                 String codigoriesgo=null;
                 if (calendario.isChecked()){
                     if (riesgos==null){
@@ -779,11 +784,7 @@ public class persona extends AppCompatActivity {
     // Cambia lo colores de avance de factores
     private void ColorAvanceFactores(){
 
-        if (Persona.FactoresDeRiesgo!=""){
-            //Toast.makeText(getApplicationContext(), "ENTRO", Toast.LENGTH_SHORT).show();
-            //Riesgo.setBackgroundColor(Color.parseColor("#8BC34A"));
-            //AvRiesgo.setText("1/1");
-            //AvRiesgo.setBackgroundColor(Color.parseColor("#8BC34A"));
+        if (Persona.FactoresDeRiesgo.length()!=0){
             factores.setBackgroundResource(R.drawable.verde);
             avancefactores.setText("Completado: 100%");
         }
@@ -871,97 +872,52 @@ public class persona extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE LAS VISTAS DE LOS CONTACTOS
 
-    // Defino el AlertDialog de los contactos
     public void Contactos(View view){
-        // Defino los contenedores
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
-        TextView textView = new TextView(this);
-        textView.setText("CONTACTO");
-        textView.setPadding(20, 30, 20, 30);
-        textView.setTextSize(22F);
-        textView.setBackgroundColor(Color.parseColor("#4588BC"));
-        textView.setTextColor(Color.WHITE);
-        builder.setCustomTitle(textView);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_contacto, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
-        // Defino el Layaout que va a contener a los Check
-        LinearLayout mainLayout       = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-        // Defino los parametros
-        int TamañoLetra =20;
-
-        // Defino los EditText
-        // Telefono Celular
-        LinearLayout layout0       = new LinearLayout(this);
-        layout0.setOrientation(LinearLayout.HORIZONTAL);
-        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        celular = new EditText(getApplicationContext());
-        celular.setHint("TELEFONO CELULAR");
-        celular.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-        celular.setHintTextColor(Color.WHITE);
-        celular.setTextSize(TamañoLetra);
-        celular.setTextColor(Color.WHITE);
-        celular.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout0.addView(celular);
-        // Telefono Fijo
-        LinearLayout layout1       = new LinearLayout(this);
-        layout1.setOrientation(LinearLayout.HORIZONTAL);
-        layout1.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        fijo = new EditText(getApplicationContext());
-        fijo.setHint("TELEFONO FIJO");
-        fijo.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-        fijo.setHintTextColor(Color.WHITE);
-        fijo.setTextSize(TamañoLetra);
-        fijo.setTextColor(Color.WHITE);
-        fijo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout1.addView(fijo);
-        // Mail
-        LinearLayout layout2       = new LinearLayout(this);
-        layout2.setOrientation(LinearLayout.HORIZONTAL);
-        layout2.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        mail = new EditText(getApplicationContext());
-        mail.setHint("MAIL");
-        mail.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        mail.setHintTextColor(Color.WHITE);
-        mail.setTextSize(TamañoLetra);
-        mail.setTextColor(Color.WHITE);
-        mail.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout2.addView(mail);
-
-        mainLayout.addView(layout0);
-        mainLayout.addView(layout1);
-        mainLayout.addView(layout2);
+        final EditText celular = view1.findViewById(R.id.CELULAR);
+        final EditText fijo = view1.findViewById(R.id.FIJO);
+        final EditText mail = view1.findViewById(R.id.MAIL);
+        final EditText nombrecontacto = view1.findViewById(R.id.NOMBREAPELLIDOCONTACTO);
+        final EditText telcontacto = view1.findViewById(R.id.TELEFONOCONTACTO);
+        final EditText parentezco = view1.findViewById(R.id.PARENTESCOCONTACTO);
 
         // Si ya tengo valores de contactos debo inicializar
         if(Persona.Celular!=""){celular.setText(Persona.Celular);}
         if(Persona.Fijo!=""){fijo.setText(Persona.Fijo);}
         if(Persona.Mail!=""){mail.setText(Persona.Mail);}
+        if(Persona.NombreContacto!=""){nombrecontacto.setText(Persona.NombreContacto);}
+        if(Persona.TelefonoContacto!=""){telcontacto.setText(Persona.TelefonoContacto);}
+        if(Persona.ParentezcoContacto!=""){parentezco.setText(Persona.ParentezcoContacto);}
 
-        // Add OK and Cancel buttons
-        builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
+        Button guardar = view1.findViewById(R.id.GUARDAR2);
+        guardar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The user clicked OK
+            public void onClick(View view) {
                 Persona.Celular = celular.getText().toString();
                 Persona.Fijo = fijo.getText().toString();
                 Persona.Mail = mail.getText().toString();
-                //Toast.makeText(getApplicationContext(), telefonocelular+telefonofijo+direccionmail, Toast.LENGTH_SHORT).show();
-
-                // Cambio los colores de avance
+                Persona.NombreContacto = nombrecontacto.getText().toString();
+                Persona.TelefonoContacto = telcontacto.getText().toString();
+                Persona.ParentezcoContacto = parentezco.getText().toString();
                 ColorAvanceContacto();
-
+                dialog.dismiss();
             }
         });
-        builder.setNegativeButton("CANCELAR", null);
-        builder.setView(mainLayout);
-        // Create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
 
-        if(Persona!=null){
-        celular.setText(Persona.Celular);
-        fijo.setText(Persona.Fijo);
-        mail.setText(Persona.Mail);
-        }
+        Button cancelar = view1.findViewById(R.id.CANCELAR2);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 
     // Cambia los colores de los botones de llenado de contacto
@@ -977,16 +933,25 @@ public class persona extends AppCompatActivity {
         if (Persona.Mail.length()!=0){
             avance+=1;
         }
-        if(avance==1 || avance==2){
+        if (Persona.NombreContacto.length()!=0){
+            avance+=1;
+        }
+        if (Persona.TelefonoContacto.length()!=0){
+            avance+=1;
+        }
+        if (Persona.ParentezcoContacto.length()!=0){
+            avance+=1;
+        }
+        if(avance==1 || avance==2 || avance==3 || avance==4 || avance==5){
             contacto.setBackgroundResource(R.drawable.amarillo);
-            double porcentaje = Math.round((avance/3)*100);
+            double porcentaje = Math.round((avance/6)*100);
             Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
             String aux = "Completado: "+ Double.toString(porcentaje)+"%";
             avancecontacto.setText(aux);
             //AvContacto.setText(aux);
             //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
-        if(avance==3){
+        if(avance==6){
             contacto.setBackgroundResource(R.drawable.verde);
             avancecontacto.setText("Completado: 100%");
             //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
@@ -994,7 +959,89 @@ public class persona extends AppCompatActivity {
             //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// SECCION DE CARGA DE EFECTORES
+    public void Efector(View view){
+    // Defino los contenedores
+    AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+    TextView textView = new TextView(this);
+    textView.setText("EFECTOR");
+    textView.setPadding(20, 30, 20, 30);
+    textView.setTextSize(22F);
+    textView.setBackgroundColor(Color.parseColor("#4588BC"));
+    textView.setTextColor(Color.WHITE);
+    builder.setCustomTitle(textView);
 
+    // Defino el Layaout que va a contener a los Check
+    LinearLayout mainLayout       = new LinearLayout(this);
+    mainLayout.setOrientation(LinearLayout.VERTICAL);
+    // Defino los parametros
+    int TamañoLetra =20;
+
+    // Defino los EditText
+    // Telefono Celular
+    LinearLayout layout0       = new LinearLayout(this);
+    layout0.setOrientation(LinearLayout.HORIZONTAL);
+    layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+    layout0.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
+    LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+    params.setMargins(10,20,10,10);
+    layout0.setLayoutParams(params);
+    Efector = new EditText(getApplicationContext());
+    Efector.setHint("EFECTOR");
+    //Efector.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+    Efector.setHintTextColor(Color.parseColor("#4A4A4A"));
+    Efector.setGravity(Gravity.CENTER_HORIZONTAL);
+    Efector.setTextSize(TamañoLetra);
+    Efector.setTextColor(Color.BLACK);
+    Efector.setBackgroundResource(R.drawable.edit_text_1);
+    Efector.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+    layout0.addView(Efector);
+
+
+    mainLayout.addView(layout0);
+
+    // Si ya tengo valores de contactos debo inicializar
+    if(Persona.Efector!=""){Efector.setText(Persona.Efector);}
+
+    // Add OK and Cancel buttons
+    builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            // The user clicked OK
+            Persona.Efector = Efector.getText().toString();
+            //Toast.makeText(getApplicationContext(), telefonocelular+telefonofijo+direccionmail, Toast.LENGTH_SHORT).show();
+
+            // Cambio los colores de avance
+            ColorAvanceEfector();
+
+        }
+    });
+    builder.setNegativeButton("CANCELAR", null);
+    builder.setView(mainLayout);
+    // Create and show the alert dialog
+    AlertDialog dialog = builder.create();
+    dialog.show();
+
+    //if(Persona!=null){
+    //    celular.setText(Persona.Celular);
+    //}
+}
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceEfector(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.Efector.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==1){
+            efector.setBackgroundResource(R.drawable.verde);
+            avanceefector.setText("Completado: 100%");
+        }
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE LAS VISTAS DE LAS OBSERVACIONES Y LOS PRODUCTOS DE LIMPIEZA
@@ -1120,18 +1167,75 @@ public class persona extends AppCompatActivity {
         }
 
         if(avance==1){
+            observaciones.setBackgroundResource(R.drawable.amarillo);
+            avanceobservaciones.setText("Completado: 50%");
             //Observacion.setBackgroundColor(Color.parseColor("#FFA07A"));
-            String aux = Integer.toString(avance)+"/2";
+            //String aux = Integer.toString(avance)+"/2";
             //AvObs.setText(aux);
             //AvObs.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
         if(avance==2){
+            observaciones.setBackgroundResource(R.drawable.verde);
+            avanceobservaciones.setText("Completado: 100%");
             //Observacion.setBackgroundColor(Color.parseColor("#8BC34A"));
             //AvObs.setText("2/2");
             //AvObs.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
 
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// SECCION DE DEFINICION DE LAS VISTAS DE LOS CONTACTOS
+
+    public void Ocupacion(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_ocupacion, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final EditText ocupacion = view1.findViewById(R.id.Ocupacion);
+
+        // Si ya tengo valores de contactos debo inicializar
+        if(Persona.Ocupacion!=""){ocupacion.setText(Persona.Ocupacion);}
+
+        Button guardar = view1.findViewById(R.id.GUARDAR3);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Persona.Ocupacion = ocupacion.getText().toString();
+                ColorAvanceOcupacion();
+                dialog.dismiss();
+            }
+        });
+
+        Button cancelar = view1.findViewById(R.id.CANCELAR3);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceOcupacion(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.Ocupacion.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==1){
+            layout_ocupacion.setBackgroundResource(R.drawable.verde);
+            avanceocupacion.setText("Completado: 100%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE DEFINICION DE LAS OPCIONES DE GUARDADO DE LAS PERSONAS
@@ -1146,7 +1250,7 @@ public class persona extends AppCompatActivity {
         if(Nombre.getText().toString()!=null){Persona.Nombre=Nombre.getText().toString();}
         if(Apellido.getText().toString()!=null){Persona.Apellido=Apellido.getText().toString();}
         if(dni.getText().toString()!=null){Persona.DNI=dni.getText().toString();}
-        if(Efector.getText().toString()!=null){Persona.Efector=Efector.getText().toString();}
+        //if(Efector.getText().toString()!=null){Persona.Efector=Efector.getText().toString();}
 
         // Si uno de los campos listados abajo es nulo lo reemplazo por S/D
         if(Persona.Edad==null){Persona.Edad="";}
@@ -1172,6 +1276,10 @@ public class persona extends AppCompatActivity {
         Modif1.putExtra("NACIMIENTO" , Persona.Nacimiento);
         Modif1.putExtra("LIMPIEZA" , Persona.Limpieza);
         Modif1.putExtra("LOTE" , Persona.LoteVacuna);
+        Modif1.putExtra("NOMBRECONTACTO" , Persona.NombreContacto);
+        Modif1.putExtra("TELEFONOCONTACTO" , Persona.TelefonoContacto);
+        Modif1.putExtra("PARENTEZCOCONTACTO" , Persona.ParentezcoContacto);
+        Modif1.putExtra("OCUPACION" , Persona.Ocupacion);
 
         Toast.makeText(this, "PERSONA CARGADA", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, Modif1);
@@ -1180,48 +1288,7 @@ public class persona extends AppCompatActivity {
         else{Toast.makeText(this, "FALTA DNI", Toast.LENGTH_SHORT).show();}
     }
     // Para que se una funcion disparada por el Button de regreso de forma private
-    private void GuardarPersona(){
-        // Defino el intent para permitir pasar los datos
-        Intent Modif1= new Intent (this, MainActivity.class);
 
-        // Reviso que no se carguen datos nuevos, si se cargaron los obtengo
-        if(Nombre.getText().toString()!=null){Persona.Nombre=Nombre.getText().toString();}
-        if(Apellido.getText().toString()!=null){Persona.Apellido=Apellido.getText().toString();}
-        if(dni.getText().toString()!=null){Persona.DNI=dni.getText().toString();}
-        if(Sp1.getSelectedItem().toString()!=null){Persona.Efector=Sp1.getSelectedItem().toString();}
-
-        // Si uno de los campos listados abajo es nulo lo reemplazo por S/D
-        if(Persona.Edad==null){Persona.Edad="";}
-        if(Persona.UnidadEdad==null){Persona.UnidadEdad="";}
-        if(Persona.CodfigoFactorRiesgo==null){Persona.CodfigoFactorRiesgo="";}
-        if(Persona.Observaciones==null){Persona.Observaciones="";}
-
-        // Si dni es distinto a null le permito guardar la persona
-        if(Persona.DNI!=""){
-            Modif1.putExtra("NOMBRE" , Persona.Nombre);
-            Modif1.putExtra("APELLIDO" , Persona.Apellido);
-            Modif1.putExtra("DNI" , Persona.DNI);
-            Modif1.putExtra("EDAD" , Persona.Edad);
-            Modif1.putExtra("UNIDADEDAD" , Persona.UnidadEdad);
-            Modif1.putExtra("EFECTOR" , Persona.Efector);
-            Modif1.putExtra("FACTORES" , Persona.FactoresDeRiesgo);
-            Modif1.putExtra("CODIGOFACTORES" , Persona.CodfigoFactorRiesgo);
-            Modif1.putExtra("VACUNAS" , Persona.Vacunas);
-            Modif1.putExtra("CELULAR" , Persona.Celular);
-            Modif1.putExtra("FIJO" , Persona.Fijo);
-            Modif1.putExtra("MAIL" , Persona.Mail);
-            Modif1.putExtra("OBSERVACIONES" , Persona.Observaciones);
-            Modif1.putExtra("NACIMIENTO" , Persona.Nacimiento);
-            Modif1.putExtra("LIMPIEZA" , Persona.Limpieza);
-            Modif1.putExtra("LOTE" , Persona.LoteVacuna);
-
-            Toast.makeText(this, "PERSONA CARGADA", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_OK, Modif1);
-            finish();
-        }
-        else{Toast.makeText(this, "FALTA DNI", Toast.LENGTH_SHORT).show();}
-    }
-    // Función que evita que al presionar volver atras se pierdan todos los datos
     @Override
     public void onBackPressed()
     {
