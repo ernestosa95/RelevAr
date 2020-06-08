@@ -25,6 +25,7 @@ public class ObjetoPersona {
     public String TelefonoContacto;
     public String ParentezcoContacto;
     public String Ocupacion;
+    public String Educacion;
 
     public void setInfoPersonal(String nombre, String apellido, String dni){
         Nombre=nombre;
@@ -52,6 +53,7 @@ public class ObjetoPersona {
         TelefonoContacto="";
         ParentezcoContacto="";
         Ocupacion="";
+        Educacion="";
     }
 
     public String FormatoGuardar(){
@@ -59,7 +61,7 @@ public class ObjetoPersona {
         String guardar=DNI+";"+Apellido+";"+Nombre+";"+Edad+";"+UnidadEdad+";"+Nacimiento+";"+Efector+
                 ";"+FactoresDeRiesgo+";"+CodfigoFactorRiesgo+";"+Vacunas+";"+LoteVacuna+";"+Celular+
                 ";"+Fijo+";"+Mail+";"+Observaciones+";"+Limpieza+";"+NombreContacto+";"+TelefonoContacto+
-                ";"+ParentezcoContacto+";"+Ocupacion;
+                ";"+ParentezcoContacto+";"+Ocupacion+";"+Educacion;
         return guardar;
     }
 

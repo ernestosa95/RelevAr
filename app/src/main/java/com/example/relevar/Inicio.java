@@ -71,11 +71,6 @@ public class Inicio extends AppCompatActivity {
 
     }
 
-    private void IniciarServicio(){
-    Intent intent = new Intent(this, ServicioGPS.class);
-    startService(intent);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -123,7 +118,7 @@ public class Inicio extends AppCompatActivity {
             String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
                     "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
                     "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;" +
-                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;ENCUESTADOR\n";
+                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n";
             try {
 
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para

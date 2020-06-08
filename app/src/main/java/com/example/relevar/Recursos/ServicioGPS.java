@@ -66,6 +66,7 @@ public class ServicioGPS extends Service {
                 Intent intent = new Intent("custom-event-name");
                 // You can also include some extra data.
                 intent.putParcelableArrayListExtra("RECORRIDO", recorrido);
+                intent.putExtra("UBICACION", Latitud+" "+Longitud);
                 LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(intent);
                 encuestador.GuardarRecorrido(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));
             }

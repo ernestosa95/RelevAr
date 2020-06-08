@@ -130,12 +130,71 @@
             android:layout_margin="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/BTNEDUCACION"
+                android:layout_width="130dp"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/fondo2"
+                android:onClick="Educacion">
+
+                <ImageView
+                    android:id="@+id/ICONOEDUCACION"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:layout_constraintBottom_toTopOf="@+id/EDUCACION"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.454"
+                    app:srcCompat="@drawable/educacion" />
+
+                <TextView
+                    android:id="@+id/COMPLETADOEDUCACION"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Completado: 00%"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toTopOf="@+id/AVANCEEDUCACION"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.985"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/EDUCACION"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="EDUCACION"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOEDUCACION"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/AVANCEEDUCACION"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@drawable/rojo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BTNTRABAJO"
                 android:layout_width="130dp"
                 android:layout_height="200dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/fondo2"
-                android:onClick="Contactos"
+                android:onClick="Ocupacion"
                 app:layout_constraintBottom_toTopOf="@+id/EMPEZAR2"
                 app:layout_constraintStart_toStartOf="@+id/EMPEZAR2"
                 app:layout_constraintTop_toTopOf="parent">

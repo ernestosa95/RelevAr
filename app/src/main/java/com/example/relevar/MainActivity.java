@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -97,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
 
     int position, NumerosPersonas;
+
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+    String auxLat;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setTitle("Familia");
         encuestador.setID((String) getIntent().getStringExtra("IDENCUESTADOR"));
         lv1 = (ListView) findViewById(R.id.list1);
+
+        LatLong();
     }
 
     //@Override
@@ -116,28 +124,28 @@ public class MainActivity extends AppCompatActivity {
         //todo esto pa actualizr la listview
         super.onStart();
         ListeVer();
-
-        // Inicio la obtencion de datos de ubicacion del GPS
-        LatLong();
     }
-//--------------------------------------------------------------------------------------------------
+
+
+
+    //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // OBTENCION DE LOS DATOS DE LONGTUD Y LATITUD
 
     private void LatLong(){
     //public void LatLong(View view){
         // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Latitud=Double.toString(location.getLatitude());
                 Longitud=Double.toString(location.getLongitude());
                 Latitudenviar = location.getLatitude();
                 Longitudenviar = location.getLongitude();
-
+                System.out.println(Latitud+Longitud+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -151,54 +159,6 @@ public class MainActivity extends AppCompatActivity {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-    }
-
-    // Guardar el recorrido de las persona
-    private void ejecutar(){
-        final Handler handler= new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LatLong();
-                GuardarRecorrido();
-                handler.postDelayed(this,20000);//se ejecutara cada 20 segundos
-            }
-        },0);//empezara a ejecutarse después de 5 milisegundos
-    }
-
-    private void GuardarRecorrido(){
-        //permisosEscribir();
-        // Agrego la cabecera en .csv
-        File ReleVar = new File(Environment.getExternalStorageDirectory() +
-                "/RelevAr");
-        File nuevaCarpeta = new File(ReleVar, "RECORRIDOS");
-        nuevaCarpeta.mkdirs();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "Recorridos-"+fecha+".csv";
-
-        File dir = new File(nuevaCarpeta, NombreArchivo);
-
-        Calendar calendario = new GregorianCalendar();
-        int hora, minutos, segundos;
-        hora =calendario.get(Calendar.HOUR_OF_DAY);
-        minutos = calendario.get(Calendar.MINUTE);
-        segundos = calendario.get(Calendar.SECOND);
-
-        if(Latitud!=null && Longitud!=null){
-        String cabecera = Integer.toString(hora)+":"+Integer.toString(minutos)+":"+Integer.toString(segundos)+";"+Latitud+" "+Longitud+";"+IDencuestador+"\n";
-        try {
-                FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
-                // que se agreguen los datos al final sin perder los datos anteriores
-                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-                myOutWriter.append(cabecera);
-                myOutWriter.close();
-                fOut.close();
-
-        } catch (IOException e){
-                e.printStackTrace();
-        }}
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -230,64 +190,6 @@ public class MainActivity extends AppCompatActivity {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // AGREGAR CABECERA POR UNICA VEZ A LOS ARCHIVOS DE DATOS
-
-    private void AgregarCabecera(){
-        permisosEscribir();
-        // Agrego la cabecera en .csv
-        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
-        nuevaCarpeta.mkdirs();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-"+fecha+".csv";
-        //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        File dir = new File(nuevaCarpeta, NombreArchivo);
-        String strLine="";
-        // leer datos
-        String myData = "";
-            //File myExternalFile = new File("assets/","log.txt");
-        try {
-                FileInputStream fis = new FileInputStream(dir);
-                DataInputStream in = new DataInputStream(fis);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-                //while ((strLine = br.readLine()) != null) {
-                //    myData = myData + strLine + "\n";
-                //}
-                strLine = br.readLine().split(";")[0];
-                //Toast.makeText(this, strLine, Toast.LENGTH_SHORT).show();
-                br.close();
-                in.close();
-                fis.close();
-        } catch (IOException e) {
-            }
-        // guardo los datos
-        if(strLine.equals("CALLE")!=true){
-        String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
-                "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
-                "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;ENCUESTADOR\n";
-        try {
-
-            FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
-            // que se agreguen los datos al final sin perder los datos anteriores
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            //BufferedWriter writer = null;
-            //writer = new BufferedWriter( new OutputStreamWriter(
-            //        new FileOutputStream( dir ),"UTF-8"));
-            myOutWriter.append(cabecera);
-            myOutWriter.close();
-            fOut.close();
-           //Toast.makeText(this, strLine+"2", Toast.LENGTH_SHORT).show();
-
-        } catch (IOException e){
-            e.printStackTrace();
-            //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
-        }}
-    }
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
     // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
         Intent Modif= new Intent (this, persona.class);
@@ -313,96 +215,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Eliminar o editar un registro de una persona
-    /*private void EliminarEditar(){
-        // Defino los contenedores
-        //makeText(getBaseContext(), MiembrosFamiliares.get(position).DNI, LENGTH_SHORT).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
-        TextView textView = new TextView(this);
-        textView.setText("PERSONA");
-        textView.setPadding(20, 30, 20, 30);
-        textView.setTextSize(22F);
-        textView.setBackgroundColor(Color.parseColor("#4588BC"));
-        textView.setTextColor(Color.WHITE);
-        builder.setCustomTitle(textView);
-
-        // Defino el Layaout que va a contener a los Check
-        LinearLayout mainLayout       = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-
-        // Defino los parametros
-        int TamañoLetra =18;
-
-        // Informacion de la persona
-        LinearLayout layout0       = new LinearLayout(this);
-        layout0.setOrientation(LinearLayout.HORIZONTAL);
-        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-        final TextView descripcion = new TextView(getApplicationContext());
-        String datospersonas = "DNI: "+ MiembrosFamiliares.get(position).DNI+"\nNombre: "+ MiembrosFamiliares.get(position).Nombre+
-        "\nApellido: "+MiembrosFamiliares.get(position).Apellido+"\nEdad: "+MiembrosFamiliares.get(position).Edad+" "+MiembrosFamiliares.get(position).UnidadEdad+
-                "\nFecha de nacimiento: " + MiembrosFamiliares.get(position).Nacimiento + "\nEfector: "+MiembrosFamiliares.get(position).Efector+"\nFactores de Riesgo: "+MiembrosFamiliares.get(position).FactoresDeRiesgo+"\nVacunas aplicadas: "+
-                MiembrosFamiliares.get(position).Vacunas+"\nLote de vacunas: "+MiembrosFamiliares.get(position).LoteVacuna+"\nCelular: "+
-                MiembrosFamiliares.get(position).Celular+"\nObservaciones: "+MiembrosFamiliares.get(position).Observaciones;
-        descripcion.setText(datospersonas);
-        descripcion.setTextSize(TamañoLetra);
-        descripcion.setTextColor(Color.WHITE);
-        descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout0.setMinimumHeight(500);
-        layout0.addView(descripcion);
-
-        // Añadir los view al Layout
-        mainLayout.addView(layout0);
-
-        // Add OK and Cancel buttons
-        builder.setPositiveButton("EDITAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The user clicked OK
-                Intent Modif= new Intent (getBaseContext(), persona.class);
-                Modif.putExtra("NOMBRE" , MiembrosFamiliares.get(position).Nombre);
-                Modif.putExtra("APELLIDO" , MiembrosFamiliares.get(position).Apellido);
-                Modif.putExtra("DNI" , MiembrosFamiliares.get(position).DNI);
-                Modif.putExtra("EDAD" ,  MiembrosFamiliares.get(position).Edad);
-                Modif.putExtra("UNIDADEDAD" ,  MiembrosFamiliares.get(position).UnidadEdad);
-                Modif.putExtra("EFECTOR" , MiembrosFamiliares.get(position).Efector);
-                Modif.putExtra("FACTORES" , MiembrosFamiliares.get(position).FactoresDeRiesgo);
-                Modif.putExtra("CODIGOFACTORES" ,  MiembrosFamiliares.get(position).CodfigoFactorRiesgo);
-                Modif.putExtra("VACUNAS" ,  MiembrosFamiliares.get(position).Vacunas);
-                Modif.putExtra("CELULAR" ,  MiembrosFamiliares.get(position).Celular);
-                Modif.putExtra("FIJO" ,  MiembrosFamiliares.get(position).Fijo);
-                Modif.putExtra("MAIL" ,  MiembrosFamiliares.get(position).Mail);
-                Modif.putExtra("OBSERVACIONES" , MiembrosFamiliares.get(position).Observaciones);
-                Modif.putExtra("NACIMIENTO" , MiembrosFamiliares.get(position).Nacimiento);
-                Modif.putExtra("LIMPIEZA" , MiembrosFamiliares.get(position).Limpieza);
-                Modif.putExtra("LOTE" , MiembrosFamiliares.get(position).LoteVacuna);
-                Modif.putExtra("NOMBRECONTACTO" , MiembrosFamiliares.get(position).NombreContacto);
-                Modif.putExtra("TELEFONOCONTACTO" , MiembrosFamiliares.get(position).TelefonoContacto);
-                Modif.putExtra("PARENTEZCOCONTACTO" , MiembrosFamiliares.get(position).ParentezcoContacto);
-                Modif.putExtra("OCUPACION" , MiembrosFamiliares.get(position).Ocupacion);
-                setResult(RESULT_OK, Modif);
-                MiembrosFamiliares.remove(position);
-                names.remove(position);
-
-                ListeVer();
-                startActivityForResult(Modif, 1);
-
-            }
-        });
-        builder.setNegativeButton("ELIMINAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                MiembrosFamiliares.remove(position);
-                names.remove(position);
-                ListeVer();
-            }
-        });
-        builder.setNeutralButton("VOLVER", null);
-        builder.setView(mainLayout);
-
-        // Create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }*/
     private void EliminarEditar(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
@@ -462,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 Modif.putExtra("TELEFONOCONTACTO" , MiembrosFamiliares.get(position).TelefonoContacto);
                 Modif.putExtra("PARENTEZCOCONTACTO" , MiembrosFamiliares.get(position).ParentezcoContacto);
                 Modif.putExtra("OCUPACION" , MiembrosFamiliares.get(position).Ocupacion);
+                Modif.putExtra("EDUCACION" , MiembrosFamiliares.get(position).Educacion);
                 setResult(RESULT_OK, Modif);
                 MiembrosFamiliares.remove(position);
                 names.remove(position);
@@ -521,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
                 Persona.TelefonoContacto = data.getStringExtra("TELEFONOCONTACTO");
                 Persona.ParentezcoContacto = data.getStringExtra("PARENTEZCOCONTACTO");
                 Persona.Ocupacion = data.getStringExtra("OCUPACION");
+                Persona.Educacion = data.getStringExtra("EDUCACION");
 
                 //Agrego la persona como miembro de la familia
                 MiembrosFamiliares.add(Persona);
@@ -536,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR
     public void Guardar(View view){
+
         //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
         // Inicio la obtencion de datos de ubicacion del GPS
         //LatLong();
@@ -624,6 +439,7 @@ public class MainActivity extends AppCompatActivity {
                             adapter.clear();
                             myOutWriter.close();
                             fOut.close();
+                            locationManager.removeUpdates(locationListener);
                             dialog.dismiss();
                             finish();
                     } catch (IOException e) {
@@ -636,6 +452,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         if(MiembrosFamiliares.size()==0){
+            locationManager.removeUpdates(locationListener);
             finish();
         }
         //thats it
