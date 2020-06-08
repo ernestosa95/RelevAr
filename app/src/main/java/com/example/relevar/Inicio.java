@@ -67,7 +67,7 @@ public class Inicio extends AppCompatActivity {
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
         // Creo un archivo y lo inicializo con la cabecera predefinida
-        AgregarCabecera();
+        //AgregarCabecera();
 
     }
 
@@ -82,6 +82,7 @@ public class Inicio extends AppCompatActivity {
     public void NextMenuPrincipal(View view) {
 
         Intent Modif = new Intent(this, MenuPrincipal.class);
+        AgregarCabecera();
         startActivityForResult(Modif, 1);
     }
 

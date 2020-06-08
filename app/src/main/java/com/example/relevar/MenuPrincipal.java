@@ -114,7 +114,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     }
 
     // Our handler for received Intents. This will be called whenever an Intent
-// with an action named "custom-event-name" is broadcasted.
+    // with an action named "custom-event-name" is broadcasted.
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -322,7 +322,6 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         super.onDestroy();
         mapView.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-        super.onDestroy();
     }
 
     @Override

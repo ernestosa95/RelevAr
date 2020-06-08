@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 Longitud=Double.toString(location.getLongitude());
                 Latitudenviar = location.getLatitude();
                 Longitudenviar = location.getLongitude();
-                System.out.println(Latitud+Longitud+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                //System.out.println(Latitud+Longitud+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -159,33 +159,6 @@ public class MainActivity extends AppCompatActivity {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-    }
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-    // SOLICITUD DE PERMISOS
-
-    private void permisosEscribir(){
-        // Check whether this app has write external storage permission or not.
-        int writeExternalStoragePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        // If do not grant write external storage permission.
-        if(writeExternalStoragePermission!= PackageManager.PERMISSION_GRANTED)
-        {
-            // Request user to grant write external storage permission.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
-        }
-        }
-
-    private void permisosPosicion(){
-
-        // Check whether this app has write external storage permission or not.
-        int PositionPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        // If do not grant write external storage permission.
-        if(PositionPermission!= PackageManager.PERMISSION_GRANTED)
-        {
-            // Request user to grant write external storage permission.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_POSITION);
-        }
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -209,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
                 //Elegir entre Eliminar y Editar
                 position=p1;
                 EliminarEditar();
-                //makeText(getBaseContext(), Integer.toString(position), LENGTH_SHORT).show();
-                //makeText(getBaseContext(), MiembrosFamiliares.get(0).DNI, LENGTH_SHORT).show();
             }
         });
     }
