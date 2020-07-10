@@ -107,8 +107,8 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         PararServicio=(Button) findViewById(R.id.TERMINAR);
         boolean estado = isMyServiceRunning(ServicioGPS.class);
         if(estado==true){
-            PararServicio.setText("TERMINAR RECORRIDO");
-        } else {PararServicio.setText("INICIAR RECORRIDO");}
+            PararServicio.setText(getString(R.string.terminar_recorrido));
+        } else {PararServicio.setText(getString(R.string.iniciar_recorrido));}
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
     }
@@ -147,7 +147,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     startService(intent);
-                    PararServicio.setText("TERMINAR RECORRIDO");
+                    PararServicio.setText(getString(R.string.terminar_recorrido));
                     dialog.dismiss();
 
                     Intent Modif = new Intent(getBaseContext(), MainActivity.class);
@@ -193,7 +193,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     stopService(intent);
-                    PararServicio.setText("REINICIAR RECORRIDO");
+                    PararServicio.setText(getString(R.string.reiniciar_recorrido));
                     dialog.dismiss();
                 }
             });
@@ -225,7 +225,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     startService(intent);
-                    PararServicio.setText("TERMINAR RECORRIDO");
+                    PararServicio.setText(getString(R.string.terminar_recorrido));
                     dialog.dismiss();
                 }
             });

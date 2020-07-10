@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.relevar.Recursos.ServicioGPS;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -76,7 +75,7 @@ public class Inicio extends AppCompatActivity {
         super.onStart();
     }
 
-    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // PASAR AL MENU PPAL
     public void NextMenuPrincipal(View view) {
@@ -116,10 +115,12 @@ public class Inicio extends AppCompatActivity {
         }
         // guardo los datos
         if (strLine.equals("CALLE") != true) {
-            String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
+            /*String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
                     "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
                     "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;" +
-                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n";
+                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n";*/
+            String cabecera = getString(R.string.encabezado);
+
             try {
 
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
@@ -137,9 +138,5 @@ public class Inicio extends AppCompatActivity {
             }
         }
     }
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-    // PERMISOS PARA ACCEDER A LA UBICACION DEL GPS
 
 }
