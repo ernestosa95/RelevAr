@@ -26,6 +26,12 @@ public class ObjetoPersona {
     public String ParentezcoContacto;
     public String Ocupacion;
     public String Educacion;
+    public String Temperatura;
+    public String Tos;
+    public String Garganta;
+    public String Respiratorio;
+    public String Disgeusia;
+    public String Anosmia;
 
     public void setInfoPersonal(String nombre, String apellido, String dni){
         Nombre=nombre;
@@ -54,13 +60,19 @@ public class ObjetoPersona {
         ParentezcoContacto="";
         Ocupacion="";
         Educacion="";
+        Temperatura="";
+        Tos="";
+        Garganta="";
+        Respiratorio="";
+        Anosmia="";
+        Disgeusia="";
     }
 
     public String FormatoGuardar(){
         // DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA
-        String guardar=DNI+";"+Apellido+";"+Nombre+";"+Edad+";"+UnidadEdad+";"+Nacimiento+";"+Efector+
-                ";"+FactoresDeRiesgo+";"+CodfigoFactorRiesgo+";"+Vacunas+";"+LoteVacuna+";"+Celular+
-                ";"+Fijo+";"+Mail+";"+Observaciones+";"+Limpieza+";"+NombreContacto+";"+TelefonoContacto+
+        String guardar=DNI+";"+Apellido+";"+Nombre+";"+Edad+";"+UnidadEdad+";"+Nacimiento+";"+Efector+";"+FactoresDeRiesgo+
+                ";"+CodfigoFactorRiesgo+";"+Vacunas+";"+LoteVacuna+";"+Celular+";"+Fijo+
+                ";"+Mail+";"+Observaciones+";"+Limpieza+";"+NombreContacto+";"+TelefonoContacto+
                 ";"+ParentezcoContacto+";"+Ocupacion+";"+Educacion;
         return guardar;
     }

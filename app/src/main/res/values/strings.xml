@@ -1,3 +1,54 @@
 <resources>
     <string name="app_name">RelevAr</string>
+    <string name="cargar_datos">CARGAR DATOS</string>
+    <string name="relevamiento_georeferenciacion">RELEVAMIENTO | GEOREFERENCIACIÓN</string>
+    <string name="encabezado">"CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD; FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n"</string>
+    <string name="iniciar_recorrido">INICIAR RECORRIDO</string>
+    <string name="terminar_recorrido">TERMINAR RECORRIDO</string>
+    <string name="reiniciar_recorrido">REINICIAR RECORRIDO</string>
+    <string name="cargar_familia">CARGAR FAMILIA</string>
+
+    <string name="nueva_persona">NUEVA PERSONA</string>
+    <string name="terminar_grupo_familiar">TERMINAR GRUPO FAMILIAR</string>
+
+    <string name="apellido">APELLIDO</string>
+    <string name="nombre">NOMBRE</string>
+    <string name="dni" translatable="false">DNI</string>
+    <string name="fecha_nacimiento">MES DIA, AÑO</string>
+    <string name="educacion">EDUCACIÓN</string>
+    <string name="ocupacion">OCUPACIÓN</string>
+    <string name="contacto">CONTACTO</string>
+    <string name="efector">EFECTOR</string>
+    <string name="observaciones">OBSERVACIONES</string>
+    <string name="factores_riesgo">FACTORES DE RIESGO</string>
+    <string name="completado">Completado:</string>
+    <string name="completado_cero">Completado: 00%</string>
+    <string name="guardar_persona">GUARDAR PERSONA</string>
+    <string name="personas_cargadas">PERSONAS CARGADAS</string>
+
+    <string name="celular">CELULAR</string>
+    <string name="fijo">FIJO</string>
+    <string name="mail" translatable="false">MAIL</string>
+    <string name="persona_contacto">PERSONA DE CONTACTO</string>
+    <string name="nombre_apellido_contacto">NOMBRE Y APELLIDO</string>
+    <string name="telefono">TELÉFONO</string>
+    <string name="parentezco_contacto">PARENTEZCO</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="guardar">GUARDAR</string>
+    <string name="editar">EDITAR</string>
+    <string name="eliminar">ELIMINAR</string>
+
+    <string name="nuevo">NUEVO</string>
+    <string name="ingresar">INGRESAR</string>
+    <string name="encuestador">ENCUESTADOR</string>
+
+    <string name="calle">CALLE</string>
+    <string name="numero">NÚMERO</string>
+    <string name="miembros_familiares">MIEMBROS FAMILIARES</string>
+    <string name="domicilio_familiar">DOMICILIO GRUPO FAMILIAR</string>
+
+    <string name="si">SI</string>
+    <string name="no">NO</string>
+
+
 </resources>

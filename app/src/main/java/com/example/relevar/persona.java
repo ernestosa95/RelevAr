@@ -787,7 +787,7 @@ public class persona extends AppCompatActivity {
     private void ColorAvanceEducacion(){
         if (Persona.Educacion.length()!=0){
             layout_educacion.setBackgroundResource(R.drawable.verde);
-            avanceeducacion.setText("Completado: 100%");
+            avanceeducacion.setText(getString(R.string.completado)+" 100%");
         }
     }
 
@@ -1025,8 +1025,13 @@ public class persona extends AppCompatActivity {
                     } else {
                         riesgos+=",OTROS";
                         codigoriesgo+=",16";}}
+                if(riesgos==null){
+                    Persona.FactoresDeRiesgo="";
+                    Persona.CodfigoFactorRiesgo="";
+                }
+                else{
                 Persona.FactoresDeRiesgo=riesgos;
-                Persona.CodfigoFactorRiesgo=codigoriesgo;
+                Persona.CodfigoFactorRiesgo=codigoriesgo;}
                 //Toast.makeText(getApplicationContext(), Persona.FactoresDeRiesgo, Toast.LENGTH_SHORT).show();
                 ColorAvanceFactores();
             }
@@ -1050,7 +1055,7 @@ public class persona extends AppCompatActivity {
 
         if (Persona.FactoresDeRiesgo.length()!=0){
             factores.setBackgroundResource(R.drawable.verde);
-            avancefactores.setText("Completado: 100%");
+            avancefactores.setText(getString(R.string.completado)+" 100%");
         }
     }
 
@@ -1086,7 +1091,7 @@ public class persona extends AppCompatActivity {
             if (vac[x].equals("RESPIRATORIOS")){
                 respiratorios.setChecked(true);
             }
-            if (vac[x].equals("DIABÉTICOS")){
+            if (vac[x].equals("DIABETICOS")){
                 diabeticos.setChecked(true);
             }
             if (vac[x].equals("PREMATUROS")){
@@ -1210,14 +1215,14 @@ public class persona extends AppCompatActivity {
             contacto.setBackgroundResource(R.drawable.amarillo);
             double porcentaje = Math.round((avance/6)*100);
             Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
-            String aux = "Completado: "+ Double.toString(porcentaje)+"%";
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
             avancecontacto.setText(aux);
             //AvContacto.setText(aux);
             //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
         if(avance==6){
             contacto.setBackgroundResource(R.drawable.verde);
-            avancecontacto.setText("Completado: 100%");
+            avancecontacto.setText(getString(R.string.completado)+" 100%");
             //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
             //AvContacto.setText("3/3");
             //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
@@ -1303,7 +1308,7 @@ public class persona extends AppCompatActivity {
 
         if(avance==1){
             efector.setBackgroundResource(R.drawable.verde);
-            avanceefector.setText("Completado: 100%");
+            avanceefector.setText(getString(R.string.completado)+" 100%");
         }
     }
 //--------------------------------------------------------------------------------------------------
@@ -1432,7 +1437,7 @@ public class persona extends AppCompatActivity {
 
         if(avance==1){
             observaciones.setBackgroundResource(R.drawable.amarillo);
-            avanceobservaciones.setText("Completado: 50%");
+            avanceobservaciones.setText(getString(R.string.completado)+" 50%");
             //Observacion.setBackgroundColor(Color.parseColor("#FFA07A"));
             //String aux = Integer.toString(avance)+"/2";
             //AvObs.setText(aux);
@@ -1440,7 +1445,7 @@ public class persona extends AppCompatActivity {
         }
         if(avance==2){
             observaciones.setBackgroundResource(R.drawable.verde);
-            avanceobservaciones.setText("Completado: 100%");
+            avanceobservaciones.setText(getString(R.string.completado)+" 100%");
             //Observacion.setBackgroundColor(Color.parseColor("#8BC34A"));
             //AvObs.setText("2/2");
             //AvObs.setBackgroundColor(Color.parseColor("#8BC34A"));
@@ -1494,7 +1499,7 @@ public class persona extends AppCompatActivity {
 
         if(avance==1){
             layout_ocupacion.setBackgroundResource(R.drawable.verde);
-            avanceocupacion.setText("Completado: 100%");
+            avanceocupacion.setText(getString(R.string.completado)+" 100%");
             //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
             //AvContacto.setText("3/3");
             //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));

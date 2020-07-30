@@ -246,6 +246,12 @@ public class MainActivity extends AppCompatActivity {
                 Modif.putExtra("PARENTEZCOCONTACTO" , MiembrosFamiliares.get(position).ParentezcoContacto);
                 Modif.putExtra("OCUPACION" , MiembrosFamiliares.get(position).Ocupacion);
                 Modif.putExtra("EDUCACION" , MiembrosFamiliares.get(position).Educacion);
+                Modif.putExtra("TEMPERATURA" , MiembrosFamiliares.get(position).Temperatura);
+                Modif.putExtra("TOS" , MiembrosFamiliares.get(position).Tos);
+                Modif.putExtra("RESPIRATORIO" , MiembrosFamiliares.get(position).Respiratorio);
+                Modif.putExtra("GARGANTA" , MiembrosFamiliares.get(position).Garganta);
+                Modif.putExtra("ANOSMIA" , MiembrosFamiliares.get(position).Anosmia);
+                Modif.putExtra("DISGEUSIA" , MiembrosFamiliares.get(position).Disgeusia);
                 setResult(RESULT_OK, Modif);
                 MiembrosFamiliares.remove(position);
                 names.remove(position);
@@ -306,6 +312,12 @@ public class MainActivity extends AppCompatActivity {
                 Persona.ParentezcoContacto = data.getStringExtra("PARENTEZCOCONTACTO");
                 Persona.Ocupacion = data.getStringExtra("OCUPACION");
                 Persona.Educacion = data.getStringExtra("EDUCACION");
+                Persona.Temperatura = data.getStringExtra("TEMPERATURA");
+                Persona.Tos = data.getStringExtra("TOS");
+                Persona.Respiratorio = data.getStringExtra("RESPIRATORIO");
+                Persona.Garganta = data.getStringExtra("GARGANTA");
+                Persona.Anosmia = data.getStringExtra("ANOSMIA");
+                Persona.Disgeusia = data.getStringExtra("DISGEUSIA");
 
                 //Agrego la persona como miembro de la familia
                 MiembrosFamiliares.add(Persona);
