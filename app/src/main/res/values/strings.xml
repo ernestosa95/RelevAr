@@ -49,6 +49,9 @@
 
     <string name="si">SI</string>
     <string name="no">NO</string>
+    <string name="servicios_basicos" translatable="false">SERVICIOS BASICOS</string>
+    <string name="vivienda" translatable="false">VIVIENDA</string>
+    <string name="electricidad" translatable="false">ELECTRICIDAD</string>
 
 
 </resources>

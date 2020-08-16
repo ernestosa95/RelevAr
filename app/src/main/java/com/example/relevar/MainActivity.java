@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Definicion de String para contener informacion
     private String Latitud, Longitud, IDencuestador="";
-    private Double Latitudenviar, Longitudenviar;
+    private Double Latitudenviar=0.0, Longitudenviar=0.0;
 
     // Encuestador
     Encuestador encuestador = new Encuestador();
@@ -319,6 +319,19 @@ public class MainActivity extends AppCompatActivity {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void ServiciosBasicos(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_servicios_basicos, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR
     public void Guardar(View view){
 
@@ -367,10 +380,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                Button guardar = view_alert.findViewById(R.id.GUARDAR1);
+                Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
                 guardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if(Latitudenviar!=0.0){
                         // The user clicked OK
                         // Agrego la cabecera en .csv
                         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
@@ -414,7 +428,8 @@ public class MainActivity extends AppCompatActivity {
                             dialog.dismiss();
                             finish();
                     } catch (IOException e) {
-                        e.printStackTrace();}
+                        e.printStackTrace();}}
+                        else{makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();}
                 }});
     } else {makeText(getBaseContext(), "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
     }

@@ -14,10 +14,12 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.relevar.Recursos.ServicioGPS;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -75,14 +77,15 @@ public class Inicio extends AppCompatActivity {
         super.onStart();
     }
 
-//--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // PASAR AL MENU PPAL
     public void NextMenuPrincipal(View view) {
-
-        Intent Modif = new Intent(this, MenuPrincipal.class);
-        AgregarCabecera();
-        startActivityForResult(Modif, 1);
+        if(checkIfLocationOpened()){
+            Intent Modif = new Intent(this, MenuPrincipal.class);
+            AgregarCabecera();
+            startActivityForResult(Modif, 1);}
+        else{makeText(getBaseContext(), "UBICACION DEL TELEFONO DESACTIVADA, POR FAVOR ACTIVARLA", LENGTH_SHORT).show();}
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -115,12 +118,10 @@ public class Inicio extends AppCompatActivity {
         }
         // guardo los datos
         if (strLine.equals("CALLE") != true) {
-            /*String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
+            String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
                     "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
                     "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;" +
-                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n";*/
-            String cabecera = getString(R.string.encabezado);
-
+                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n";
             try {
 
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
@@ -138,5 +139,17 @@ public class Inicio extends AppCompatActivity {
             }
         }
     }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // CONOCER SI LA UBICACION ESTA ACTIVADA
+    private boolean checkIfLocationOpened() {
+    String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+    System.out.println("Provider contains=> " + provider);
+    if (provider.contains("gps") || provider.contains("network")){
+        return true;
+    }
+    return false;
+}
 
 }

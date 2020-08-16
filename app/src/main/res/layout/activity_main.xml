@@ -7,6 +7,43 @@
     android:background="#4A4A4A"
     tools:context=".MainActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/fondo2"
+        android:onClick="NuevaPersona"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <ImageView
+            android:id="@+id/mascara"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/factores"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icono_anadir" />
+
+        <TextView
+            android:id="@+id/factores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/nueva_persona"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
         android:id="@+id/TERMINAR"
         android:layout_width="300dp"
@@ -24,7 +61,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,49 +99,135 @@
         app:layout_constraintBottom_toTopOf="@+id/TERMINAR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="10dp">
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="150dp"
+                android:id="@+id/BTNSERVICIOSBASICOS"
+                android:layout_width="130dp"
                 android:layout_height="200dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/fondo2"
-                android:onClick="NuevaPersona"
+                android:onClick="ServiciosBasicos">
+
+                <ImageView
+                    android:id="@+id/ICONOSERVICIOSBASICOS"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/canilla" />
+
+                <TextView
+                    android:id="@+id/COMPLETADOSERVICIOS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/completado_cero"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toTopOf="@+id/AVANCESERVICIOSBASICOS"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.985"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/SERVICIOSBASICOS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/servicios_basicos"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOSERVICIOS"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ICONOSERVICIOSBASICOS" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/AVANCESERVICIOSBASICOS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@drawable/rojo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/BTNVIVIENDA"
+                android:layout_width="130dp"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/fondo2"
                 app:layout_constraintBottom_toTopOf="@+id/EMPEZAR2"
                 app:layout_constraintStart_toStartOf="@+id/EMPEZAR2"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/mascara"
+                    android:id="@+id/ICONOSVIVIENDA"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    app:layout_constraintBottom_toTopOf="@+id/factores"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/icono_anadir" />
+                    app:srcCompat="@drawable/vivienda" />
 
                 <TextView
-                    android:id="@+id/factores"
+                    android:id="@+id/COMPLETADOVIVIENDA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:text="@string/nueva_persona"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/completado_cero"
                     android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toTopOf="@+id/AVANCEVIVIENDA"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.985"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <TextView
+                    android:id="@+id/VIVIENDA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/vivienda"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOVIVIENDA"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ICONOSVIVIENDA" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/AVANCEVIVIENDA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@drawable/rojo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
         </LinearLayout>
 
         >

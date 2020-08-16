@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/GUARDAR1"
+        android:id="@+id/GUARDARFAMILIA"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button1"
