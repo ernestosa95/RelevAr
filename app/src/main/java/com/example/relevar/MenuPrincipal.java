@@ -3,8 +3,10 @@ package com.example.relevar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -12,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -76,6 +79,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     TextView txt;
 
     private ArrayList<LatLng> latlngs = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,11 +108,13 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         latLng = new LatLng(-60, -30);
         // Inicio de la App
         Encuestador();
-        PararServicio=(Button) findViewById(R.id.TERMINAR);
+        PararServicio = (Button) findViewById(R.id.TERMINAR);
         boolean estado = isMyServiceRunning(ServicioGPS.class);
-        if(estado==true){
+        if (estado == true) {
             PararServicio.setText(getString(R.string.terminar_recorrido));
-        } else {PararServicio.setText(getString(R.string.iniciar_recorrido));}
+        } else {
+            PararServicio.setText(getString(R.string.iniciar_recorrido));
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
     }
@@ -124,12 +130,12 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         }
     };
 
-//--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // NUEVA FAMILIA
     public void NuevaFamilia(View view) {
         boolean estado = isMyServiceRunning(ServicioGPS.class);
-        if(estado==false){
+        if (estado == false) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater Inflater = getLayoutInflater();
             View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
@@ -163,7 +169,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                     dialog.dismiss();
                 }
             });
-        } else{
+        } else {
             Intent Modif = new Intent(getBaseContext(), MainActivity.class);
             Modif.putExtra("IDENCUESTADOR", encuestador.getID());
             startActivityForResult(Modif, 1);
@@ -171,11 +177,11 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
     }
 
     // TERMINAR RECORRIDO
-    public void TerminarRecorrido(View view){
+    public void TerminarRecorrido(View view) {
         boolean estado = isMyServiceRunning(ServicioGPS.class);
         //Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
         //Toast.makeText(this, Boolean.toString(EstadoServicio()), Toast.LENGTH_SHORT).show();
-        if(estado==true){
+        if (estado == true) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater Inflater = getLayoutInflater();
             View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
@@ -205,9 +211,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                     dialog.dismiss();
                 }
             });
-        }
-
-        else{
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater Inflater = getLayoutInflater();
             View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
@@ -240,21 +244,27 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) { ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-        if (serviceClass.getName().equals(service.service.getClassName())) {
-            return true; } }
-    return false; }
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1){
-            if(resultCode== RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getParcelableExtra("bundle");
                 LatLng position = bundle.getParcelable("from_position");
                 latlngs.add(position);
                 System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            }}}
+            }
+        }
+    }
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -265,6 +275,16 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
 
         //map.addMarker(new MarkerOptions().position(new LatLng(Latitud,Longitud)).title("aca toy"));
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
 

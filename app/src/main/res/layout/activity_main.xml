@@ -9,9 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="70dp"
-        android:layout_marginTop="5dp"
         android:background="@drawable/fondo2"
         android:onClick="NuevaPersona"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,9 +21,8 @@
             android:id="@+id/mascara"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/factores"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icono_anadir" />
@@ -33,7 +31,7 @@
             android:id="@+id/factores"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="80dp"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/nueva_persona"
             android:textColor="#FFFFFF"
@@ -110,7 +108,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BTNSERVICIOSBASICOS"
                 android:layout_width="130dp"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/fondo2"
                 android:onClick="ServiciosBasicos">
@@ -170,9 +168,10 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BTNVIVIENDA"
                 android:layout_width="130dp"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/fondo2"
+                android:onClick="Vivienda"
                 app:layout_constraintBottom_toTopOf="@+id/EMPEZAR2"
                 app:layout_constraintStart_toStartOf="@+id/EMPEZAR2"
                 app:layout_constraintTop_toTopOf="parent">

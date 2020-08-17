@@ -2,7 +2,7 @@
     <string name="app_name">RelevAr</string>
     <string name="cargar_datos">CARGAR DATOS</string>
     <string name="relevamiento_georeferenciacion">RELEVAMIENTO | GEOREFERENCIACIÓN</string>
-    <string name="encabezado">"CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD; FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;ENCUESTADOR\n"</string>
+    <string name="encabezado">CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD; FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;TIPO DE VIVIENDA;LA VIVIENDA ES;CANTIDAD HABITACIONES;LUGAR PARA COCINAR;USA PARA COCINAR;PAREDES EXTERIORES;REVOQUE EXTERIOR;PISOS;EXTERIOR DEL TECHO; CIELORRASO;ENCUESTADOR\n</string>
     <string name="iniciar_recorrido">INICIAR RECORRIDO</string>
     <string name="terminar_recorrido">TERMINAR RECORRIDO</string>
     <string name="reiniciar_recorrido">REINICIAR RECORRIDO</string>
@@ -52,6 +52,18 @@
     <string name="servicios_basicos" translatable="false">SERVICIOS BASICOS</string>
     <string name="vivienda" translatable="false">VIVIENDA</string>
     <string name="electricidad" translatable="false">ELECTRICIDAD</string>
+    <string name="tipo_de_vivienda" translatable="false">TIPO DE VIVIENDA</string>
+    <string name="la_vivienda_es" translatable="false">LA VIVIENDA ES...</string>
+    <string name="lugar_cocinar" translatable="false">LUGAR PARA COCINAR</string>
+    <string name="usa_para_cocinar" translatable="false">USA PARA COCINAR...</string>
+    <string name="pisos" translatable="false">MATERIAL DE LOS PISOS</string>
+    <string name="paredes" translatable="false">MATERIAL PREDOMINANTE EN LAS PAREDES EXTERIORES</string>
+    <string name="revestimiento" translatable="false">REVESTIMIENTO EXTERNO O REVOQUE</string>
+    <string name="revestimiento_cielorrazo" translatable="false">REVESTIMIENTO INTERIOR DEL TECHO O CIELORRAZO</string>
+    <string name="techo" translatable="false">MATERIAL PREDOMINANTE EN LA CUBIERTA EXTERIOR DEL TECHO</string>
+    <string name="piezas" translatable="false">CANTIDAD DE AMBIENTES/HABITACIONES/PIEZAS</string>
+    <string name="agua" translatable="false">AGUA</string>
+    <string name="agua_beber_cocinar" translatable="false">AGUA PARA BEBER Y COCINAR, PROVIENE DE...</string>
 
 
 </resources>
