@@ -2,7 +2,7 @@
     <string name="app_name">RelevAr</string>
     <string name="cargar_datos">CARGAR DATOS</string>
     <string name="relevamiento_georeferenciacion">RELEVAMIENTO | GEOREFERENCIACIÓN</string>
-    <string name="encabezado">CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD; FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;TIPO DE VIVIENDA;LA VIVIENDA ES;CANTIDAD HABITACIONES;LUGAR PARA COCINAR;USA PARA COCINAR;PAREDES EXTERIORES;REVOQUE EXTERIOR;PISOS;EXTERIOR DEL TECHO; CIELORRASO;ENCUESTADOR\n</string>
+    <string name="encabezado">CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD; FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;TIPO DE VIVIENDA;PAREDES EXTERIORE;REVOQUE;EXTERIOR DEL TECHO;ARBOLES;AGUA;AGUA PARA BEBER PROVIENE;ALMACENA AGUA DE LLUVIA;ELECTRICIDAD;GAS;EXCRETAS;HABITACIONES;LA VIVIENDA ES;BAÑO;EL BAÑO TIENE;LUGAR PARA COCINAR;USA PARA COCINAR;PISOS;CIELORRAZO;ENCUESTADOR\n</string>
     <string name="iniciar_recorrido">INICIAR RECORRIDO</string>
     <string name="terminar_recorrido">TERMINAR RECORRIDO</string>
     <string name="reiniciar_recorrido">REINICIAR RECORRIDO</string>
@@ -64,6 +64,12 @@
     <string name="piezas" translatable="false">CANTIDAD DE AMBIENTES/HABITACIONES/PIEZAS</string>
     <string name="agua" translatable="false">AGUA</string>
     <string name="agua_beber_cocinar" translatable="false">AGUA PARA BEBER Y COCINAR, PROVIENE DE...</string>
-
+    <string name="agua_lluvia" translatable="false">ALMACENA AGUA DE LLUVIA</string>
+    <string name="gas" translatable="false">GAS</string>
+    <string name="excretas" translatable="false">EXCRETAS</string>
+    <string name="arboles" translatable="false">ÁRBOLES</string>
+    <string name="externo_vivienda" translatable="false">INSPECCION EXTERIOR</string>
+    <string name="baño" translatable="false">BAÑO</string>
+    <string name="baño_tiene" translatable="false">EL BAÑO TIENE</string>
 
 </resources>

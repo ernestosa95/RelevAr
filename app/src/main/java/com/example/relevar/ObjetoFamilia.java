@@ -17,6 +17,13 @@ public class ObjetoFamilia {
     public String Cielorraso;
     public String Agua;
     public String AguaOrigen;
+    public String Excretas;
+    public String Electricidad;
+    public String Gas;
+    public String AguaLluvia;
+    public String Arboles;
+    public String Baño;
+    public String BañoTiene;
 
     public ObjetoFamilia() {
         TipoVivienda="";
@@ -31,13 +38,20 @@ public class ObjetoFamilia {
         Techo="";
         Agua="";
         AguaOrigen="";
-
+        Excretas="";
+        Electricidad="";
+        Gas="";
+        AguaLluvia="";
+        Arboles="";
+        Baño="";
+        BañoTiene="";
     }
 
     public String FormatoGuardar(){
         // DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA
-        String guardar=TipoVivienda+";"+DueñoVivienda+";"+CantidadPiezas+";"+LugarCocinar+";"+UsaParaCocinar+";"+
-                Paredes+";"+Revoque+";"+Pisos+";"+Techo+";"+Cielorraso;
+        String guardar=TipoVivienda+";"+Paredes+";"+Revoque+";"+Techo+";"+Arboles;
+        guardar+=";"+Agua+";"+AguaOrigen+";"+AguaLluvia+";"+Electricidad+";"+Gas+";"+Excretas;
+        guardar+=";"+CantidadPiezas+";"+DueñoVivienda+";"+Baño+";"+BañoTiene+";"+LugarCocinar+";"+UsaParaCocinar+";"+Pisos+";"+Cielorraso;
         return guardar;
     }
 

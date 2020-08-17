@@ -122,14 +122,14 @@ public class Inicio extends AppCompatActivity {
                     "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
                     "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;" +
                     "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;TIPO DE VIVIENDA;LA VIVIENDA ES;CANTIDAD HABITACIONES;LUGAR PARA COCINAR;USA PARA COCINAR;PAREDES EXTERIORES;REVOQUE EXTERIOR;PISOS;EXTERIOR DEL TECHO; CIELORRASO;ENCUESTADOR\n";
-            String cab = String.valueOf(R.string.encabezado);
+            String cab = getString(R.string.encabezado);
             try {
 
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
                 // que se agreguen los datos al final sin perder los datos anteriores
                 OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
 
-                myOutWriter.append(cabecera);
+                myOutWriter.append(cab);
                 myOutWriter.close();
                 fOut.close();
                 //Toast.makeText(this, strLine+"2", Toast.LENGTH_SHORT).show();

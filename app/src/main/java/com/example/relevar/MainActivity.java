@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
     ObjetoFamilia familia = new ObjetoFamilia();
-    ConstraintLayout CLVivienda;
-    TextView avanceVivienda;
+    ConstraintLayout CLVivienda, CLServiciosBasicos, CLExteriorVivienda;
+    TextView avanceVivienda, avanceServiciosBasicos, avanceExteriorVivienda;
     String auxLat;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -114,9 +114,13 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); //evita la rotacion
         setContentView(R.layout.activity_main);
 
-        // Seteo el titulo de la action bar del activity
+        // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setTitle("Familia");
+        actionbar.hide();
+
+        // Seteo el titulo de la action bar del activity
+        //ActionBar actionbar = getSupportActionBar();
+        //actionbar.setTitle("Familia");
         encuestador.setID((String) getIntent().getStringExtra("IDENCUESTADOR"));
         lv1 = (ListView) findViewById(R.id.list1);
 
@@ -125,6 +129,14 @@ public class MainActivity extends AppCompatActivity {
         // PARA EL AVANCE DE LOS FACTORES
         CLVivienda = (ConstraintLayout) findViewById(R.id.AVANCEVIVIENDA);
         avanceVivienda = (TextView) findViewById(R.id.COMPLETADOVIVIENDA);
+
+        // PARA EL AVANCE DE LOS FACTORES
+        CLServiciosBasicos = (ConstraintLayout) findViewById(R.id.AVANCESERVICIOSBASICOS);
+        avanceServiciosBasicos = (TextView) findViewById(R.id.COMPLETADOSERVICIOS);
+
+        // PARA EL AVANCE DE LOS FACTORES
+        CLExteriorVivienda = (ConstraintLayout) findViewById(R.id.AVANCEXTERIOR);
+        avanceExteriorVivienda = (TextView) findViewById(R.id.COMPLETADOEXTERIOR);
     }
 
     //@Override
@@ -388,15 +400,132 @@ public class MainActivity extends AppCompatActivity {
             AguaOrigen.setSelection(indice);
         }
 
+        // PROVEDURIA DE AGUA
+        // Defino el spinner del tipo de vivienda y le agrego las opciones
+        final Spinner Excretas = view1.findViewById(R.id.SPEXCRETAS);
+        ArrayList<String> OpcExcretas = new ArrayList<>();
+
+        OpcExcretas.add("");
+        OpcExcretas.add("A RED PUBLICA O CLOACA");
+        OpcExcretas.add("A CAMARA SEPTICA Y POZO CIEGO");
+        OpcExcretas.add("SOLO A POZO CIEGO");
+        OpcExcretas.add("A HOYO, EXCAVACION EN LA TIERRA");
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterExcretas = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcExcretas);
+        Excretas.setAdapter(comboAdapterExcretas);
+
+        // Recordar las opciones seleccionadas
+        if(familia.Excretas.length()!=0) {
+            int indice=0;
+            for(int i=0; i<OpcExcretas.size(); i++){
+                if(OpcExcretas.get(i).equals(familia.Excretas)){
+                    indice=i;
+                }
+            }
+            Excretas.setSelection(indice);
+        }
+
+        final RadioButton SiElectricidad = view1.findViewById(R.id.SIELECTRICIDAD);
+        final RadioButton NoElectricidad = view1.findViewById(R.id.NOELECTRICIDAD);
+        if(familia.Electricidad=="SI"){SiElectricidad.setChecked(true);}
+        if(familia.Electricidad=="NO"){NoElectricidad.setChecked(true);}
+
+        final RadioButton SiGas = view1.findViewById(R.id.SIGAS);
+        final RadioButton NoGas = view1.findViewById(R.id.NOGAS);
+        if(familia.Gas=="SI"){SiGas.setChecked(true);}
+        if(familia.Gas=="NO"){NoGas.setChecked(true);}
+
+        final RadioButton SiAguaLluvia = view1.findViewById(R.id.SIAGUALLUVIA);
+        final RadioButton NoAguaLluvia = view1.findViewById(R.id.NOAGUALLUVIA);
+        if(familia.AguaLluvia=="SI"){SiAguaLluvia.setChecked(true);}
+        if(familia.AguaLluvia=="NO"){NoAguaLluvia.setChecked(true);}
+
+        final Button guardar = view1.findViewById(R.id.GUARDARSERVICIOBASICOS);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(SiElectricidad.isChecked()){familia.Electricidad="SI";}
+                if(NoElectricidad.isChecked()){familia.Electricidad="NO";}
+
+                if(SiGas.isChecked()){familia.Gas="SI";}
+                if(NoGas.isChecked()){familia.Gas="NO";}
+
+                familia.Excretas = Excretas.getSelectedItem().toString();
+                familia.AguaOrigen = AguaOrigen.getSelectedItem().toString();
+                familia.Agua = Agua.getSelectedItem().toString();
+
+                if(SiAguaLluvia.isChecked()){familia.AguaLluvia="SI";}
+                if(NoAguaLluvia.isChecked()){familia.AguaLluvia="NO";}
+
+                ColorAvanceServiciosBasicos();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARSERVICIOSBASICOS);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceServiciosBasicos(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (familia.Agua.length()!=0){
+            avance+=1;
+        }
+        if (familia.AguaOrigen.length()!=0){
+            avance+=1;
+        }
+        if (familia.AguaLluvia.length()!=0){
+            avance+=1;
+        }
+        if (familia.Electricidad.length()!=0){
+            avance+=1;
+        }
+        if (familia.Excretas.length()!=0){
+            avance+=1;
+        }
+        if (familia.Gas.length()!=0){
+            avance+=1;
+        }
+
+        if(avance>0 && avance<6){
+            CLServiciosBasicos.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/6)*100);
+            //Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceServiciosBasicos.setText(aux);
+            //AvContacto.setText(aux);
+            //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
+        }
+        if(avance==6){
+            CLServiciosBasicos.setBackgroundResource(R.drawable.verde);
+            avanceServiciosBasicos.setText(getString(R.string.completado)+" 100%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+        if(avance==0){
+            CLServiciosBasicos.setBackgroundResource(R.drawable.rojo);
+            avanceServiciosBasicos.setText(getString(R.string.completado)+" 00%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // VIVIENDA
-    public void Vivienda(View view){
+    // EXTERIOR VIVIENDA
+    public void ServiciosExteriorVivienda(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
-        View view1 = Inflater.inflate(R.layout.alert_vivienda, null);
+        View view1 = Inflater.inflate(R.layout.alert_inspeccion_exterior, null);
         builder.setView(view1);
         builder.setCancelable(false);
         final AlertDialog dialog = builder.create();
@@ -430,87 +559,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             TipoVivienda.setSelection(indice);
-        }
-
-        // LA VIVIENDA ES
-        // Defino el spinner del tipo de vivienda y le agrego las opciones
-        final Spinner ViviendaEs = view1.findViewById(R.id.SPDUEÑOVIVIENDA);
-        ArrayList<String> OpcDueñoVivienda = new ArrayList<>();
-
-        OpcDueñoVivienda.add("");
-        OpcDueñoVivienda.add("PROPIA");
-        OpcDueñoVivienda.add("ALQUILADA");
-        OpcDueñoVivienda.add("CEDIDA POR TRABAJO");
-        OpcDueñoVivienda.add("PRESTADA");
-        OpcDueñoVivienda.add("OTRA");
-
-
-        // Cargo el spinner con los datos
-        ArrayAdapter<String> comboAdapterDueño = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcDueñoVivienda);
-        ViviendaEs.setAdapter(comboAdapterDueño);
-
-        // Recordar las opciones seleccionadas
-        if(familia.DueñoVivienda.length()!=0) {
-            int indice=0;
-            for(int i=0; i<OpcDueñoVivienda.size(); i++){
-                if(OpcDueñoVivienda.get(i).equals(familia.DueñoVivienda)){
-                    indice=i;
-                }
-            }
-            ViviendaEs.setSelection(indice);
-        }
-
-        // COCINA
-        // Defino el spinner del tipo de vivienda y le agrego las opciones
-        final Spinner Cocinar = view1.findViewById(R.id.SPLUGARCOCINAR);
-        ArrayList<String> OpcCocinar = new ArrayList<>();
-
-        OpcCocinar.add("");
-        OpcCocinar.add("CON INSTALACION DE AGUA Y DESAGUE");
-        OpcCocinar.add("CON INSTALCION DE AGUA SIN DESAGUE");
-        OpcCocinar.add("SIN INSTALACION DE AGUA");
-        OpcCocinar.add("NO TIENE LUGAR O CUARTO PARA COCINAR");
-
-        // Cargo el spinner con los datos
-        ArrayAdapter<String> comboAdapterCocinar = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcCocinar);
-        Cocinar.setAdapter(comboAdapterCocinar);
-
-        // Recordar las opciones seleccionadas
-        if(familia.LugarCocinar.length()!=0) {
-            int indice=0;
-            for(int i=0; i<OpcCocinar.size(); i++){
-                if(OpcCocinar.get(i).equals(familia.LugarCocinar)){
-                    indice=i;
-                }
-            }
-            Cocinar.setSelection(indice);
-        }
-
-        // USA PARA COCINAR
-        // Defino el spinner del tipo de vivienda y le agrego las opciones
-        final Spinner UsaCocinar = view1.findViewById(R.id.SPUSAPARACOCINAR);
-        ArrayList<String> OpcUsaCocinar = new ArrayList<>();
-
-        OpcUsaCocinar.add("");
-        OpcUsaCocinar.add("GAS DE RED");
-        OpcUsaCocinar.add("GAS EN GARRAFA, EN TUBO O A GRANEL");
-        OpcUsaCocinar.add("LEÑA O CARBON");
-        OpcUsaCocinar.add("ELECTRICIDAD");
-        OpcUsaCocinar.add("OTRO");
-
-        // Cargo el spinner con los datos
-        ArrayAdapter<String> comboAdapterUsaCocinar = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcUsaCocinar);
-        UsaCocinar.setAdapter(comboAdapterUsaCocinar);
-
-        // Recordar las opciones seleccionadas
-        if(familia.UsaParaCocinar.length()!=0) {
-            int indice=0;
-            for(int i=0; i<OpcUsaCocinar.size(); i++){
-                if(OpcUsaCocinar.get(i).equals(familia.UsaParaCocinar)){
-                    indice=i;
-                }
-            }
-            UsaCocinar.setSelection(indice);
         }
 
         // PARADES
@@ -569,6 +617,230 @@ public class MainActivity extends AppCompatActivity {
             Techo.setSelection(indice);
         }
 
+        final RadioButton SiRevoque = view1.findViewById(R.id.SIREVOQUE);
+        final RadioButton NoRevoque = view1.findViewById(R.id.NOREVOQUE);
+        if(familia.Revoque=="SI"){SiRevoque.setChecked(true);}
+        if(familia.Revoque=="NO"){NoRevoque.setChecked(true);}
+
+        final EditText CantArboles = view1.findViewById(R.id.EDTARBOLES);
+        if(familia.Arboles.length()!=0){CantArboles.setText(familia.Arboles);}
+
+        final Button guardar = view1.findViewById(R.id.GUARDAREXTERIOR);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                familia.TipoVivienda = TipoVivienda.getSelectedItem().toString();
+                familia.Paredes = Paredes.getSelectedItem().toString();
+                if(SiRevoque.isChecked()){familia.Revoque="SI";}
+                if(NoRevoque.isChecked()){familia.Revoque="NO";}
+                familia.Techo = Techo.getSelectedItem().toString();
+                familia.Arboles = CantArboles.getText().toString();
+                dialog.dismiss();
+                ColorAvanceExteriorVivienda();
+            }
+        });
+
+        final  Button cancelar =view1.findViewById(R.id.CANCELAREXTERIOR);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceExteriorVivienda(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (familia.TipoVivienda.length()!=0){
+            avance+=1;
+        }
+        if (familia.Paredes.length()!=0){
+            avance+=1;
+        }
+        if (familia.Revoque.length()!=0){
+            avance+=1;
+        }
+        if (familia.Techo.length()!=0){
+            avance+=1;
+        }
+        if (familia.Arboles.length()!=0){
+            avance+=1;
+        }
+
+        if(avance>0 && avance<5){
+            CLExteriorVivienda.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/5)*100);
+            //Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceExteriorVivienda.setText(aux);
+            //AvContacto.setText(aux);
+            //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
+        }
+        if(avance==5){
+            CLExteriorVivienda.setBackgroundResource(R.drawable.verde);
+            avanceExteriorVivienda.setText(getString(R.string.completado)+" 100%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+        if(avance==0){
+            CLExteriorVivienda.setBackgroundResource(R.drawable.rojo);
+            avanceExteriorVivienda.setText(getString(R.string.completado)+" 00%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+    }
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // VIVIENDA
+    public void Vivienda(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_vivienda, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+
+        // LA VIVIENDA ES
+        // Defino el spinner del tipo de vivienda y le agrego las opciones
+        final Spinner ViviendaEs = view1.findViewById(R.id.SPDUEÑOVIVIENDA);
+        ArrayList<String> OpcDueñoVivienda = new ArrayList<>();
+
+        OpcDueñoVivienda.add("");
+        OpcDueñoVivienda.add("PROPIA");
+        OpcDueñoVivienda.add("ALQUILADA");
+        OpcDueñoVivienda.add("CEDIDA POR TRABAJO");
+        OpcDueñoVivienda.add("PRESTADA");
+        OpcDueñoVivienda.add("OTRA");
+
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterDueño = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcDueñoVivienda);
+        ViviendaEs.setAdapter(comboAdapterDueño);
+
+        // Recordar las opciones seleccionadas
+        if(familia.DueñoVivienda.length()!=0) {
+            int indice=0;
+            for(int i=0; i<OpcDueñoVivienda.size(); i++){
+                if(OpcDueñoVivienda.get(i).equals(familia.DueñoVivienda)){
+                    indice=i;
+                }
+            }
+            ViviendaEs.setSelection(indice);
+        }
+        // BAÑO
+        // Defino el spinner del tipo de vivienda y le agrego las opciones
+        final Spinner Baño = view1.findViewById(R.id.SPBAÑO);
+        ArrayList<String> OpcBaño = new ArrayList<>();
+
+        OpcBaño.add("");
+        OpcBaño.add("DENTRO DE LA VIVIENDA");
+        OpcBaño.add("FUERA DE LA VIVIENDA");
+        OpcBaño.add("NO TIENE");
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterBaño = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcBaño);
+        Baño.setAdapter(comboAdapterBaño);
+
+        // Recordar las opciones seleccionadas
+        if(familia.Baño.length()!=0) {
+            int indice=0;
+            for(int i=0; i<OpcBaño.size(); i++){
+                if(OpcBaño.get(i).equals(familia.Baño)){
+                    indice=i;
+                }
+            }
+            Baño.setSelection(indice);
+        }
+
+        // BAÑO
+        // Defino el spinner del tipo de vivienda y le agrego las opciones
+        final Spinner BañoTiene = view1.findViewById(R.id.SPBAÑOTIENE);
+        ArrayList<String> OpcBañoTiene = new ArrayList<>();
+
+        OpcBañoTiene.add("");
+        OpcBañoTiene.add("INODORO CON BOTON, MOCHILA O CADENA");
+        OpcBañoTiene.add("INODORO SIN BOTON O SIN CADENA");
+        OpcBañoTiene.add("POZO");
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterBañoTiene = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcBañoTiene);
+        BañoTiene.setAdapter(comboAdapterBañoTiene);
+
+        // Recordar las opciones seleccionadas
+        if(familia.BañoTiene.length()!=0) {
+            int indice=0;
+            for(int i=0; i<OpcBañoTiene.size(); i++){
+                if(OpcBañoTiene.get(i).equals(familia.BañoTiene)){
+                    indice=i;
+                }
+            }
+            BañoTiene.setSelection(indice);
+        }
+
+        // COCINA
+        // Defino el spinner del tipo de vivienda y le agrego las opciones
+        final Spinner Cocinar = view1.findViewById(R.id.SPLUGARCOCINAR);
+        ArrayList<String> OpcCocinar = new ArrayList<>();
+
+        OpcCocinar.add("");
+        OpcCocinar.add("CON INSTALACION DE AGUA Y DESAGUE");
+        OpcCocinar.add("CON INSTALCION DE AGUA SIN DESAGUE");
+        OpcCocinar.add("SIN INSTALACION DE AGUA");
+        OpcCocinar.add("NO TIENE LUGAR O CUARTO PARA COCINAR");
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterCocinar = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcCocinar);
+        Cocinar.setAdapter(comboAdapterCocinar);
+
+        // Recordar las opciones seleccionadas
+        if(familia.LugarCocinar.length()!=0) {
+            int indice=0;
+            for(int i=0; i<OpcCocinar.size(); i++){
+                if(OpcCocinar.get(i).equals(familia.LugarCocinar)){
+                    indice=i;
+                }
+            }
+            Cocinar.setSelection(indice);
+        }
+
+        // USA PARA COCINAR
+        // Defino el spinner del tipo de vivienda y le agrego las opciones
+        final Spinner UsaCocinar = view1.findViewById(R.id.SPUSAPARACOCINAR);
+        ArrayList<String> OpcUsaCocinar = new ArrayList<>();
+
+        OpcUsaCocinar.add("");
+        OpcUsaCocinar.add("GAS DE RED");
+        OpcUsaCocinar.add("GAS EN GARRAFA, EN TUBO O A GRANEL");
+        OpcUsaCocinar.add("LEÑA O CARBON");
+        OpcUsaCocinar.add("ELECTRICIDAD");
+        OpcUsaCocinar.add("OTRO");
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterUsaCocinar = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcUsaCocinar);
+        UsaCocinar.setAdapter(comboAdapterUsaCocinar);
+
+        // Recordar las opciones seleccionadas
+        if(familia.UsaParaCocinar.length()!=0) {
+            int indice=0;
+            for(int i=0; i<OpcUsaCocinar.size(); i++){
+                if(OpcUsaCocinar.get(i).equals(familia.UsaParaCocinar)){
+                    indice=i;
+                }
+            }
+            UsaCocinar.setSelection(indice);
+        }
+
+
+
+
+
         // PIDO
         // Defino el spinner del tipo de vivienda y le agrego las opciones
         final Spinner Piso = view1.findViewById(R.id.SPPISOS);
@@ -598,11 +870,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText CantidadHabitaciones = view1.findViewById(R.id.CANTPIEZAS);
         CantidadHabitaciones.setText(familia.CantidadPiezas);
 
-        final RadioButton SiRevoque = view1.findViewById(R.id.SIREVOQUE);
-        final RadioButton NoRevoque = view1.findViewById(R.id.NOREVOQUE);
-        if(familia.Revoque=="SI"){SiRevoque.setChecked(true);}
-        if(familia.Revoque=="NO"){NoRevoque.setChecked(true);}
-
         final RadioButton SiCielorraso = view1.findViewById(R.id.SICIELORRAZO);
         final RadioButton NoCielorraso = view1.findViewById(R.id.NOCIELORRAZO);
         if(familia.Cielorraso=="SI"){SiCielorraso.setChecked(true);}
@@ -613,18 +880,16 @@ public class MainActivity extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                familia.TipoVivienda = TipoVivienda.getSelectedItem().toString();
+
                 familia.DueñoVivienda = ViviendaEs.getSelectedItem().toString();
                 familia.CantidadPiezas = CantidadHabitaciones.getText().toString();
                 familia.LugarCocinar = Cocinar.getSelectedItem().toString();
                 familia.UsaParaCocinar = UsaCocinar.getSelectedItem().toString();
-                familia.Paredes = Paredes.getSelectedItem().toString();
-                if(SiRevoque.isChecked()){familia.Revoque="SI";}
-                if(NoRevoque.isChecked()){familia.Revoque="NO";}
                 familia.Pisos = Piso.getSelectedItem().toString();
-                familia.Techo = Techo.getSelectedItem().toString();
                 if(SiCielorraso.isChecked()){familia.Cielorraso="SI";}
                 if(NoCielorraso.isChecked()){familia.Cielorraso="NO";}
+                familia.Baño = Baño.getSelectedItem().toString();
+                familia.BañoTiene = BañoTiene.getSelectedItem().toString();
                 dialog.dismiss();
                 ColorAvanceVivienda();
             }
@@ -643,7 +908,7 @@ public class MainActivity extends AppCompatActivity {
     private void ColorAvanceVivienda(){
         // Cambio los colores de avance
         float avance = 0;
-        if (familia.TipoVivienda.length()!=0){
+        if (familia.Baño.length()!=0){
             avance+=1;
         }
         if (familia.DueñoVivienda.length()!=0){
@@ -658,31 +923,25 @@ public class MainActivity extends AppCompatActivity {
         if (familia.UsaParaCocinar.length()!=0){
             avance+=1;
         }
-        if (familia.Paredes.length()!=0){
-            avance+=1;
-        }
-        if (familia.Revoque.length()!=0){
+        if (familia.BañoTiene.length()!=0){
             avance+=1;
         }
         if (familia.Pisos.length()!=0){
             avance+=1;
         }
-        if (familia.Techo.length()!=0){
-            avance+=1;
-        }
         if (familia.Cielorraso.length()!=0){
             avance+=1;
         }
-        if(avance>0 && avance<10){
+        if(avance>0 && avance<8){
             CLVivienda.setBackgroundResource(R.drawable.amarillo);
-            double porcentaje = Math.round((avance/10)*100);
+            double porcentaje = Math.round((avance/8)*100);
             //Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
             String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
             avanceVivienda.setText(aux);
             //AvContacto.setText(aux);
             //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
-        if(avance==10){
+        if(avance==8){
             CLVivienda.setBackgroundResource(R.drawable.verde);
             avanceVivienda.setText(getString(R.string.completado)+" 100%");
             //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
