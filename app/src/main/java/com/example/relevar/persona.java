@@ -2,6 +2,7 @@ package com.example.relevar;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -11,7 +12,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -112,6 +115,15 @@ public class persona extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_persona);
+
+        // Evitar la rotacion
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        }
+
+        // Eliminar el action bar
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.hide();
 
         // Defino los widgets
         dni = (EditText) findViewById(R.id.DNI);

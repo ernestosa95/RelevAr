@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.IDNA;
@@ -117,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
         // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
+
+        // Evitar la rotacion
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        }
 
         // Seteo el titulo de la action bar del activity
         //ActionBar actionbar = getSupportActionBar();
