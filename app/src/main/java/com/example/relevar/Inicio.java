@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.relevar.MySQL.ConexionSQLiteHelper;
 import com.example.relevar.MySQL.SQLitePpal;
@@ -30,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -74,6 +77,36 @@ public class Inicio extends AppCompatActivity {
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.CAMERA},
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+
+
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        // Cargo la base de datos de los trabajos si no esta vacia
+        //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        try{
+            InputStream fis = getResources().openRawResource(R.raw.trabajos);//new FileInputStream(R.raw.efectores);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            SQLiteDatabase Bd1 = admin.getWritableDatabase();
+            String myData="";
+            if(!admin.ExisteTrabajos()){
+                while ((myData=br.readLine())!=null){
+
+                    ContentValues registro = new ContentValues();
+                    registro.put("TRABAJO", myData);
+                    Bd1.insert("TRABAJOS", null, registro);
+
+                }
+                // Cierro todo las bases de datos y lectura de archivos
+                Bd1.close();
+                br.close();
+                in.close();
+                fis.close();
+            }else{
+                Toast.makeText(this, "YA ESTA CARGADO TRABAJOS", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (IOException e){
+            Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}
     }
 
 //--------------------------------------------------------------------------------------------------

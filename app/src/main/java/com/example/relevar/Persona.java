@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -35,9 +36,11 @@ import android.widget.Toast;
 
 import com.example.relevar.Recursos.ObjetoPersona;
 import com.example.relevar.Recursos.ScannerQR;
+import com.example.relevar.Recursos.TrabajosSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.widget.Toast.makeText;
@@ -1470,6 +1473,12 @@ public class Persona extends AppCompatActivity {
         dialog.show();
 
         final EditText ocupacion = view1.findViewById(R.id.Ocupacion);
+        // AUTOCOMPLETE TEXTVIEW DE LOS TRABAJOS
+        final AutoCompleteTextView autocomplete = view1.findViewById(R.id.AutoTrabajos);
+        List<String> trabajos = new ArrayList<String>();
+        TrabajosSearchAdapter searchAdapter = new TrabajosSearchAdapter(getApplicationContext(), trabajos);
+        autocomplete.setThreshold(1);
+        autocomplete.setAdapter(searchAdapter);
 
         // Si ya tengo valores de contactos debo inicializar
         if(Persona.Ocupacion!=""){ocupacion.setText(Persona.Ocupacion);}
@@ -1509,6 +1518,7 @@ public class Persona extends AppCompatActivity {
             //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE DEFINICION DE LAS OPCIONES DE GUARDADO DE LAS PERSONAS

@@ -23,14 +23,13 @@
         android:id="@+id/CANCELAR3"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button1"
         android:text="@string/cancelar"
         android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/Ocupacion"
-        app:layout_constraintTop_toBottomOf="@+id/Ocupacion" />
+        app:layout_constraintTop_toBottomOf="@+id/AutoTrabajos" />
 
     <Button
         android:id="@+id/GUARDAR3"
@@ -59,5 +58,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <AutoCompleteTextView
+        android:id="@+id/AutoTrabajos"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edit_text_1"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="BUSCAR TRABAJO"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Ocupacion" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
