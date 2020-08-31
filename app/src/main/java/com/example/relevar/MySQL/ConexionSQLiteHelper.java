@@ -1,4 +1,4 @@
-package com.example.relevar;
+package com.example.relevar.MySQL;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

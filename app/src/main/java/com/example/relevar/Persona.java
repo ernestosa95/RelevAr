@@ -5,9 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -19,14 +17,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.InputType;
-import android.text.Layout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -39,19 +33,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import com.example.relevar.Recursos.ObjetoPersona;
+import com.example.relevar.Recursos.ScannerQR;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
-import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 
-public class persona extends AppCompatActivity {
+public class Persona extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // DEFINICION DE VARIABLES GLOBALES
@@ -1525,7 +1517,7 @@ public class persona extends AppCompatActivity {
     // Para que sea una funcion disparada por un Button
     public void GuardarPersona(View view){
         // Defino el intent para permitir pasar los datos
-        Intent Modif1= new Intent (this, MainActivity.class);
+        Intent Modif1= new Intent (this, Familia.class);
 
         // Reviso que no se carguen datos nuevos, si se cargaron los obtengo
         if(Nombre.getText().toString()!=null){Persona.Nombre=Nombre.getText().toString();}

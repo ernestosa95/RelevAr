@@ -5,76 +5,49 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.icu.text.IDNA;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.text.InputType;
-import android.text.Layout;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.relevar.Recursos.Encuestador;
+import com.example.relevar.Recursos.ObjetoFamilia;
+import com.example.relevar.Recursos.ObjetoPersona;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
-import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.widget.Toast.*;
-import static com.example.relevar.R.drawable.fondo1;
 
-public class MainActivity extends AppCompatActivity {
+public class Familia extends AppCompatActivity {
     // DEFINICION DE VARIABLES GLOBALES
     // Definicion de contantes que hacen al funcionamiento
     private static final String TAG="MainActivity";
@@ -189,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
-        Intent Modif= new Intent (this, persona.class);
+        Intent Modif= new Intent (this, Persona.class);
         startActivityForResult(Modif, 1);}
 
     private void ListeVer(){
@@ -248,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // The user clicked OK
-                Intent Modif= new Intent (getBaseContext(), persona.class);
+                Intent Modif= new Intent (getBaseContext(), Persona.class);
                 Modif.putExtra("NOMBRE" , MiembrosFamiliares.get(position).Nombre);
                 Modif.putExtra("APELLIDO" , MiembrosFamiliares.get(position).Apellido);
                 Modif.putExtra("DNI" , MiembrosFamiliares.get(position).DNI);
@@ -1044,7 +1017,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                            Intent intent= new Intent (getBaseContext(), MenuPrincipal.class);
+                            Intent intent= new Intent (getBaseContext(), MenuMapa.class);
                             LatLng position = new LatLng(Latitudenviar,Longitudenviar); // Boa Vista
                             Bundle args = new Bundle();
                             args.putParcelable("from_position", position);

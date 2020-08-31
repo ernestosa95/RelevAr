@@ -12,21 +12,16 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.relevar.Inicio;
-import com.example.relevar.MenuPrincipal;
+import com.example.relevar.MenuMapa;
 import com.example.relevar.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.example.relevar.Recursos.App.CHANNEL_ID;
 
@@ -93,7 +88,7 @@ public class ServicioGPS extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        Intent notificationIntent = new Intent(this, MenuPrincipal.class);
+        Intent notificationIntent = new Intent(this, MenuMapa.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 

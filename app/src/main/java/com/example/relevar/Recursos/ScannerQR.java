@@ -1,11 +1,12 @@
-package com.example.relevar;
+package com.example.relevar.Recursos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
+import com.example.relevar.Familia;
+import com.example.relevar.R;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -30,7 +31,7 @@ public class ScannerQR extends AppCompatActivity implements ZXingScannerView.Res
         //mScanner.resumeCameraPreview(this);
         String escaneado = result.getText().toString();
         String[] datos = escaneado.split("@");
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Familia.class);
         int tamaño = datos.length;
         intent.putExtra("APELLIDO_ESCANEADO", datos[1]);
         intent.putExtra("NOMBRE_ESCANEADO", datos[2]);

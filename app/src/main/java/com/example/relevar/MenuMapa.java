@@ -3,10 +3,8 @@ package com.example.relevar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -14,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,15 +29,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.relevar.MySQL.ConexionSQLiteHelper;
 import com.example.relevar.Recursos.Encuestador;
 import com.example.relevar.Recursos.ServicioGPS;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -50,7 +46,7 @@ import java.util.ArrayList;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
-public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallback {
+public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final int REQUEST_CODE_POSITION = 1;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
@@ -94,7 +90,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         }
 
         //
-
+        encuestador.setID((String) getIntent().getStringExtra("IDENCUESTADOR"));
         // Mapa
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
@@ -106,8 +102,9 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
         mapView.getMapAsync(this);
 
         latLng = new LatLng(-60, -30);
+
         // Inicio de la App
-        Encuestador();
+        //Encuestador();
         PararServicio = (Button) findViewById(R.id.TERMINAR);
         boolean estado = isMyServiceRunning(ServicioGPS.class);
         if (estado == true) {
@@ -156,7 +153,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                     PararServicio.setText(getString(R.string.terminar_recorrido));
                     dialog.dismiss();
 
-                    Intent Modif = new Intent(getBaseContext(), MainActivity.class);
+                    Intent Modif = new Intent(getBaseContext(), Familia.class);
                     Modif.putExtra("IDENCUESTADOR", encuestador.getID());
                     startActivityForResult(Modif, 1);
                 }
@@ -170,7 +167,7 @@ public class MenuPrincipal extends AppCompatActivity implements OnMapReadyCallba
                 }
             });
         } else {
-            Intent Modif = new Intent(getBaseContext(), MainActivity.class);
+            Intent Modif = new Intent(getBaseContext(), Familia.class);
             Modif.putExtra("IDENCUESTADOR", encuestador.getID());
             startActivityForResult(Modif, 1);
         }
