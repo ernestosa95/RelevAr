@@ -42,9 +42,9 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 public class Inicio extends AppCompatActivity {
-    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
-    private static final int REQUEST_CODE_POSITION = 1;
+
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 123;
+
     // Widgets
     Button empezar;
     Encuestador encuestador = new Encuestador();
