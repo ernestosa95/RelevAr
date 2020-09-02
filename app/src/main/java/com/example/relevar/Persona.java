@@ -1486,7 +1486,6 @@ public class Persona extends AppCompatActivity {
 
 
         // Si ya tengo valores de contactos debo inicializar
-
         if(Persona.Ocupacion!=""){
             autocomplete.setText(Persona.Ocupacion);
             RbtSITrabajo.setChecked(true);}
