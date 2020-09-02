@@ -72,4 +72,10 @@
     <string name="baño" translatable="false">BAÑO</string>
     <string name="baño_tiene" translatable="false">EL BAÑO TIENE</string>
 
+    <string name="agregar_trabajo_manualmente" translatable="false">Agregar trabajo manualmente</string>
+    <string name="nuevo_trabajo" translatable="false">NUEVO TRABAJO</string>
+    <string name="listo" translatable="false">LISTO</string>
+    <string name="tiene_trabajo" translatable="false">¿TIENE TRABAJO?</string>
+
+
 </resources>

@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -69,6 +70,7 @@ public class Persona extends AppCompatActivity {
 
     // Defino de manera global los Button para realizar acciones
     //private Button ;
+    private AutoCompleteTextView autocomplete;
 
     // Defino de manera global los Chekclist para crear los menus de opciones
     CheckBox hepaA, hepaB, bcg, rotavirus, quintuple, tripleviral, varicela, dtp, vph, tripeacelular,
@@ -1472,22 +1474,31 @@ public class Persona extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        final EditText ocupacion = view1.findViewById(R.id.Ocupacion);
         // AUTOCOMPLETE TEXTVIEW DE LOS TRABAJOS
-        final AutoCompleteTextView autocomplete = view1.findViewById(R.id.AutoTrabajos);
+        autocomplete = view1.findViewById(R.id.AutoTrabajos);
         List<String> trabajos = new ArrayList<String>();
         TrabajosSearchAdapter searchAdapter = new TrabajosSearchAdapter(getApplicationContext(), trabajos);
         autocomplete.setThreshold(1);
         autocomplete.setAdapter(searchAdapter);
 
+        final RadioButton RbtSITrabajo = view1.findViewById(R.id.SITRABAJO);
+        final RadioButton RbtNOTrabajo = view1.findViewById(R.id.NOTRABAJO);
+
+
         // Si ya tengo valores de contactos debo inicializar
-        if(Persona.Ocupacion!=""){ocupacion.setText(Persona.Ocupacion);}
+        if(Persona.Ocupacion!=""){
+            autocomplete.setText(Persona.Ocupacion);
+            RbtSITrabajo.setChecked(true);}
+        else{
+            RbtNOTrabajo.setChecked(true);}
 
         Button guardar = view1.findViewById(R.id.GUARDAR3);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Persona.Ocupacion = ocupacion.getText().toString();
+                if(RbtSITrabajo.isChecked()){
+                Persona.Ocupacion = autocomplete.getText().toString().toUpperCase();}
+                else{Persona.Ocupacion = "DESOCUPADO";}
                 ColorAvanceOcupacion();
                 dialog.dismiss();
             }
@@ -1498,6 +1509,15 @@ public class Persona extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+            }
+        });
+
+        final TextView AgregarManualmente = view1.findViewById(R.id.AGREGARMANUALMENTE);
+        AgregarManualmente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TrabajoManual();
+                //dialog.dismiss();
             }
         });
     }
@@ -1519,6 +1539,40 @@ public class Persona extends AppCompatActivity {
         }
     }
 
+    private void TrabajoManual(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View viewManual = Inflater.inflate(R.layout.alert_nuevo_encuestador, null);
+        builder.setView(viewManual);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final TextView encabezado = viewManual.findViewById(R.id.textView4);
+        encabezado.setText(R.string.nuevo_trabajo);
+
+        final TextView NuevoTrabajo = viewManual.findViewById(R.id.EditNuevoEncuestador);
+        NuevoTrabajo.setHint(R.string.nuevo_trabajo);
+
+        final Button guardar = viewManual.findViewById(R.id.GUARDAR);
+        guardar.setText(R.string.listo);
+        guardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Persona.Ocupacion = NuevoTrabajo.getText().toString().toUpperCase();
+                        autocomplete.setText(NuevoTrabajo.getText().toString().toUpperCase());
+                        dialog.dismiss();
+                    }
+        });
+
+        final Button cancelar = viewManual.findViewById(R.id.CANCELAR);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+        });
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE DEFINICION DE LAS OPCIONES DE GUARDADO DE LAS PERSONAS
