@@ -30,6 +30,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
 import com.example.relevar.Recursos.ObjetoFamilia;
 import com.example.relevar.Recursos.ObjetoPersona;
@@ -100,7 +101,8 @@ public class Familia extends AppCompatActivity {
         // Seteo el titulo de la action bar del activity
         //ActionBar actionbar = getSupportActionBar();
         //actionbar.setTitle("Familia");
-        encuestador.setID((String) getIntent().getStringExtra("IDENCUESTADOR"));
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        encuestador.setID(admin.ObtenerActivado());
         lv1 = (ListView) findViewById(R.id.list1);
 
         LatLong();

@@ -7,13 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.solver.SolverVariable;
 
 import java.util.ArrayList;
 
 public class SQLitePpal extends SQLiteOpenHelper {
     final String CREAR_TABLA_EFECTORES = "CREATE TABLE EFECTORES (NOMBRE TEXT, PROVINCIA TEXT)";
     final String CREAR_TABLA_TRABAJOS = "CREATE TABLE TRABAJOS (TRABAJO TEXT)";
-    final String CREAR_TABLA_ENCUESTADORES = "CREATE TABLE ENCUESTADOR (ID TEXT,APELLIDO TEXT,ACTIVO BOOLEAN)";
+    final String CREAR_TABLA_ENCUESTADORES = "CREATE TABLE ENCUESTADOR (ID TEXT,APELLIDO TEXT,PROVINCIA TEXT,DNI TEXT, ACTIVO BOOLEAN)";
 
     final ArrayList<String> datos = new ArrayList<String>();
 
@@ -94,6 +95,22 @@ public class SQLitePpal extends SQLiteOpenHelper {
         }
     }
 
+    public boolean ExisteEfectores(String Provincia){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //String aux1 = "SELECT name FROM sqlite_master WHERE name='TRABAJOS'";
+        String aux2 = "SELECT * FROM EFECTORES WHERE PROVINCIA='"+Provincia+"'";
+
+        Cursor registros = db.rawQuery(aux2, null);
+
+        if(registros.getCount()==0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public boolean TieneElementosTrabajos(){
         SQLiteDatabase db = this.getReadableDatabase();
         String aux = "SELECT DISTINCT * FROM TRABAJOS";
@@ -135,11 +152,14 @@ public class SQLitePpal extends SQLiteOpenHelper {
         return datos;
     }
 
-    public void CrearUsuario(String Nombre, String Apellido){
+    public void CrearUsuario(String Nombre, String Apellido, String DNI, String Provincia){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues registro = new ContentValues();
         registro.put("ID", Nombre);
         registro.put("APELLIDO", Apellido);
+        registro.put("PROVINCIA", Provincia);
+        registro.put("DNI", DNI);
+        registro.put("ACTIVO", true);
         db.insert("ENCUESTADOR", null, registro);
         db.close();
     }
@@ -150,9 +170,48 @@ public class SQLitePpal extends SQLiteOpenHelper {
         String consulta ="SELECT * FROM ENCUESTADOR";
         Cursor a = db.rawQuery(consulta, null);
         while (a.moveToNext()){
-            encuestadores.add(a.getString(0));//+" "+a.getString(1));
+            encuestadores.add(a.getString(0)+","+a.getString(1));
         }
         db.close();
         return encuestadores;
+    }
+
+    public void DesactivarUsuario(){
+        SQLiteDatabase dbRead = this.getReadableDatabase();
+        String cantidad = "SELECT DISTINCT * FROM ENCUESTADOR";
+        Cursor cant = dbRead.rawQuery(cantidad, null);
+        if(cant.getCount()!=0){
+        SQLiteDatabase db = this.getWritableDatabase();
+            //Establecemos los campos-valores a actualizar
+            ContentValues valores = new ContentValues();
+            valores.put("ACTIVO",Boolean.FALSE);
+
+//Actualizamos el registro en la base de datos
+            db.update("ENCUESTADOR", valores, null, null);
+        db.close();}
+        dbRead.close();
+    }
+
+    public void ActivarUsuario(String Nombre, String Apellido){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //Establecemos los campos-valores a actualizar
+        ContentValues valores = new ContentValues();
+        valores.put("ACTIVO",Boolean.TRUE);
+
+        //Actualizamos el registro en la base de datos
+        String[] args = new String[]{Nombre, Apellido};
+        db.update("ENCUESTADOR", valores, "ID=? AND APELLIDO=?" , args);
+        db.close();
+    }
+
+    public String ObtenerActivado(){
+        String encuestador="";
+        SQLiteDatabase db = this.getReadableDatabase();
+        String consulta ="SELECT ID, APELLIDO FROM ENCUESTADOR WHERE ACTIVO=1";
+        Cursor a = db.rawQuery(consulta, null);
+        a.moveToFirst();
+        if(a.getCount()!=0){
+        encuestador = a.getString(0)+" "+a.getString(1);}//+" "+a.getString(1);}
+        return encuestador;
     }
 }

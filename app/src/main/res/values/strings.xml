@@ -73,9 +73,14 @@
     <string name="baño_tiene" translatable="false">EL BAÑO TIENE</string>
 
     <string name="agregar_trabajo_manualmente" translatable="false">Agregar trabajo manualmente</string>
+    <string name="agregar_efector_manualmente" translatable="false">Agregar efector manualmente</string>
     <string name="nuevo_trabajo" translatable="false">NUEVO TRABAJO</string>
     <string name="listo" translatable="false">LISTO</string>
     <string name="tiene_trabajo" translatable="false">¿TIENE TRABAJO?</string>
+    <string name="compartit" translatable="false">COMPARTIR</string>
+
+    <string name="buscar_efector" translatable="false">BUSCAR EFECTOR</string>
+    <string name="nuevo_efector" translatable="false">NUEVO EFECTOR</string>
 
 
 </resources>

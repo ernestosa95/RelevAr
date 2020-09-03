@@ -6,12 +6,13 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.relevar.MySQL.ConexionSQLiteHelper;
 import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
 
@@ -52,6 +52,9 @@ public class Inicio extends AppCompatActivity {
     Button empezar;
     Encuestador encuestador = new Encuestador();
     EditText Nencuestador;
+    Spinner SPProvincias;
+    private ProgressDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +110,7 @@ public class Inicio extends AppCompatActivity {
         }
         catch (IOException e){
             Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}
+
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -212,13 +216,7 @@ public class Inicio extends AppCompatActivity {
         // Recupero los encuestadores cargados
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         enc = admin.Encuestadores();
-        /*SQLiteDatabase db = conn.getReadableDatabase();
-        String consulta ="SELECT * FROM ENCUESTADOR";
-        Cursor a = db.rawQuery(consulta, null);
-        while (a.moveToNext()){
-            enc.add(a.getString(0));
-        }
-        db.close();*/
+
 
         // Cargo el spinner con los datos
         ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, enc);
@@ -240,10 +238,15 @@ public class Inicio extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (encuestadores.getAdapter().getCount()!=0){
-                    encuestador.setID(encuestadores.getSelectedItem().toString());
+                    SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+                    admin.DesactivarUsuario();
+                    String nombre = encuestadores.getSelectedItem().toString().split(",")[0];
+                    String apellido = encuestadores.getSelectedItem().toString().split(",")[1];
+                    admin.ActivarUsuario(nombre,apellido);
+                    //encuestador.setID(encuestadores.getSelectedItem().toString());
                     //makeText(getBaseContext(), encuestador.getID(), LENGTH_SHORT).show();
                     Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
-                    Modif.putExtra("IDENCUESTADOR", encuestador.getID());
+                    //Modif.putExtra("IDENCUESTADOR", encuestador.getID());
                     startActivityForResult(Modif, 1);
 
                     dialog.dismiss();}
@@ -257,37 +260,85 @@ public class Inicio extends AppCompatActivity {
         // Creo el Alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
-        View view = Inflater.inflate(R.layout.alert_nuevo_encuestador, null);
+        View view = Inflater.inflate(R.layout.alert_crear_encuestador, null);
         builder.setView(view);
         builder.setCancelable(false);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        Nencuestador = view.findViewById(R.id.EditNuevoEncuestador);
-        Button nuevo = view.findViewById(R.id.GUARDAR);
+        SPProvincias = view.findViewById(R.id.PROVINCIA);
+        ArrayList<String> Provincias = new ArrayList<String>();
+        Provincias.add("");
+        Provincias.add("ENTRE RÍOS");
+        Provincias.add("CABA");
+        Provincias.add("BUENOS AIRES");
+        Provincias.add("CATAMARCA");
+        Provincias.add("CÓRDOBA");
+        Provincias.add("TIERRA DEL FUEGO");
+        Provincias.add("TUCUMÁN");
+        Provincias.add("SANTA CRUZ");
+        Provincias.add("RÍO NEGRO");
+        Provincias.add("CHUBUT");
+        Provincias.add("MENDOZA");
+        Provincias.add("SAN JUAN");
+        Provincias.add("LA PAMPA");
+        Provincias.add("SANTA FE");
+        Provincias.add("CHACO");
+        Provincias.add("CORRIENTES");
+        Provincias.add("MISIONES");
+        Provincias.add("FORMOSA");
+        Provincias.add("SANTIAGO DEL ESTERO");
+        Provincias.add("SAN LUIS");
+        Provincias.add("LA RIOJA");
+        Provincias.add("SALTA");
+        Provincias.add("JUJUY");
+        Provincias.add("NEUQUÉN");
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapterAgua = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, Provincias);
+        SPProvincias.setAdapter(comboAdapterAgua);
+
+        final EditText NonmbreEncuestador = view.findViewById(R.id.EditCrearEncuestador);
+        final EditText ApellidoEncuestador = view.findViewById(R.id.editApellidoEncuestador);
+        final EditText DNI = view.findViewById(R.id.editDNI);
+
+        Button nuevo = view.findViewById(R.id.GUARDARCREARENCUESTADOR);
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Ingreso datos del encuestador
-                if (Nencuestador.getText().toString().isEmpty()){makeText(getBaseContext(), "INGRESE NOMBRE Y APELLIDO", LENGTH_SHORT).show();}
-                else {
-                    SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-                    admin.CrearUsuario(Nencuestador.getText().toString(), "APELLIDO");
-                    /*SQLiteDatabase db = conn.getWritableDatabase();
-                    String insert ="INSERT INTO ENCUESTADOR (ID) VALUES ('"+Nencuestador.getText().toString()+"')";
-                    db.execSQL(insert);
-                    db.close();*/
+                    if(DNI.getText().toString().length()!=0) {
+                        if (SPProvincias.getSelectedItem().toString().length() != 0) {
+                            if(NonmbreEncuestador.getText().toString().length()!=0){
+                            SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+                            admin.DesactivarUsuario();
+                            admin.CrearUsuario(NonmbreEncuestador.getText().toString(),
+                                    ApellidoEncuestador.getText().toString(),
+                                    DNI.getText().toString(),
+                                    SPProvincias.getSelectedItem().toString());
 
-                    // Inicializo el encuestador
-                    encuestador.setID(Nencuestador.getText().toString());
-                    Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
-                    Modif.putExtra("IDENCUESTADOR", encuestador.getID());
-                    startActivityForResult(Modif, 1);
-                    dialog.dismiss();}
+                            BdEfectores bdEfectores = new BdEfectores();
+                            bdEfectores.execute();
+
+                            // Inicializo el encuestador
+                            //encuestador.setID(Nencuestador.getText().toString());
+                            Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
+                            //Modif.putExtra("IDENCUESTADOR", encuestador.getID());
+                            startActivityForResult(Modif, 1);
+                            dialog.dismiss();
+
+                            } else {
+                                makeText(getBaseContext(), "INGRESE UNA NOMBRE", LENGTH_SHORT).show();
+                            }
+                            } else {
+                            makeText(getBaseContext(), "INGRESE UNA PROVINCIA", LENGTH_SHORT).show();
+                        }
+                    }else{makeText(getBaseContext(), "INGRESE DNI", LENGTH_SHORT).show();}
+
             }
         });
 
-        Button cancelar = view.findViewById(R.id.CANCELAR);
+        Button cancelar = view.findViewById(R.id.CANCELARCREARENCUESTADOR);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -296,5 +347,65 @@ public class Inicio extends AppCompatActivity {
             }
         });
     }
+
+    private class BdEfectores extends AsyncTask<Void, Void, Void>
+    {
+        ProgressDialog pd;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(Inicio.this);
+            pd.setMessage("Cargando datos, aguarde");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            String myData = "";
+            try {
+                InputStream fis = getResources().openRawResource(R.raw.efectores);//new FileInputStream(R.raw.efectores);
+                DataInputStream in = new DataInputStream(fis);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                SQLiteDatabase Bd1 = admin.getWritableDatabase();
+                if (!admin.ExisteEfectores(SPProvincias.getSelectedItem().toString())) {
+                    while ((myData = br.readLine()) != null) {
+
+                        if (myData.split(",")[2].equals(SPProvincias.getSelectedItem().toString())) {
+                            ContentValues registro = new ContentValues();
+                            registro.put("NOMBRE", myData.split(",")[0]);
+                            registro.put("PROVINCIA", myData.split(",")[2]);
+                            Bd1.insert("EFECTORES", null, registro);
+                        }
+                    }
+
+                    // Cierro todo las bases de datos y lectura de archivos
+                    Bd1.close();
+                    br.close();
+                    in.close();
+                    fis.close();
+                    //Toast.makeText(getBaseContext(), "CREADA LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(getBaseContext(), "YA ESTA CREADA LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                //Toast.makeText(getBaseContext(), "NO SE CREO LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (pd != null)
+            {
+                pd.dismiss();
+            }
+        }
+
+    }
+
+
 
 }

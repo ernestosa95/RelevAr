@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -18,18 +19,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.relevar.MySQL.ConexionSQLiteHelper;
+import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
 import com.example.relevar.Recursos.ServicioGPS;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,7 +47,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
@@ -51,11 +60,15 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_CODE_POSITION = 1;
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
 
+    private List<String> listaNombresArchivos;
+    private List<String> listaRutasArchivos;
+    private ArrayAdapter adaptador;
+    ListView lv1;
     // Inicio de toma de ubicacion
     boolean devolver = false;
     //
     EditText Nencuestador;
-    Button PararServicio;
+    Button PararServicio, BtnCompartir;
 
     // Creo al encuestador
     Encuestador encuestador = new Encuestador();
@@ -76,6 +89,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     private ArrayList<LatLng> latlngs = new ArrayList<>();
 
+    String directorioraiz;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +105,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         //
-        encuestador.setID((String) getIntent().getStringExtra("IDENCUESTADOR"));
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        encuestador.setID(admin.ObtenerActivado());
         // Mapa
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
@@ -114,6 +130,16 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
+
+        //directorioraiz = Environment.getExternalStorageDirectory().getPath();
+        directorioraiz = "/storage/emulated/0/RelevAr";
+        BtnCompartir = (Button) findViewById(R.id.COMPARTIR);
+        BtnCompartir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buscar(directorioraiz);
+            }
+        });
     }
 
     // Our handler for received Intents. This will be called whenever an Intent
@@ -126,8 +152,89 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             Log.d("receiver", Integer.toString(recorrido.size()));
         }
     };
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // COMPARTIR
+    @SuppressLint("WrongConstant")
+    private void buscar(String RutaDirectorio){
 
-    //--------------------------------------------------------------------------------------------------
+    Toast.makeText(this, RutaDirectorio, 6000).show();
+    listaNombresArchivos = new ArrayList<String>();
+    listaRutasArchivos = new ArrayList<String>();
+    File directorioactual = new File(RutaDirectorio);
+    File[] listaArchivos = directorioactual.listFiles();
+
+    int x=0;
+    if(!RutaDirectorio.equals(directorioraiz)){
+        listaNombresArchivos.add("../");
+        listaRutasArchivos.add(directorioactual.getParent());
+        x=1;
+    }
+
+    for(File archivo : listaArchivos){
+        listaRutasArchivos.add(archivo.getPath());
+    }
+
+    Collections.sort(listaRutasArchivos, String.CASE_INSENSITIVE_ORDER);
+
+    for(int i=x; i<listaRutasArchivos.size(); i++){
+        File archivo = new File(listaRutasArchivos.get(i));
+        if(archivo.isFile()){
+            listaNombresArchivos.add(archivo.getName());
+        } else{
+            listaNombresArchivos.add("/"+archivo.getName());
+        }
+    }
+
+    if(listaArchivos.length<1){
+        listaNombresArchivos.add("NO HAY ARCHIVOS");
+        listaRutasArchivos.add(RutaDirectorio);
+    }
+
+    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    LayoutInflater Inflater = getLayoutInflater();
+    View view1 = Inflater.inflate(R.layout.alert_explorador, null);
+    builder.setView(view1);
+    builder.setCancelable(false);
+    final AlertDialog dialog = builder.create();
+    dialog.show();
+
+    lv1 = view1.findViewById(R.id.LIDTVIEW1);
+
+    adaptador = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, listaNombresArchivos);
+    lv1.setAdapter(adaptador);
+    //realizar accion con el listview
+    lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int p1, long id) {
+            File archivo = new File(listaRutasArchivos.get(p1));
+            if(archivo.isFile()){
+                String ubicacion = archivo.getAbsolutePath();
+                Toast.makeText(getBaseContext(), "es un archivo", 6000).show();
+                compartir(ubicacion);
+            } else {
+                buscar(listaRutasArchivos.get(p1));
+            }
+        }
+    });
+    final Button cancelar = view1.findViewById(R.id.CANCELAR);
+    cancelar.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dialog.dismiss();
+        }
+    });
+}
+
+    private void compartir(String dir){
+        final String fileUriString = dir;
+        Intent sharingIntent = new Intent();
+        sharingIntent.setAction(Intent.ACTION_SEND);
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse( fileUriString ) ) ;
+        sharingIntent.setType("text/csv");
+        startActivity(Intent.createChooser(sharingIntent, "share file with"));
+    }
+//--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // NUEVA FAMILIA
     public void NuevaFamilia(View view) {

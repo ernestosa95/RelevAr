@@ -35,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.relevar.Recursos.EfectoresSearchAdapter;
 import com.example.relevar.Recursos.ObjetoPersona;
 import com.example.relevar.Recursos.ScannerQR;
 import com.example.relevar.Recursos.TrabajosSearchAdapter;
@@ -104,7 +105,7 @@ public class Persona extends AppCompatActivity {
     ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion;
     TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion;
 
-
+    AutoCompleteTextView autoEfector;
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // CLASES DE CREACION Y ACTUALIZACION DE LAS VARIABLES
@@ -1240,7 +1241,7 @@ public class Persona extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE CARGA DE EFECTORES
-    public void Efector(View view){
+    /*public void Efector(View view){
     // Defino los contenedores
     AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
     TextView textView = new TextView(this);
@@ -1305,8 +1306,49 @@ public class Persona extends AppCompatActivity {
     //if(Persona!=null){
     //    celular.setText(Persona.Celular);
     //}
-}
+}*/
+    public void Efector(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_efector, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
+        // AUTOCOMPLETE TEXTVIEW DE LOS TRABAJOS
+        autoEfector = view1.findViewById(R.id.AutoEfector);
+        List<String> efectores = new ArrayList<String>();
+        EfectoresSearchAdapter searchAdapter = new EfectoresSearchAdapter(getApplicationContext(), efectores);
+        autoEfector.setThreshold(1);
+        autoEfector.setAdapter(searchAdapter);
+
+        final Button guardar = view1.findViewById(R.id.GUARDAREFECTOR);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Persona.Efector = autoEfector.getText().toString();
+                dialog.dismiss();
+                ColorAvanceEfector();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAREFECTOR);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        final TextView AgregarManualmente = view1.findViewById(R.id.AGREGARMANUALMENTEEFECTOR);
+        AgregarManualmente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EfectorManual();
+            }
+        });
+    }
     // Cambia los colores de los botones de llenado de contacto
     private void ColorAvanceEfector(){
         // Cambio los colores de avance
@@ -1319,6 +1361,41 @@ public class Persona extends AppCompatActivity {
             efector.setBackgroundResource(R.drawable.verde);
             avanceefector.setText(getString(R.string.completado)+" 100%");
         }
+    }
+
+    private void EfectorManual(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View viewManual = Inflater.inflate(R.layout.alert_nuevo_encuestador, null);
+        builder.setView(viewManual);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final TextView encabezado = viewManual.findViewById(R.id.textView4);
+        encabezado.setText(R.string.nuevo_efector);
+
+        final TextView NuevoEfector = viewManual.findViewById(R.id.EditNuevoEncuestador);
+        NuevoEfector.setHint(R.string.nuevo_efector);
+
+        final Button guardar = viewManual.findViewById(R.id.GUARDAR);
+        guardar.setText(R.string.listo);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Persona.Ocupacion = NuevoTrabajo.getText().toString().toUpperCase();
+                autoEfector.setText(NuevoEfector.getText().toString().toUpperCase());
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = viewManual.findViewById(R.id.CANCELAR);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -1573,6 +1650,7 @@ public class Persona extends AppCompatActivity {
                     }
         });
     }
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE DEFINICION DE LAS OPCIONES DE GUARDADO DE LAS PERSONAS
