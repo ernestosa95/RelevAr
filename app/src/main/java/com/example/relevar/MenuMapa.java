@@ -210,7 +210,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             File archivo = new File(listaRutasArchivos.get(p1));
             if(archivo.isFile()){
                 String ubicacion = archivo.getAbsolutePath();
-                Toast.makeText(getBaseContext(), "es un archivo", 6000).show();
+                //Toast.makeText(getBaseContext(), "es un archivo", 6000).show();
                 compartir(ubicacion);
             } else {
                 buscar(listaRutasArchivos.get(p1));

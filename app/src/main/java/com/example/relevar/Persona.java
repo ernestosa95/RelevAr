@@ -1322,6 +1322,7 @@ public class Persona extends AppCompatActivity {
         EfectoresSearchAdapter searchAdapter = new EfectoresSearchAdapter(getApplicationContext(), efectores);
         autoEfector.setThreshold(1);
         autoEfector.setAdapter(searchAdapter);
+        if(Persona.Efector.length()!=0) autoEfector.setText(Persona.Efector);
 
         final Button guardar = view1.findViewById(R.id.GUARDAREFECTOR);
         guardar.setOnClickListener(new View.OnClickListener() {

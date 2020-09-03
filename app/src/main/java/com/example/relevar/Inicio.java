@@ -105,7 +105,7 @@ public class Inicio extends AppCompatActivity {
                 in.close();
                 fis.close();
             }else{
-                Toast.makeText(this, "YA ESTA CARGADO TRABAJOS", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "YA ESTA CARGADO TRABAJOS", Toast.LENGTH_SHORT).show();
             }
         }
         catch (IOException e){
