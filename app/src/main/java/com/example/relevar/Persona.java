@@ -1324,6 +1324,8 @@ public class Persona extends AppCompatActivity {
         autoEfector.setAdapter(searchAdapter);
         if(Persona.Efector.length()!=0) autoEfector.setText(Persona.Efector);
 
+        if(Persona.Efector.length()!=0){autoEfector.setText(Persona.Efector);}
+
         final Button guardar = view1.findViewById(R.id.GUARDAREFECTOR);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1350,6 +1352,7 @@ public class Persona extends AppCompatActivity {
             }
         });
     }
+
     // Cambia los colores de los botones de llenado de contacto
     private void ColorAvanceEfector(){
         // Cambio los colores de avance
@@ -1564,11 +1567,12 @@ public class Persona extends AppCompatActivity {
 
 
         // Si ya tengo valores de contactos debo inicializar
-        if(Persona.Ocupacion!=""){
+        if(!Persona.Ocupacion.equals("")){
             autocomplete.setText(Persona.Ocupacion);
             RbtSITrabajo.setChecked(true);}
-        else{
-            RbtNOTrabajo.setChecked(true);}
+
+        if(Persona.Ocupacion.equals("DESOCUPADO")){RbtNOTrabajo.setChecked(true);}
+
 
         Button guardar = view1.findViewById(R.id.GUARDAR3);
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -1577,6 +1581,7 @@ public class Persona extends AppCompatActivity {
                 if(RbtSITrabajo.isChecked()){
                 Persona.Ocupacion = autocomplete.getText().toString().toUpperCase();}
                 else{Persona.Ocupacion = "DESOCUPADO";}
+                if(RbtNOTrabajo.isChecked()){Persona.Ocupacion = "DESOCUPADO";}
                 ColorAvanceOcupacion();
                 dialog.dismiss();
             }
