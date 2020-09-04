@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.relevar.Recursos.Encuestador;
+import com.example.relevar.Recursos.ObjetoPersona;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
-        Intent Modif= new Intent (this, persona.class);
+        Intent Modif= new Intent (this, Persona.class);
         startActivityForResult(Modif, 1);}
 
     private void ListeVer(){
@@ -224,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // The user clicked OK
-                Intent Modif= new Intent (getBaseContext(), persona.class);
+                Intent Modif= new Intent (getBaseContext(), Persona.class);
                 Modif.putExtra("NOMBRE" , MiembrosFamiliares.get(position).Nombre);
                 Modif.putExtra("APELLIDO" , MiembrosFamiliares.get(position).Apellido);
                 Modif.putExtra("DNI" , MiembrosFamiliares.get(position).DNI);
@@ -379,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                Button guardar = view_alert.findViewById(R.id.GUARDAR1);
+                Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
                 guardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -409,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                            Intent intent= new Intent (getBaseContext(), MenuPrincipal.class);
+                            Intent intent= new Intent (getBaseContext(), MenuMapa.class);
                             LatLng position = new LatLng(Latitudenviar,Longitudenviar); // Boa Vista
                             Bundle args = new Bundle();
                             args.putParcelable("from_position", position);
