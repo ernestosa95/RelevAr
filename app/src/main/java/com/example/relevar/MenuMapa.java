@@ -158,7 +158,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     @SuppressLint("WrongConstant")
     private void buscar(String RutaDirectorio){
 
-    Toast.makeText(this, RutaDirectorio, 6000).show();
+    //Toast.makeText(this, RutaDirectorio, 6000).show();
     listaNombresArchivos = new ArrayList<String>();
     listaRutasArchivos = new ArrayList<String>();
     File directorioactual = new File(RutaDirectorio);

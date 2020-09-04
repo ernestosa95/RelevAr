@@ -82,7 +82,7 @@ public class Inicio extends AppCompatActivity {
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
 
-        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        /*SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         // Cargo la base de datos de los trabajos si no esta vacia
         //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         try{
@@ -109,7 +109,7 @@ public class Inicio extends AppCompatActivity {
             }
         }
         catch (IOException e){
-            Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}
+            Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}*/
 
     }
 
@@ -310,6 +310,7 @@ public class Inicio extends AppCompatActivity {
                     if(DNI.getText().toString().length()!=0) {
                         if (SPProvincias.getSelectedItem().toString().length() != 0) {
                             if(NonmbreEncuestador.getText().toString().length()!=0){
+                                if(ApellidoEncuestador.getText().toString().length()!=0){
                             SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
                             admin.DesactivarUsuario();
                             admin.CrearUsuario(NonmbreEncuestador.getText().toString(),
@@ -326,9 +327,11 @@ public class Inicio extends AppCompatActivity {
                             //Modif.putExtra("IDENCUESTADOR", encuestador.getID());
                             startActivityForResult(Modif, 1);
                             dialog.dismiss();
-
+                                } else {
+                                    makeText(getBaseContext(), "INGRESE UN APELLIDO", LENGTH_SHORT).show();
+                                }
                             } else {
-                                makeText(getBaseContext(), "INGRESE UNA NOMBRE", LENGTH_SHORT).show();
+                                makeText(getBaseContext(), "INGRESE UN NOMBRE", LENGTH_SHORT).show();
                             }
                             } else {
                             makeText(getBaseContext(), "INGRESE UNA PROVINCIA", LENGTH_SHORT).show();
@@ -392,6 +395,35 @@ public class Inicio extends AppCompatActivity {
             } catch (IOException e) {
                 //Toast.makeText(getBaseContext(), "NO SE CREO LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
             }
+
+            //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            // Cargo la base de datos de los trabajos si no esta vacia
+            //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            try{
+                InputStream fis = getResources().openRawResource(R.raw.trabajos);//new FileInputStream(R.raw.efectores);
+                DataInputStream in = new DataInputStream(fis);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                SQLiteDatabase Bd1 = admin.getWritableDatabase();
+                //String myData="";
+                if(!admin.ExisteTrabajos()){
+                    while ((myData=br.readLine())!=null){
+
+                        ContentValues registro = new ContentValues();
+                        registro.put("TRABAJO", myData);
+                        Bd1.insert("TRABAJOS", null, registro);
+
+                    }
+                    // Cierro todo las bases de datos y lectura de archivos
+                    Bd1.close();
+                    br.close();
+                    in.close();
+                    fis.close();
+                }else{
+                    //Toast.makeText(this, "YA ESTA CARGADO TRABAJOS", Toast.LENGTH_SHORT).show();
+                }
+            }
+            catch (IOException e){}
+                //Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}
             return null;
         }
 

@@ -1565,33 +1565,20 @@ public class Persona extends AppCompatActivity {
 
         // Si ya tengo valores de contactos debo inicializar
         if(Persona.Ocupacion!=""){
-            if(!Persona.Ocupacion.equals("DESOCUPADO")){
-                autocomplete.setText(Persona.Ocupacion);
-                RbtSITrabajo.setChecked(true);}
-            else{
-                RbtNOTrabajo.setChecked(true);
-                autocomplete.setText(Persona.Ocupacion);
-            }}
-
+            autocomplete.setText(Persona.Ocupacion);
+            RbtSITrabajo.setChecked(true);}
+        else{
+            RbtNOTrabajo.setChecked(true);}
 
         Button guardar = view1.findViewById(R.id.GUARDAR3);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(RbtSITrabajo.isChecked()){
-                    if(autocomplete.getText().toString().length()!=0){
-                        Persona.Ocupacion=autocomplete.getText().toString();
-                        dialog.dismiss();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "INGRESE UNA OCUPACIÓN", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                if(RbtNOTrabajo.isChecked()){
-                    Persona.Ocupacion = "DESOCUPADO";
-                    dialog.dismiss();
-                }
+                Persona.Ocupacion = autocomplete.getText().toString().toUpperCase();}
+                else{Persona.Ocupacion = "DESOCUPADO";}
                 ColorAvanceOcupacion();
+                dialog.dismiss();
             }
         });
 
