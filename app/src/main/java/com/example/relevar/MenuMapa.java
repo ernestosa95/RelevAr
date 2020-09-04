@@ -21,6 +21,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -444,7 +445,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         mapView.onPause();
         }
 
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -546,6 +546,14 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 dialog.dismiss();
             }
         });
+    }
+
+    // ABRIR EL EXPLORADOR DE ARCHIVOS
+    public void MostrarArchivos(View view){
+        Uri selectedUri = Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/RelevAr");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(selectedUri, "application/*");
+        startActivity(Intent.createChooser(intent, "Open folder"));
     }
 
 //--------------------------------------------------------------------------------------------------
