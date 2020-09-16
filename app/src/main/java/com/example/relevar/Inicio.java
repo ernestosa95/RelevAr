@@ -44,22 +44,37 @@ import static android.os.Environment.getExternalStorageDirectory;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
+// Descripcion de la Activity:
+/*      Esta activity es la pantalla inicial de la App, su principal función es la de preparar los
+*       datos necesarios para poder iniciar el uso de la app.*/
+
+// Metodos de la Activity:
+
+//--------------------------------------------------------------------------------------------------
+
+//  - Oncreate()
+//  - NextMenuPrincipal()
+//  - AgregarCabecera()
+//  - checkIfLocationOpened()
+//  - Encuestador()
+//  - NuevoEncuestador()
+//  - Extensión de AsyncTask: BdEfectores
+
 public class Inicio extends AppCompatActivity {
 
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 123;
 
     // Widgets
     Button empezar;
-    Encuestador encuestador = new Encuestador();
-    EditText Nencuestador;
     Spinner SPProvincias;
-    private ProgressDialog dialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert_inicio);
+
+        // Boton para comenzar a cargar datos
+        empezar = (Button) findViewById(R.id.EMPEZAR);
 
         // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
@@ -70,10 +85,7 @@ public class Inicio extends AppCompatActivity {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
 
-        // Boton para comenzar a cargar datos
-        empezar = (Button) findViewById(R.id.EMPEZAR);
-
-        // Solicito multiples permisos
+        // Solicito multiples permisos para las diferentes servicios que se utilizan
         ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -81,47 +93,14 @@ public class Inicio extends AppCompatActivity {
                         Manifest.permission.CAMERA},
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
-
-        /*SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-        // Cargo la base de datos de los trabajos si no esta vacia
-        //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-        try{
-            InputStream fis = getResources().openRawResource(R.raw.trabajos);//new FileInputStream(R.raw.efectores);
-            DataInputStream in = new DataInputStream(fis);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            SQLiteDatabase Bd1 = admin.getWritableDatabase();
-            String myData="";
-            if(!admin.ExisteTrabajos()){
-                while ((myData=br.readLine())!=null){
-
-                    ContentValues registro = new ContentValues();
-                    registro.put("TRABAJO", myData);
-                    Bd1.insert("TRABAJOS", null, registro);
-
-                }
-                // Cierro todo las bases de datos y lectura de archivos
-                Bd1.close();
-                br.close();
-                in.close();
-                fis.close();
-            }else{
-                //Toast.makeText(this, "YA ESTA CARGADO TRABAJOS", Toast.LENGTH_SHORT).show();
-            }
-        }
-        catch (IOException e){
-            Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}*/
-
     }
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // PASAR AL MENU PPAL, PRIMERO ELIGIENDO UN USUARIO
+
     public void NextMenuPrincipal(View view) {
         if(checkIfLocationOpened()) {
-            /*Intent Modif = new Intent(this, MenuMapa.class);
-            AgregarCabecera();
-            startActivityForResult(Modif, 1);
-             */
             AgregarCabecera();
             Encuestador();
         }
@@ -133,50 +112,50 @@ public class Inicio extends AppCompatActivity {
     // AGREGAR CABECERA POR UNICA VEZ A LOS ARCHIVOS DE DATOS
 
     private void AgregarCabecera() {
-        // Agrego la cabecera en .csv
+        /* Me dirijo a el directorio en la memoria interna del dispositivo para poder acceder a la
+        * carpeta llamada RelevAr donde se almacena de manera publlica la informacion, de no
+        * encontrarla se debe crear la misma*/
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
+
+        /* Necesito abrir el archivo .csv correspondiente al dia actual, por esta razon se solicita
+        * la fecha actual al dispositivo, si este no existe se debe crear*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date1 = new Date();
         String fecha = dateFormat.format(date1);
         String NombreArchivo = "RelevAr-" + fecha + ".csv";
         File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        /* Una vez tenemos el archivo dir con la ruta correcta, necesitamos leer los datos conenidos
+        * en este, se va a leer la primera linea que es la que debe contener la cabecera con las categorias*/
         String strLine = "";
-        // leer datos
-        String myData = "";
         try {
             FileInputStream fis = new FileInputStream(dir);
             DataInputStream in = new DataInputStream(fis);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
             strLine = br.readLine().split(";")[0];
-            //Toast.makeText(this, strLine, Toast.LENGTH_SHORT).show();
             br.close();
             in.close();
             fis.close();
         } catch (IOException e) {
+            Toast.makeText(this, R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
         }
-        // guardo los datos
+
+        /* Con los datos de la primer fila es necesario ahora corroborar que esta se corresponda con
+        * la cabecera, la primer palabra que debe aparecer es la palbra "CALLE"*/
         if (strLine.equals("CALLE") != true) {
-            String cabecera = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;" +
-                    "FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;" +
-                    "LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;" +
-                    "TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;TIPO DE VIVIENDA;LA VIVIENDA ES;CANTIDAD HABITACIONES;LUGAR PARA COCINAR;USA PARA COCINAR;PAREDES EXTERIORES;REVOQUE EXTERIOR;PISOS;EXTERIOR DEL TECHO; CIELORRASO;ENCUESTADOR\n";
             String cab = getString(R.string.encabezado);
             try {
-
-                FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
-                // que se agreguen los datos al final sin perder los datos anteriores
+                //el true es para que se agreguen los datos al final sin perder los datos anteriores
+                FileOutputStream fOut = new FileOutputStream(dir, true);
                 OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-
                 myOutWriter.append(cab);
                 myOutWriter.close();
                 fOut.close();
-                //Toast.makeText(this, strLine+"2", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
                 e.printStackTrace();
-                //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -184,6 +163,7 @@ public class Inicio extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // CONOCER SI LA UBICACION ESTA ACTIVADA
+
     private boolean checkIfLocationOpened() {
     String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
     System.out.println("Provider contains=> " + provider);
@@ -197,10 +177,10 @@ public class Inicio extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
 
-    // FUNCION DE ENCUESTADORES, muestra los encuestadores cargados y la posibilidad de crear un
-    // NUEVO ENCUENTADOR
+    // ENCUENTADOR, INGRESAR CON UN ENCUESTADOR PRECARGADO O CREAR UNO NUEVO
     private void Encuestador(){
-        // Creo el alert dialog con los widgets para encuestador
+        /* Creo un alert dialog y utilizo el recurso layout creado alert_encuestador para poder
+        * mostrar las diferentes opciones y el listado de encuestadores precargados*/
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
         View view = Inflater.inflate(R.layout.alert_encuestador, null);
@@ -213,16 +193,15 @@ public class Inicio extends AppCompatActivity {
         final Spinner encuestadores = view.findViewById(R.id.ENCUESTADOR);
         ArrayList<String> enc = new ArrayList<>();
 
-        // Recupero los encuestadores cargados
+        // Recupero los encuestadores cargados en la base de datos
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         enc = admin.Encuestadores();
 
-
-        // Cargo el spinner con los datos
+        // Cargo el spinner con los datos de los encuestadores
         ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, enc);
         encuestadores.setAdapter(comboAdapter);
 
-        // Crear nuevo encuestador
+        // Creo y le otorgo las funciones al boton crear nuevo encuestador
         Button nuevo = view.findViewById(R.id.NUEVOENC);
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,7 +211,9 @@ public class Inicio extends AppCompatActivity {
             }
         });
 
-        // Ingresar con encuestador existente
+        /* Creo y le otorgo las funciones al boton ingresar, desactivando todos los usarios,
+        * seleccionando el nuevo usuario y activando solo a este, una vez realizada estas acciones
+        * se dirije la app a la activity MenuMapa*/
         Button ingresar = view.findViewById(R.id.INGRESAR);
         ingresar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,21 +224,19 @@ public class Inicio extends AppCompatActivity {
                     String nombre = encuestadores.getSelectedItem().toString().split(",")[0];
                     String apellido = encuestadores.getSelectedItem().toString().split(",")[1];
                     admin.ActivarUsuario(nombre,apellido);
-                    //encuestador.setID(encuestadores.getSelectedItem().toString());
-                    //makeText(getBaseContext(), encuestador.getID(), LENGTH_SHORT).show();
                     Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
-                    //Modif.putExtra("IDENCUESTADOR", encuestador.getID());
                     startActivityForResult(Modif, 1);
-
                     dialog.dismiss();}
-                else {makeText(getBaseContext(), "NO HAY ENCUESTADORES", LENGTH_SHORT).show();}
+                else {
+                    makeText(getBaseContext(), "NO HAY ENCUESTADORES", LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     // FUNCION DE CREAR NUEVO ENCUESTADOR
     private void NuevoEncuestador(){
-        // Creo el Alert dialog
+        // Creo el Alert dialog con los recursos layout creados para este alert_crear_encuestador
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
         View view = Inflater.inflate(R.layout.alert_crear_encuestador, null);
@@ -266,6 +245,7 @@ public class Inicio extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
+        // Creo un spinner para mostrar la seleccion de provincias
         SPProvincias = view.findViewById(R.id.PROVINCIA);
         ArrayList<String> Provincias = new ArrayList<String>();
         Provincias.add("");
@@ -298,15 +278,18 @@ public class Inicio extends AppCompatActivity {
         ArrayAdapter<String> comboAdapterAgua = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, Provincias);
         SPProvincias.setAdapter(comboAdapterAgua);
 
+        // Creo los edittext para ingresar datos de nombre, apellido, dni
         final EditText NonmbreEncuestador = view.findViewById(R.id.EditCrearEncuestador);
         final EditText ApellidoEncuestador = view.findViewById(R.id.editApellidoEncuestador);
         final EditText DNI = view.findViewById(R.id.editDNI);
 
+        /* Creo y asigno las funciones al boton de crear encuentador, corroboro que ninguno de los
+        campos este vacio, desactivo todos los encuestadores y luego inserto en la base de datos el
+        nuevo, activandolo, paso siguiente paso la app a la activity MenuMapa*/
         Button nuevo = view.findViewById(R.id.GUARDARCREARENCUESTADOR);
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Ingreso datos del encuestador
                     if(DNI.getText().toString().length()!=0) {
                         if (SPProvincias.getSelectedItem().toString().length() != 0) {
                             if(NonmbreEncuestador.getText().toString().length()!=0){
@@ -318,13 +301,12 @@ public class Inicio extends AppCompatActivity {
                                     DNI.getText().toString(),
                                     SPProvincias.getSelectedItem().toString());
 
+                            // Creo en segundo plano las bases de datos correspondientes a este
+                            // encuestador
                             BdEfectores bdEfectores = new BdEfectores();
                             bdEfectores.execute();
 
-                            // Inicializo el encuestador
-                            //encuestador.setID(Nencuestador.getText().toString());
                             Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
-                            //Modif.putExtra("IDENCUESTADOR", encuestador.getID());
                             startActivityForResult(Modif, 1);
                             dialog.dismiss();
                                 } else {
@@ -341,6 +323,8 @@ public class Inicio extends AppCompatActivity {
             }
         });
 
+        /* Creo y asigno la posibilidad de cerrar las opciones de cancelar la carga de un nuevo
+        * encuestador, iniciando nuevamente el alert dialog de encuestador*/
         Button cancelar = view.findViewById(R.id.CANCELARCREARENCUESTADOR);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,9 +335,13 @@ public class Inicio extends AppCompatActivity {
         });
     }
 
-    private class BdEfectores extends AsyncTask<Void, Void, Void>
-    {
+    // ESTA ES UNA EXTENSION PARA PODER CREAR LAS BASES DE DATOS EN SEGUNDO PLANO
+    private class BdEfectores extends AsyncTask<Void, Void, Void> {
+
+        // Creo un progress dialog para mostrar mientras se ejecuta este codigo
         ProgressDialog pd;
+
+        /*Antes de comenzar la ejecucion se inicia el progress dialog con los siguientes atributos*/
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -363,8 +351,15 @@ public class Inicio extends AppCompatActivity {
             pd.show();
         }
 
+        /* Este es el codigo que se ejecuta en segundo plano mientras el usuario ve un cartel de
+        * cargando datos*/
         @Override
         protected Void doInBackground(Void... voids) {
+            /* Se crea una conexion con la base de datos, se corrobora que los datos de la provincia
+            * seleccionada por el encuestador no esten cargados y se comienza a leer desde efectores.csv
+            * solo eligiendo los efectores correspondientes a esta provincia, posteriomente se los
+            * inserta en la base de datos.
+            * Esta accion se realiza una vez por provincia*/
             SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
             String myData = "";
             try {
@@ -382,23 +377,19 @@ public class Inicio extends AppCompatActivity {
                             Bd1.insert("EFECTORES", null, registro);
                         }
                     }
-
-                    // Cierro todo las bases de datos y lectura de archivos
                     Bd1.close();
                     br.close();
                     in.close();
                     fis.close();
-                    //Toast.makeText(getBaseContext(), "CREADA LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(getBaseContext(), "YA ESTA CREADA LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
+
                 }
             } catch (IOException e) {
-                //Toast.makeText(getBaseContext(), "NO SE CREO LA BASE DE DATOS", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
             }
 
-            //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-            // Cargo la base de datos de los trabajos si no esta vacia
-            //SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            /* Tambien debo crear la base de datos de los trabajos, esto se hace una vez, jsto despues
+            * de instalar la app, para eso corroboro que la misma no este creada, leo los datos desde
+            * trabajo.csv y los inserto en la base de datos correspondiente*/
             try{
                 InputStream fis = getResources().openRawResource(R.raw.trabajos);//new FileInputStream(R.raw.efectores);
                 DataInputStream in = new DataInputStream(fis);
@@ -413,20 +404,19 @@ public class Inicio extends AppCompatActivity {
                         Bd1.insert("TRABAJOS", null, registro);
 
                     }
-                    // Cierro todo las bases de datos y lectura de archivos
                     Bd1.close();
                     br.close();
                     in.close();
                     fis.close();
-                }else{
-                    //Toast.makeText(this, "YA ESTA CARGADO TRABAJOS", Toast.LENGTH_SHORT).show();
                 }
             }
-            catch (IOException e){}
-                //Toast.makeText(this, "NO SE CREO LA BASE DE DATOS DE TRABAJOS", Toast.LENGTH_SHORT).show();}
+            catch (IOException e){
+                Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();}
             return null;
         }
 
+        /* Despues de la ejecucion del codigo en segundo plano debo detener el alert que me indica
+        * que se estan cargando los datos*/
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
@@ -437,7 +427,5 @@ public class Inicio extends AppCompatActivity {
         }
 
     }
-
-
 
 }

@@ -81,6 +81,7 @@
 
     <string name="buscar_efector" translatable="false">BUSCAR EFECTOR</string>
     <string name="nuevo_efector" translatable="false">NUEVO EFECTOR</string>
+    <string name="ocurrio_error" translatable="false">OCURRIO UN ERROR</string>
 
 
 </resources>
