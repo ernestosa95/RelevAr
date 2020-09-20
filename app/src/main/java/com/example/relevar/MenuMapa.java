@@ -3,6 +3,7 @@ package com.example.relevar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.annotation.SuppressLint;
@@ -53,49 +54,49 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static android.os.Environment.getExternalStorageDirectory;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
+// Descripcion de la Activity:
+/*      Esta activity es la pantalla inicial de la App, su principal función es la de preparar los
+ *       datos necesarios para poder iniciar el uso de la app.*/
+
+// Metodos de la Activity:
+
+//--------------------------------------------------------------------------------------------------
+
+//  - Oncreate()
+//  -
+
 public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
-    private static final int REQUEST_CODE_POSITION = 1;
-    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
 
+    // Widgets
     private List<String> listaNombresArchivos;
     private List<String> listaRutasArchivos;
     private ArrayAdapter adaptador;
     ListView lv1;
     // Inicio de toma de ubicacion
-    boolean devolver = false;
-    //
     EditText Nencuestador;
     Button PararServicio, BtnCompartir;
-
     // Creo al encuestador
     Encuestador encuestador = new Encuestador();
-
     // Mapa
     private MapView mapView;
     private GoogleMap map;
     LatLng latLng;
     ArrayList<LatLng> recorrido = new ArrayList<>();
-    ArrayList<LatLng> marcadores = new ArrayList<>();
-    // String
-    private Double Latitud, Longitud;
     Polyline ruta;
-    LocationManager locationManagerEncuestador;
-    LocationListener locationListenerEncuestador;
-    private BroadcastReceiver broadcastReceiver;
     TextView txt;
-
     private ArrayList<LatLng> latlngs = new ArrayList<>();
-
     String directorioraiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
+
         // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
@@ -105,10 +106,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
 
-        //
+        // Obtengo el encuestador que esta activado desde la base de datos
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         encuestador.setID(admin.ObtenerActivado());
-        // Mapa
+
+        // Creo el mapa y lo centro en las coodenadas -60 -30
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
         txt = (TextView) findViewById(R.id.COMPLETADOFACTORES);
@@ -117,11 +119,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
         mapView.onCreate(mapBundle);
         mapView.getMapAsync(this);
-
         latLng = new LatLng(-60, -30);
 
-        // Inicio de la App
-        //Encuestador();
+        /* Creo y asigno tareas al boton para iniciar o terminar la toma de datos del recorrido por
+        medio del GPS*/
         PararServicio = (Button) findViewById(R.id.TERMINAR);
         boolean estado = isMyServiceRunning(ServicioGPS.class);
         if (estado == true) {
@@ -132,7 +133,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
 
-        //directorioraiz = Environment.getExternalStorageDirectory().getPath();
+        /* Creo y asigno funciones para compartir los arcivos .csv*/
         directorioraiz = "/storage/emulated/0/RelevAr";
         BtnCompartir = (Button) findViewById(R.id.COMPARTIR);
         BtnCompartir.setOnClickListener(new View.OnClickListener() {
@@ -143,23 +144,27 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
-    // Our handler for received Intents. This will be called whenever an Intent
-    // with an action named "custom-event-name" is broadcasted.
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+    // ESCUCHA AL SERVICIO DE GPS Y ACTUALIZA EL RECORRIDO
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             recorrido = intent.getParcelableArrayListExtra("RECORRIDO");
-            Log.d("receiver", Integer.toString(recorrido.size()));
         }
     };
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // COMPARTIR
+
+    // BOTON PARA COMPARTIR LOS ARCHIVOS .CSV DESDE LA APP
     @SuppressLint("WrongConstant")
     private void buscar(String RutaDirectorio){
 
-    //Toast.makeText(this, RutaDirectorio, 6000).show();
+    /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
+    * RelevAr*/
     listaNombresArchivos = new ArrayList<String>();
     listaRutasArchivos = new ArrayList<String>();
     File directorioactual = new File(RutaDirectorio);
@@ -201,9 +206,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     dialog.show();
 
     lv1 = view1.findViewById(R.id.LIDTVIEW1);
-
     adaptador = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, listaNombresArchivos);
     lv1.setAdapter(adaptador);
+
     //realizar accion con el listview
     lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -212,7 +217,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             if(archivo.isFile()){
                 String ubicacion = archivo.getAbsolutePath();
                 //Toast.makeText(getBaseContext(), "es un archivo", 6000).show();
-                compartir(ubicacion);
+                compartir(archivo.getName());
             } else {
                 buscar(listaRutasArchivos.get(p1));
             }
@@ -227,20 +232,37 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     });
 }
 
-    private void compartir(String dir){
-        final String fileUriString = dir;
-        Intent sharingIntent = new Intent();
-        sharingIntent.setAction(Intent.ACTION_SEND);
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse( fileUriString ) ) ;
-        sharingIntent.setType("text/csv");
-        startActivity(Intent.createChooser(sharingIntent, "share file with"));
+    // FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
+    private void compartir(String nombreArchivo){
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        File dir = new File(nuevaCarpeta, nombreArchivo);
+
+        Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, nombreArchivo);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        this.startActivity(Intent.createChooser(emailIntent, "SUBIR ARCHIVO"));
     }
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+
     // NUEVA FAMILIA
     public void NuevaFamilia(View view) {
+
+        /* Corroboro el estado del servicio de GPS ya que para tomar datos de la persona debe estar
+        * tomando datos de ubicación*/
         boolean estado = isMyServiceRunning(ServicioGPS.class);
         if (estado == false) {
+
+            /* Si no esta iniciado el servicio creo una alert para solicitar el inicio del gps*/
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater Inflater = getLayoutInflater();
             View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
@@ -256,6 +278,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             si.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    /* Iniciar el recorrido y pasar el foco de la app a un nuevo activity para poder
+                    * cargar los datos de una familia*/
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     startService(intent);
                     PararServicio.setText(getString(R.string.terminar_recorrido));
@@ -267,6 +292,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             });
 
+            // Cerrar el alert de iniciar el recorrido
             Button no = view1.findViewById(R.id.BTNNO);
             no.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -275,6 +301,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             });
         } else {
+
+            /* Si esta iniciado el recorrido, directamente paso el foco de la app al activity para
+            * poder cargar la familia*/
             Intent Modif = new Intent(getBaseContext(), Familia.class);
             Modif.putExtra("IDENCUESTADOR", encuestador.getID());
             startActivityForResult(Modif, 1);
@@ -283,10 +312,14 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     // TERMINAR RECORRIDO
     public void TerminarRecorrido(View view) {
+
+        /* Consulto la situacion del gps*/
         boolean estado = isMyServiceRunning(ServicioGPS.class);
-        //Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
-        //Toast.makeText(this, Boolean.toString(EstadoServicio()), Toast.LENGTH_SHORT).show();
+
         if (estado == true) {
+
+            /* Si esta iniciado la opcion que debe estar disponible es terminar el recorrido, o
+            * reiniciarlo*/
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater Inflater = getLayoutInflater();
             View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
@@ -317,6 +350,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             });
         } else {
+
+            /* Si el recorrido no esta iniciado, la opcion disponible es iniciar el recorrido*/
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater Inflater = getLayoutInflater();
             View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
@@ -349,6 +384,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
+    // CORROBORAR LA SITUACION DEL GPS
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -359,6 +395,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         return false;
     }
 
+    // FUNCION QUE ESPERA EL RESULTADO DE LOS SERVICIOS DE GPS
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -366,15 +403,14 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 Bundle bundle = data.getParcelableExtra("bundle");
                 LatLng position = bundle.getParcelable("from_position");
                 latlngs.add(position);
-                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             }
         }
     }
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // PARA EL MAPA
 
+    // PARA EL MAPA
     @Override
     public void onMapReady(final GoogleMap map) {
 

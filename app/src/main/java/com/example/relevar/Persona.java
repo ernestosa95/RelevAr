@@ -613,7 +613,7 @@ public class Persona extends AppCompatActivity {
 
     // Defino las opciones referidas al AlertDialog de las vacunas
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void Educacion(View view){
+    /*public void Educacion(View view){
 
         // Inializo el alert dialog, defino el titulo
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
@@ -791,6 +791,69 @@ public class Persona extends AppCompatActivity {
         // Create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }*/
+
+    public void Educacion(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_educacion, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final RadioGroup Educacion = view1.findViewById(R.id.GroupEducacion);
+        if(Persona.Educacion.length()!=0){
+        for(int i=0; i<Educacion.getChildCount(); i++){
+          RadioButton rb = (RadioButton) Educacion.findViewById(Educacion.getChildAt(i).getId());
+          if(rb.getText().toString().split(" ")[0].equals(Persona.Educacion.split(" ")[0])){
+              rb.setChecked(true);
+          }
+        }}
+
+        final RadioButton primaria = view1.findViewById(R.id.PRIMARIO);
+        primaria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               CompletoIncompletoCursando(primaria.getText().toString());
+               dialog.dismiss();
+            }
+        });
+        final RadioButton secundaria = view1.findViewById(R.id.SECUNDARIO);
+        secundaria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CompletoIncompletoCursando(secundaria.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        final RadioButton terciaria = view1.findViewById(R.id.TERCIARIO);
+        terciaria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CompletoIncompletoCursando(terciaria.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        final RadioButton universidad = view1.findViewById(R.id.UNIVERSIDAD);
+        universidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CompletoIncompletoCursando(universidad.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+        final Button guardar = view1.findViewById(R.id.GUARDAREDUCACION);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton rb = (RadioButton) Educacion.findViewById(Educacion.getCheckedRadioButtonId());
+                Persona.Educacion = rb.getText().toString();
+                dialog.dismiss();
+                ColorAvanceEducacion();
+            }
+        });
     }
 
     // Cambia lo colores de avance de factores
@@ -855,6 +918,38 @@ public class Persona extends AppCompatActivity {
                 }
             }
         }}
+
+    private void CompletoIncompletoCursando(final String nivel){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_educacion_completitud, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final RadioGroup completitud = view1.findViewById(R.id.COMPLETITUD);
+        /*if(Persona.Educacion.length()!=0){
+            for(int i=0; i<completitud.getChildCount(); i++){
+                RadioButton rb = (RadioButton) completitud.findViewById(completitud.getChildAt(i).getId());
+                int ultimoPersonaEducacion = Persona.Educacion.split(" ").length;
+                int ultimoEducacion = rb.getText().toString().split(" ").length;
+                if(rb.getText().toString().split(" ")[ultimoEducacion].equals(Persona.Educacion.split(" ")[ultimoPersonaEducacion])){
+                    rb.setChecked(true);
+                }
+            }}*/
+
+        final Button guardar = view1.findViewById(R.id.GUARDARCOMPLETITUD);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                RadioButton rb = (RadioButton) completitud.findViewById(completitud.getCheckedRadioButtonId());
+                Persona.Educacion = nivel +" "+ rb.getText().toString();
+                ColorAvanceEducacion();
+            }
+        });
+    }
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -1350,6 +1445,7 @@ public class Persona extends AppCompatActivity {
             }
         });
     }
+
     // Cambia los colores de los botones de llenado de contacto
     private void ColorAvanceEfector(){
         // Cambio los colores de avance

@@ -90,7 +90,8 @@ public class Inicio extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.CAMERA},
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.GET_ACCOUNTS},
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
     }
@@ -138,7 +139,7 @@ public class Inicio extends AppCompatActivity {
             in.close();
             fis.close();
         } catch (IOException e) {
-            Toast.makeText(this, R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
         }
 
         /* Con los datos de la primer fila es necesario ahora corroborar que esta se corresponda con
@@ -155,7 +156,7 @@ public class Inicio extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(this, R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.ocurrio_error+" 2", Toast.LENGTH_SHORT).show();
             }
         }
     }

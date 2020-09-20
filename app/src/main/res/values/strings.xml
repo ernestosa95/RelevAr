@@ -83,5 +83,18 @@
     <string name="nuevo_efector" translatable="false">NUEVO EFECTOR</string>
     <string name="ocurrio_error" translatable="false">OCURRIO UN ERROR</string>
 
+    <string name="sin_dato" translatable="false">SIN DATO</string>
+    <string name="escuela_especial" translatable="false">ESCUELA ESPECIAL</string>
+    <string name="jardin" translatable="false">JARDIN</string>
+    <string name="primario" translatable="false">PRIMARIO</string>
+    <string name="secundario" translatable="false">SECUNDARIO</string>
+    <string name="terciario" translatable="false">TERCIARIO</string>
+    <string name="universitario" translatable="false">UNIVERSITARIO</string>
+    <string name="incompleto" translatable="false">INCOMPLETO</string>
+    <string name="cursando" translatable="false">CURSANDO</string>
+    <string name="completo" translatable="false">COMPLETO</string>
+
+
+
 
 </resources>
