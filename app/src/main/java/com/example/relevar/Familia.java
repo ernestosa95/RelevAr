@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -506,7 +507,7 @@ public class Familia extends AppCompatActivity {
     public void ServiciosExteriorVivienda(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
-        View view1 = Inflater.inflate(R.layout.alert_inspeccion_exterior, null);
+        final View view1 = Inflater.inflate(R.layout.alert_inspeccion_exterior, null);
         builder.setView(view1);
         builder.setCancelable(false);
         final AlertDialog dialog = builder.create();
@@ -530,6 +531,22 @@ public class Familia extends AppCompatActivity {
         // Cargo el spinner con los datos
         ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, OpcTipoVivienda);
         TipoVivienda.setAdapter(comboAdapter);
+
+        final ImageView helpcasa = view1.findViewById(R.id.INFOBOTONCASA);
+        helpcasa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builderhelpcasa = new androidx.appcompat.app.AlertDialog.Builder(view1.getContext());
+                LayoutInflater Inflaterhelpcasa = getLayoutInflater();
+                View viewcasa = Inflaterhelpcasa.inflate(R.layout.informacion, null); //nombre del alert que quiero mostrar
+                builderhelpcasa.setView(viewcasa);
+                //builder.setCancelable(false); //NO cerrar el alert haciendo click en cualquier lado de la pantalla
+                final androidx.appcompat.app.AlertDialog dialogcasa = builderhelpcasa.create();
+                dialogcasa.show(); //mostrar
+                final TextView casa = viewcasa.findViewById(R.id.INFOTEXT);
+                casa.setText(getString(R.string.casilla) + "\n"+ "\n" + getString(R.string.rancho) + "\n" + "\n"+ getString(R.string.local) + "\n"+ "\n" + getString(R.string.movil));
+            }
+        });
 
         // Recordar las opciones seleccionadas
         if(familia.TipoVivienda.length()!=0) {
@@ -602,6 +619,22 @@ public class Familia extends AppCompatActivity {
         final RadioButton NoRevoque = view1.findViewById(R.id.NOREVOQUE);
         if(familia.Revoque=="SI"){SiRevoque.setChecked(true);}
         if(familia.Revoque=="NO"){NoRevoque.setChecked(true);}
+
+        final ImageView helprevoque = view1.findViewById(R.id.INFOBOTONREVOQUE);
+        helprevoque.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builderhelprevoque = new androidx.appcompat.app.AlertDialog.Builder(view1.getContext());
+                LayoutInflater Inflaterhelprevoque = getLayoutInflater();
+                View viewrevoque = Inflaterhelprevoque.inflate(R.layout.informacion, null); //nombre del alert que quiero mostrar
+                builderhelprevoque.setView(viewrevoque);
+                //builder.setCancelable(false); //NO cerrar el alert haciendo click en cualquier lado de la pantalla
+                final androidx.appcompat.app.AlertDialog dialogrevoque = builderhelprevoque.create();
+                dialogrevoque.show(); //mostrar
+                final TextView revoque = viewrevoque.findViewById(R.id.INFOTEXT);
+                revoque.setText(getString(R.string.revoque));
+            }
+        });
 
         final EditText CantArboles = view1.findViewById(R.id.EDTARBOLES);
         if(familia.Arboles.length()!=0){CantArboles.setText(familia.Arboles);}
@@ -680,7 +713,7 @@ public class Familia extends AppCompatActivity {
     public void Vivienda(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
-        View view1 = Inflater.inflate(R.layout.alert_vivienda, null);
+        final View view1 = Inflater.inflate(R.layout.alert_vivienda, null);
         builder.setView(view1);
         builder.setCancelable(false);
         final AlertDialog dialog = builder.create();
@@ -765,6 +798,21 @@ public class Familia extends AppCompatActivity {
             BañoTiene.setSelection(indice);
         }
 
+        final ImageView helpbaño = view1.findViewById(R.id.INFOBOTON);
+        helpbaño.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builderhelpbaño = new androidx.appcompat.app.AlertDialog.Builder(view1.getContext());
+                LayoutInflater Inflaterhelpbaño = getLayoutInflater();
+                View view2 = Inflaterhelpbaño.inflate(R.layout.informacion, null); //nombre del alert que quiero mostrar
+                builderhelpbaño.setView(view2);
+                //builder.setCancelable(false); //NO cerrar el alert haciendo click en cualquier lado de la pantalla
+                final androidx.appcompat.app.AlertDialog dialog1 = builderhelpbaño.create();
+                dialog1.show(); //mostrar
+                final TextView inodoro = view2.findViewById(R.id.INFOTEXT);
+                inodoro.setText(getString(R.string.inodoro)+ "\n" + "\n"+ getString(R.string.inodoro2));
+            }
+        });
         // COCINA
         // Defino el spinner del tipo de vivienda y le agrego las opciones
         final Spinner Cocinar = view1.findViewById(R.id.SPLUGARCOCINAR);
@@ -936,6 +984,16 @@ public class Familia extends AppCompatActivity {
             //AvContacto.setText("3/3");
             //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
+    }
+
+    private void bano(){
+        AlertDialog.Builder builderhelpbano = new AlertDialog.Builder(getBaseContext());
+        LayoutInflater Inflaterhelpbano = getLayoutInflater();
+        View viewhelpbano = Inflaterhelpbano.inflate(R.layout.informacion, null);
+        builderhelpbano.setView(viewhelpbano);
+        builderhelpbano.setCancelable(false);
+        final AlertDialog dialoghelpbano = builderhelpbano.create();
+        dialoghelpbano.show();
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

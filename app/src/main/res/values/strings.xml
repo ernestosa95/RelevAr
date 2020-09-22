@@ -94,7 +94,14 @@
     <string name="cursando" translatable="false">CURSANDO</string>
     <string name="completo" translatable="false">COMPLETO</string>
 
+    <string name="inodoro" translatable="false">INODORO CON BOTON, MOCHILA O CADENA: con sistema de arrastre de agua para su limpieza.</string>
+    <string name="inodoro2" translatable="false">INODORO SIN BOTON O SIN CADENA: sin sistema de arrastre de agua (por ejemplo: balde).</string>
 
+    <string name="casilla">CASILLA: está construida con materiales de baja calidad o de desecho.</string>
+    <string name="rancho">RANCHO: generalmente tiene paredes de adobe, piso de tierra y techo de chapa o paja.</string>
+    <string name="local">LOCAL NO CONSTRUIDO PARA HABITACION: no ha sido construido o adaptado para que habiten personas, pero que al momento del Censo es ocupado como residencia habitual.</string>
+    <string name="movil">VIVIENDA MOVIL: puede ser transportada (tienda de campaña o carpa) o constituye una unidad móvil (barco, vagón de ferrocarril, casa rodante, camión).</string>
 
+    <string name="revoque">REVESTIMIENTO EXTERNO O REVOQUE: incluye terminación ladrillo a la vista.</string>
 
 </resources>
