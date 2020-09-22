@@ -594,6 +594,19 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    // Muestro la check list de los botones
+
+    private void Botones(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_educacion, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
     // Desactivo el boton de volver atras
     @Override
     public void onBackPressed()

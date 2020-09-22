@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class SQLitePpal extends SQLiteOpenHelper {
     final String CREAR_TABLA_EFECTORES = "CREATE TABLE EFECTORES (NOMBRE TEXT, PROVINCIA TEXT)";
     final String CREAR_TABLA_TRABAJOS = "CREATE TABLE TRABAJOS (TRABAJO TEXT)";
+    final String CREAR_TABLA_BOTONES = "CREATE TABLE BOTONES (BOTON TEXT, ACTIVO BOOLEAN)";
     final String CREAR_TABLA_ENCUESTADORES = "CREATE TABLE ENCUESTADOR (ID TEXT,APELLIDO TEXT,PROVINCIA TEXT,DNI TEXT, ACTIVO BOOLEAN)";
 
     final ArrayList<String> datos = new ArrayList<String>();
@@ -27,6 +28,7 @@ public class SQLitePpal extends SQLiteOpenHelper {
         db.execSQL(CREAR_TABLA_EFECTORES);
         db.execSQL(CREAR_TABLA_TRABAJOS);
         db.execSQL(CREAR_TABLA_ENCUESTADORES);
+        db.execSQL(CREAR_TABLA_BOTONES);
 
     }
 
@@ -36,6 +38,7 @@ public class SQLitePpal extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS EFECTORES");
         db.execSQL("DROP TABLE IF EXISTS TRABAJOS");
         db.execSQL("DROP TABLE IF EXISTS ENCUESTADOR");
+        db.execSQL("DROP TABLE IF EXISTS BOTONES");
         onCreate(db);
     }
 
@@ -65,18 +68,6 @@ public class SQLitePpal extends SQLiteOpenHelper {
         db.close();
         registros.close();
         return datos;
-    }
-
-    public boolean ExisteProvincia(String Provincia){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String aux = "SELECT DISTINCT PROVINCIA FROM EFECTORES WHERE PROVINCIA = '"+Provincia+"'";
-        Cursor registros = db.rawQuery(aux, null);
-        if(registros.getCount()==0){
-            db.close();
-            return false;}
-        else {
-            db.close();
-            return true;}
     }
 
     public boolean ExisteTrabajos(){
@@ -109,20 +100,6 @@ public class SQLitePpal extends SQLiteOpenHelper {
         else{
             return true;
         }
-    }
-
-    public boolean TieneElementosTrabajos(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String aux = "SELECT DISTINCT * FROM TRABAJOS";
-        String aux1 = "SELECT name FROM sqlite_master WHERE name='TRABAJOS'";
-
-        Cursor registros = db.rawQuery(aux, null);
-        if(registros.getCount()==0){
-            db.close();
-            return false;}
-        else {
-            db.close();
-            return false;}
     }
 
     public ArrayList<String> BuscarTrabajo(String Trabajo){
@@ -186,7 +163,7 @@ public class SQLitePpal extends SQLiteOpenHelper {
             ContentValues valores = new ContentValues();
             valores.put("ACTIVO",Boolean.FALSE);
 
-//Actualizamos el registro en la base de datos
+            //Actualizamos el registro en la base de datos
             db.update("ENCUESTADOR", valores, null, null);
         db.close();}
         dbRead.close();
@@ -213,5 +190,46 @@ public class SQLitePpal extends SQLiteOpenHelper {
         if(a.getCount()!=0){
         encuestador = a.getString(0)+" "+a.getString(1);}//+" "+a.getString(1);}
         return encuestador;
+    }
+
+    public void DesactivarBotones(){
+        SQLiteDatabase dbRead = this.getReadableDatabase();
+        String cantidad = "SELECT DISTINCT * FROM BOTON";
+        Cursor cant = dbRead.rawQuery(cantidad, null);
+        if(cant.getCount()!=0){
+            SQLiteDatabase db = this.getWritableDatabase();
+            //Establecemos los campos-valores a actualizar
+            ContentValues valores = new ContentValues();
+            valores.put("ACTIVO",Boolean.FALSE);
+
+//Actualizamos el registro en la base de datos
+            db.update("BOTONES", valores, null, null);
+            db.close();}
+        dbRead.close();
+
+    }
+
+    public void ActivarBoton(String nombreBoton){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //Establecemos los campos-valores a actualizar
+        ContentValues valores = new ContentValues();
+        valores.put("ACTIVO",Boolean.TRUE);
+
+        //Actualizamos el registro en la base de datos
+        String[] args = new String[]{nombreBoton};
+        db.update("BOTONES", valores, "BOTON=?" , args);
+        db.close();
+    }
+
+    public ArrayList<String> Botones(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> botones = new ArrayList<>();
+        String consulta ="SELECT * FROM BOTONES";
+        Cursor a = db.rawQuery(consulta, null);
+        while (a.moveToNext()){
+            botones.add(a.getString(0));
+        }
+        db.close();
+        return botones;
     }
 }

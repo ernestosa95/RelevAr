@@ -434,7 +434,7 @@
                 android:layout_height="200dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/fondo2"
-                android:onClick="Factores"
+                android:onClick="TipoFactores"
                 app:layout_constraintBottom_toTopOf="@+id/EMPEZAR2"
                 app:layout_constraintStart_toStartOf="@+id/EMPEZAR2"
                 app:layout_constraintTop_toTopOf="parent">

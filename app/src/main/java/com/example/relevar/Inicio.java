@@ -68,6 +68,7 @@ public class Inicio extends AppCompatActivity {
     Button empezar;
     Spinner SPProvincias;
 
+    private ArrayList<String> botones = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,19 @@ public class Inicio extends AppCompatActivity {
                         Manifest.permission.GET_ACCOUNTS},
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
 
+        // Cargo los botones
+        // Botones de la familia
+        botones.add("INSPECCION EXTERIOR");
+        botones.add("SERVICIOS BASICOS");
+        botones.add("VIVIENDA");
+
+        // Botones de la persona
+        botones.add("EDUCACION");
+        botones.add("OCUPACION");
+        botones.add("CONTACTO");
+        botones.add("EFECTOR");
+        botones.add("OBSERVACIONES");
+        botones.add("FACTORES DE RIESGO");
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,6 +193,7 @@ public class Inicio extends AppCompatActivity {
     // FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
 
     // ENCUENTADOR, INGRESAR CON UN ENCUESTADOR PRECARGADO O CREAR UNO NUEVO
+
     private void Encuestador(){
         /* Creo un alert dialog y utilizo el recurso layout creado alert_encuestador para poder
         * mostrar las diferentes opciones y el listado de encuestadores precargados*/
@@ -236,6 +251,7 @@ public class Inicio extends AppCompatActivity {
     }
 
     // FUNCION DE CREAR NUEVO ENCUESTADOR
+
     private void NuevoEncuestador(){
         // Creo el Alert dialog con los recursos layout creados para este alert_crear_encuestador
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -337,6 +353,7 @@ public class Inicio extends AppCompatActivity {
     }
 
     // ESTA ES UNA EXTENSION PARA PODER CREAR LAS BASES DE DATOS EN SEGUNDO PLANO
+
     private class BdEfectores extends AsyncTask<Void, Void, Void> {
 
         // Creo un progress dialog para mostrar mientras se ejecuta este codigo
@@ -388,6 +405,8 @@ public class Inicio extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
             }
 
+            /* Como la base de datos de los trabajos solo ejecuta una vez desde la instalacion de la
+            * app aprovecho y tambien cargo la base de datos de los botones*/
             /* Tambien debo crear la base de datos de los trabajos, esto se hace una vez, jsto despues
             * de instalar la app, para eso corroboro que la misma no este creada, leo los datos desde
             * trabajo.csv y los inserto en la base de datos correspondiente*/
@@ -404,6 +423,12 @@ public class Inicio extends AppCompatActivity {
                         registro.put("TRABAJO", myData);
                         Bd1.insert("TRABAJOS", null, registro);
 
+
+                    }
+                    for(int i=0; i<botones.size(); i++){
+                        ContentValues botonesValores = new ContentValues();
+                        botonesValores.put("BOTON", botones.get(i));
+                        Bd1.insert("BOTONES", null, botonesValores);
                     }
                     Bd1.close();
                     br.close();
