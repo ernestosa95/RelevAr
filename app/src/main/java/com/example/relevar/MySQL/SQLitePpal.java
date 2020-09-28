@@ -194,7 +194,8 @@ public class SQLitePpal extends SQLiteOpenHelper {
 
     public void DesactivarBotones(){
         SQLiteDatabase dbRead = this.getReadableDatabase();
-        String cantidad = "SELECT DISTINCT * FROM BOTON";
+        String cantidad = "SELECT DISTINCT * FROM BOTONES";
+
         Cursor cant = dbRead.rawQuery(cantidad, null);
         if(cant.getCount()!=0){
             SQLiteDatabase db = this.getWritableDatabase();
@@ -219,6 +220,33 @@ public class SQLitePpal extends SQLiteOpenHelper {
         String[] args = new String[]{nombreBoton};
         db.update("BOTONES", valores, "BOTON=?" , args);
         db.close();
+    }
+
+    public void DesactivarBoton(String nombreBoton){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //Establecemos los campos-valores a actualizar
+        ContentValues valores = new ContentValues();
+        valores.put("ACTIVO",Boolean.FALSE);
+
+        //Actualizamos el registro en la base de datos
+        String[] args = new String[]{nombreBoton};
+        db.update("BOTONES", valores, "BOTON=?" , args);
+        db.close();
+    }
+
+    public Boolean EstadoBoton(String nombreBoton){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //String aux1 = "SELECT name FROM sqlite_master WHERE name='TRABAJOS'";
+        String aux2 = "SELECT ACTIVO FROM BOTONES WHERE BOTON='"+nombreBoton+"'";
+
+        Cursor registros = db.rawQuery(aux2, null);
+        registros.moveToFirst();
+        if (registros.isNull(0) || registros.getShort(0) == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public ArrayList<String> Botones(){

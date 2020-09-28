@@ -428,6 +428,7 @@ public class Inicio extends AppCompatActivity {
                     for(int i=0; i<botones.size(); i++){
                         ContentValues botonesValores = new ContentValues();
                         botonesValores.put("BOTON", botones.get(i));
+                        botonesValores.put("ACTIVO", false);
                         Bd1.insert("BOTONES", null, botonesValores);
                     }
                     Bd1.close();

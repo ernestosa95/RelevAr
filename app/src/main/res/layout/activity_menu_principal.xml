@@ -14,7 +14,7 @@
 
         android:layout_marginTop="5dp"
         android:background="@drawable/button1"
-        android:onClick="NuevaFamilia"
+        android:onClick="MostrarArchivos"
         android:text="@string/compartit"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"

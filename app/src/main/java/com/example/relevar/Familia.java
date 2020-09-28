@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,13 +24,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
@@ -80,9 +85,12 @@ public class Familia extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
     ObjetoFamilia familia = new ObjetoFamilia();
+    ConstraintLayout BtnInspeccionExterior;
+    ConstraintLayout BtnServiciosBasicos, BtnVivienda;
     ConstraintLayout CLVivienda, CLServiciosBasicos, CLExteriorVivienda;
     TextView avanceVivienda, avanceServiciosBasicos, avanceExteriorVivienda;
-    String auxLat;
+    LinearLayout BotonesFamilia;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,17 +116,138 @@ public class Familia extends AppCompatActivity {
 
         LatLong();
 
-        // PARA EL AVANCE DE LOS FACTORES
-        CLVivienda = (ConstraintLayout) findViewById(R.id.AVANCEVIVIENDA);
-        avanceVivienda = (TextView) findViewById(R.id.COMPLETADOVIVIENDA);
+        // Defino el linearlayout que contiene los botones
+        BotonesFamilia = findViewById(R.id.BtnsFamilia);
 
-        // PARA EL AVANCE DE LOS FACTORES
-        CLServiciosBasicos = (ConstraintLayout) findViewById(R.id.AVANCESERVICIOSBASICOS);
-        avanceServiciosBasicos = (TextView) findViewById(R.id.COMPLETADOSERVICIOS);
+        CrearBotonera();
 
-        // PARA EL AVANCE DE LOS FACTORES
+    }
+
+    private void CrearBotonera(){
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+
+        //
+        BtnInspeccionExterior = (ConstraintLayout) findViewById(R.id.BTNEXTERIOR);
         CLExteriorVivienda = (ConstraintLayout) findViewById(R.id.AVANCEXTERIOR);
         avanceExteriorVivienda = (TextView) findViewById(R.id.COMPLETADOEXTERIOR);
+        if(!admin.EstadoBoton("INSPECCION EXTERIOR")){
+            BtnInspeccionExterior.setVisibility(View.GONE);
+        }
+        else{
+            BtnInspeccionExterior.setVisibility(View.VISIBLE);
+        }
+
+        //
+        BtnServiciosBasicos = (ConstraintLayout) findViewById(R.id.BTNSERVICIOSBASICOS);
+        CLServiciosBasicos = (ConstraintLayout) findViewById(R.id.AVANCESERVICIOSBASICOS);
+        avanceServiciosBasicos = (TextView) findViewById(R.id.COMPLETADOSERVICIOS);
+        if(!admin.EstadoBoton("SERVICIOS BASICOS")){
+            BtnServiciosBasicos.setVisibility(View.GONE);
+        }
+        else{
+            BtnServiciosBasicos.setVisibility(View.VISIBLE);
+        }
+
+        //
+        BtnVivienda = (ConstraintLayout) findViewById(R.id.BTNVIVIENDA);
+        CLVivienda = (ConstraintLayout) findViewById(R.id.AVANCEVIVIENDA);
+        avanceVivienda = (TextView) findViewById(R.id.COMPLETADOVIVIENDA);
+        if(!admin.EstadoBoton("VIVIENDA")){
+            BtnVivienda.setVisibility(View.GONE);
+        }
+        else {
+            BtnVivienda.setVisibility(View.VISIBLE);
+        }
+        admin.close();
+    }
+
+    public void Botones(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_listado_botones, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+
+        final Switch inspeccionExterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
+        if(admin.EstadoBoton("INSPECCION EXTERIOR")){
+            inspeccionExterior.setChecked(true);
+        }
+
+        inspeccionExterior.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(inspeccionExterior.getText().toString());
+                    BtnInspeccionExterior.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(inspeccionExterior.getText().toString());
+                    BtnInspeccionExterior.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        final Switch serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
+        if (admin.EstadoBoton("SERVICIOS BASICOS")){
+            serviciosBasicos.setChecked(true);
+        }
+
+        serviciosBasicos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(serviciosBasicos.getText().toString());
+                    BtnServiciosBasicos.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(serviciosBasicos.getText().toString());
+                    BtnServiciosBasicos.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
+        if(admin.EstadoBoton("VIVIENDA")){
+            vivienda.setChecked(true);
+        }
+        vivienda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(vivienda.getText().toString());
+                    BtnVivienda.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(vivienda.getText().toString());
+                    BtnVivienda.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        admin.close();
+        final Button listo = view1.findViewById(R.id.LISTOBOTON);
+        listo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                //recreate();
+            }
+        });
+
+        final Switch educacion = view1.findViewById(R.id.SWITCHEDUCACION);
+        educacion.setVisibility(View.GONE);
+        final Switch ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
+        ocupacion.setVisibility(View.GONE);
+        final Switch contacto = view1.findViewById(R.id.SWITCHCONTACTO);
+        contacto.setVisibility(View.GONE);
+        final Switch efector = view1.findViewById(R.id.SWITCHEFECTOR);
+        efector.setVisibility(View.GONE);
+        final Switch observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
+        observaciones.setVisibility(View.GONE);
+        final Switch factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
+        factores_riesgo.setVisibility(View.GONE);
     }
 
     //@Override
@@ -126,7 +255,8 @@ public class Familia extends AppCompatActivity {
         //todo esto pa actualizr la listview
         super.onStart();
         ListeVer();
-    }
+        CrearBotonera();
+        }
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -986,15 +1116,6 @@ public class Familia extends AppCompatActivity {
         }
     }
 
-    private void bano(){
-        AlertDialog.Builder builderhelpbano = new AlertDialog.Builder(getBaseContext());
-        LayoutInflater Inflaterhelpbano = getLayoutInflater();
-        View viewhelpbano = Inflaterhelpbano.inflate(R.layout.informacion, null);
-        builderhelpbano.setView(viewhelpbano);
-        builderhelpbano.setCancelable(false);
-        final AlertDialog dialoghelpbano = builderhelpbano.create();
-        dialoghelpbano.show();
-    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR

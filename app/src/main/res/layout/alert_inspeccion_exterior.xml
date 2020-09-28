@@ -61,6 +61,7 @@
                 android:id="@+id/TIPODEVIVIENDA"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -86,8 +87,9 @@
 
                 <Spinner
                     android:id="@+id/SPTIPODEVIVIENDA"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -98,6 +100,7 @@
                 android:id="@+id/PAREDES"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -114,8 +117,9 @@
 
                 <Spinner
                     android:id="@+id/SPPAREDES"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -126,6 +130,7 @@
                 android:id="@+id/REVESTIMIENTO"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -181,6 +186,7 @@
                 android:id="@+id/TECHO"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -197,8 +203,9 @@
 
                 <Spinner
                     android:id="@+id/SPTECHO"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -209,6 +216,7 @@
                 android:id="@+id/ARBOLES"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 

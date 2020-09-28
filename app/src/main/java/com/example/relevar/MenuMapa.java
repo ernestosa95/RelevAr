@@ -30,9 +30,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -273,6 +275,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
             TextView txt1 = view1.findViewById(R.id.CONSULTA);
             txt1.setText("¿Iniciar recorrido?");
+            Botones();
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -362,6 +365,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
             TextView txt1 = view1.findViewById(R.id.CONSULTA);
             txt1.setText("¿Iniciar recorrido?");
+            Botones();
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -599,11 +603,59 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private void Botones(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
-        View view1 = Inflater.inflate(R.layout.alert_educacion, null);
+        View view1 = Inflater.inflate(R.layout.alert_listado_botones, null);
         builder.setView(view1);
         builder.setCancelable(false);
         final AlertDialog dialog = builder.create();
         dialog.show();
+
+        final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        admin.DesactivarBotones();
+
+        final Switch inspeccionExterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
+        inspeccionExterior.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(inspeccionExterior.getText().toString());
+                } else {
+                    admin.DesactivarBoton(inspeccionExterior.getText().toString());
+                }
+            }
+        });
+
+        final Switch serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
+        serviciosBasicos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(serviciosBasicos.getText().toString());
+                } else {
+                    admin.DesactivarBoton(serviciosBasicos.getText().toString());
+                }
+            }
+        });
+
+        final Switch vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
+        vivienda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(vivienda.getText().toString());
+                } else {
+                    admin.DesactivarBoton(vivienda.getText().toString());
+                }
+            }
+        });
+
+        admin.close();
+        final Button listo = view1.findViewById(R.id.LISTOBOTON);
+        listo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

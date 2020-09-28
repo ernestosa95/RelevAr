@@ -61,6 +61,7 @@
                 android:id="@+id/AGUA"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -76,8 +77,9 @@
 
                 <Spinner
                     android:id="@+id/SPAGUA"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +90,7 @@
                 android:id="@+id/AGUAORIGEN"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -104,8 +107,9 @@
 
                 <Spinner
                     android:id="@+id/SPAGUAORIGEN"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -116,6 +120,7 @@
                 android:id="@+id/AGUALLUVIA"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -161,6 +166,7 @@
                 android:id="@+id/ELECTRICIDAD"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -206,6 +212,7 @@
                 android:id="@+id/GAS"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -251,6 +258,7 @@
                 android:id="@+id/EXCRETAS"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -266,8 +274,9 @@
 
                 <Spinner
                     android:id="@+id/SPEXCRETAS"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

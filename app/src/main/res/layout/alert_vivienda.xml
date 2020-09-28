@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/button1">
+    android:background="#4A4A4A">
 
     <Button
         android:id="@+id/CANCELARVIVIENDA"
@@ -62,6 +62,7 @@
                 android:id="@+id/PIEZAS"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -97,6 +98,7 @@
                 android:id="@+id/DUEÑOVIVIENDA"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -112,8 +114,9 @@
 
                 <Spinner
                     android:id="@+id/SPDUEÑOVIVIENDA"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -134,6 +137,7 @@
                 android:id="@+id/BAÑO"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -149,8 +153,9 @@
 
                 <Spinner
                     android:id="@+id/SPBAÑO"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -161,6 +166,7 @@
                 android:id="@+id/BAÑOTIENE"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -186,8 +192,9 @@
 
                 <Spinner
                     android:id="@+id/SPBAÑOTIENE"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -208,6 +215,7 @@
                 android:id="@+id/LUGARCOCINAR"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -223,8 +231,9 @@
 
                 <Spinner
                     android:id="@+id/SPLUGARCOCINAR"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -235,6 +244,7 @@
                 android:id="@+id/USAPARACOCINAR"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -250,8 +260,9 @@
 
                 <Spinner
                     android:id="@+id/SPUSAPARACOCINAR"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -272,6 +283,7 @@
                 android:id="@+id/PISOS"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
@@ -287,8 +299,9 @@
 
                 <Spinner
                     android:id="@+id/SPPISOS"
-                    android:layout_width="300dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -309,6 +322,7 @@
                 android:id="@+id/REVESTIMIENTOCIELORRAZO"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_margin="5dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
