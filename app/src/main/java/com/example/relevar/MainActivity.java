@@ -4,73 +4,42 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.icu.text.IDNA;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.text.InputType;
-import android.text.Layout;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.relevar.Recursos.Encuestador;
-import com.example.relevar.Recursos.ObjetoPersona;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
-import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.widget.Toast.*;
-import static com.example.relevar.R.drawable.fondo1;
 
 public class MainActivity extends AppCompatActivity {
     // DEFINICION DE VARIABLES GLOBALES
@@ -89,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Defino Arrays para almacenar datos
     private ArrayList<String> names = new ArrayList<String>();
-    private ArrayList<ArrayList<String>> InfoPersonas = new ArrayList<ArrayList<String>>();
+    private ArrayList<String> categoriasPersona = new ArrayList<>();
     private ArrayList<ObjetoPersona> MiembrosFamiliares = new ArrayList<ObjetoPersona>();
 
     // Defino la lisa de personas
@@ -118,6 +87,20 @@ public class MainActivity extends AppCompatActivity {
         lv1 = (ListView) findViewById(R.id.list1);
 
         LatLong();
+
+        //
+        categoriasPersona.add(getString(R.string.celular));
+        categoriasPersona.add(getString(R.string.fijo));
+        categoriasPersona.add(getString(R.string.mail));
+        categoriasPersona.add(getString(R.string.factores_riesgo));
+        categoriasPersona.add(getString(R.string.efector));
+        categoriasPersona.add(getString(R.string.observaciones));
+        categoriasPersona.add(getString(R.string.nombre_apellido_contacto));
+        categoriasPersona.add(getString(R.string.telefono_contacto));
+        categoriasPersona.add(getString(R.string.parentezco_contacto));
+        categoriasPersona.add(getString(R.string.ocupacion));
+        categoriasPersona.add(getString(R.string.educacion));
+
     }
 
     //@Override
@@ -289,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1){
             if(resultCode== RESULT_OK){
-                ObjetoPersona Persona=new ObjetoPersona();
+                ObjetoPersona Persona=new ObjetoPersona(categoriasPersona);
                 ArrayList<String> CamposPersona = new ArrayList<String>();
 
                 Persona.DNI = data.getStringExtra("DNI");

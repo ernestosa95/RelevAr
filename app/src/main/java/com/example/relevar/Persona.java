@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -36,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.relevar.Recursos.EfectoresSearchAdapter;
-import com.example.relevar.Recursos.ObjetoPersona;
 import com.example.relevar.Recursos.ScannerQR;
 import com.example.relevar.Recursos.TrabajosSearchAdapter;
 
@@ -96,12 +94,12 @@ public class Persona extends AppCompatActivity {
     private Spinner Sp1;
 
     // Defino los Array que contienen conjunto de informacion
-    private ArrayList<String> categorias = new ArrayList<>();
+    private ArrayList<String> categoriasPersona = new ArrayList<>();
 
     // Defino los RadioButton para la limpieza
     RadioButton rb1, rb2;
 
-    ObjetoPersona Persona = new ObjetoPersona();
+    ObjetoPersona Persona;
     ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion;
     TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion;
 
@@ -119,6 +117,20 @@ public class Persona extends AppCompatActivity {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
 
+        //
+        categoriasPersona.add(getString(R.string.celular));
+        categoriasPersona.add(getString(R.string.fijo));
+        categoriasPersona.add(getString(R.string.mail));
+        categoriasPersona.add(getString(R.string.factores_riesgo));
+        categoriasPersona.add(getString(R.string.efector));
+        categoriasPersona.add(getString(R.string.observaciones));
+        categoriasPersona.add(getString(R.string.nombre_apellido_contacto));
+        categoriasPersona.add(getString(R.string.telefono_contacto));
+        categoriasPersona.add(getString(R.string.parentezco_contacto));
+        categoriasPersona.add(getString(R.string.ocupacion));
+        categoriasPersona.add(getString(R.string.educacion));
+
+        Persona = new ObjetoPersona(categoriasPersona);
         // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();

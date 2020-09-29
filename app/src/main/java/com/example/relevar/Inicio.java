@@ -159,7 +159,8 @@ public class Inicio extends AppCompatActivity {
         /* Con los datos de la primer fila es necesario ahora corroborar que esta se corresponda con
         * la cabecera, la primer palabra que debe aparecer es la palbra "CALLE"*/
         if (strLine.equals("CALLE") != true) {
-            String cab = getString(R.string.encabezado);
+            //String cab = getString(R.string.encabezado);
+            String cab = "CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO\n";
             try {
                 //el true es para que se agreguen los datos al final sin perder los datos anteriores
                 FileOutputStream fOut = new FileOutputStream(dir, true);

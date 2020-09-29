@@ -103,5 +103,12 @@
     <string name="movil" translatable="false">VIVIENDA MOVIL: puede ser transportada (tienda de campaña o carpa) o constituye una unidad móvil (barco, vagón de ferrocarril, casa rodante, camión).</string>
 
     <string name="modulos" translatable="false">MÓDULOS</string>
+    <string name="telefono_contacto" translatable="false">TELEFONO CONTACTO</string>
+    <string name="dueño_vivienda" translatable="false">DUEÑO DE LA VIVIENDA</string>
+    <string name="cantidad_piezas" translatable="false">CANTIDAD DE PIEZAS</string>
+    <string name="cielorraso" translatable="false">CIELORRASO</string>
+    <string name="origenagua" translatable="false">ORIGEN AGUA</string>
+
+
 
 </resources>

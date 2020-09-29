@@ -26,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,23 +37,32 @@ import android.widget.Toast;
 
 import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
-import com.example.relevar.Recursos.ObjetoFamilia;
-import com.example.relevar.Recursos.ObjetoPersona;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Scanner;
 
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.widget.Toast.*;
 
 public class Familia extends AppCompatActivity {
+    // CABECERA EN LA FAMILIA
+    ArrayList<String> familiaCabecera = new ArrayList<>();
+    ArrayList<String> categoriasPersona = new ArrayList<>();
+
     // DEFINICION DE VARIABLES GLOBALES
     // Definicion de contantes que hacen al funcionamiento
     private static final String TAG="MainActivity";
@@ -84,7 +92,7 @@ public class Familia extends AppCompatActivity {
 
     LocationManager locationManager;
     LocationListener locationListener;
-    ObjetoFamilia familia = new ObjetoFamilia();
+    ObjetoFamilia familia;
     ConstraintLayout BtnInspeccionExterior;
     ConstraintLayout BtnServiciosBasicos, BtnVivienda;
     ConstraintLayout CLVivienda, CLServiciosBasicos, CLExteriorVivienda;
@@ -120,6 +128,41 @@ public class Familia extends AppCompatActivity {
         BotonesFamilia = findViewById(R.id.BtnsFamilia);
 
         CrearBotonera();
+
+        // Lleno y paso el array de la cabecera
+        familiaCabecera.add(getString(R.string.tipo_de_vivienda));
+        familiaCabecera.add(getString(R.string.dueño_vivienda));
+        familiaCabecera.add(getString(R.string.cantidad_piezas));
+        familiaCabecera.add(getString(R.string.lugar_cocinar));
+        familiaCabecera.add(getString(R.string.usa_para_cocinar));
+        familiaCabecera.add(getString(R.string.paredes));
+        familiaCabecera.add(getString(R.string.revoque));
+        familiaCabecera.add(getString(R.string.pisos));
+        familiaCabecera.add(getString(R.string.cielorraso));
+        familiaCabecera.add(getString(R.string.techo));
+        familiaCabecera.add(getString(R.string.agua));
+        familiaCabecera.add(getString(R.string.origenagua));
+        familiaCabecera.add(getString(R.string.excretas));
+        familiaCabecera.add(getString(R.string.electricidad));
+        familiaCabecera.add(getString(R.string.gas));
+        familiaCabecera.add(getString(R.string.agua_lluvia));
+        familiaCabecera.add(getString(R.string.arboles));
+        familiaCabecera.add(getString(R.string.baño));
+        familiaCabecera.add(getString(R.string.baño_tiene));
+        familia=new ObjetoFamilia(familiaCabecera);
+
+        //
+        categoriasPersona.add(getString(R.string.celular));
+        categoriasPersona.add(getString(R.string.fijo));
+        categoriasPersona.add(getString(R.string.mail));
+        categoriasPersona.add(getString(R.string.factores_riesgo));
+        categoriasPersona.add(getString(R.string.efector));
+        categoriasPersona.add(getString(R.string.observaciones));
+        categoriasPersona.add(getString(R.string.nombre_apellido_contacto));
+        categoriasPersona.add(getString(R.string.telefono_contacto));
+        categoriasPersona.add(getString(R.string.parentezco_contacto));
+        categoriasPersona.add(getString(R.string.ocupacion));
+        categoriasPersona.add(getString(R.string.educacion));
 
     }
 
@@ -412,7 +455,7 @@ public class Familia extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1){
             if(resultCode== RESULT_OK){
-                ObjetoPersona Persona=new ObjetoPersona();
+                ObjetoPersona Persona=new ObjetoPersona(categoriasPersona);
                 ArrayList<String> CamposPersona = new ArrayList<String>();
 
                 Persona.DNI = data.getStringExtra("DNI");
@@ -1230,5 +1273,253 @@ public class Familia extends AppCompatActivity {
         }
         //thats it
     }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // GUARDAR GRUPO FAMILIAR
+    public void Guardar2(View view){
+
+        //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
+        // Inicio la obtencion de datos de ubicacion del GPS
+        //LatLong();
+        if(MiembrosFamiliares.size()!=0){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater Inflater = getLayoutInflater();
+            View view_alert = Inflater.inflate(R.layout.alert_guardar_familia, null);
+            builder.setView(view_alert);
+            builder.setCancelable(false);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            Button cancelar = view_alert.findViewById(R.id.CANCELAR1);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            final EditText calle = view_alert.findViewById(R.id.CALLE);
+            final EditText numero = view_alert.findViewById(R.id.NUMERO);
+            final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
+            NumerosPersonas = MiembrosFamiliares.size();
+            cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
+
+            ImageView mas = view_alert.findViewById(R.id.MAS);
+            mas.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NumerosPersonas+=1;
+                    cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
+                }
+            });
+
+            ImageView menos = view_alert.findViewById(R.id.MENOS);
+            menos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (NumerosPersonas!=MiembrosFamiliares.size()){
+                        NumerosPersonas-=1;
+                        cantidadintegrantes.setText(Integer.toString(NumerosPersonas));}
+                }
+            });
+
+            Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
+            guardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(Latitudenviar!=0.0) {
+                        /* Cuales son los datos que cargo el usuario, primero agrego los datos de la
+                         familia y luego unifico los datos de las personas cargadas */
+                        ArrayList<String> CategoriasDatos = familia.DatosCargadosCsv();
+
+                        /* De cada persona cuales son los datos cargados*/
+                        ArrayList<String> CategoriaPersonas = new ArrayList<>();
+                        CategoriaPersonas = MiembrosFamiliares.get(0).DatosCargadosCsv();
+
+                        /* Creo una lista de datos unificada para todas la personas de la misma
+                         * familia */
+                        for (int i = 1; i < MiembrosFamiliares.size(); i++) {
+                            ArrayList<String> auxDatosCargados = MiembrosFamiliares.get(i).DatosCargadosCsv();
+                            for (int j = 0; j < auxDatosCargados.size(); j++) {
+                                if (!CategoriaPersonas.contains(auxDatosCargados.get(j))) {
+                                    CategoriaPersonas.add(auxDatosCargados.get(j));
+                                }
+                            }
+                        }
+
+                        // Unifico las dos listas
+                        CategoriasDatos.addAll(CategoriaPersonas);
+
+                        // Leo la cabecera para comparar los datos
+                        ArrayList<String> datosCabeceraCsv = DatosCabeceraCsv();
+
+                        /* Comparo el conjunto de datos cargados con los de la cabecera csv */
+                        for(int i=0; i< CategoriasDatos.size(); i++){
+                            if(!datosCabeceraCsv.contains(CategoriasDatos.get(i))){
+                                datosCabeceraCsv.add(CategoriasDatos.get(i));
+                            }
+                        }
+
+                        // Crear un string que es la nueva cabecera
+                        String cabecera="";
+                        for (int i=0; i< datosCabeceraCsv.size()-1; i++){
+                            cabecera += datosCabeceraCsv.get(i) +";";
+                        }
+                        cabecera+= datosCabeceraCsv.get(datosCabeceraCsv.size()-1);
+                        //cabecera +="\n";
+
+                        // Creo el string de la vieja cabecera
+                        String viejaCabecera="";
+                        CategoriaPersonas = DatosCabeceraCsv();
+                        for (int i=0; i< CategoriaPersonas.size()-1; i++){
+                            viejaCabecera += CategoriaPersonas.get(i) +";";
+                        }
+                        viejaCabecera += CategoriaPersonas.get(CategoriaPersonas.size()-1);
+                        //viejaCabecera +="\n";
+
+                        // Reemplazo la cabecera por una nueva
+                        try {
+                            ReemplazarCabecera(viejaCabecera, cabecera);
+                        } catch (IOException e) {
+                            makeText(getBaseContext(), "ERROR NO SE PUDO CARGAR LA CABECERA", LENGTH_SHORT).show();
+                        }
+
+                        /* Solicito los datos cargados tanto en la persona como en la familia*/
+                        String datosGuardar = "";
+                        String coordenadas = Latitud +" "+ Longitud;
+                        HashMap<String,String> datosFamilia = familia.DatosIngresados();
+                        for (int i=0; i<MiembrosFamiliares.size(); i++){
+                            HashMap<String,String> auxHash = new HashMap<>();
+                            auxHash.putAll(datosFamilia);
+                            auxHash.put("COORDENADAS",coordenadas);
+                            auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
+                            for(int j=0; j < datosCabeceraCsv.size()-1; j++){
+                                if(auxHash.get(datosCabeceraCsv.get(j))!=null){
+                                datosGuardar+=auxHash.get(datosCabeceraCsv.get(j))+";";}
+                                else {datosGuardar+=";";}
+                            }
+                            if(auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size()-1))!=null){
+                                datosGuardar+=auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size()-1))+"\n";}
+                            else {datosGuardar+="\n";}
+
+                            /* guardo el string de la persona agregando una linea */
+                            GuardarPersona(datosGuardar);
+                        }
+
+                        // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
+                        Intent intent= new Intent (getBaseContext(), MenuMapa.class);
+                        LatLng position = new LatLng(Latitudenviar,Longitudenviar); // Boa Vista
+                        Bundle args = new Bundle();
+                        args.putParcelable("from_position", position);
+                        //intent.putExtra("MARCADOR", position);
+                        intent.putExtra("bundle", args);
+                        setResult(RESULT_OK, intent);
+
+                    }else{makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();}
+                }});
+        } else {makeText(getBaseContext(), "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
+    }
+
+    private ArrayList<String> DatosCabeceraCsv(){
+        String[] cabecera_recortada = new String[0];
+        /* Me dirijo a el directorio en la memoria interna del dispositivo para poder acceder a la
+         * carpeta llamada RelevAr donde se almacena de manera publlica la informacion, de no
+         * encontrarla se debe crear la misma*/
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        /* Necesito abrir el archivo .csv correspondiente al dia actual, por esta razon se solicita
+         * la fecha actual al dispositivo, si este no existe se debe crear*/
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        /* Una vez tenemos el archivo dir con la ruta correcta, necesitamos leer los datos conenidos
+         * en este, se va a leer la primera linea que es la que debe contener la cabecera con las categorias*/
+        try {
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            cabecera_recortada = br.readLine().split(";");
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
+        }
+
+        ArrayList<String> devolver = new ArrayList<>();
+        for(int i=0; i<cabecera_recortada.length; i++){
+            devolver.add(cabecera_recortada[i]);
+        }
+        return devolver;
+    }
+
+    private void ReemplazarCabecera(String viejaCabecera, String nuevaCabecera) throws IOException {
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        //Instantiating the Scanner class to read the file
+        Scanner sc = new Scanner(dir);
+        //instantiating the StringBuffer class
+        StringBuffer buffer = new StringBuffer();
+        //Reading lines of the file and appending them to StringBuffer
+        while (sc.hasNextLine()) {
+            buffer.append(sc.nextLine()+System.lineSeparator());
+        }
+
+        String fileContents = buffer.toString();
+        System.out.println("Contents of the file: "+viejaCabecera);
+        System.out.println("Contents of the file: "+nuevaCabecera);
+        //closing the Scanner object
+        sc.close();
+
+        //Replacing the old line with new line
+        fileContents = fileContents.replaceAll(viejaCabecera, nuevaCabecera);
+        //instantiating the FileWriter class
+        FileWriter writer = new FileWriter(dir);
+        System.out.println("");
+        System.out.println("new data: "+fileContents);
+        writer.append(fileContents);
+        writer.flush();
+    }
+
+    private void GuardarPersona(String datos){
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+        try {
+            FileOutputStream fOut = new FileOutputStream(dir, true);
+
+            //el true es para
+            // que se agreguen los datos al final sin perder los datos anteriores
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+
+                myOutWriter.append(datos);
+
+            myOutWriter.close();
+            fOut.close();
+            locationManager.removeUpdates(locationListener);
+            finish();
+
+        } catch (IOException e) {
+            e.printStackTrace();}
+    }
+
 }
 
