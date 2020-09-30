@@ -14,11 +14,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,6 +35,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,6 +102,7 @@ public class Familia extends AppCompatActivity {
     ConstraintLayout CLVivienda, CLServiciosBasicos, CLExteriorVivienda;
     TextView avanceVivienda, avanceServiciosBasicos, avanceExteriorVivienda;
     LinearLayout BotonesFamilia;
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -292,6 +296,8 @@ public class Familia extends AppCompatActivity {
         observaciones.setVisibility(View.GONE);
         final Switch factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
         factores_riesgo.setVisibility(View.GONE);
+
+
     }
 
     //@Override

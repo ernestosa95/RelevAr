@@ -122,7 +122,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         // Creo el mapa y lo centro en las coodenadas -60 -30
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
-        txt = (TextView) findViewById(R.id.COMPLETADOFACTORES);
+        //txt = (TextView) findViewById(R.id.COMPLETADOFACTORES);
         if (savedInstanceState != null) {
             mapBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }

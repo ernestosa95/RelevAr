@@ -31,6 +31,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,7 +108,13 @@ public class Persona extends AppCompatActivity {
     AutoCompleteTextView autoEfector;
 
     TextView txtNombre, txtApellido, txtDni, txtSexo, txtNacimiento, txtNacimientoEditar;
-//--------------------------------------------------------------------------------------------------
+
+    private TabHost tabs;
+    ConstraintLayout BtnVitamina, CLVitamina;
+    TextView avanceVitamina;
+    //private String date="DD-MM-AAAA";
+
+    //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // CLASES DE CREACION Y ACTUALIZACION DE LAS VARIABLES
     @Override
@@ -238,6 +245,54 @@ public class Persona extends AppCompatActivity {
         ColorAvanceEfector();
         ColorAvanceOcupacion();
         ColorAvanceEducacion();
+
+        // Codigo de funcionamiento de los tabs
+        tabs = findViewById(R.id.TABS);
+        tabs.setup();
+
+        TextView tv = (TextView)LayoutInflater.from(this).inflate(R.layout.titulo_tabs,null);
+        tv.setText("GENERAL");
+        tv.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        TabHost.TabSpec spec = tabs.newTabSpec("mytab1");
+        spec.setContent(R.id.GENERAL);
+        //spec.setIndicator("GENERAL");
+        spec.setIndicator(tv);
+        tabs.addTab(spec);
+
+        spec = tabs.newTabSpec("mytab2");
+        spec.setContent(R.id.FISICO);
+        TextView tv1 = (TextView)LayoutInflater.from(this).inflate(R.layout.titulo_tabs,null);
+        tv1.setText("ESTADO FISICO");
+        tv1.setGravity(Gravity.CENTER_HORIZONTAL);
+        spec.setIndicator(tv1);
+        tabs.addTab(spec);
+
+        spec = tabs.newTabSpec("mytab3");
+        spec.setContent(R.id.PSICO);
+        TextView tv3 = (TextView)LayoutInflater.from(this).inflate(R.layout.titulo_tabs,null);
+        tv3.setText("PSICO SOCIAL");
+        tv3.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        spec.setIndicator(tv3);
+        tabs.addTab(spec);
+
+        tabs.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#4A4A4A"));
+        tabs.getTabWidget().getChildAt(1).setBackgroundColor(Color.BLACK);
+        tabs.getTabWidget().getChildAt(2).setBackgroundColor(Color.BLACK);
+
+        BtnVitamina = (ConstraintLayout) findViewById(R.id.BTNVITAMINA);
+        CLVitamina = (ConstraintLayout) findViewById(R.id.AVANCEVITAMINA);
+        avanceVitamina = (TextView) findViewById(R.id.COMPLETADOVITAMINA);
+
+        tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                int tab = tabs.getCurrentTab();
+                tabs.getTabWidget().getChildAt(0).setBackgroundColor(Color.BLACK);
+                tabs.getTabWidget().getChildAt(1).setBackgroundColor(Color.BLACK);
+                tabs.getTabWidget().getChildAt(2).setBackgroundColor(Color.BLACK);
+                tabs.getTabWidget().getChildAt(tab).setBackgroundColor(Color.parseColor("#4A4A4A"));
+            }
+        });
     }
 
     //@Override

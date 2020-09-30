@@ -112,5 +112,56 @@
     <string name="femenino" translatable="false">F</string>
     <string name="masculino" translatable="false">M</string>
 
+    <string name="vitamina" translatable="false">VITAMINA D</string>
+    <string name="entrega_vitamina" translatable="false">¿Entrego vitamina D?</string>
+    <string name="embarazo" translatable="false">EMBARAZO</string>
+    <string name="fecha_parto" translatable="false">FECHA PROBABLE DE PARTO</string>
+    <string name="ultimo_control" translatable="false">ULTIMO CONTROL</string>
+    <string name="enfermedad_relacionada_embarazo" translatable="false">ENFERMEDAD ASOCIADA AL EMBARAZO</string>
+    <string name="enfermedad" translatable="false">ENFERMEDAD</string>
+    <string name="discapacidad" translatable="false">DISCAPACIDAD</string>
+    <string name="certificado_unico_discapacidad" translatable="false">CERTIFICADO UNICO DE DISCAPACIDAD</string>
+    <string name="tipo_discapacidad" translatable="false">TIPO DE DISCAPACIDAD</string>
+    <string name="deficiencia_fisica_origen_motor" translatable="false">DEFICIENCIA FISICA DE ORIGEN MOTOR</string>
+    <string name="deficiencia_fisica_origen_visceral" translatable="false">DEFICIENCIA FISICA DE ORIGEN VISCERAL</string>
+    <string name="auditiva" translatable="false">AUDITIVA</string>
+    <string name="deficiencia_intelectual_mental" translatable="false">DEFICIENCIA INTELECTUAL O MENTAL</string>
+    <string name="deficiencia_sensorial_origen_visual" translatable="false">DEFICIENCIA SENSORIAL DE ORIGEN VISUAL</string>
+    <string name="ocio" translatable="false">OCIO</string>
+    <string name="adicciones" translatable="false">ADICCIONES</string>
+    <string name="violencia" translatable="false">VIOLENCIA</string>
+    <string name="transtornos_mentales" translatable="false">TRASTORNOS MENTALES</string>
+    <string name="transtornos_en_niños" translatable="false">TRASTORNOS EN NIÑOS</string>
+    <string name="acompañamiento" translatable="false">ACOMPAÑAMIENTO</string>
+    <string name="recibe_acompañamiento" translatable="false">¿RECIBE ACOMPAÑAMIENTO?</string>
+    <string name="deficit_atencion" translatable="false">DEFICIT DE ATENCION</string>
+    <string name="trastornos_conducta" translatable="false">TRASTORNOS DE LA CONDUCTA</string>
+    <string name="alcohol" translatable="false">ALCOHOL</string>
+    <string name="drogas" translatable="false">DROGAS</string>
+    <string name="tabaco" translatable="false">TABACO</string>
+    <string name="psicologico" translatable="false">PSICOLOGICO</string>
+    <string name="medico" translatable="false">MEDICO</string>
+    <string name="institucion_social" translatable="false">INSTITUCION SOCIAL</string>
+    <string name="deportes" translatable="false">DEPORTES</string>
+    <string name="musica" translatable="false">MUSICA</string>
+    <string name="baile" translatable="false">BAILE</string>
+    <string name="manualidades" translatable="false">MANUALIDADES</string>
+    <string name="actividad_aire_libre" translatable="false">ACTIVIDAD AL AIRE LIBRE</string>
+    <string name="donde_ocio" translatable="false">¿DONDE REALIZA LAS ACTIVIDADES?</string>
+    <string name="lugar" translatable="false">LUGAR</string>
+    <string name="otros" translatable="false">OTROS</string>
+    <string name="tipo_violencia" translatable="false">TIPO DE VIOLENCIA</string>
+    <string name="fisica" translatable="false">FISICA</string>
+    <string name="psicologica" translatable="false">PSICOLOGICA</string>
+    <string name="sexual" translatable="false">SEXUAL</string>
+    <string name="economica" translatable="false">ECONOMICA Y PATRIMONIAL</string>
+    <string name="simbolica" translatable="false">SIMBOLICA</string>
+    <string name="modalidad_violencia" translatable="false">MODALIDAD DE LA VIOLENCIA</string>
+    <string name="domestica" translatable="false">DOMESTICA</string>
+    <string name="laboral" translatable="false">LABORAL</string>
+    <string name="institucional" translatable="false">INSTITUCIONAL</string>
+    <string name="reproductiva" translatable="false">CONTRA LA LIBERTAD REPRODUCTIVA</string>
+    <string name="obstetrica" translatable="false">OBSTETRICA</string>
+    <string name="mediatica" translatable="false">MEDIATICA</string>
 
 </resources>
