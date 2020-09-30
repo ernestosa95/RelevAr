@@ -108,7 +108,9 @@
     <string name="cantidad_piezas" translatable="false">CANTIDAD DE PIEZAS</string>
     <string name="cielorraso" translatable="false">CIELORRASO</string>
     <string name="origenagua" translatable="false">ORIGEN AGUA</string>
-
+    <string name="sexo" translatable="false">SEXO</string>
+    <string name="femenino" translatable="false">F</string>
+    <string name="masculino" translatable="false">M</string>
 
 
 </resources>

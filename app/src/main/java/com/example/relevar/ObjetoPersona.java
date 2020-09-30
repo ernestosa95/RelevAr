@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
-public class ObjetoPersona {
+public class ObjetoPersona implements Serializable {
     public String Nombre;
     public String Apellido;
     public String DNI;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ancho_icono">50dp</dimen>
+    <dimen name="alto_icono">40dp</dimen>
+    <dimen name="ancho_map">40dp</dimen>
+    <dimen name="alto_map">50dp</dimen>
+</resources>

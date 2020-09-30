@@ -43,6 +43,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 
@@ -59,7 +60,7 @@ public class Persona extends AppCompatActivity {
     private int STORAGE_PERMISSION_CODE =1;
 
     // Defino de forma global los String para recibir y devolver la informacion
-    private String telefonocelular="", telefonofijo="", direccionmail="", date="DD-MM-AAAA";
+    private String date="DD-MM-AAAA";
 
     // Defino de manera global los EditText para ingresar informacion
     private EditText dni, Apellido, Nombre, Efector, celular, fijo, mail, obs, lotevacuna;
@@ -104,6 +105,8 @@ public class Persona extends AppCompatActivity {
     TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion;
 
     AutoCompleteTextView autoEfector;
+
+    TextView txtNombre, txtApellido, txtDni, txtSexo, txtNacimiento, txtNacimientoEditar;
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // CLASES DE CREACION Y ACTUALIZACION DE LAS VARIABLES
@@ -136,10 +139,16 @@ public class Persona extends AppCompatActivity {
         actionbar.hide();
 
         // Defino los widgets
-        dni = (EditText) findViewById(R.id.DNI);
-        Apellido = (EditText) findViewById(R.id.APELLIDO);
-        Nombre = (EditText) findViewById(R.id.NOMBRE);
-        fecha=(TextView) findViewById(R.id.fecha);
+        //dni = (EditText) findViewById(R.id.DNI);
+        //Apellido = (EditText) findViewById(R.id.APELLIDO);
+        //Nombre = (EditText) findViewById(R.id.NOMBRE);
+        //fecha=(TextView) findViewById(R.id.fecha);
+
+        txtNombre = findViewById(R.id.TXTNOMBRE);
+        txtApellido = findViewById(R.id.TXTAPELLIDO);
+        txtDni = findViewById(R.id.TXTDNI);
+        txtSexo = findViewById(R.id.TXTSEXO);
+        txtNacimiento = findViewById(R.id.TXTFECHANACIMIENTO);
 
         // Construyo el widget para la fecha
         Date = new DatePickerDialog.OnDateSetListener() {
@@ -148,14 +157,14 @@ public class Persona extends AppCompatActivity {
                 //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
                 date=day+"-"+mes+"-"+year;
-                fecha.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
+                txtNacimientoEditar.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
                 Persona.Nacimiento = date;
                 Persona.CalcularEdad(year, month, day);
                 }
         };
 
         // Cargo los datos para que se pueda editar un registro que ya esta hecho
-        if((String) getIntent().getStringExtra("DNI")!=null){
+        /*if((String) getIntent().getStringExtra("DNI")!=null){
         Persona.DNI = (String) getIntent().getStringExtra("DNI");
         Persona.Nombre = (String) getIntent().getStringExtra("NOMBRE");
         Persona.Apellido = (String) getIntent().getStringExtra("APELLIDO");
@@ -176,16 +185,23 @@ public class Persona extends AppCompatActivity {
         Persona.TelefonoContacto = (String) getIntent().getStringExtra("TELEFONOCONTACTO");
         Persona.ParentezcoContacto = (String) getIntent().getStringExtra("PARENTEZCOCONTACTO");
         Persona.Ocupacion = (String) getIntent().getStringExtra("OCUPACION");
-        Persona.Educacion = (String) getIntent().getStringExtra("EDUCACION");
+        Persona.Educacion = (String) getIntent().getStringExtra("EDUCACION");*/
+
+        if(getIntent().getExtras()!=null){
+        Bundle bundle = getIntent().getExtras();
+            if(bundle!=null){
+                Persona = (ObjetoPersona) bundle.getSerializable("PERSONAEDITAR");
+        }
 
         // Inicializo los campos de edicion
-        dni.setText(Persona.DNI);
-        Apellido.setText(Persona.Apellido);
-        Nombre.setText(Persona.Nombre);
+        txtDni.setText(Persona.DNI);
+        txtApellido.setText(Persona.Apellido);
+        txtNombre.setText(Persona.Nombre);
+        txtSexo.setText(Persona.Sexo);
 
         //Toast.makeText(this, Persona.Nacimiento, Toast.LENGTH_SHORT).show();
         if(Persona.Nacimiento!=""){
-        fecha.setText(Persona.Nacimiento);}
+        txtNacimiento.setText(Persona.Nacimiento);}
         else {fecha.setText("DD-MM-AAAA");}
 
         //Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
@@ -240,14 +256,16 @@ public class Persona extends AppCompatActivity {
             if(resultCode== RESULT_OK){
 
                     //Toast.makeText(this, data.getStringExtra("DNI_ESCANEADO"), Toast.LENGTH_SHORT).show();
-                    dni.setText(data.getStringExtra("DNI_ESCANEADO"));
+                    txtDni.setText(data.getStringExtra("DNI_ESCANEADO"));
                     Persona.DNI = data.getStringExtra("DNI_ESCANEADO");
-                    Apellido.setText(data.getStringExtra("APELLIDO_ESCANEADO"));
+                    txtApellido.setText(data.getStringExtra("APELLIDO_ESCANEADO"));
                     Persona.Apellido = data.getStringExtra("APELLIDO_ESCANEADO");
-                    Nombre.setText(data.getStringExtra("NOMBRE_ESCANEADO"));
+                    txtNombre.setText(data.getStringExtra("NOMBRE_ESCANEADO"));
                     Persona.Nombre = data.getStringExtra("NOMBRE_ESCANEADO");
-                    fecha.setText(data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO"));
+                    txtNacimiento.setText(data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO"));
                     Persona.Nacimiento = data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO");
+                    Persona.Sexo = data.getStringExtra("SEXO_ESCANEADO");
+                    txtSexo.setText(data.getStringExtra("SEXO_ESCANEADO"));
                     int año, mes, dia;
                     String[] convertir = Persona.Nacimiento.split("/");
                     dia = Integer.parseInt(convertir[0]);
@@ -292,6 +310,58 @@ public class Persona extends AppCompatActivity {
         startActivityForResult(Modif, 1);
     }
 
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Tomar los datos de identificacion de la persona
+    public void DatosIdentificar(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_informacion_personal, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final EditText edtNombre = view1.findViewById(R.id.EDTNOMBRE);
+        if(Persona.Nombre.length()!=0){edtNombre.setText(Persona.Nombre);}
+        final EditText edtApellido = view1.findViewById(R.id.EDTAPELLIDO);
+        if(Persona.Apellido.length()!=0){edtApellido.setText(Persona.Apellido);}
+        final EditText edtDni = view1.findViewById(R.id.EDTDNI);
+        if(Persona.DNI.length()!=0){edtDni.setText(Persona.DNI);}
+        txtNacimientoEditar = view1.findViewById(R.id.EDTFECHANACIMIENTO);
+        txtNacimientoEditar.setText(Persona.Nacimiento);
+        final RadioButton masculino = view1.findViewById(R.id.MASCULINO);
+        final RadioButton femenino = view1.findViewById(R.id.FEMENINO);
+        if (Persona.Sexo.equals("M")){masculino.setChecked(true);}
+        if (Persona.Sexo.equals("F")){femenino.setChecked(true);}
+
+        final Button guardar = view1.findViewById(R.id.GUARDARINFORMACIONPERSONAL);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Persona.Nombre = edtNombre.getText().toString();
+                txtNombre.setText(Persona.Nombre);
+                Persona.Apellido = edtApellido.getText().toString();
+                txtApellido.setText(Persona.Apellido);
+                if(masculino.isChecked()){Persona.Sexo = "M";}
+                if(femenino.isChecked()){Persona.Sexo = "F";}
+                txtSexo.setText(Persona.Sexo);
+                Persona.DNI = edtDni.getText().toString();
+                txtDni.setText(Persona.DNI);
+                Persona.Nacimiento = txtNacimientoEditar.getText().toString();
+                txtNacimiento.setText(Persona.Nacimiento);
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARINFORMACIONPERSONAL);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -1784,9 +1854,10 @@ public class Persona extends AppCompatActivity {
         Intent Modif1= new Intent (this, Familia.class);
 
         // Reviso que no se carguen datos nuevos, si se cargaron los obtengo
-        if(Nombre.getText().toString()!=null){Persona.Nombre=Nombre.getText().toString();}
-        if(Apellido.getText().toString()!=null){Persona.Apellido=Apellido.getText().toString();}
-        if(dni.getText().toString()!=null){Persona.DNI=dni.getText().toString();}
+        if(txtNombre.getText().toString()!=null){Persona.Nombre=txtNombre.getText().toString();}
+        if(txtApellido.getText().toString()!=null){Persona.Apellido=txtApellido.getText().toString();}
+        if(txtDni.getText().toString()!=null){Persona.DNI=txtDni.getText().toString();}
+        if(txtSexo.getText().toString()!=null){Persona.Sexo=txtSexo.getText().toString();}
         //if(Efector.getText().toString()!=null){Persona.Efector=Efector.getText().toString();}
 
         // Si uno de los campos listados abajo es nulo lo reemplazo por S/D
@@ -1797,10 +1868,11 @@ public class Persona extends AppCompatActivity {
 
         // Si dni es distinto a null le permito guardar la persona
         if(Persona.DNI!=""){
-        Modif1.putExtra("NOMBRE" , Persona.Nombre);
+        /*Modif1.putExtra("NOMBRE" , Persona.Nombre);
         Modif1.putExtra("APELLIDO" , Persona.Apellido);
         Modif1.putExtra("DNI" , Persona.DNI);
         Modif1.putExtra("EDAD" , Persona.Edad);
+        Modif1.putExtra("SEXO" , Persona.Nombre);
         Modif1.putExtra("UNIDADEDAD" , Persona.UnidadEdad);
         Modif1.putExtra("EFECTOR" , Persona.Efector);
         Modif1.putExtra("FACTORES" , Persona.FactoresDeRiesgo);
@@ -1817,7 +1889,12 @@ public class Persona extends AppCompatActivity {
         Modif1.putExtra("TELEFONOCONTACTO" , Persona.TelefonoContacto);
         Modif1.putExtra("PARENTEZCOCONTACTO" , Persona.ParentezcoContacto);
         Modif1.putExtra("OCUPACION" , Persona.Ocupacion);
-        Modif1.putExtra("EDUCACION" , Persona.Educacion);
+        Modif1.putExtra("EDUCACION" , Persona.Educacion);*/
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PERSONA", Persona);
+
+        Modif1.putExtras(bundle);
 
         Toast.makeText(this, "PERSONA CARGADA", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, Modif1);

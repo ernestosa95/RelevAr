@@ -107,4 +107,40 @@ public class Encuestador {
 
         return marcadores;
     }
+
+    public ArrayList<String> CodigoColores (){
+        ArrayList<String> marcadores = new ArrayList<>();
+        String linea;
+        try {
+            File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+            nuevaCarpeta.mkdirs();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date1 = new Date();
+            String fecha = dateFormat.format(date1);
+            String NombreArchivo = "RelevAr-" + fecha + ".csv";
+            File dir = new File(nuevaCarpeta, NombreArchivo);
+            String strLine = "";
+            // leer datos
+            String myData = "";
+
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            linea = br.readLine();
+            while((linea =br.readLine())!= null){
+                String[] aux = linea.split(";");
+
+                marcadores.add(aux[3]);
+            }
+
+            br.close();
+            in.close();
+            fis.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return marcadores;
+    }
 }

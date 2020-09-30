@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -398,7 +399,7 @@ public class Familia extends AppCompatActivity {
             public void onClick(View view) {
                 // The user clicked OK
                 Intent Modif= new Intent (getBaseContext(), Persona.class);
-                Modif.putExtra("NOMBRE" , MiembrosFamiliares.get(position).Nombre);
+                /*Modif.putExtra("NOMBRE" , MiembrosFamiliares.get(position).Nombre);
                 Modif.putExtra("APELLIDO" , MiembrosFamiliares.get(position).Apellido);
                 Modif.putExtra("DNI" , MiembrosFamiliares.get(position).DNI);
                 Modif.putExtra("EDAD" ,  MiembrosFamiliares.get(position).Edad);
@@ -418,7 +419,12 @@ public class Familia extends AppCompatActivity {
                 Modif.putExtra("TELEFONOCONTACTO" , MiembrosFamiliares.get(position).TelefonoContacto);
                 Modif.putExtra("PARENTEZCOCONTACTO" , MiembrosFamiliares.get(position).ParentezcoContacto);
                 Modif.putExtra("OCUPACION" , MiembrosFamiliares.get(position).Ocupacion);
-                Modif.putExtra("EDUCACION" , MiembrosFamiliares.get(position).Educacion);
+                Modif.putExtra("EDUCACION" , MiembrosFamiliares.get(position).Educacion);*/
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("PERSONAEDITAR", MiembrosFamiliares.get(position));
+                Modif.putExtras(bundle);
+
                 setResult(RESULT_OK, Modif);
                 MiembrosFamiliares.remove(position);
                 names.remove(position);
@@ -458,7 +464,7 @@ public class Familia extends AppCompatActivity {
                 ObjetoPersona Persona=new ObjetoPersona(categoriasPersona);
                 ArrayList<String> CamposPersona = new ArrayList<String>();
 
-                Persona.DNI = data.getStringExtra("DNI");
+                /*Persona.DNI = data.getStringExtra("DNI");
                 Persona.Nombre = data.getStringExtra("NOMBRE");
                 Persona.Apellido = data.getStringExtra("APELLIDO");
                 Persona.Edad = data.getStringExtra("EDAD");
@@ -478,8 +484,12 @@ public class Familia extends AppCompatActivity {
                 Persona.TelefonoContacto = data.getStringExtra("TELEFONOCONTACTO");
                 Persona.ParentezcoContacto = data.getStringExtra("PARENTEZCOCONTACTO");
                 Persona.Ocupacion = data.getStringExtra("OCUPACION");
-                Persona.Educacion = data.getStringExtra("EDUCACION");
+                Persona.Educacion = data.getStringExtra("EDUCACION");*/
 
+                Bundle bundle = data.getExtras();
+                if(bundle!=null){
+                    Persona = (ObjetoPersona) bundle.getSerializable("PERSONA");
+                }
                 //Agrego la persona como miembro de la familia
                 MiembrosFamiliares.add(Persona);
 
@@ -1299,8 +1309,46 @@ public class Familia extends AppCompatActivity {
                 }
             });
 
-            final EditText calle = view_alert.findViewById(R.id.CALLE);
-            final EditText numero = view_alert.findViewById(R.id.NUMERO);
+            final String[] codigoColor = {"V"};
+            final ImageView rojo = view_alert.findViewById(R.id.ICONOROJO);
+            final ImageView amarillo = view_alert.findViewById(R.id.ICONOAMARILLO);
+            final ImageView verde = view_alert.findViewById(R.id.ICONOVERDE);
+            rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+
+            rojo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    codigoColor[0] = "R";
+                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                }
+            });
+
+            amarillo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    codigoColor[0] = "A";
+                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                }
+            });
+
+            verde.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    codigoColor[0] = "V";
+                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                }
+            });
+
+            final EditText edtCalle = view_alert.findViewById(R.id.CALLE);
+            final EditText edtNumero = view_alert.findViewById(R.id.NUMERO);
             final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
             NumerosPersonas = MiembrosFamiliares.size();
             cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
@@ -1388,11 +1436,17 @@ public class Familia extends AppCompatActivity {
                         /* Solicito los datos cargados tanto en la persona como en la familia*/
                         String datosGuardar = "";
                         String coordenadas = Latitud +" "+ Longitud;
+                        String calle = edtCalle.getText().toString();
+                        String numero = edtNumero.getText().toString();
                         HashMap<String,String> datosFamilia = familia.DatosIngresados();
                         for (int i=0; i<MiembrosFamiliares.size(); i++){
                             HashMap<String,String> auxHash = new HashMap<>();
                             auxHash.putAll(datosFamilia);
                             auxHash.put("COORDENADAS",coordenadas);
+                            auxHash.put("ESTADO",codigoColor[0]);
+                            auxHash.put("GRUPO FAMILIAR",Integer.toString(NumerosPersonas));
+                            auxHash.put("NUMERO",numero);
+                            auxHash.put("CALLE",calle.toUpperCase());
                             auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
                             for(int j=0; j < datosCabeceraCsv.size()-1; j++){
                                 if(auxHash.get(datosCabeceraCsv.get(j))!=null){

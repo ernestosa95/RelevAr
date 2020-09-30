@@ -21,108 +21,16 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/DNI"
-        android:layout_width="200dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edit_text_1"
-        android:ems="10"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="@string/dni"
-        android:inputType="number"
-        android:textColor="#000000"
-        android:textColorHighlight="#4588BC"
-        android:textColorHint="#4A4A4A"
-        android:textColorLink="#4588BC"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/NOMBRE"
-        app:layout_constraintTop_toBottomOf="@+id/NOMBRE" />
-
-    <EditText
-        android:id="@+id/NOMBRE"
-        android:layout_width="300dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edit_text_1"
-        android:cursorVisible="true"
-        android:ems="10"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="@string/nombre"
-        android:inputType="textPersonName"
-        android:textColor="#000000"
-        android:textColorHighlight="#4588BC"
-        android:textColorHint="#4A4A4A"
-        android:textColorLink="#4588BC"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/APELLIDO"
-        app:layout_constraintTop_toBottomOf="@+id/APELLIDO" />
-
-    <EditText
-        android:id="@+id/APELLIDO"
-        android:layout_width="300dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/edit_text_1"
-        android:ems="10"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="@string/apellido"
-        android:inputType="textPersonName"
-        android:textColor="#000000"
-        android:textColorHighlight="#4588BC"
-        android:textColorHint="#4A4A4A"
-        android:textColorLink="#4588BC"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/fecha"
-        android:layout_width="200dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/edit_text_1"
-        android:clickable="true"
-        android:focusable="false"
-        android:gravity="center_horizontal|center_vertical"
-        android:hint="@string/fecha_nacimiento"
-        android:onClick="Fecha"
-        android:textColor="#000000"
-        android:textColorHighlight="#4588BC"
-        android:textColorHint="#4A4A4A"
-        android:textColorLink="#4588BC"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/DNI"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/DNI"
-        app:layout_constraintTop_toBottomOf="@+id/DNI" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="80dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/fondo1"
-        android:onClick="escanear"
-        app:layout_constraintEnd_toEndOf="@+id/NOMBRE"
-        app:layout_constraintTop_toBottomOf="@+id/NOMBRE"
-        app:srcCompat="@drawable/qr" />
-
 
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:foregroundGravity="center_horizontal"
         android:onClick="TipoFactores"
         app:layout_constraintBottom_toTopOf="@+id/OBSERVACION2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fecha">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -495,6 +403,92 @@
 
         >
     </HorizontalScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fondo5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/fondo1"
+            android:onClick="escanear"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/qr" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:onClick="DatosIdentificar"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/TXTAPELLIDO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/edit_text_1"
+                android:gravity="center_horizontal"
+                android:text="@string/apellido"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TXTNOMBRE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/edit_text_1"
+                android:gravity="center_horizontal"
+                android:text="@string/nombre"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TXTSEXO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/edit_text_1"
+                android:gravity="center_horizontal"
+                android:text="@string/sexo"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TXTDNI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/edit_text_1"
+                android:gravity="center_horizontal"
+                android:text="@string/dni"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TXTFECHANACIMIENTO"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/edit_text_1"
+                android:gravity="center_horizontal"
+                android:text="@string/fecha_nacimiento"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

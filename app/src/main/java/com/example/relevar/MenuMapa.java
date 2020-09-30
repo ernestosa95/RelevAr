@@ -3,6 +3,7 @@ package com.example.relevar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.FileProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -17,7 +18,11 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -46,6 +51,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -438,11 +445,21 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
                 if (encuestador.Marcadores().size()!=0){
                     ArrayList<LatLng> marcadores = encuestador.Marcadores();
+                    ArrayList<String> codigoColores = encuestador.CodigoColores();
                     for(int i=0; i<encuestador.Marcadores().size(); i++){
+
                         MarkerOptions mo1 = new MarkerOptions();
                         mo1.position(marcadores.get(i));
                         mo1.title("REGISTRO "+Integer.toString(i+1));
-                        //mo1.icon(BitmapDescriptorFactory.fromResource(R.drawable.casa));
+                        //mo1.icon(BitmapDescriptorFactory.fromResource(getBitmap(R.id)));
+                        Bitmap drawableBitmap = null;
+                        if(codigoColores.get(i).equals("R")){
+                        drawableBitmap = getBitmap(R.drawable.icono_mapa_rojo);}
+                        if(codigoColores.get(i).equals("A")){
+                            drawableBitmap = getBitmap(R.drawable.icono_mapa_amarilla);}
+                        if(codigoColores.get(i).equals("V")){
+                            drawableBitmap = getBitmap(R.drawable.icono_mapa_verde);}
+                        mo1.icon(BitmapDescriptorFactory.fromBitmap(drawableBitmap));
                         map.addMarker(mo1);
                     }
                 }}
@@ -451,6 +468,22 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
 
         }, 0);
+    }
+
+    /* Transformo los xml de los iconos en un bitmap para que puedan ser graficados */
+    private Bitmap getBitmap(int drawableRes){
+        Drawable drawable = getResources().getDrawable(drawableRes);
+        Canvas canvas = new Canvas();
+        //Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap( (int)getResources().getDimension(R.dimen.ancho_map), (int)getResources().getDimension(R.dimen.alto_map), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        //drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.setBounds(0, 0, (int)getResources().getDimension(R.dimen.alto_icono),
+                (int)getResources().getDimension(R.dimen.ancho_icono));
+
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
     @Override
