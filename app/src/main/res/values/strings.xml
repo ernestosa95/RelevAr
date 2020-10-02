@@ -163,5 +163,7 @@
     <string name="reproductiva" translatable="false">CONTRA LA LIBERTAD REPRODUCTIVA</string>
     <string name="obstetrica" translatable="false">OBSTETRICA</string>
     <string name="mediatica" translatable="false">MEDIATICA</string>
+    <string name="actividades_ocio" translatable="false">ACTIVIDADES DE OCIO</string>
+
 
 </resources>

@@ -103,9 +103,11 @@ public class Persona extends AppCompatActivity {
 
     ObjetoPersona Persona;
     ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion, layout_vitamina,
-                layout_embarazo, layout_discapacidad, layout_acompañamiento, layout_trastornosniños;
+                layout_embarazo, layout_discapacidad, layout_acompañamiento, layout_trastornosniños, layout_adicciones,
+                layout_ocio;
     TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion,
-                avancevitamina, avanceembarazo, avancediscapacidad, avanceacompañamiento, avancetrastornosniños;
+                avancevitamina, avanceembarazo, avancediscapacidad, avanceacompañamiento, avancetrastornosniños,
+                avanceadicciones, avanceocio;
 
     AutoCompleteTextView autoEfector;
 
@@ -149,6 +151,9 @@ public class Persona extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.tipo_discapacidad));
         categoriasPersona.add(getString(R.string.acompañamiento));
         categoriasPersona.add(getString(R.string.transtornos_en_niños));
+        categoriasPersona.add(getString(R.string.adicciones));
+        categoriasPersona.add(getString(R.string.actividades_ocio));
+        categoriasPersona.add(getString(R.string.donde_ocio));
 
         Persona = new ObjetoPersona(categoriasPersona);
         // Eliminar el action bar
@@ -238,6 +243,14 @@ public class Persona extends AppCompatActivity {
         layout_trastornosniños = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSENNIÑOS);
         avancetrastornosniños = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSENNIÑOS);
 
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_adicciones = (ConstraintLayout) findViewById(R.id.AVANCEADICCIONES);
+        avanceadicciones = (TextView) findViewById(R.id.COMPLETADOADICCIONES);
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_ocio = (ConstraintLayout) findViewById(R.id.AVANCEOCIO);
+        avanceocio = (TextView) findViewById(R.id.COMPLETADOOCIO);
+
         // inicar estado de carga
         ColorAvanceFactores();
         ColorAvanceContacto();
@@ -250,7 +263,8 @@ public class Persona extends AppCompatActivity {
         ColorAvanceDiscapacidad();
         ColorAvanceAcompañamiento();
         ColorAvanceTrastornosNiños();
-
+        ColorAvanceAdicciones();
+        ColorAvanceOcio();
 
         // Codigo de funcionamiento de los tabs
         tabs = findViewById(R.id.TABS);
@@ -2127,6 +2141,215 @@ public class Persona extends AppCompatActivity {
         }
     }
 
+    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void Adicciones(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_adicciones, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final CheckBox alcohol =  view1.findViewById(R.id.ALCOHOL);
+        final CheckBox drogas = view1.findViewById(R.id.DROGAS);
+        final CheckBox tabaco = view1.findViewById(R.id.TABACO);
+
+        String[] vac = Persona.Adicciones.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(alcohol.getText().toString())){
+                alcohol.setChecked(true);
+            }
+            if (vac[x].equals(drogas.getText().toString())){
+                drogas.setChecked(true);
+            }
+            if (vac[x].equals(tabaco.getText().toString())){
+                tabaco.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDARADICCIONES);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String adicciones = null;
+                if (alcohol.isChecked()){
+                    if (adicciones==null){
+                        adicciones=alcohol.getText().toString();
+                    } else {
+                        adicciones+=","+alcohol.getText().toString();}}
+                if (drogas.isChecked()){
+                    if (adicciones==null){
+                        adicciones=drogas.getText().toString();
+                    } else {
+                        adicciones+=","+drogas.getText().toString();}}
+                if (tabaco.isChecked()){
+                    if (adicciones==null){
+                        adicciones=tabaco.getText().toString();
+                    } else {
+                        adicciones+=","+tabaco.getText().toString();}}
+
+                if(adicciones!=null){Persona.Adicciones = adicciones;}
+
+                ColorAvanceAdicciones();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARADICCIONES);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceAdicciones(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.Adicciones.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_adicciones.setBackgroundResource(R.drawable.rojo);
+            avanceadicciones.setText(getString(R.string.completado)+" 00%");
+        }
+
+        /*if(avance>0 && avance<2){
+            layout_acompañamiento.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avancediscapacidad.setText(aux);
+        }*/
+
+        if(avance==1){
+            layout_adicciones.setBackgroundResource(R.drawable.verde);
+            avanceadicciones.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void Ocio(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_ocio, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final EditText editLugarOcio = view1.findViewById(R.id.LUGAROCIO);
+        if(Persona.LugarOcio.length()!=0){editLugarOcio.setText(Persona.LugarOcio);}
+
+        final CheckBox deportes =  view1.findViewById(R.id.DEPORTES);
+        final CheckBox musica = view1.findViewById(R.id.MUSICA);
+        final CheckBox manualidades = view1.findViewById(R.id.MANUALIDADES);
+        final CheckBox baile = view1.findViewById(R.id.BAILE);
+        final CheckBox otros = view1.findViewById(R.id.OTROS);
+
+        String[] vac = Persona.Adicciones.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(deportes.getText().toString())){
+                deportes.setChecked(true);
+            }
+            if (vac[x].equals(musica.getText().toString())){
+                musica.setChecked(true);
+            }
+            if (vac[x].equals(manualidades.getText().toString())){
+                manualidades.setChecked(true);
+            }
+            if (vac[x].equals(baile.getText().toString())){
+                baile.setChecked(true);
+            }
+            if (vac[x].equals(otros.getText().toString())){
+                otros.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDAROCIO);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String actividades = null;
+                if (deportes.isChecked()){
+                    if (actividades==null){
+                        actividades=deportes.getText().toString();
+                    } else {
+                        actividades+=","+deportes.getText().toString();}}
+                if (baile.isChecked()){
+                    if (actividades==null){
+                        actividades=baile.getText().toString();
+                    } else {
+                        actividades+=","+baile.getText().toString();}}
+                if (manualidades.isChecked()){
+                    if (actividades==null){
+                         actividades=manualidades.getText().toString();
+                    } else {
+                         actividades+=","+manualidades.getText().toString();}}
+                if (musica.isChecked()){
+                    if (actividades==null){
+                        actividades=musica.getText().toString();
+                    } else {
+                        actividades+=","+musica.getText().toString();}}
+                if (otros.isChecked()){
+                    if (actividades==null){
+                        actividades=otros.getText().toString();
+                    } else {
+                        actividades+=","+otros.getText().toString();}}
+                if(actividades!=null){Persona.ActividadesOcio = actividades;}
+
+                Persona.LugarOcio = editLugarOcio.getText().toString();
+                ColorAvanceOcio();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAROCIO);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceOcio(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.ActividadesOcio.length()!=0){
+            avance+=1;
+        }
+
+        if (Persona.LugarOcio.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_ocio.setBackgroundResource(R.drawable.rojo);
+            avanceocio.setText(getString(R.string.completado)+" 00%");
+        }
+
+        if(avance>0 && avance<2){
+            layout_ocio.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceocio.setText(aux);
+        }
+
+        if(avance==2){
+            layout_ocio.setBackgroundResource(R.drawable.verde);
+            avanceocio.setText(getString(R.string.completado)+" 100%");
+        }
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE DEFINICION DE LAS OPCIONES DE GUARDADO DE LAS PERSONAS
