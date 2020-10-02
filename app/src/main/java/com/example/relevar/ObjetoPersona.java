@@ -53,6 +53,15 @@ public class ObjetoPersona implements Serializable {
     public String Respiratorio;
     public String Disgeusia;
     public String Anosmia;
+    public String Vitamina;
+    public String FechaParto;
+    public String UltimoControlEmbarazo;
+    public String EnfermedadEmbarazo;
+    public String CertificadoDiscapacidad;
+    public String TipoDiscapacidad;
+    public String Acompañamiento;
+    public String TrastornoNiños;
+
     private ArrayList<String> cabeceraPersona = new ArrayList<>();
     private HashMap<String,String> datosIngresados = new HashMap<>();
     public void setInfoPersonal(String nombre, String apellido, String dni){
@@ -90,6 +99,14 @@ public class ObjetoPersona implements Serializable {
         Respiratorio="";
         Anosmia="";
         Disgeusia="";
+        Vitamina="";
+        FechaParto="";
+        UltimoControlEmbarazo="";
+        EnfermedadEmbarazo="";
+        CertificadoDiscapacidad="";
+        TipoDiscapacidad="";
+        Acompañamiento="";
+        TrastornoNiños="";
     }
 
     public String FormatoGuardar(){
@@ -179,6 +196,38 @@ public class ObjetoPersona implements Serializable {
             cabecera.add(cabeceraPersona.get(10));
             datosIngresados.put(cabeceraPersona.get(10), Educacion);
         }
+        if(Vitamina.length()!=0){
+            cabecera.add(cabeceraPersona.get(11));
+            datosIngresados.put(cabeceraPersona.get(11), Vitamina);
+        }
+        if(FechaParto.length()!=0){
+            cabecera.add(cabeceraPersona.get(12));
+            datosIngresados.put(cabeceraPersona.get(12), FechaParto);
+        }
+        if(UltimoControlEmbarazo.length()!=0){
+            cabecera.add(cabeceraPersona.get(13));
+            datosIngresados.put(cabeceraPersona.get(13), UltimoControlEmbarazo);
+        }
+        if(EnfermedadEmbarazo.length()!=0){
+            cabecera.add(cabeceraPersona.get(14));
+            datosIngresados.put(cabeceraPersona.get(14), EnfermedadEmbarazo);
+        }
+        if(CertificadoDiscapacidad.length()!=0){
+            cabecera.add(cabeceraPersona.get(15));
+            datosIngresados.put(cabeceraPersona.get(15), CertificadoDiscapacidad);
+        }
+        if(TipoDiscapacidad.length()!=0){
+            cabecera.add(cabeceraPersona.get(16));
+            datosIngresados.put(cabeceraPersona.get(16), TipoDiscapacidad);
+        }
+        if(Acompañamiento.length()!=0){
+            cabecera.add(cabeceraPersona.get(17));
+            datosIngresados.put(cabeceraPersona.get(17), Acompañamiento);
+        }
+        if(TrastornoNiños.length()!=0){
+            cabecera.add(cabeceraPersona.get(18));
+            datosIngresados.put(cabeceraPersona.get(18), TrastornoNiños);
+        }
         return cabecera;
     }
 
@@ -192,6 +241,7 @@ public class ObjetoPersona implements Serializable {
 
         return datosIngresados;
     }
+
     public void CalcularEdad(int year, int month, int day){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date1 = new Date();

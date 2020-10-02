@@ -168,7 +168,14 @@ public class Familia extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.parentezco_contacto));
         categoriasPersona.add(getString(R.string.ocupacion));
         categoriasPersona.add(getString(R.string.educacion));
-
+        categoriasPersona.add(getString(R.string.vitamina));
+        categoriasPersona.add(getString(R.string.fecha_nacimiento));
+        categoriasPersona.add(getString(R.string.ultimo_control));
+        categoriasPersona.add(getString(R.string.enfermedad_relacionada_embarazo));
+        categoriasPersona.add(getString(R.string.certificado_unico_discapacidad));
+        categoriasPersona.add(getString(R.string.tipo_discapacidad));
+        categoriasPersona.add(getString(R.string.acompañamiento));
+        categoriasPersona.add(getString(R.string.transtornos_en_niños));
     }
 
     private void CrearBotonera(){

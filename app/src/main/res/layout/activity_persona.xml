@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#4A4A4A"
+    android:onClick="Acompañamiento"
     tools:context=".Persona">
 
     <TabHost
@@ -60,7 +61,8 @@
                                 android:layout_width="130dp"
                                 android:layout_height="200dp"
                                 android:layout_margin="10dp"
-                                android:background="@drawable/fondo2">
+                                android:background="@drawable/fondo2"
+                                android:onClick="Acompañamiento">
 
                                 <ImageView
                                     android:id="@+id/ICONOACOMPAÑAMIENTO"
@@ -119,7 +121,8 @@
                                 android:layout_width="130dp"
                                 android:layout_height="200dp"
                                 android:layout_margin="10dp"
-                                android:background="@drawable/fondo2">
+                                android:background="@drawable/fondo2"
+                                android:onClick="TrastornosNiños">
 
                                 <ImageView
                                     android:id="@+id/ICONOTRANSTORNOSENNIÑOS"
@@ -502,7 +505,8 @@
                                 android:layout_width="130dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
-                                android:background="@drawable/fondo2">
+                                android:background="@drawable/fondo2"
+                                android:onClick="Discapacidad">
 
                                 <ImageView
                                     android:id="@+id/ICONODISCAPACIDAD"
@@ -560,7 +564,8 @@
                                 android:layout_width="130dp"
                                 android:layout_height="200dp"
                                 android:layout_margin="10dp"
-                                android:background="@drawable/fondo2">
+                                android:background="@drawable/fondo2"
+                                android:onClick="Embarazo">
 
                                 <ImageView
                                     android:id="@+id/ICONOEMBARAZO"
@@ -618,7 +623,8 @@
                                 android:layout_width="130dp"
                                 android:layout_height="200dp"
                                 android:layout_margin="10dp"
-                                android:background="@drawable/fondo2">
+                                android:background="@drawable/fondo2"
+                                android:onClick="VitaminaD">
 
                                 <ImageView
                                     android:id="@+id/ICONOVITAMINA"

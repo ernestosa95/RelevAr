@@ -91,7 +91,7 @@ public class Persona extends AppCompatActivity {
             universidadincompleto="Universidad Incompleta", universidadcompleto="Universidad Completa";
     // Defino el Interfaz para ingresar la fecha
     private DatePickerDialog.OnDateSetListener Date;
-
+    private DatePickerDialog.OnDateSetListener Date2, Date1;
     // Defino el Spinner que va a contener los efectores
     private Spinner Sp1;
 
@@ -102,8 +102,10 @@ public class Persona extends AppCompatActivity {
     RadioButton rb1, rb2;
 
     ObjetoPersona Persona;
-    ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion;
-    TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion;
+    ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion, layout_vitamina,
+                layout_embarazo, layout_discapacidad, layout_acompañamiento, layout_trastornosniños;
+    TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion,
+                avancevitamina, avanceembarazo, avancediscapacidad, avanceacompañamiento, avancetrastornosniños;
 
     AutoCompleteTextView autoEfector;
 
@@ -114,7 +116,7 @@ public class Persona extends AppCompatActivity {
     TextView avanceVitamina;
     //private String date="DD-MM-AAAA";
 
-    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // CLASES DE CREACION Y ACTUALIZACION DE LAS VARIABLES
     @Override
@@ -139,17 +141,19 @@ public class Persona extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.parentezco_contacto));
         categoriasPersona.add(getString(R.string.ocupacion));
         categoriasPersona.add(getString(R.string.educacion));
+        categoriasPersona.add(getString(R.string.vitamina));
+        categoriasPersona.add(getString(R.string.fecha_nacimiento));
+        categoriasPersona.add(getString(R.string.ultimo_control));
+        categoriasPersona.add(getString(R.string.enfermedad_relacionada_embarazo));
+        categoriasPersona.add(getString(R.string.certificado_unico_discapacidad));
+        categoriasPersona.add(getString(R.string.tipo_discapacidad));
+        categoriasPersona.add(getString(R.string.acompañamiento));
+        categoriasPersona.add(getString(R.string.transtornos_en_niños));
 
         Persona = new ObjetoPersona(categoriasPersona);
         // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
-
-        // Defino los widgets
-        //dni = (EditText) findViewById(R.id.DNI);
-        //Apellido = (EditText) findViewById(R.id.APELLIDO);
-        //Nombre = (EditText) findViewById(R.id.NOMBRE);
-        //fecha=(TextView) findViewById(R.id.fecha);
 
         txtNombre = findViewById(R.id.TXTNOMBRE);
         txtApellido = findViewById(R.id.TXTAPELLIDO);
@@ -169,30 +173,6 @@ public class Persona extends AppCompatActivity {
                 Persona.CalcularEdad(year, month, day);
                 }
         };
-
-        // Cargo los datos para que se pueda editar un registro que ya esta hecho
-        /*if((String) getIntent().getStringExtra("DNI")!=null){
-        Persona.DNI = (String) getIntent().getStringExtra("DNI");
-        Persona.Nombre = (String) getIntent().getStringExtra("NOMBRE");
-        Persona.Apellido = (String) getIntent().getStringExtra("APELLIDO");
-        Persona.Efector = (String) getIntent().getStringExtra("EFECTOR");
-        Persona.Edad = (String) getIntent().getStringExtra("EDAD");
-        Persona.UnidadEdad = (String) getIntent().getStringExtra("UNIDADEDAD");
-        Persona.FactoresDeRiesgo = (String) getIntent().getStringExtra("FACTORES");
-        Persona.Vacunas = (String) getIntent().getStringExtra("VACUNAS");
-        Persona.CodfigoFactorRiesgo = (String) getIntent().getStringExtra("CODIGOFACTORES");
-        Persona.Celular = (String) getIntent().getStringExtra("CELULAR");
-        Persona.Fijo = (String) getIntent().getStringExtra("FIJO");
-        Persona.Mail = (String) getIntent().getStringExtra("MAIL");
-        Persona.Observaciones = (String) getIntent().getStringExtra("OBSERVACIONES");
-        Persona.Nacimiento = (String) getIntent().getStringExtra("NACIMIENTO");
-        Persona.Limpieza = (String) getIntent().getStringExtra("LIMPIEZA");
-        Persona.LoteVacuna = (String) getIntent().getStringExtra("LOTE");
-        Persona.NombreContacto = (String) getIntent().getStringExtra("NOMBRECONTACTO");
-        Persona.TelefonoContacto = (String) getIntent().getStringExtra("TELEFONOCONTACTO");
-        Persona.ParentezcoContacto = (String) getIntent().getStringExtra("PARENTEZCOCONTACTO");
-        Persona.Ocupacion = (String) getIntent().getStringExtra("OCUPACION");
-        Persona.Educacion = (String) getIntent().getStringExtra("EDUCACION");*/
 
         if(getIntent().getExtras()!=null){
         Bundle bundle = getIntent().getExtras();
@@ -238,6 +218,26 @@ public class Persona extends AppCompatActivity {
         layout_educacion = (ConstraintLayout) findViewById(R.id.AVANCEEDUCACION);
         avanceeducacion = (TextView) findViewById(R.id.COMPLETADOEDUCACION);
 
+        // PARA EL AVANCE DE LA VITAMINA
+        layout_vitamina = (ConstraintLayout) findViewById(R.id.AVANCEVITAMINA);
+        avancevitamina = (TextView) findViewById(R.id.COMPLETADOVITAMINA);
+
+        // PARA EL AVANCE DE LA EMBARAZO
+        layout_embarazo = (ConstraintLayout) findViewById(R.id.AVANCEEMBARAZO);
+        avanceembarazo = (TextView) findViewById(R.id.COMPLETADOEMBARAZO);
+
+        // PARA EL AVANCE DE LA EMBARAZO
+        layout_discapacidad = (ConstraintLayout) findViewById(R.id.AVANCEDISCAPACIDAD);
+        avancediscapacidad = (TextView) findViewById(R.id.COMPLETADODISCAPACIDAD);
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_acompañamiento = (ConstraintLayout) findViewById(R.id.AVANCEACOMPAÑAMIENTO);
+        avanceacompañamiento = (TextView) findViewById(R.id.COMPLETADOACOMPAÑAMIENTO);
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_trastornosniños = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSENNIÑOS);
+        avancetrastornosniños = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSENNIÑOS);
+
         // inicar estado de carga
         ColorAvanceFactores();
         ColorAvanceContacto();
@@ -245,6 +245,12 @@ public class Persona extends AppCompatActivity {
         ColorAvanceEfector();
         ColorAvanceOcupacion();
         ColorAvanceEducacion();
+        ColorAvanceEmbarazo();
+        ColorAvanceVitamina();
+        ColorAvanceDiscapacidad();
+        ColorAvanceAcompañamiento();
+        ColorAvanceTrastornosNiños();
+
 
         // Codigo de funcionamiento de los tabs
         tabs = findViewById(R.id.TABS);
@@ -748,187 +754,6 @@ public class Persona extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 // SECCION DE LAS VISTA DE LAS VACUNAS
 
-    // Defino las opciones referidas al AlertDialog de las vacunas
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    /*public void Educacion(View view){
-
-        // Inializo el alert dialog, defino el titulo
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
-        TextView textView = new TextView(this);
-        textView.setText("EDUCACION");
-        textView.setPadding(20, 30, 20, 30);
-        textView.setTextSize(22F);
-        textView.setBackgroundColor(Color.parseColor("#4588BC"));
-        textView.setTextColor(Color.WHITE);
-        builder.setCustomTitle(textView);
-
-        // Defino el Layaout que va a contener a los Check principal
-        LinearLayout mainLayout0       = new LinearLayout(this);
-        mainLayout0.setOrientation(LinearLayout.VERTICAL);
-
-        // Defino el Layaout que va a contener a los Check principal cabecera
-        LinearLayout mainLayout1       = new LinearLayout(this);
-        mainLayout1.setOrientation(LinearLayout.VERTICAL);
-
-        // Defino el Layaout que va a contener a los Check
-        LinearLayout mainLayout       = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-
-        // Defino los Checks
-        String ColorPares = "#4A4A4A";
-        String ColorImpares = "#4588BC";
-        int TamañoLetra =20;
-        int AltoContenedor = 80;
-
-
-        // SIN DATOS
-        SD = PersonalCheck(mainLayout,"Sin Dato", TamañoLetra, ColorPares, AltoContenedor);
-
-        // JARDIN
-        Jardin = PersonalCheck(mainLayout,"Jardin", TamañoLetra, ColorImpares, AltoContenedor);
-
-        // ESCUELA ESPECIAL
-        EscuelaEspecial = PersonalCheck(mainLayout,"Escuela Especial", TamañoLetra, ColorPares, AltoContenedor);
-
-
-        // PRIMARIA
-        PrimariaCursando = PersonalCheck(mainLayout,"Cursando Primaria", TamañoLetra, ColorImpares, AltoContenedor);
-
-        PrimarioIncompleto = PersonalCheck(mainLayout,"Primario Incompleto", TamañoLetra, ColorPares, AltoContenedor);
-
-        PrimariaCompleta = PersonalCheck(mainLayout,"Primaria Completa", TamañoLetra, ColorImpares, AltoContenedor);
-
-        // SECUNDARIA
-        SecundariaCursando = PersonalCheck(mainLayout,"Cursando Secundaria", TamañoLetra, ColorPares, AltoContenedor);
-
-        SecundariaImcompleto = PersonalCheck(mainLayout,"Secundario Incompleto", TamañoLetra, ColorImpares, AltoContenedor);
-
-        SecundariaCompleto = PersonalCheck(mainLayout,"Secundaria Completa", TamañoLetra, ColorPares, AltoContenedor);
-
-        // TERCIARIO
-        TerciarioCursando = PersonalCheck(mainLayout,"Cursando Terciario", TamañoLetra, ColorImpares, AltoContenedor);
-
-        TerciarioImcompleto = PersonalCheck(mainLayout,"Terciario Incompleto", TamañoLetra, ColorPares, AltoContenedor);
-
-        TerciarioCompleto = PersonalCheck(mainLayout,"Terciario Completo", TamañoLetra, ColorImpares, AltoContenedor);
-
-        // UNIVERSIDAD
-        UniersidadCursando = PersonalCheck(mainLayout,"Cursando Universidad", TamañoLetra, ColorPares, AltoContenedor);
-
-        UniversidadImcompleto = PersonalCheck(mainLayout,"Universidad Incompleta", TamañoLetra, ColorImpares, AltoContenedor);
-
-        UniversidadCompleto = PersonalCheck(mainLayout,"Universidad Completa", TamañoLetra, ColorPares, AltoContenedor);
-
-        // En el caso de editar un registro necesito que me ponga seleccionado todos aquellos que
-        // ya se habian seleeccionado antes para que los pueda editar
-        //Necesito activar los check que ya habia seleccionado antes
-        CheckSeleccionadosEducacion(Persona.Educacion);
-
-        // Defino un ScrollView para visualizar todos
-        ScrollView sv = new ScrollView(this);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        sv.setVerticalScrollBarEnabled(true);
-        sv.addView(mainLayout);
-
-        // Agrego las vistas al Layout principal
-        mainLayout0.addView(mainLayout1);
-        mainLayout0.addView(sv);
-        builder.setView(mainLayout0);
-
-        // Add OK and Cancel buttons
-        builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The user clicked OK
-                String vacunas=null;
-                if (SD.isChecked()){
-                    if (vacunas==null){
-                        vacunas=sindato;
-                    } else vacunas+=","+sindato;
-                }
-                if (Jardin.isChecked()){
-                    if (vacunas==null){
-                        vacunas=jardin;
-                    } else vacunas+=","+jardin;
-                }
-                if (PrimariaCursando.isChecked()){
-                    if (vacunas==null){
-                        vacunas=primariacurasando;
-                    } else vacunas+=","+primariacurasando;
-                }
-                if (PrimariaCompleta.isChecked()){
-                    if (vacunas==null){
-                        vacunas=primariacompleta;
-                    } else vacunas+=","+primariacompleta;
-                }
-                if (PrimarioIncompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=primarioincompleto;
-                    } else vacunas+=","+primarioincompleto;
-                }
-                if (SecundariaCompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=secundariocompleto;
-                    } else vacunas+=","+secundariocompleto;
-                }
-                if (SecundariaCursando.isChecked()){
-                    if (vacunas==null){
-                        vacunas=secundariacursando;
-                    } else vacunas+=","+secundariacursando;
-                }
-                if (SecundariaImcompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=secundariaincompleta;
-                    } else vacunas+=","+secundariaincompleta;
-                }
-                if (TerciarioCursando.isChecked()){
-                    if (vacunas==null){
-                        vacunas=terciariocursando;
-                    } else vacunas+=","+terciariocursando;
-                }
-                if (TerciarioCompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=terciariocompleto;
-                    } else vacunas+=","+terciariocompleto;
-                }
-                if (TerciarioImcompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=terciarioincompleto;
-                    } else vacunas+=","+terciarioincompleto;
-                }
-                if (UniersidadCursando.isChecked()){
-                    if (vacunas==null){
-                        vacunas=universidadcursando;
-                    } else vacunas+=","+universidadcursando;
-                }
-                if (UniversidadCompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=universidadcompleto;
-                    } else vacunas+=","+universidadcompleto;
-                }
-                if (UniversidadImcompleto.isChecked()){
-                    if (vacunas==null){
-                        vacunas=universidadincompleto;
-                    } else vacunas+=","+universidadincompleto;
-                }
-                if (EscuelaEspecial.isChecked()){
-                    if (vacunas==null){
-                        vacunas=escuelaespecial;
-                    } else vacunas+=","+escuelaespecial;
-                }
-
-                if(vacunas!=null){Persona.Educacion=vacunas;}
-
-                // Cambio los colores de avance
-                ColorAvanceEducacion();
-            }
-        });
-        builder.setNegativeButton("CANCELAR", null);
-
-        // Create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }*/
 
     public void Educacion(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1456,7 +1281,7 @@ public class Persona extends AppCompatActivity {
         if(avance==1 || avance==2 || avance==3 || avance==4 || avance==5){
             contacto.setBackgroundResource(R.drawable.amarillo);
             double porcentaje = Math.round((avance/6)*100);
-            Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
             String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
             avancecontacto.setText(aux);
             //AvContacto.setText(aux);
@@ -1473,72 +1298,7 @@ public class Persona extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE CARGA DE EFECTORES
-    /*public void Efector(View view){
-    // Defino los contenedores
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
-    TextView textView = new TextView(this);
-    textView.setText("EFECTOR");
-    textView.setPadding(20, 30, 20, 30);
-    textView.setTextSize(22F);
-    textView.setBackgroundColor(Color.parseColor("#4588BC"));
-    textView.setTextColor(Color.WHITE);
-    builder.setCustomTitle(textView);
 
-    // Defino el Layaout que va a contener a los Check
-    LinearLayout mainLayout       = new LinearLayout(this);
-    mainLayout.setOrientation(LinearLayout.VERTICAL);
-    // Defino los parametros
-    int TamañoLetra =20;
-
-    // Defino los EditText
-    // Telefono Celular
-    LinearLayout layout0       = new LinearLayout(this);
-    layout0.setOrientation(LinearLayout.HORIZONTAL);
-    layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
-    layout0.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
-    LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-    params.setMargins(10,20,10,10);
-    layout0.setLayoutParams(params);
-    Efector = new EditText(getApplicationContext());
-    Efector.setHint("EFECTOR");
-    //Efector.setInputType(TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-    Efector.setHintTextColor(Color.parseColor("#4A4A4A"));
-    Efector.setGravity(Gravity.CENTER_HORIZONTAL);
-    Efector.setTextSize(TamañoLetra);
-    Efector.setTextColor(Color.BLACK);
-    Efector.setBackgroundResource(R.drawable.edit_text_1);
-    Efector.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-    layout0.addView(Efector);
-
-
-    mainLayout.addView(layout0);
-
-    // Si ya tengo valores de contactos debo inicializar
-    if(Persona.Efector!=""){Efector.setText(Persona.Efector);}
-
-    // Add OK and Cancel buttons
-    builder.setPositiveButton("LISTO", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            // The user clicked OK
-            Persona.Efector = Efector.getText().toString();
-            //Toast.makeText(getApplicationContext(), telefonocelular+telefonofijo+direccionmail, Toast.LENGTH_SHORT).show();
-
-            // Cambio los colores de avance
-            ColorAvanceEfector();
-
-        }
-    });
-    builder.setNegativeButton("CANCELAR", null);
-    builder.setView(mainLayout);
-    // Create and show the alert dialog
-    AlertDialog dialog = builder.create();
-    dialog.show();
-
-    //if(Persona!=null){
-    //    celular.setText(Persona.Celular);
-    //}
-}*/
     public void Efector(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
@@ -1900,6 +1660,475 @@ public class Persona extends AppCompatActivity {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    // VITAMINA D
+    public void VitaminaD(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_vitamina, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final RadioGroup vitamina = view1.findViewById(R.id.GROUPVITAMINA);
+
+        final Button guardar = view1.findViewById(R.id.GUARDARVITAMINA);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton selec = vitamina.findViewById(vitamina.getCheckedRadioButtonId());
+                String seleccionado = selec.getText().toString();
+                Persona.Vitamina = seleccionado;
+                //Toast.makeText(getApplicationContext(), seleccionado, Toast.LENGTH_SHORT).show();
+                ColorAvanceVitamina();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARVITAMINA);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceVitamina(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.Vitamina.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_vitamina.setBackgroundResource(R.drawable.rojo);
+            avancevitamina.setText(getString(R.string.completado)+" 00%");
+        }
+
+        if(avance==1){
+            layout_vitamina.setBackgroundResource(R.drawable.verde);
+            avancevitamina.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // EMBARAZO
+    public void Embarazo(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_embarazo, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final TextView fechaDeParto = view1.findViewById(R.id.FECHADEPARTO);
+        if(Persona.FechaParto.length()!=0){fechaDeParto.setText(Persona.FechaParto);}
+        final TextView ultimoControl = view1.findViewById(R.id.FECHADECONTROL);
+        if(Persona.UltimoControlEmbarazo.length()!=0){ultimoControl.setText(Persona.UltimoControlEmbarazo);}
+
+        // Construyo el widget para la fecha
+        Date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int  year, int month, int day) {
+                //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
+                int mes = month + 1;
+                fechaDeParto.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
+            }
+        };
+
+        // Construyo el widget para la fecha
+        Date1 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int  year, int month, int day) {
+                //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
+                int mes = month + 1;
+                ColorAvanceEmbarazo();
+                ultimoControl.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
+            }
+        };
+
+        final EditText editEnfermedad = view1.findViewById(R.id.EDTENFERMEDAD);
+        if(Persona.EnfermedadEmbarazo.length()!=0){editEnfermedad.setText(Persona.EnfermedadEmbarazo);}
+
+        final Button guardar = view1.findViewById(R.id.GUARDAREMBARAZO);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Persona.FechaParto = fechaDeParto.getText().toString();
+               // Toast.makeText(getBaseContext(), Persona.FechaParto, Toast.LENGTH_SHORT).show();
+                Persona.UltimoControlEmbarazo = ultimoControl.getText().toString();
+                Persona.EnfermedadEmbarazo = editEnfermedad.getText().toString();
+                ColorAvanceEmbarazo();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAREMBARAZO);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Se inicializa el scrollbar para la fecha
+    public void FechaUltimoControl (View view){
+        Calendar cal=Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date1, 1955,month,day);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceEmbarazo(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.FechaParto.length()!=0){
+            avance+=1;
+        }
+        if (Persona.UltimoControlEmbarazo.length()!=0){
+            avance+=1;
+        }
+        if (Persona.EnfermedadEmbarazo.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_embarazo.setBackgroundResource(R.drawable.rojo);
+            avanceembarazo.setText(getString(R.string.completado)+" 00%");
+        }
+
+        if(avance>0 && avance<3){
+            layout_embarazo.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/3)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceembarazo.setText(aux);
+        }
+
+        if(avance==3){
+            layout_embarazo.setBackgroundResource(R.drawable.verde);
+            avanceembarazo.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // DISCAPACIDAD
+    public void Discapacidad(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_discapacidad, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final RadioGroup discapacidad = view1.findViewById(R.id.GROUPDISCAPACIDAD);
+        final RadioButton siDisacapacidad = view1.findViewById(R.id.SIVDISCAPACIDAD);
+        final RadioButton noDiscapacidad = view1.findViewById(R.id.NODISCAPACIDAD);
+
+        final CheckBox defFisicaMotor = view1.findViewById(R.id.DEFICIENCIAFISICAMOTOR);
+        final CheckBox defFisicaVisceral = view1.findViewById(R.id.DEFICIENCIAFISICAVISCERAL);
+        final CheckBox auditiva = view1.findViewById(R.id.AUDITIVA);
+        final CheckBox defIntelectual = view1.findViewById(R.id.DEFICIENCIAINTELECTUAL);
+        final CheckBox visual = view1.findViewById(R.id.SENSORIALVISUAL);
+
+        if(Persona.CertificadoDiscapacidad.length()!=0){
+            if(Persona.CertificadoDiscapacidad.equals("SI")){
+                siDisacapacidad.setChecked(true);
+            }
+            else{
+                noDiscapacidad.setChecked(true);
+            }
+        }
+
+        String[] vac = Persona.TipoDiscapacidad.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(defFisicaMotor.getText().toString())){
+                defFisicaMotor.setChecked(true);
+            }
+            if (vac[x].equals(defFisicaVisceral.getText().toString())){
+                defFisicaVisceral.setChecked(true);
+            }
+            if (vac[x].equals(auditiva.getText().toString())){
+                auditiva.setChecked(true);
+            }
+            if (vac[x].equals(defIntelectual.getText().toString())){
+                defIntelectual.setChecked(true);
+            }
+            if (vac[x].equals(visual.getText().toString())){
+                visual.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDARDISCAPACIDAD);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton selec = discapacidad.findViewById(discapacidad.getCheckedRadioButtonId());
+                String seleccionado = selec.getText().toString();
+                Persona.CertificadoDiscapacidad = seleccionado;
+
+                String discapacidad = null;
+                if (defFisicaMotor.isChecked()){
+                    if (discapacidad==null){
+                        discapacidad=defFisicaMotor.getText().toString();
+                    } else {
+                        discapacidad+=","+defFisicaMotor.getText().toString();}}
+                if (defFisicaVisceral.isChecked()){
+                    if (discapacidad==null){
+                        discapacidad=defFisicaVisceral.getText().toString();
+                    } else {
+                        discapacidad+=","+defFisicaVisceral.getText().toString();}}
+                if (auditiva.isChecked()){
+                    if (discapacidad==null){
+                        discapacidad=auditiva.getText().toString();
+                    } else {
+                        discapacidad+=","+auditiva.getText().toString();}}
+                if (defIntelectual.isChecked()){
+                    if (discapacidad==null){
+                        discapacidad=defIntelectual.getText().toString();
+                    } else {
+                        discapacidad+=","+defIntelectual.getText().toString();}}
+                if (visual.isChecked()){
+                    if (discapacidad==null){
+                        discapacidad=visual.getText().toString();
+                    } else {
+                        discapacidad+=","+visual.getText().toString();}}
+
+                if(discapacidad!=null){
+                    Persona.TipoDiscapacidad = discapacidad;
+                }
+
+                ColorAvanceDiscapacidad();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARDISCAPCIDAD);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceDiscapacidad(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.CertificadoDiscapacidad.length()!=0){
+            avance+=1;
+        }
+        if (Persona.TipoDiscapacidad.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_discapacidad.setBackgroundResource(R.drawable.rojo);
+            avancediscapacidad.setText(getString(R.string.completado)+" 00%");
+        }
+
+        if(avance>0 && avance<2){
+            layout_discapacidad.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avancediscapacidad.setText(aux);
+        }
+
+        if(avance==2){
+            layout_discapacidad.setBackgroundResource(R.drawable.verde);
+            avancediscapacidad.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // ACOMPAÑAMIENTO
+    public void Acompañamiento(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_acompanamiento, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final CheckBox psicologico = view1.findViewById(R.id.PSICOLOGICO);
+        final CheckBox medico = view1.findViewById(R.id.MEDICO);
+        final CheckBox institucion = view1.findViewById(R.id.INSTITUCIOSOCIAL);
+
+        String[] vac = Persona.Acompañamiento.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(psicologico.getText().toString())){
+                psicologico.setChecked(true);
+            }
+            if (vac[x].equals(medico.getText().toString())){
+                medico.setChecked(true);
+            }
+            if (vac[x].equals(institucion.getText().toString())){
+                institucion.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDARACOMPAÑAMIENTO);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String acompañamiento = null;
+                if (psicologico.isChecked()){
+                    if (acompañamiento==null){
+                        acompañamiento=psicologico.getText().toString();
+                    } else {
+                        acompañamiento+=","+psicologico.getText().toString();}}
+                if (medico.isChecked()){
+                    if (acompañamiento==null){
+                        acompañamiento=medico.getText().toString();
+                    } else {
+                        acompañamiento+=","+medico.getText().toString();}}
+                if (institucion.isChecked()){
+                    if (acompañamiento==null){
+                        acompañamiento=institucion.getText().toString();
+                    } else {
+                        acompañamiento+=","+institucion.getText().toString();}}
+
+                if(acompañamiento!=null){Persona.Acompañamiento = acompañamiento;}
+
+                ColorAvanceAcompañamiento();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARACOMPAÑAMIENTO);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceAcompañamiento(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.Acompañamiento.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_acompañamiento.setBackgroundResource(R.drawable.rojo);
+            avanceacompañamiento.setText(getString(R.string.completado)+" 00%");
+        }
+
+        /*if(avance>0 && avance<2){
+            layout_acompañamiento.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avancediscapacidad.setText(aux);
+        }*/
+
+        if(avance==1){
+            layout_acompañamiento.setBackgroundResource(R.drawable.verde);
+            avanceacompañamiento.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void TrastornosNiños(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_trastornos_ninos, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final CheckBox deficitAtencion =  view1.findViewById(R.id.DEFICITATENCION);
+        final CheckBox trastornosConducta = view1.findViewById(R.id.TRASTORNOSCONDUCTA);
+
+        String[] vac = Persona.TrastornoNiños.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(deficitAtencion.getText().toString())){
+                deficitAtencion.setChecked(true);
+            }
+            if (vac[x].equals(trastornosConducta.getText().toString())){
+                deficitAtencion.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDARTRANSTORNOSNIÑOS);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String trastornosNiños = null;
+                if (deficitAtencion.isChecked()){
+                    if (trastornosNiños==null){
+                        trastornosNiños=deficitAtencion.getText().toString();
+                    } else {
+                        trastornosNiños+=","+deficitAtencion.getText().toString();}}
+                if (trastornosConducta.isChecked()){
+                    if (trastornosNiños==null){
+                        trastornosNiños=trastornosConducta.getText().toString();
+                    } else {
+                        trastornosNiños+=","+trastornosConducta.getText().toString();}}
+
+                if(trastornosNiños!=null){Persona.TrastornoNiños = trastornosNiños;}
+                ColorAvanceTrastornosNiños();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARTRASTORNOSNIÑOS);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceTrastornosNiños(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.TrastornoNiños.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_trastornosniños.setBackgroundResource(R.drawable.rojo);
+            avancetrastornosniños.setText(getString(R.string.completado)+" 00%");
+        }
+
+        /*if(avance>0 && avance<2){
+            layout_acompañamiento.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avancediscapacidad.setText(aux);
+        }*/
+
+        if(avance==1){
+            layout_trastornosniños.setBackgroundResource(R.drawable.verde);
+            avancetrastornosniños.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // SECCION DE DEFINICION DE DEFINICION DE LAS OPCIONES DE GUARDADO DE LAS PERSONAS
 
     // Defino las funciones de guardado de persona
@@ -1923,28 +2152,6 @@ public class Persona extends AppCompatActivity {
 
         // Si dni es distinto a null le permito guardar la persona
         if(Persona.DNI!=""){
-        /*Modif1.putExtra("NOMBRE" , Persona.Nombre);
-        Modif1.putExtra("APELLIDO" , Persona.Apellido);
-        Modif1.putExtra("DNI" , Persona.DNI);
-        Modif1.putExtra("EDAD" , Persona.Edad);
-        Modif1.putExtra("SEXO" , Persona.Nombre);
-        Modif1.putExtra("UNIDADEDAD" , Persona.UnidadEdad);
-        Modif1.putExtra("EFECTOR" , Persona.Efector);
-        Modif1.putExtra("FACTORES" , Persona.FactoresDeRiesgo);
-        Modif1.putExtra("CODIGOFACTORES" , Persona.CodfigoFactorRiesgo);
-        Modif1.putExtra("VACUNAS" , Persona.Vacunas);
-        Modif1.putExtra("CELULAR" , Persona.Celular);
-        Modif1.putExtra("FIJO" , Persona.Fijo);
-        Modif1.putExtra("MAIL" , Persona.Mail);
-        Modif1.putExtra("OBSERVACIONES" , Persona.Observaciones);
-        Modif1.putExtra("NACIMIENTO" , Persona.Nacimiento);
-        Modif1.putExtra("LIMPIEZA" , Persona.Limpieza);
-        Modif1.putExtra("LOTE" , Persona.LoteVacuna);
-        Modif1.putExtra("NOMBRECONTACTO" , Persona.NombreContacto);
-        Modif1.putExtra("TELEFONOCONTACTO" , Persona.TelefonoContacto);
-        Modif1.putExtra("PARENTEZCOCONTACTO" , Persona.ParentezcoContacto);
-        Modif1.putExtra("OCUPACION" , Persona.Ocupacion);
-        Modif1.putExtra("EDUCACION" , Persona.Educacion);*/
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("PERSONA", Persona);
