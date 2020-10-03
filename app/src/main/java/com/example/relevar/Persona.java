@@ -381,7 +381,7 @@ public class Persona extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date, 1955,month,day);
+        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date, year,month,day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -1692,6 +1692,10 @@ public class Persona extends AppCompatActivity {
         dialog.show();
 
         final RadioGroup vitamina = view1.findViewById(R.id.GROUPVITAMINA);
+        final RadioButton siVitamina = view1.findViewById(R.id.SIVITAMINA);
+        final RadioButton noVitamina = view1.findViewById(R.id.NOVITAMINA);
+        if(Persona.Vitamina.equals("SI")){siVitamina.setChecked(true);}
+        if(Persona.Vitamina.equals("NO")){noVitamina.setChecked(true);}
 
         final Button guardar = view1.findViewById(R.id.GUARDARVITAMINA);
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -1805,7 +1809,7 @@ public class Persona extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date1, 1955,month,day);
+        DatePickerDialog dialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, Date1, year,month,day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -1929,7 +1933,7 @@ public class Persona extends AppCompatActivity {
 
                 if(discapacidad!=null){
                     Persona.TipoDiscapacidad = discapacidad;
-                }
+                }else{Persona.TipoDiscapacidad="";}
 
                 ColorAvanceDiscapacidad();
                 dialog.dismiss();
@@ -2087,7 +2091,7 @@ public class Persona extends AppCompatActivity {
                 deficitAtencion.setChecked(true);
             }
             if (vac[x].equals(trastornosConducta.getText().toString())){
-                deficitAtencion.setChecked(true);
+                trastornosConducta.setChecked(true);
             }
         }
 
@@ -2261,7 +2265,7 @@ public class Persona extends AppCompatActivity {
         final CheckBox baile = view1.findViewById(R.id.BAILE);
         final CheckBox otros = view1.findViewById(R.id.OTROS);
 
-        String[] vac = Persona.Adicciones.split(",");
+        String[] vac = Persona.ActividadesOcio.split(",");
         for (int x = 0; x < vac.length; x++) {
             if (vac[x].equals(deportes.getText().toString())){
                 deportes.setChecked(true);
