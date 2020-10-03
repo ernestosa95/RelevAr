@@ -181,6 +181,7 @@ public class Familia extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.donde_ocio));
         categoriasPersona.add(getString(R.string.tipo_violencia));
         categoriasPersona.add(getString(R.string.modalidad_violencia));
+        categoriasPersona.add(getString(R.string.trastornos_mentales));
     }
 
     private void CrearBotonera(){

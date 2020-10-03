@@ -104,10 +104,10 @@ public class Persona extends AppCompatActivity {
     ObjetoPersona Persona;
     ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion, layout_vitamina,
                 layout_embarazo, layout_discapacidad, layout_acompañamiento, layout_trastornosniños, layout_adicciones,
-                layout_ocio, layout_violencia;
+                layout_ocio, layout_violencia, layout_trastornosmentales;
     TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion,
                 avancevitamina, avanceembarazo, avancediscapacidad, avanceacompañamiento, avancetrastornosniños,
-                avanceadicciones, avanceocio, avanceviolencia;
+                avanceadicciones, avanceocio, avanceviolencia, avancetrastornosmentales;
 
     AutoCompleteTextView autoEfector;
 
@@ -156,6 +156,7 @@ public class Persona extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.donde_ocio));
         categoriasPersona.add(getString(R.string.tipo_violencia));
         categoriasPersona.add(getString(R.string.modalidad_violencia));
+        categoriasPersona.add(getString(R.string.trastornos_mentales));
 
         Persona = new ObjetoPersona(categoriasPersona);
         // Eliminar el action bar
@@ -257,6 +258,10 @@ public class Persona extends AppCompatActivity {
         layout_violencia = (ConstraintLayout) findViewById(R.id.AVANCEVIOLENCIA);
         avanceviolencia = (TextView) findViewById(R.id.COMPLETADOVIOLENCIA);
 
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_trastornosmentales = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSMENTALES);
+        avancetrastornosmentales = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSMENTALES);
+
         // inicar estado de carga
         ColorAvanceFactores();
         ColorAvanceContacto();
@@ -272,6 +277,7 @@ public class Persona extends AppCompatActivity {
         ColorAvanceAdicciones();
         ColorAvanceOcio();
         ColorAvanceViolencia();
+        ColorAvanceTrastornosMentales();
 
         // Codigo de funcionamiento de los tabs
         tabs = findViewById(R.id.TABS);
@@ -1141,7 +1147,24 @@ public class Persona extends AppCompatActivity {
     // Cambia lo colores de avance de factores
     private void ColorAvanceFactores(){
 
+        float avance = 0;
         if (Persona.FactoresDeRiesgo.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            factores.setBackgroundResource(R.drawable.rojo);
+            avancefactores.setText(getString(R.string.completado)+" 00%");
+        }
+
+        /*if(avance>0 && avance<2){
+            layout_acompañamiento.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avancediscapacidad.setText(aux);
+        }*/
+
+        if(avance==1){
             factores.setBackgroundResource(R.drawable.verde);
             avancefactores.setText(getString(R.string.completado)+" 100%");
         }
@@ -2152,7 +2175,7 @@ public class Persona extends AppCompatActivity {
         }
     }
 
-    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // SERVICIOS BASICOS
     public void Adicciones(View view){
@@ -2203,6 +2226,7 @@ public class Persona extends AppCompatActivity {
                         adicciones+=","+tabaco.getText().toString();}}
 
                 if(adicciones!=null){Persona.Adicciones = adicciones;}
+                else{Persona.Adicciones="";}
 
                 ColorAvanceAdicciones();
                 dialog.dismiss();
@@ -2241,6 +2265,181 @@ public class Persona extends AppCompatActivity {
         if(avance==1){
             layout_adicciones.setBackgroundResource(R.drawable.verde);
             avanceadicciones.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void TrantornosMentales(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_trastornos_mentales, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final CheckBox organicos =  view1.findViewById(R.id.TRASTORNOORGANICO);
+        final CheckBox psicoactivas = view1.findViewById(R.id.SUSTANCIAPSICOACTIVAS);
+        final CheckBox esquizofrenia = view1.findViewById(R.id.ESQUISOFRENIA);
+        final CheckBox humor =  view1.findViewById(R.id.HUMOR);
+        final CheckBox estres = view1.findViewById(R.id.ESTRES);
+        final CheckBox sindromes_comportamiento = view1.findViewById(R.id.SINDROMESCOMPORTAMIENTO);
+        final CheckBox personalidad =  view1.findViewById(R.id.TRASTORNOSPERSONALIDAD);
+        final CheckBox retraso_mental = view1.findViewById(R.id.RETRASOMENTAL);
+        final CheckBox desarrollo_psicosocial = view1.findViewById(R.id.DESARROLLOPSICOLOGICO);
+        final CheckBox emocionales =  view1.findViewById(R.id.EMOCIONALES);
+        final CheckBox no_especificados = view1.findViewById(R.id.TRASTORNOSNOESPECIFICADO);
+        final CheckBox lesiones_autoinflijidas = view1.findViewById(R.id.LESIONESAUTOINFLIJIDAS);
+
+        String[] vac = Persona.Adicciones.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(organicos.getText().toString())){
+                organicos.setChecked(true);
+            }
+            if (vac[x].equals(psicoactivas.getText().toString())){
+                psicoactivas.setChecked(true);
+            }
+            if (vac[x].equals(esquizofrenia.getText().toString())){
+                esquizofrenia.setChecked(true);
+            }
+            if (vac[x].equals(humor.getText().toString())){
+                humor.setChecked(true);
+            }
+            if (vac[x].equals(estres.getText().toString())){
+                estres.setChecked(true);
+            }
+            if (vac[x].equals(sindromes_comportamiento.getText().toString())){
+                sindromes_comportamiento.setChecked(true);
+            }
+            if (vac[x].equals(personalidad.getText().toString())){
+                personalidad.setChecked(true);
+            }
+            if (vac[x].equals(retraso_mental.getText().toString())){
+                retraso_mental.setChecked(true);
+            }
+            if (vac[x].equals(desarrollo_psicosocial.getText().toString())){
+                desarrollo_psicosocial.setChecked(true);
+            }
+            if (vac[x].equals(emocionales.getText().toString())){
+                emocionales.setChecked(true);
+            }
+            if (vac[x].equals(no_especificados.getText().toString())){
+                no_especificados.setChecked(true);
+            }
+            if (vac[x].equals(lesiones_autoinflijidas.getText().toString())){
+                lesiones_autoinflijidas.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDARADICCIONES);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String trastornosMentales = null;
+                if (organicos.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=organicos.getText().toString();
+                    } else {
+                        trastornosMentales+=","+organicos.getText().toString();}}
+                if (psicoactivas.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=psicoactivas.getText().toString();
+                    } else {
+                        trastornosMentales+=","+psicoactivas.getText().toString();}}
+                if (esquizofrenia.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=esquizofrenia.getText().toString();
+                    } else {
+                        trastornosMentales+=","+esquizofrenia.getText().toString();}}
+                if (humor.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=humor.getText().toString();
+                    } else {
+                        trastornosMentales+=","+humor.getText().toString();}}
+                if (estres.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=estres.getText().toString();
+                    } else {
+                        trastornosMentales+=","+estres.getText().toString();}}
+                if (sindromes_comportamiento.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=sindromes_comportamiento.getText().toString();
+                    } else {
+                        trastornosMentales+=","+sindromes_comportamiento.getText().toString();}}
+                if (personalidad.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=personalidad.getText().toString();
+                    } else {
+                        trastornosMentales+=","+personalidad.getText().toString();}}
+                if (retraso_mental.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=retraso_mental.getText().toString();
+                    } else {
+                        trastornosMentales+=","+retraso_mental.getText().toString();}}
+                if (desarrollo_psicosocial.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=desarrollo_psicosocial.getText().toString();
+                    } else {
+                        trastornosMentales+=","+desarrollo_psicosocial.getText().toString();}}
+                if (emocionales.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=emocionales.getText().toString();
+                    } else {
+                        trastornosMentales+=","+emocionales.getText().toString();}}
+                if (no_especificados.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=no_especificados.getText().toString();
+                    } else {
+                        trastornosMentales+=","+no_especificados.getText().toString();}}
+                if (lesiones_autoinflijidas.isChecked()){
+                    if (trastornosMentales==null){
+                        trastornosMentales=lesiones_autoinflijidas.getText().toString();
+                    } else {
+                        trastornosMentales+=","+lesiones_autoinflijidas.getText().toString();}}
+
+
+                if(trastornosMentales!=null){Persona.TrastornosMentales = trastornosMentales;}
+                else{Persona.TrastornosMentales="";}
+
+                ColorAvanceTrastornosMentales();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARADICCIONES);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceTrastornosMentales(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.TrastornosMentales.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_trastornosmentales.setBackgroundResource(R.drawable.rojo);
+            avancetrastornosmentales.setText(getString(R.string.completado)+" 00%");
+        }
+
+        /*if(avance>0 && avance<2){
+            layout_acompañamiento.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avancediscapacidad.setText(aux);
+        }*/
+
+        if(avance==1){
+            layout_trastornosmentales.setBackgroundResource(R.drawable.verde);
+            avancetrastornosmentales.setText(getString(R.string.completado)+" 100%");
         }
     }
 
@@ -2316,6 +2515,7 @@ public class Persona extends AppCompatActivity {
                     } else {
                         actividades+=","+otros.getText().toString();}}
                 if(actividades!=null){Persona.ActividadesOcio = actividades;}
+                else{Persona.ActividadesOcio="";}
 
                 Persona.LugarOcio = editLugarOcio.getText().toString();
                 ColorAvanceOcio();
@@ -2455,6 +2655,7 @@ public class Persona extends AppCompatActivity {
                     } else {
                         tipoViolencia+=","+simbolica.getText().toString();}}
                 if(tipoViolencia!=null){Persona.TipoViolencia = tipoViolencia;}
+                else {Persona.TipoViolencia="";}
 
                 String modalidadViolencia = null;
                 if (domestica.isChecked()){
@@ -2483,6 +2684,7 @@ public class Persona extends AppCompatActivity {
                     } else {
                         modalidadViolencia+=","+obstetrica.getText().toString();}}
                 if(modalidadViolencia!=null){Persona.ModalidadViolencia = modalidadViolencia;}
+                else{Persona.ModalidadViolencia="";}
                 ColorAvanceViolencia();
                 dialog.dismiss();
             }

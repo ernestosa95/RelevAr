@@ -66,6 +66,7 @@ public class ObjetoPersona implements Serializable {
     public String LugarOcio;
     public String TipoViolencia;
     public String ModalidadViolencia;
+    public String TrastornosMentales;
 
     private ArrayList<String> cabeceraPersona = new ArrayList<>();
     private HashMap<String,String> datosIngresados = new HashMap<>();
@@ -117,6 +118,7 @@ public class ObjetoPersona implements Serializable {
         LugarOcio="";
         TipoViolencia="";
         ModalidadViolencia="";
+        TrastornosMentales="";
     }
 
     public String FormatoGuardar(){
@@ -257,6 +259,10 @@ public class ObjetoPersona implements Serializable {
         if(ModalidadViolencia.length()!=0){
             cabecera.add(cabeceraPersona.get(23));
             datosIngresados.put(cabeceraPersona.get(23), ModalidadViolencia);
+        }
+        if(TrastornosMentales.length()!=0){
+            cabecera.add(cabeceraPersona.get(24));
+            datosIngresados.put(cabeceraPersona.get(24), TrastornosMentales);
         }
         return cabecera;
     }
