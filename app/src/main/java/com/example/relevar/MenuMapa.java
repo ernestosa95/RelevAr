@@ -107,8 +107,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_menu_principal);
 
         // Eliminar el action bar
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.hide();
+        /*ActionBar actionbar = getSupportActionBar();
+        actionbar.hide();*/
 
         // Evitar la rotacion
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {

@@ -3,6 +3,8 @@
     <string name="cargar_datos">CARGAR DATOS</string>
     <string name="relevamiento_georeferenciacion">RELEVAMIENTO | GEOREFERENCIACIÓN</string>
     <string name="encabezado">CALLE;NUMERO;COORDENADAS;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD; FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA;TELEFONO CELULAR;TELEFONO FIJO;MAIL;OBSERVACIONES;PRODUCTO DE LIMPIEZA;NOMBRE CONTACTO;TELEFONO CONTACTO;PARENTEZCO CONTACTO;OCUPACION;EDUCACION;TIPO DE VIVIENDA;PAREDES EXTERIORE;REVOQUE;EXTERIOR DEL TECHO;ARBOLES;AGUA;AGUA PARA BEBER PROVIENE;ALMACENA AGUA DE LLUVIA;ELECTRICIDAD;GAS;EXCRETAS;HABITACIONES;LA VIVIENDA ES;BAÑO;EL BAÑO TIENE;LUGAR PARA COCINAR;USA PARA COCINAR;PISOS;CIELORRAZO;ENCUESTADOR\n</string>
+    <string name="encabezado_dengue" translatable="false">CALLE;NUMERO;COORDENADAS;DNI;APELLIDO;NOMBRE;N° RESIDENTES;CERRADOS O RENUENTES;TANQUES BAJOS Y ELEVADOS - BARRILES - TONELES;-;-;PILETAS - CISTERNAS - ALJIBES;-;-;CUBIERTAS;-;-;CANALETA PARA LLUVIA;-;-;HUECO - AXILA DE ARBOL;-;-;MACETAS - FLORERO - PLANTA ACUATICA;-;-;RECIPIENTE PLASTICOS;-;-;BOTELLAS VARIAS;-;-;ELEMENTOS EN DESUSO - OTROS;-;-\n</string>
+    <string name="encabezado_dengue_2" translatable="false">;;;;;;;;I;T;FA;I;T;FA;I;T;FA;I;T;FA;I;T;FA;I;T;FA;I;T;FA;I;T;FA;I;T;FA;INSPECCIONADOS;TRATADOS;DESTRUIDOS;FOCO AEDICO;LARVICIDA;TIPO DE TRABAJO\n</string>
     <string name="iniciar_recorrido">INICIAR RECORRIDO</string>
     <string name="terminar_recorrido">TERMINAR RECORRIDO</string>
     <string name="reiniciar_recorrido">REINICIAR RECORRIDO</string>
@@ -179,5 +181,28 @@
     <string name="trastorno_no_especificado" translatable="false">Trastorno mental no especificado</string>
     <string name="lesiones_autoinfligidas" translatable="false">Lesiones autoinfligidas intencionalmente </string>
 
+    <string name="dengue" translatable="false">DENGUE</string>
+    <string name="tipo_trabajo" translatable="false">TIPO DE TRABAJO</string>
+    <string name="inspeccion_domiciliaria" translatable="false">INSPECCION DOMICILIARIA</string>
+    <string name="tratamientos" translatable="false">TRATAMIENTOS</string>
+    <string name="fumigacion" translatable="false">FUMIGACION</string>
+    <string name="situacion_casa" translatable="false">SITUACION DE LA CASA</string>
+    <string name="habitada" translatable="false">HABITADA</string>
+    <string name="cerrada" translatable="false">CERRADA O RENUENTE</string>
+    <string name="tanque" translatable="false">TANQUES BAJOS Y ELEVADOS - BARRILES - TONELES</string>
+    <string name="piletas" translatable="false">PILETAS - CISTERNAS - ALJIBES</string>
+    <string name="cubiertas" translatable="false">CUBIERTAS</string>
+    <string name="canaleta" translatable="false">CANALETA PARA LLUVIA</string>
+    <string name="hueco" translatable="false">HUECO O AXILA DE ARBOL</string>
+    <string name="maceta" translatable="false">MACETA - FLOREROS - PLANTA ACUATICA</string>
+    <string name="recipientes_plasticos" translatable="false">RECIPIENTES PLASTICOS</string>
+    <string name="botellas_varias" translatable="false">BOTELLAS VARIAS</string>
+    <string name="elementos_desuso" translatable="false">ELEMENTO EN DESUSO - OTROS</string>
+    <string name="inspeccionado" translatable="false">INSPECCIONADO</string>
+    <string name="tratado" translatable="false">TRATADO</string>
+    <string name="foco_aedico" translatable="false">FOCO AEDICO</string>
+    <string name="destruidos" translatable="false">DESTRUIDOS</string>
+    <string name="larvicidas" translatable="false">LARVICIDAS</string>
+    <string name="sin_intervencion" translatable="false">SIN INTERVENCION</string>
 
 </resources>

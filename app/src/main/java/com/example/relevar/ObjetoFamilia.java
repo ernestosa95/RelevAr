@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.relevar.R;
 
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +21,7 @@ import java.util.Locale;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
-public class ObjetoFamilia{
+public class ObjetoFamilia implements Serializable {
     public String TipoVivienda;
     public String DueñoVivienda;
     public String CantidadPiezas;
@@ -43,6 +44,23 @@ public class ObjetoFamilia{
     private ArrayList<String> cabeceraFamilia = new ArrayList<String>();
     private HashMap<String, String> datosIngresados = new HashMap<>();
 
+    // Datos de dengue
+    public String Tanques;
+    public String Piletas;
+    public String Cubiertas;
+    public String Canaleta;
+    public String Hueco;
+    public String Macetas;
+    public String RecipientesPlasticos;
+    public String Botellas;
+    public String ElementosDesuso;
+    public String SituacionVivienda;
+    public String TipoTrabajo;
+    public String TotalTratados;
+    public String TotalFocoAedico;
+    public String TotalIspeccionado;
+    public String Larvicida;
+    public String Destruidos;
 
     public ObjetoFamilia(ArrayList<String> aux) {
         cabeceraFamilia = aux;
@@ -65,6 +83,24 @@ public class ObjetoFamilia{
         Arboles="";
         Baño="";
         BañoTiene="";
+
+        // Dengue
+        Tanques = ";;";
+        Piletas = ";;";
+        Cubiertas = ";;";
+        Canaleta = ";;";
+        Hueco = ";;";
+        Macetas = ";;";
+        RecipientesPlasticos = ";;";
+        Botellas = ";;";
+        ElementosDesuso = ";;";
+        SituacionVivienda = "";
+        TipoTrabajo="";
+        TotalFocoAedico="";
+        TotalIspeccionado="";
+        TotalTratados="";
+        Larvicida="";
+        Destruidos="";
     }
 
     public String FormatoGuardar(){
@@ -75,6 +111,13 @@ public class ObjetoFamilia{
         return guardar;
     }
 
+    public String FormatoGuardarDengue(){
+        // DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA
+        String guardar = SituacionVivienda+";"+Tanques+";"+Piletas+";"+Cubiertas+";"+Canaleta+";"+Hueco+";"+
+                Macetas+";"+RecipientesPlasticos+";"+Botellas+";"+ElementosDesuso+";"+TotalIspeccionado+";"+
+                TotalTratados+";"+Destruidos+";"+TotalFocoAedico+";"+Larvicida+";"+TipoTrabajo;
+        return guardar;
+    }
 
     public ArrayList<String> DatosCargadosCsv(){
         ArrayList<String> cabecera = new ArrayList<>();

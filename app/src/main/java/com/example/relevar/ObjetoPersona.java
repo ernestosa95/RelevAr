@@ -119,6 +119,8 @@ public class ObjetoPersona implements Serializable {
         TipoViolencia="";
         ModalidadViolencia="";
         TrastornosMentales="";
+
+
     }
 
     public String FormatoGuardar(){
@@ -127,6 +129,13 @@ public class ObjetoPersona implements Serializable {
                 ";"+CodfigoFactorRiesgo+";"+Vacunas+";"+LoteVacuna+";"+Celular+";"+Fijo+
                 ";"+Mail+";"+Observaciones+";"+Limpieza+";"+NombreContacto+";"+TelefonoContacto+
                 ";"+ParentezcoContacto+";"+Ocupacion+";"+Educacion;
+        return guardar;
+    }
+
+
+    public String FormatoGuardarDengue(){
+        // DNI;APELLIDO;NOMBRE;EDAD;UNIDAD EDAD;FECHA DE NACIMIENTO;EFECTOR;FACTORES DE RIESGO;CODIGO SISA F. DE RIESGO;VACUNAS;LOTE DE VACUNA
+        String guardar=DNI+";"+Apellido+";"+Nombre;
         return guardar;
     }
 

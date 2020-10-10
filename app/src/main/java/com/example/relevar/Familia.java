@@ -20,6 +20,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -479,9 +480,9 @@ public class Familia extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1){
-            if(resultCode== RESULT_OK){
+            if(resultCode == RESULT_OK){
                 ObjetoPersona Persona=new ObjetoPersona(categoriasPersona);
-                ArrayList<String> CamposPersona = new ArrayList<String>();
+                //ArrayList<String> CamposPersona = new ArrayList<String>();
 
                 /*Persona.DNI = data.getStringExtra("DNI");
                 Persona.Nombre = data.getStringExtra("NOMBRE");
@@ -509,11 +510,37 @@ public class Familia extends AppCompatActivity {
                 if(bundle!=null){
                     Persona = (ObjetoPersona) bundle.getSerializable("PERSONA");
                 }
+
+
                 //Agrego la persona como miembro de la familia
                 MiembrosFamiliares.add(Persona);
-
                 //makeText(this, Persona.Nombre, LENGTH_SHORT).show();
                 names.add("DNI: "+Persona.DNI+", "+Persona.Apellido+" "+Persona.Nombre);}
+
+            if(resultCode == 3){
+                ObjetoFamilia aux = new ObjetoFamilia(null);
+                Bundle bundle = data.getExtras();
+                if(bundle!=null){
+                    aux = (ObjetoFamilia) bundle.getSerializable("DENGUE");
+                }
+                //Toast.makeText(this, aux.RecipientesPlasticos, Toast.LENGTH_SHORT).show();
+                familia.SituacionVivienda = aux.SituacionVivienda;
+                familia.TipoTrabajo = aux.TipoTrabajo;
+                familia.ElementosDesuso = aux.ElementosDesuso;
+                familia.Botellas = aux.Botellas;
+                familia.RecipientesPlasticos = aux.RecipientesPlasticos;
+                familia.Macetas = aux.Macetas;
+                familia.Hueco = aux.Hueco;
+                familia.Canaleta = aux.Canaleta;
+                familia.Cubiertas = aux.Cubiertas;
+                familia.Piletas = aux.Piletas;
+                familia.Tanques = aux.Tanques;
+                familia.TotalFocoAedico = aux.TotalFocoAedico;
+                familia.TotalIspeccionado = aux.TotalIspeccionado;
+                familia.TotalTratados = aux.TotalTratados;
+                familia.Larvicida = aux.Larvicida;
+                familia.Destruidos = aux.Destruidos;
+            }
 
                 ListeVer();
         }
@@ -703,6 +730,15 @@ public class Familia extends AppCompatActivity {
             //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
+
+    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void Dengue(View view){
+        Intent Modif= new Intent (this, Dengue.class);
+        startActivityForResult(Modif, 1);
+    }
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // EXTERIOR VIVIENDA
@@ -1311,60 +1347,67 @@ public class Familia extends AppCompatActivity {
         //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
         // Inicio la obtencion de datos de ubicacion del GPS
         //LatLong();
-        if(MiembrosFamiliares.size()!=0){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater Inflater = getLayoutInflater();
-            View view_alert = Inflater.inflate(R.layout.alert_guardar_familia, null);
-            builder.setView(view_alert);
-            builder.setCancelable(false);
-            final AlertDialog dialog = builder.create();
-            dialog.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view_alert = Inflater.inflate(R.layout.alert_guardar_familia, null);
+        builder.setView(view_alert);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
-            Button cancelar = view_alert.findViewById(R.id.CANCELAR1);
-            cancelar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
+        Button cancelar = view_alert.findViewById(R.id.CANCELAR1);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
-            final String[] codigoColor = {"V"};
-            final ImageView rojo = view_alert.findViewById(R.id.ICONOROJO);
-            final ImageView amarillo = view_alert.findViewById(R.id.ICONOAMARILLO);
-            final ImageView verde = view_alert.findViewById(R.id.ICONOVERDE);
-            rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-            amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-            verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+        final String[] codigoColor = {"V"};
+        final ImageView rojo = view_alert.findViewById(R.id.ICONOROJO);
+        final ImageView amarillo = view_alert.findViewById(R.id.ICONOAMARILLO);
+        final ImageView verde = view_alert.findViewById(R.id.ICONOVERDE);
+        rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
 
-            rojo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    codigoColor[0] = "R";
-                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                }
-            });
+        rojo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codigoColor[0] = "R";
+                rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            }
+        });
 
-            amarillo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    codigoColor[0] = "A";
-                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                }
-            });
+        amarillo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codigoColor[0] = "A";
+                amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            }
+        });
 
-            verde.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    codigoColor[0] = "V";
-                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                }
-            });
+        verde.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                codigoColor[0] = "V";
+                verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            }
+        });
+
+        ObjetoPersona auxPersona = new ObjetoPersona(null);
+        if(familia.SituacionVivienda.equals("X")){
+            MiembrosFamiliares.add(auxPersona);
+            Toast.makeText(this, "ENTRO", Toast.LENGTH_SHORT).show();
+        }
+
+        if(MiembrosFamiliares.size()!=0) {
 
             final EditText edtCalle = view_alert.findViewById(R.id.CALLE);
             final EditText edtNumero = view_alert.findViewById(R.id.NUMERO);
@@ -1376,7 +1419,7 @@ public class Familia extends AppCompatActivity {
             mas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    NumerosPersonas+=1;
+                    NumerosPersonas += 1;
                     cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
                 }
             });
@@ -1385,9 +1428,10 @@ public class Familia extends AppCompatActivity {
             menos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (NumerosPersonas!=MiembrosFamiliares.size()){
-                        NumerosPersonas-=1;
-                        cantidadintegrantes.setText(Integer.toString(NumerosPersonas));}
+                    if (NumerosPersonas != MiembrosFamiliares.size()) {
+                        NumerosPersonas -= 1;
+                        cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
+                    }
                 }
             });
 
@@ -1395,7 +1439,7 @@ public class Familia extends AppCompatActivity {
             guardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(Latitudenviar!=0.0) {
+                    if (Latitudenviar != 0.0) {
                         /* Cuales son los datos que cargo el usuario, primero agrego los datos de la
                          familia y luego unifico los datos de las personas cargadas */
                         ArrayList<String> CategoriasDatos = familia.DatosCargadosCsv();
@@ -1422,27 +1466,27 @@ public class Familia extends AppCompatActivity {
                         ArrayList<String> datosCabeceraCsv = DatosCabeceraCsv();
 
                         /* Comparo el conjunto de datos cargados con los de la cabecera csv */
-                        for(int i=0; i< CategoriasDatos.size(); i++){
-                            if(!datosCabeceraCsv.contains(CategoriasDatos.get(i))){
+                        for (int i = 0; i < CategoriasDatos.size(); i++) {
+                            if (!datosCabeceraCsv.contains(CategoriasDatos.get(i))) {
                                 datosCabeceraCsv.add(CategoriasDatos.get(i));
                             }
                         }
 
                         // Crear un string que es la nueva cabecera
-                        String cabecera="";
-                        for (int i=0; i< datosCabeceraCsv.size()-1; i++){
-                            cabecera += datosCabeceraCsv.get(i) +";";
+                        String cabecera = "";
+                        for (int i = 0; i < datosCabeceraCsv.size() - 1; i++) {
+                            cabecera += datosCabeceraCsv.get(i) + ";";
                         }
-                        cabecera+= datosCabeceraCsv.get(datosCabeceraCsv.size()-1);
+                        cabecera += datosCabeceraCsv.get(datosCabeceraCsv.size() - 1);
                         //cabecera +="\n";
 
                         // Creo el string de la vieja cabecera
-                        String viejaCabecera="";
+                        String viejaCabecera = "";
                         CategoriaPersonas = DatosCabeceraCsv();
-                        for (int i=0; i< CategoriaPersonas.size()-1; i++){
-                            viejaCabecera += CategoriaPersonas.get(i) +";";
+                        for (int i = 0; i < CategoriaPersonas.size() - 1; i++) {
+                            viejaCabecera += CategoriaPersonas.get(i) + ";";
                         }
-                        viejaCabecera += CategoriaPersonas.get(CategoriaPersonas.size()-1);
+                        viejaCabecera += CategoriaPersonas.get(CategoriaPersonas.size() - 1);
                         //viejaCabecera +="\n";
 
                         // Reemplazo la cabecera por una nueva
@@ -1454,44 +1498,58 @@ public class Familia extends AppCompatActivity {
 
                         /* Solicito los datos cargados tanto en la persona como en la familia*/
                         String datosGuardar = "";
-                        String coordenadas = Latitud +" "+ Longitud;
+                        String coordenadas = Latitud + " " + Longitud;
                         String calle = edtCalle.getText().toString();
                         String numero = edtNumero.getText().toString();
-                        HashMap<String,String> datosFamilia = familia.DatosIngresados();
-                        for (int i=0; i<MiembrosFamiliares.size(); i++){
-                            HashMap<String,String> auxHash = new HashMap<>();
+                        HashMap<String, String> datosFamilia = familia.DatosIngresados();
+                        for (int i = 0; i < MiembrosFamiliares.size(); i++) {
+                            HashMap<String, String> auxHash = new HashMap<>();
                             auxHash.putAll(datosFamilia);
-                            auxHash.put("COORDENADAS",coordenadas);
-                            auxHash.put("ESTADO",codigoColor[0]);
-                            auxHash.put("GRUPO FAMILIAR",Integer.toString(NumerosPersonas));
-                            auxHash.put("NUMERO",numero);
-                            auxHash.put("CALLE",calle.toUpperCase());
+                            auxHash.put("COORDENADAS", coordenadas);
+                            auxHash.put("ESTADO", codigoColor[0]);
+                            auxHash.put("GRUPO FAMILIAR", Integer.toString(NumerosPersonas));
+                            auxHash.put("NUMERO", numero);
+                            auxHash.put("CALLE", calle.toUpperCase());
                             auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
-                            for(int j=0; j < datosCabeceraCsv.size()-1; j++){
-                                if(auxHash.get(datosCabeceraCsv.get(j))!=null){
-                                datosGuardar+=auxHash.get(datosCabeceraCsv.get(j))+";";}
-                                else {datosGuardar+=";";}
+                            for (int j = 0; j < datosCabeceraCsv.size() - 1; j++) {
+                                if (auxHash.get(datosCabeceraCsv.get(j)) != null) {
+                                    datosGuardar += auxHash.get(datosCabeceraCsv.get(j)) + ";";
+                                } else {
+                                    datosGuardar += ";";
+                                }
                             }
-                            if(auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size()-1))!=null){
-                                datosGuardar+=auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size()-1))+"\n";}
-                            else {datosGuardar+="\n";}
+                            if (auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) != null) {
+                                datosGuardar += auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) + "\n";
+                            } else {
+                                datosGuardar += "\n";
+                            }
 
                             /* guardo el string de la persona agregando una linea */
                             GuardarPersona(datosGuardar);
                         }
 
+                        /* Guardo Dengue si es que se cargaron datos en este modulo*/
+                        if(familia.TipoTrabajo.length()!=0){
+                        GuardarDengue(calle, numero, Integer.toString(NumerosPersonas), MiembrosFamiliares.get(0));}
+
                         // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                        Intent intent= new Intent (getBaseContext(), MenuMapa.class);
-                        LatLng position = new LatLng(Latitudenviar,Longitudenviar); // Boa Vista
+                        Intent intent = new Intent(getBaseContext(), MenuMapa.class);
+                        LatLng position = new LatLng(Latitudenviar, Longitudenviar); // Boa Vista
                         Bundle args = new Bundle();
                         args.putParcelable("from_position", position);
                         //intent.putExtra("MARCADOR", position);
                         intent.putExtra("bundle", args);
                         setResult(RESULT_OK, intent);
 
-                    }else{makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();}
-                }});
-        } else {makeText(getBaseContext(), "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
+                    } else {
+                        makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }else{
+                makeText(getBaseContext(), "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();
+            }
+
     }
 
     private ArrayList<String> DatosCabeceraCsv(){
@@ -1592,6 +1650,64 @@ public class Familia extends AppCompatActivity {
 
         } catch (IOException e) {
             e.printStackTrace();}
+    }
+
+    private void GuardarDengue(String calle, String numeroCalle, String cantidadMiembros, ObjetoPersona responsable){
+
+        // Agrego la cabecera en .csv
+        File ReleVar = new File(Environment.getExternalStorageDirectory() +
+                "/RelevAr");
+        File nuevaCarpeta = new File(ReleVar, "PLANILLAS DENGUE");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "Dengue-"+fecha+".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        String strLine = "";
+        try {
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            strLine = br.readLine().split(";")[0];
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
+        }
+
+        if(!strLine.equals("CALLE")){
+        String cabecera_dengue = getString(R.string.encabezado_dengue);
+        try {
+            FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
+            // que se agreguen los datos al final sin perder los datos anteriores
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(cabecera_dengue);
+            myOutWriter.append(getString(R.string.encabezado_dengue_2));
+            myOutWriter.close();
+            fOut.close();
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }}
+
+        try {
+            String coordenadas = Latitud +" "+ Longitud;
+            String guardar = calle+";"+numeroCalle+";"+coordenadas+";"+responsable.FormatoGuardarDengue()+";"+
+                    cantidadMiembros+";"+familia.FormatoGuardarDengue()+"\n";
+        FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
+        // que se agreguen los datos al final sin perder los datos anteriores
+        OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+        myOutWriter.append(guardar);
+        myOutWriter.close();
+        fOut.close();
+
+        } catch (IOException e){
+        e.printStackTrace();
+        }
+
     }
 
 }
