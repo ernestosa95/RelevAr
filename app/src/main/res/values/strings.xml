@@ -204,5 +204,6 @@
     <string name="destruidos" translatable="false">DESTRUIDOS</string>
     <string name="larvicidas" translatable="false">LARVICIDAS</string>
     <string name="sin_intervencion" translatable="false">SIN INTERVENCION</string>
+    <string name="info_familiar" translatable="false">INFORMACION FAMILIAR</string>
 
 </resources>

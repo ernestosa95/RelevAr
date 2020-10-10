@@ -315,5 +315,9 @@ public class ObjetoPersona implements Serializable {
                 UnidadEdad="AÑOS";}
         }else Edad="";
     }
+
+    public void CargarInformacion(HashMap<String, String> datos){
+
+    }
 }
 

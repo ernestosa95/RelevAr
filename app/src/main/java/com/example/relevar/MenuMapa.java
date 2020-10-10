@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -37,6 +38,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -54,14 +56,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -88,7 +100,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     ListView lv1;
     // Inicio de toma de ubicacion
     EditText Nencuestador;
-    Button PararServicio, BtnCompartir;
+    Button PararServicio;
+    ImageButton BtnCompartir;
     // Creo al encuestador
     Encuestador encuestador = new Encuestador();
     // Mapa
@@ -100,15 +113,20 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     TextView txt;
     private ArrayList<LatLng> latlngs = new ArrayList<>();
     String directorioraiz;
-
+    Spinner fechas;
+    ObjetoFamilia familia = new ObjetoFamilia(null);
+    ArrayList<String> MiembrosFamiliares = new ArrayList<>();
+    ArrayList<String> DatosMiembrosFamiliares = new ArrayList<>();
+    ArrayList<String> categoriasPersona = new ArrayList<>();
+    ArrayList<String> familiaCabecera = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
 
         // Eliminar el action bar
-        /*ActionBar actionbar = getSupportActionBar();
-        actionbar.hide();*/
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.hide();
 
         // Evitar la rotacion
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -122,7 +140,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         // Creo el mapa y lo centro en las coodenadas -60 -30
         mapView = (MapView) findViewById(R.id.MAPA);
         Bundle mapBundle = null;
-        //txt = (TextView) findViewById(R.id.COMPLETADOFACTORES);
+
         if (savedInstanceState != null) {
             mapBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
@@ -144,13 +162,64 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         /* Creo y asigno funciones para compartir los arcivos .csv*/
         directorioraiz = "/storage/emulated/0/RelevAr";
-        BtnCompartir = (Button) findViewById(R.id.COMPARTIR);
+        BtnCompartir = findViewById(R.id.COMPARTIR);
         BtnCompartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buscar(directorioraiz);
             }
         });
+
+        fechas = findViewById(R.id.FECHAS);
+        // Cargo el spinner con los datos de los encuestadores
+        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spiner_personalizado, FechasArchivos());
+        fechas.setAdapter(comboAdapter);
+
+        categoriasPersona.add(getString(R.string.celular));
+        categoriasPersona.add(getString(R.string.fijo));
+        categoriasPersona.add(getString(R.string.mail));
+        categoriasPersona.add(getString(R.string.factores_riesgo));
+        categoriasPersona.add(getString(R.string.efector));
+        categoriasPersona.add(getString(R.string.observaciones));
+        categoriasPersona.add(getString(R.string.nombre_apellido_contacto));
+        categoriasPersona.add(getString(R.string.telefono_contacto));
+        categoriasPersona.add(getString(R.string.parentezco_contacto));
+        categoriasPersona.add(getString(R.string.ocupacion));
+        categoriasPersona.add(getString(R.string.educacion));
+        categoriasPersona.add(getString(R.string.vitamina));
+        categoriasPersona.add(getString(R.string.fecha_nacimiento));
+        categoriasPersona.add(getString(R.string.ultimo_control));
+        categoriasPersona.add(getString(R.string.enfermedad_relacionada_embarazo));
+        categoriasPersona.add(getString(R.string.certificado_unico_discapacidad));
+        categoriasPersona.add(getString(R.string.tipo_discapacidad));
+        categoriasPersona.add(getString(R.string.acompañamiento));
+        categoriasPersona.add(getString(R.string.transtornos_en_niños));
+        categoriasPersona.add(getString(R.string.adicciones));
+        categoriasPersona.add(getString(R.string.actividades_ocio));
+        categoriasPersona.add(getString(R.string.donde_ocio));
+        categoriasPersona.add(getString(R.string.tipo_violencia));
+        categoriasPersona.add(getString(R.string.modalidad_violencia));
+        categoriasPersona.add(getString(R.string.trastornos_mentales));
+
+        familiaCabecera.add(getString(R.string.tipo_de_vivienda));
+        familiaCabecera.add(getString(R.string.dueño_vivienda));
+        familiaCabecera.add(getString(R.string.cantidad_piezas));
+        familiaCabecera.add(getString(R.string.lugar_cocinar));
+        familiaCabecera.add(getString(R.string.usa_para_cocinar));
+        familiaCabecera.add(getString(R.string.paredes));
+        familiaCabecera.add(getString(R.string.revoque));
+        familiaCabecera.add(getString(R.string.pisos));
+        familiaCabecera.add(getString(R.string.cielorraso));
+        familiaCabecera.add(getString(R.string.techo));
+        familiaCabecera.add(getString(R.string.agua));
+        familiaCabecera.add(getString(R.string.origenagua));
+        familiaCabecera.add(getString(R.string.excretas));
+        familiaCabecera.add(getString(R.string.electricidad));
+        familiaCabecera.add(getString(R.string.gas));
+        familiaCabecera.add(getString(R.string.agua_lluvia));
+        familiaCabecera.add(getString(R.string.arboles));
+        familiaCabecera.add(getString(R.string.baño));
+        familiaCabecera.add(getString(R.string.baño_tiene));
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,6 +499,28 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
 
+        ImageButton centrar = findViewById(R.id.MIUBICACION);
+        centrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int ultimo = recorrido.size();
+                if(ultimo!=0){
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));}
+            }
+        });
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                LatLng position = marker.getPosition();
+                String pos = Double.toString(position.latitude)+" "+Double.toString(position.longitude);
+                //Toast.makeText(getBaseContext(),pos, Toast.LENGTH_SHORT).show();
+                InfoFamilia(pos);
+                return false;
+            }
+        });
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -440,13 +531,13 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         .clickable(true).color(Color.parseColor("#69A4D1")));
                 int ultimo = recorrido.size();
                 if(ultimo!=0){
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
+                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
                 ruta.setPoints(recorrido);
 
-                if (encuestador.Marcadores().size()!=0){
-                    ArrayList<LatLng> marcadores = encuestador.Marcadores();
-                    ArrayList<String> codigoColores = encuestador.CodigoColores();
-                    for(int i=0; i<encuestador.Marcadores().size(); i++){
+                if (encuestador.Marcadores(fechas.getSelectedItem().toString()).size()!=0){
+                    ArrayList<LatLng> marcadores = encuestador.Marcadores(fechas.getSelectedItem().toString());
+                    ArrayList<String> codigoColores = encuestador.CodigoColores(fechas.getSelectedItem().toString());
+                    for(int i=0; i<encuestador.Marcadores(fechas.getSelectedItem().toString()).size(); i++){
 
                         MarkerOptions mo1 = new MarkerOptions();
                         mo1.position(marcadores.get(i));
@@ -461,6 +552,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                             drawableBitmap = getBitmap(R.drawable.icono_mapa_verde);}
                         mo1.icon(BitmapDescriptorFactory.fromBitmap(drawableBitmap));
                         map.addMarker(mo1);
+
                     }
                 }}
 
@@ -623,7 +715,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     // ABRIR EL EXPLORADOR DE ARCHIVOS
     public void MostrarArchivos(View view){
-        Uri selectedUri = Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/RelevAr");
+        Uri selectedUri = Uri.parse("file:/" + Environment.getExternalStorageDirectory() + "/RelevAr");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(selectedUri, "application/*");
         startActivity(Intent.createChooser(intent, "Open folder"));
@@ -689,6 +781,128 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 dialog.dismiss();
             }
         });
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // Comparar mapas
+    private ArrayList<String> FechasArchivos (){
+        /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
+         * RelevAr*/
+        ArrayList<String> listaFechasArchivos = new ArrayList<String>();
+        ArrayList<String> listaRutasFechasArchivos = new ArrayList<String>();
+        String RutaDirectorio = "/storage/emulated/0/RelevAr";
+        File directorioactual = new File(RutaDirectorio);
+        File[] listaArchivos = directorioactual.listFiles();
+
+        int x=0;
+
+        for(File archivo : listaArchivos){
+            listaRutasFechasArchivos.add(archivo.getPath());
+        }
+
+        Collections.sort(listaRutasFechasArchivos, String.CASE_INSENSITIVE_ORDER);
+
+        for(int i=x; i<listaRutasFechasArchivos.size(); i++){
+            File archivo = new File(listaRutasFechasArchivos.get(i));
+            if(archivo.isFile()){
+                String[] auxCorte = archivo.getName().split("-");
+                String auxNombre = auxCorte[1]+"-"+auxCorte[2]+"-"+auxCorte[3];
+                //auxNombre.replaceAll(".csv", "");
+                listaFechasArchivos.add(auxNombre);
+            } else{
+                //listaFechasArchivos.add("/"+archivo.getName());
+            }
+        }
+        Collections.reverse(listaFechasArchivos);
+     return listaFechasArchivos;
+    }
+
+    private void InfoFamilia(String coordenadas){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MenuMapa.this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view = Inflater.inflate(R.layout.alert_info_familia, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        String infoFamilia = LeerInfo(coordenadas);
+        final TextView txtInfoFamilia = view.findViewById(R.id.DATOSFAMILIARES);
+        txtInfoFamilia.setText(infoFamilia);
+
+        final ListView Personas = view.findViewById(R.id.LISTMIEMBROS);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, MiembrosFamiliares);
+        Personas.setAdapter(adapter);
+
+        final Button cancelar = view.findViewById(R.id.CANCELARINFOFMAILIA);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private String LeerInfo(String coordenadas){
+        MiembrosFamiliares.clear();
+        DatosMiembrosFamiliares.clear();
+
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fechas.getSelectedItem().toString();//+ fecha + ".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        String[] cabecera;
+        String datosFamilia="";
+        try {
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            cabecera = br.readLine().split(";");
+            String myData;
+            while ((myData=br.readLine())!=null){
+                String[] Datos = myData.split(";");
+                String datosMostrar = "";
+                if(Datos[2].equals(coordenadas)){
+                    String identificacion="";
+                    if(Datos.length>=6){identificacion+=Datos[5]+",";}
+                    if(Datos.length>=7){identificacion+=Datos[6]+",";}
+                    if(Datos.length>=8){identificacion+=Datos[7]+",";}
+
+                    MiembrosFamiliares.add(identificacion);
+                    // Tengo datos fijos de los cuales conozco la ubicacion
+                    for (int i=0; i<Datos.length; i++) {
+                        for (int j = 0; j < categoriasPersona.size(); j++) {
+                            if (cabecera[i].equals(categoriasPersona.get(j))) {
+                                datosMostrar += categoriasPersona.get(j) + ": " + Datos[i] + "\n";
+                            }
+                        }
+                        for (int k=0; k < familiaCabecera.size(); k++){
+                            if (cabecera[i].equals(familiaCabecera.get(k))){
+                                datosFamilia += familiaCabecera.get(k)+": "+ Datos[i]+ "\n";
+                                //Toast.makeText(this, Datos[i], Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                DatosMiembrosFamiliares.add(datosMostrar);
+                //Toast.makeText(this, Integer.toString(MiembrosFamiliares.size()), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
+        }
+
+        //Toast.makeText(this, datosFamilia, Toast.LENGTH_SHORT).show();
+        return datosFamilia;
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

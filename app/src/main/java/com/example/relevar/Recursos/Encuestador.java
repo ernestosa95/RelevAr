@@ -72,7 +72,7 @@ public class Encuestador {
             }}
     }
 
-    public ArrayList<LatLng> Marcadores (){
+    public ArrayList<LatLng> Marcadores (String fechaVisualizacion){
         ArrayList<LatLng> marcadores = new ArrayList<>();
         String linea;
         try {
@@ -81,7 +81,7 @@ public class Encuestador {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date1 = new Date();
             String fecha = dateFormat.format(date1);
-            String NombreArchivo = "RelevAr-" + fecha + ".csv";
+            String NombreArchivo = "RelevAr-" +fechaVisualizacion;//+ fecha + ".csv";
             File dir = new File(nuevaCarpeta, NombreArchivo);
             String strLine = "";
             // leer datos
@@ -108,7 +108,7 @@ public class Encuestador {
         return marcadores;
     }
 
-    public ArrayList<String> CodigoColores (){
+    public ArrayList<String> CodigoColores (String fechaInteres){
         ArrayList<String> marcadores = new ArrayList<>();
         String linea;
         try {
@@ -117,7 +117,7 @@ public class Encuestador {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date1 = new Date();
             String fecha = dateFormat.format(date1);
-            String NombreArchivo = "RelevAr-" + fecha + ".csv";
+            String NombreArchivo = "RelevAr-" +fechaInteres;//+ fecha + ".csv";
             File dir = new File(nuevaCarpeta, NombreArchivo);
             String strLine = "";
             // leer datos
