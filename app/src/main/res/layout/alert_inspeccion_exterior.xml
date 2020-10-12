@@ -69,6 +69,7 @@
                     android:id="@+id/INFOBOTONCASA"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_margin="5dp"
                     android:background="@drawable/button1"
                     android:onClick="TipodeCasa"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -138,6 +139,7 @@
                     android:id="@+id/INFOBOTONREVOQUE"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_margin="5dp"
                     android:background="@drawable/button1"
                     android:onClick="TipodeCasa"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -215,9 +217,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ARBOLES"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:layout_marginTop="2dp"
                 android:background="@drawable/edit_text_1">
 
                 <TextView
@@ -235,6 +236,7 @@
                     android:id="@+id/EDTARBOLES"
                     android:layout_width="80dp"
                     android:layout_height="40dp"
+                    android:layout_margin="5dp"
                     android:background="#FFFFFF"
                     android:ems="10"
                     android:gravity="center_horizontal|center_vertical"
@@ -245,6 +247,90 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/TXTARBOLES" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/PATAGONIA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/edit_text_1">
+
+                <TextView
+                    android:id="@+id/TXTNIEVEHIELO"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/hielo"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/TXTPERROSSUELTOS"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/perros_sueltos"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TXTPERROSSUELTOS">
+
+                    <RadioButton
+                        android:id="@+id/SIPERROSSUELTOS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/si"
+                        android:textSize="18sp" />
+
+                    <RadioButton
+                        android:id="@+id/NOPERROSSUELTOS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/no"
+                        android:textSize="18sp" />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TXTNIEVEHIELO">
+
+                    <RadioButton
+                        android:id="@+id/SINIEVEHIELO"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/si"
+                        android:textSize="18sp" />
+
+                    <RadioButton
+                        android:id="@+id/NONIEVEHIELO"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/no"
+                        android:textSize="18sp" />
+                </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

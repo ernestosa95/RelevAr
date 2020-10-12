@@ -24,6 +24,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -220,6 +222,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         familiaCabecera.add(getString(R.string.arboles));
         familiaCabecera.add(getString(R.string.baño));
         familiaCabecera.add(getString(R.string.baño_tiene));
+        familiaCabecera.add(getString(R.string.hielo));
+        familiaCabecera.add(getString(R.string.perros_sueltos));
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -498,14 +502,20 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMapToolbarEnabled(false);
+        LatLng posinicial = new LatLng(-34.891920, -63.719044);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(posinicial,3));
 
         ImageButton centrar = findViewById(R.id.MIUBICACION);
         centrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int ultimo = recorrido.size();
-                if(ultimo!=0){
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));}
+                LocationManager service = (LocationManager)
+                        getSystemService(LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                String provider = service.getBestProvider(criteria, false);
+                Location location = service.getLastKnownLocation(provider);
+                LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,17));
             }
         });
 
@@ -734,6 +744,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
+        final int[] pantallas = {0};
+
+        final TextView encabezado = view1.findViewById(R.id.ENCABEZADOMODULOS);
+        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.grupo_familiar));
+
         final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         admin.DesactivarBotones();
 
@@ -773,12 +788,272 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        final Switch dengue = view1.findViewById(R.id.SWITCHDENGUE);
+        dengue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(dengue.getText().toString());
+                } else {
+                    admin.DesactivarBoton(dengue.getText().toString());
+                }
+            }
+        });
+
+        final Switch educacion = view1.findViewById(R.id.SWITCHEDUCACION);
+        educacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(educacion.getText().toString());
+                } else {
+                    admin.DesactivarBoton(educacion.getText().toString());
+                }
+            }
+        });
+        educacion.setVisibility(View.GONE);
+
+        final Switch ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
+        ocupacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(ocupacion.getText().toString());
+                } else {
+                    admin.DesactivarBoton(ocupacion.getText().toString());
+                }
+            }
+        });
+        ocupacion.setVisibility(View.GONE);
+
+        final Switch contacto = view1.findViewById(R.id.SWITCHCONTACTO);
+        contacto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(contacto.getText().toString());
+                } else {
+                    admin.DesactivarBoton(contacto.getText().toString());
+                }
+            }
+        });
+        contacto.setVisibility(View.GONE);
+
+        final Switch efector = view1.findViewById(R.id.SWITCHEFECTOR);
+        efector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(efector.getText().toString());
+                } else {
+                    admin.DesactivarBoton(efector.getText().toString());
+                }
+            }
+        });
+        efector.setVisibility(View.GONE);
+
+        final Switch observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
+        observaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(observaciones.getText().toString());
+                } else {
+                    admin.DesactivarBoton(observaciones.getText().toString());
+                }
+            }
+        });
+        observaciones.setVisibility(View.GONE);
+
+        // ESTADO RIESGO
+        final Switch factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
+        factores_riesgo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(factores_riesgo.getText().toString());
+                } else {
+                    admin.DesactivarBoton(factores_riesgo.getText().toString());
+                }
+            }
+        });
+        factores_riesgo.setVisibility(View.GONE);
+
+        final Switch discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
+        discapacidad.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(discapacidad.getText().toString());
+                } else {
+                    admin.DesactivarBoton(discapacidad.getText().toString());
+                }
+            }
+        });
+        discapacidad.setVisibility(View.GONE);
+
+        final Switch embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
+        embarazo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(embarazo.getText().toString());
+                } else {
+                    admin.DesactivarBoton(embarazo.getText().toString());
+                }
+            }
+        });
+        embarazo.setVisibility(View.GONE);
+
+        final Switch vitamina_D = view1.findViewById(R.id.SWITCHVITAMINAD);
+        vitamina_D.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(vitamina_D.getText().toString());
+                } else {
+                    admin.DesactivarBoton(vitamina_D.getText().toString());
+                }
+            }
+        });
+        vitamina_D.setVisibility(View.GONE);
+
+        // ESTADO PSICO-SOCIAL
+        final Switch acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
+        acompañamiento.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(acompañamiento.getText().toString());
+                } else {
+                    admin.DesactivarBoton(acompañamiento.getText().toString());
+                }
+            }
+        });
+        acompañamiento.setVisibility(View.GONE);
+
+        final Switch transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
+        transtornos_niños.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(transtornos_niños.getText().toString());
+                } else {
+                    admin.DesactivarBoton(transtornos_niños.getText().toString());
+                }
+            }
+        });
+        transtornos_niños.setVisibility(View.GONE);
+
+        final Switch trastornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
+        trastornos_mentales.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(trastornos_mentales.getText().toString());
+                } else {
+                    admin.DesactivarBoton(trastornos_mentales.getText().toString());
+                }
+            }
+        });
+        trastornos_mentales.setVisibility(View.GONE);
+
+        final Switch adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
+        adicciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(adicciones.getText().toString());
+                } else {
+                    admin.DesactivarBoton(adicciones.getText().toString());
+                }
+            }
+        });
+        adicciones.setVisibility(View.GONE);
+
+        final Switch violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
+        violencia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(violencia.getText().toString());
+                } else {
+                    admin.DesactivarBoton(violencia.getText().toString());
+                }
+            }
+        });
+        violencia.setVisibility(View.GONE);
+
+        final Switch ocio = view1.findViewById(R.id.SWITCHOCIO);
+        ocio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(ocio.getText().toString());
+                } else {
+                    admin.DesactivarBoton(ocio.getText().toString());
+                }
+            }
+        });
+        ocio.setVisibility(View.GONE);
+
         admin.close();
         final Button listo = view1.findViewById(R.id.LISTOBOTON);
         listo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                switch (pantallas[0]){
+                    case 0:
+                        inspeccionExterior.setVisibility(View.GONE);
+                        serviciosBasicos.setVisibility(View.GONE);
+                        vivienda.setVisibility(View.GONE);
+                        dengue.setVisibility(View.GONE);
+
+                        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_general));
+
+                        educacion.setVisibility(View.VISIBLE);
+                        ocupacion.setVisibility(View.VISIBLE);
+                        contacto.setVisibility(View.VISIBLE);
+                        efector.setVisibility(View.VISIBLE);
+                        observaciones.setVisibility(View.VISIBLE);
+
+                        pantallas[0] +=1;
+                        break;
+                    case 1:
+                        educacion.setVisibility(View.GONE);
+                        ocupacion.setVisibility(View.GONE);
+                        contacto.setVisibility(View.GONE);
+                        efector.setVisibility(View.GONE);
+                        observaciones.setVisibility(View.GONE);
+
+                        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_estado_fisico));
+
+                        factores_riesgo.setVisibility(View.VISIBLE);
+                        discapacidad.setVisibility(View.VISIBLE);
+                        embarazo.setVisibility(View.VISIBLE);
+                        vitamina_D.setVisibility(View.VISIBLE);
+                        pantallas[0] +=1;
+                        break;
+                    case 2:
+                        factores_riesgo.setVisibility(View.GONE);
+                        discapacidad.setVisibility(View.GONE);
+                        embarazo.setVisibility(View.GONE);
+                        vitamina_D.setVisibility(View.GONE);
+
+                        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_psico_social));
+
+                        acompañamiento.setVisibility(View.VISIBLE);
+                        transtornos_niños.setVisibility(View.VISIBLE);
+                        trastornos_mentales.setVisibility(View.VISIBLE);
+                        adicciones.setVisibility(View.VISIBLE);
+                        violencia.setVisibility(View.VISIBLE);
+                        ocio.setVisibility(View.VISIBLE);
+                        pantallas[0] +=1;
+                        break;
+                    case 3:
+                        dialog.dismiss();
+                        break;
+                }
             }
         });
     }
@@ -827,13 +1102,28 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        String infoFamilia = LeerInfo(coordenadas);
+        final String infoFamilia = LeerInfo(coordenadas);
         final TextView txtInfoFamilia = view.findViewById(R.id.DATOSFAMILIARES);
         txtInfoFamilia.setText(infoFamilia);
+
+        final ImageButton volverInfoFamilia = view.findViewById(R.id.VOLVERANTERIOR);
+        volverInfoFamilia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtInfoFamilia.setText(infoFamilia);
+            }
+        });
 
         final ListView Personas = view.findViewById(R.id.LISTMIEMBROS);
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, MiembrosFamiliares);
         Personas.setAdapter(adapter);
+
+        Personas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                txtInfoFamilia.setText(DatosMiembrosFamiliares.get(position));
+            }
+        });
 
         final Button cancelar = view.findViewById(R.id.CANCELARINFOFMAILIA);
         cancelar.setOnClickListener(new View.OnClickListener() {

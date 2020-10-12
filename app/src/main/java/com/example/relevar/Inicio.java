@@ -100,14 +100,28 @@ public class Inicio extends AppCompatActivity {
         botones.add("INSPECCION EXTERIOR");
         botones.add("SERVICIOS BASICOS");
         botones.add("VIVIENDA");
+        botones.add("DENGUE");
 
-        // Botones de la persona
+        // Botones de la persona: general
         botones.add("EDUCACION");
         botones.add("OCUPACION");
         botones.add("CONTACTO");
         botones.add("EFECTOR");
         botones.add("OBSERVACIONES");
+
+        // Botones de la persona: fisico
         botones.add("FACTORES DE RIESGO");
+        botones.add("DISCAPACIDAD");
+        botones.add("EMBARAZO");
+        botones.add("VITAMINA D");
+
+        // Botones de la persona: psico-social
+        botones.add("ACOMPAÑAMIENTO");
+        botones.add("TRASTORNOS EN NIÑOS");
+        botones.add("TRASTORNOS MENTALES");
+        botones.add("ADICCIONES");
+        botones.add("VIOLENCIA");
+        botones.add("OCIO");
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,7 +174,7 @@ public class Inicio extends AppCompatActivity {
         * la cabecera, la primer palabra que debe aparecer es la palbra "CALLE"*/
         if (strLine.equals("CALLE") != true) {
             //String cab = getString(R.string.encabezado);
-            String cab = "CALLE;NUMERO;COORDENADAS;ESTADO;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO\n";
+            String cab = "CALLE;NUMERO;COORDENADAS;ESTADO;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;NUMERO CASA CARTOGRAFIA\n";
             try {
                 //el true es para que se agreguen los datos al final sin perder los datos anteriores
                 FileOutputStream fOut = new FileOutputStream(dir, true);

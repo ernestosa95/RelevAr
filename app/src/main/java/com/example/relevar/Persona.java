@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,10 +33,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.EfectoresSearchAdapter;
 import com.example.relevar.Recursos.ScannerQR;
 import com.example.relevar.Recursos.TrabajosSearchAdapter;
@@ -117,6 +121,10 @@ public class Persona extends AppCompatActivity {
     ConstraintLayout BtnVitamina, CLVitamina;
     TextView avanceVitamina;
     //private String date="DD-MM-AAAA";
+
+    ConstraintLayout BtnEducacion, BtnOcupacion, BtnContacto, BtnEfector, BtnObservaciones;
+    ConstraintLayout BtnFactoresRiesgo, BtnDiscapacidad, BtnEmbarazo, VitaminaD;
+    ConstraintLayout BtnAcompañamiento, BtnTranstornosNiños, BtnTranstornosMentales, BtnAdicciones, BtnViolencia, BtnOcio;
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -202,65 +210,7 @@ public class Persona extends AppCompatActivity {
         //Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
         }
 
-        // PARA EL AVANCE DE LOS FACTORES
-        factores = (ConstraintLayout) findViewById(R.id.AVANCEFACTORES);
-        avancefactores = (TextView) findViewById(R.id.COMPLETADOFACTORES);
-
-        // PARA EL AVANCE DE LOS CONTACTOS
-        contacto = (ConstraintLayout) findViewById(R.id.AVANCECONTACTO);
-        avancecontacto = (TextView) findViewById(R.id.COMPLETADOCONTACTO);
-
-        // PARA EL AVANCE DE LOS OBSERVACIONES
-        observaciones = (ConstraintLayout) findViewById(R.id.AVANCEOBSERVACIONES);
-        avanceobservaciones = (TextView) findViewById(R.id.COMPLETADOOBSERVACIONES);
-
-        // PARA EL AVANCE DE LOS EFECTOR
-        efector = (ConstraintLayout) findViewById(R.id.AVANCEEFECTOR);
-        avanceefector = (TextView) findViewById(R.id.COMPLETADOEFECTOR);
-
-        // PARA EL AVANCE DE LOS EFECTOR
-        layout_ocupacion = (ConstraintLayout) findViewById(R.id.AVANCETRABAJO);
-        avanceocupacion = (TextView) findViewById(R.id.COMPLETADOTRABAJO);
-
-        // PARA EL AVANCE DE LA EDUCACION
-        layout_educacion = (ConstraintLayout) findViewById(R.id.AVANCEEDUCACION);
-        avanceeducacion = (TextView) findViewById(R.id.COMPLETADOEDUCACION);
-
-        // PARA EL AVANCE DE LA VITAMINA
-        layout_vitamina = (ConstraintLayout) findViewById(R.id.AVANCEVITAMINA);
-        avancevitamina = (TextView) findViewById(R.id.COMPLETADOVITAMINA);
-
-        // PARA EL AVANCE DE LA EMBARAZO
-        layout_embarazo = (ConstraintLayout) findViewById(R.id.AVANCEEMBARAZO);
-        avanceembarazo = (TextView) findViewById(R.id.COMPLETADOEMBARAZO);
-
-        // PARA EL AVANCE DE LA EMBARAZO
-        layout_discapacidad = (ConstraintLayout) findViewById(R.id.AVANCEDISCAPACIDAD);
-        avancediscapacidad = (TextView) findViewById(R.id.COMPLETADODISCAPACIDAD);
-
-        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
-        layout_acompañamiento = (ConstraintLayout) findViewById(R.id.AVANCEACOMPAÑAMIENTO);
-        avanceacompañamiento = (TextView) findViewById(R.id.COMPLETADOACOMPAÑAMIENTO);
-
-        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
-        layout_trastornosniños = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSENNIÑOS);
-        avancetrastornosniños = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSENNIÑOS);
-
-        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
-        layout_adicciones = (ConstraintLayout) findViewById(R.id.AVANCEADICCIONES);
-        avanceadicciones = (TextView) findViewById(R.id.COMPLETADOADICCIONES);
-
-        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
-        layout_ocio = (ConstraintLayout) findViewById(R.id.AVANCEOCIO);
-        avanceocio = (TextView) findViewById(R.id.COMPLETADOOCIO);
-
-        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
-        layout_violencia = (ConstraintLayout) findViewById(R.id.AVANCEVIOLENCIA);
-        avanceviolencia = (TextView) findViewById(R.id.COMPLETADOVIOLENCIA);
-
-        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
-        layout_trastornosmentales = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSMENTALES);
-        avancetrastornosmentales = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSMENTALES);
+        CrearBotonera();
 
         // inicar estado de carga
         ColorAvanceFactores();
@@ -326,6 +276,8 @@ public class Persona extends AppCompatActivity {
                 tabs.getTabWidget().getChildAt(tab).setBackgroundColor(Color.parseColor("#4A4A4A"));
             }
         });
+
+
     }
 
     //@Override
@@ -396,6 +348,476 @@ public class Persona extends AppCompatActivity {
     public void escanear(View view){
         Intent Modif= new Intent (this, ScannerQR.class);
         startActivityForResult(Modif, 1);
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    private void CrearBotonera(){
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+
+        //------------------------------------------------------------------------------------------
+        // GENERAL
+        // PARA EL AVANCE DE LA EDUCACION
+        layout_educacion = (ConstraintLayout) findViewById(R.id.AVANCEEDUCACION);
+        avanceeducacion = (TextView) findViewById(R.id.COMPLETADOEDUCACION);
+        BtnEducacion = (ConstraintLayout) findViewById(R.id.BTNEDUCACION);
+        if(!admin.EstadoBoton("EDUCACION")){
+            BtnEducacion.setVisibility(View.GONE);
+        }
+        else{
+            BtnEducacion.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LOS EFECTOR
+        layout_ocupacion = (ConstraintLayout) findViewById(R.id.AVANCETRABAJO);
+        avanceocupacion = (TextView) findViewById(R.id.COMPLETADOTRABAJO);
+        BtnOcupacion = (ConstraintLayout) findViewById(R.id.BTNTRABAJO);
+        if(!admin.EstadoBoton("OCUPACION")){
+            BtnOcupacion.setVisibility(View.GONE);
+        }
+        else{
+            BtnOcupacion.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LOS CONTACTOS
+        contacto = (ConstraintLayout) findViewById(R.id.AVANCECONTACTO);
+        avancecontacto = (TextView) findViewById(R.id.COMPLETADOCONTACTO);
+        BtnContacto = (ConstraintLayout) findViewById(R.id.BTNCONTACTO);
+        if(!admin.EstadoBoton("CONTACTO")){
+            BtnContacto.setVisibility(View.GONE);
+        }
+        else{
+            BtnContacto.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LOS EFECTOR
+        efector = (ConstraintLayout) findViewById(R.id.AVANCEEFECTOR);
+        avanceefector = (TextView) findViewById(R.id.COMPLETADOEFECTOR);
+        BtnEfector = (ConstraintLayout) findViewById(R.id.BTNEFECTOR);
+        if(!admin.EstadoBoton("EFECTOR")){
+            BtnEfector.setVisibility(View.GONE);
+        }
+        else{
+            BtnEfector.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LOS OBSERVACIONES
+        observaciones = (ConstraintLayout) findViewById(R.id.AVANCEOBSERVACIONES);
+        avanceobservaciones = (TextView) findViewById(R.id.COMPLETADOOBSERVACIONES);
+        BtnObservaciones = (ConstraintLayout) findViewById(R.id.BTNOBSERVACIONES);
+        if(!admin.EstadoBoton("OBSERVACIONES")){
+            BtnObservaciones.setVisibility(View.GONE);
+        }
+        else{
+            BtnObservaciones.setVisibility(View.VISIBLE);
+        }
+
+        // Fisico
+        // PARA EL AVANCE DE LOS FACTORES
+        factores = (ConstraintLayout) findViewById(R.id.AVANCEFACTORES);
+        avancefactores = (TextView) findViewById(R.id.COMPLETADOFACTORES);
+        BtnFactoresRiesgo = (ConstraintLayout) findViewById(R.id.BTNFACTORES);
+        if(!admin.EstadoBoton("FACTORES DE RIESGO")){
+            BtnFactoresRiesgo.setVisibility(View.GONE);
+        }
+        else{
+            BtnFactoresRiesgo.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LA EMBARAZO
+        layout_discapacidad = (ConstraintLayout) findViewById(R.id.AVANCEDISCAPACIDAD);
+        avancediscapacidad = (TextView) findViewById(R.id.COMPLETADODISCAPACIDAD);
+        BtnDiscapacidad = (ConstraintLayout) findViewById(R.id.BTNDISCAPACIDAD);
+        if(!admin.EstadoBoton("DISCAPACIDAD")){
+            BtnDiscapacidad.setVisibility(View.GONE);
+        }
+        else{
+            BtnDiscapacidad.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LA EMBARAZO
+        layout_embarazo = (ConstraintLayout) findViewById(R.id.AVANCEEMBARAZO);
+        avanceembarazo = (TextView) findViewById(R.id.COMPLETADOEMBARAZO);
+        BtnEmbarazo = (ConstraintLayout) findViewById(R.id.BTNEMBARAZO);
+        if(!admin.EstadoBoton("EMBARAZO")){
+            BtnEmbarazo.setVisibility(View.GONE);
+        }
+        else{
+            BtnEmbarazo.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DE LA VITAMINA
+        layout_vitamina = (ConstraintLayout) findViewById(R.id.AVANCEVITAMINA);
+        avancevitamina = (TextView) findViewById(R.id.COMPLETADOVITAMINA);
+        BtnVitamina = (ConstraintLayout) findViewById(R.id.BTNVITAMINA);
+        if(!admin.EstadoBoton("VITAMINA D")){
+            BtnVitamina.setVisibility(View.GONE);
+        }
+        else{
+            BtnVitamina.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_acompañamiento = (ConstraintLayout) findViewById(R.id.AVANCEACOMPAÑAMIENTO);
+        avanceacompañamiento = (TextView) findViewById(R.id.COMPLETADOACOMPAÑAMIENTO);
+        BtnAcompañamiento = (ConstraintLayout) findViewById(R.id.BTNACOMPAÑAMIENTO);
+        if(!admin.EstadoBoton("ACOMPAÑAMIENTO")){
+            BtnAcompañamiento.setVisibility(View.GONE);
+        }
+        else{
+            BtnAcompañamiento.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_trastornosniños = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSENNIÑOS);
+        avancetrastornosniños = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSENNIÑOS);
+        BtnTranstornosNiños = (ConstraintLayout) findViewById(R.id.BTNTRANSTORNOSENNIÑOS);
+        if(!admin.EstadoBoton("TRASTORNOS EN NIÑOS")){
+            BtnTranstornosNiños.setVisibility(View.GONE);
+        }
+        else{
+            BtnTranstornosNiños.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_trastornosmentales = (ConstraintLayout) findViewById(R.id.AVANCETRANSTORNOSMENTALES);
+        avancetrastornosmentales = (TextView) findViewById(R.id.COMPLETADOTRANSTORNOSMENTALES);
+        BtnTranstornosMentales = (ConstraintLayout) findViewById(R.id.BTNTRANSTORNOSMENTALES);
+        if(!admin.EstadoBoton("TRASTORNOS MENTALES")){
+            BtnTranstornosMentales.setVisibility(View.GONE);
+        }
+        else{
+            BtnTranstornosMentales.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_adicciones = (ConstraintLayout) findViewById(R.id.AVANCEADICCIONES);
+        avanceadicciones = (TextView) findViewById(R.id.COMPLETADOADICCIONES);
+        BtnAdicciones = (ConstraintLayout) findViewById(R.id.BTNADICCIONES);
+        if(!admin.EstadoBoton("ADICCIONES")){
+            BtnAdicciones.setVisibility(View.GONE);
+        }
+        else{
+            BtnAdicciones.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_violencia = (ConstraintLayout) findViewById(R.id.AVANCEVIOLENCIA);
+        avanceviolencia = (TextView) findViewById(R.id.COMPLETADOVIOLENCIA);
+        BtnViolencia = (ConstraintLayout) findViewById(R.id.BTNVIOLENCIA);
+        if(!admin.EstadoBoton("VIOLENCIA")){
+            BtnViolencia.setVisibility(View.GONE);
+        }
+        else{
+            BtnViolencia.setVisibility(View.VISIBLE);
+        }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_ocio = (ConstraintLayout) findViewById(R.id.AVANCEOCIO);
+        avanceocio = (TextView) findViewById(R.id.COMPLETADOOCIO);
+        BtnOcio = (ConstraintLayout) findViewById(R.id.BTNOCIO);
+        if(!admin.EstadoBoton("OCIO")){
+            BtnOcio.setVisibility(View.GONE);
+        }
+        else{
+            BtnOcio.setVisibility(View.VISIBLE);
+        }
+        admin.close();
+    }
+
+    public void BotonesPersona(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_listado_botones, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+
+        final Switch educacion = view1.findViewById(R.id.SWITCHEDUCACION);
+        if(admin.EstadoBoton("EDUCACION")){
+            educacion.setChecked(true);
+        }
+        educacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(educacion.getText().toString());
+                    BtnEducacion.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(educacion.getText().toString());
+                    BtnEducacion.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        final Switch ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
+        if(admin.EstadoBoton("OCUPACION")){
+            ocupacion.setChecked(true);
+        }
+        ocupacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(ocupacion.getText().toString());
+                    BtnOcupacion.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(ocupacion.getText().toString());
+                    BtnOcupacion.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        final Switch contacto = view1.findViewById(R.id.SWITCHCONTACTO);
+        if(admin.EstadoBoton("CONTACTO")){
+            contacto.setChecked(true);
+        }
+        contacto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(contacto.getText().toString());
+                    BtnContacto.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(contacto.getText().toString());
+                    BtnContacto.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        final Switch efector = view1.findViewById(R.id.SWITCHEFECTOR);
+        if(admin.EstadoBoton("EFECTOR")){
+            efector.setChecked(true);
+        }
+        efector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(efector.getText().toString());
+                    BtnEfector.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(efector.getText().toString());
+                    BtnEfector.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        final Switch observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
+        if(admin.EstadoBoton("OBSERVACIONES")){
+            observaciones.setChecked(true);
+        }
+        observaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(observaciones.getText().toString());
+                    BtnObservaciones.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(observaciones.getText().toString());
+                    BtnObservaciones.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+
+        final Switch factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
+        if(admin.EstadoBoton("FACTORES DE RIESGO")){
+            factores_riesgo.setChecked(true);
+        }
+        factores_riesgo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint({"WrongConstant", "ResourceType"})
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(factores_riesgo.getText().toString());
+                    BtnFactoresRiesgo.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(factores_riesgo.getText().toString());
+                    BtnFactoresRiesgo.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        final Switch discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
+        if (admin.EstadoBoton("DISCAPACIDAD")){
+            discapacidad.setChecked(true);
+        }
+        discapacidad.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(discapacidad.getText().toString());
+                    BtnDiscapacidad.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(discapacidad.getText().toString());
+                    BtnDiscapacidad.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
+        if(admin.EstadoBoton("EMBARAZO")){
+            embarazo.setChecked(true);
+        }
+        embarazo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(embarazo.getText().toString());
+                    BtnEmbarazo.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(embarazo.getText().toString());
+                    BtnEmbarazo.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch vitamina_d = view1.findViewById(R.id.SWITCHVITAMINAD);
+        if(admin.EstadoBoton("VITAMINA D")){
+            vitamina_d.setChecked(true);
+        }
+        vitamina_d.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(vitamina_d.getText().toString());
+                    BtnVitamina.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(vitamina_d.getText().toString());
+                    BtnVitamina.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        final Switch acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
+        if(admin.EstadoBoton("ACOMPAÑAMIENTO")){
+            acompañamiento.setChecked(true);
+        }
+        acompañamiento.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(acompañamiento.getText().toString());
+                    BtnAcompañamiento.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(acompañamiento.getText().toString());
+                    BtnAcompañamiento.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
+        if(admin.EstadoBoton("TRASTORNOS EN NIÑOS")){
+            transtornos_niños.setChecked(true);
+        }
+        transtornos_niños.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(transtornos_niños.getText().toString());
+                    BtnTranstornosNiños.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(transtornos_niños.getText().toString());
+                    BtnTranstornosNiños.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch transtornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
+        if(admin.EstadoBoton("TRASTORNOS MENTALES")){
+            transtornos_mentales.setChecked(true);
+        }
+        transtornos_mentales.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(transtornos_mentales.getText().toString());
+                    BtnTranstornosMentales.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(transtornos_mentales.getText().toString());
+                    BtnTranstornosMentales.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
+        if(admin.EstadoBoton("ADICCIONES")){
+            adicciones.setChecked(true);
+        }
+        adicciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(adicciones.getText().toString());
+                    BtnAdicciones.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(adicciones.getText().toString());
+                    BtnAdicciones.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
+        if(admin.EstadoBoton("VIOLENCIA")){
+            violencia.setChecked(true);
+        }
+        violencia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(violencia.getText().toString());
+                    BtnViolencia.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(violencia.getText().toString());
+                    BtnViolencia.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch ocio = view1.findViewById(R.id.SWITCHOCIO);
+        if(admin.EstadoBoton("OCIO")){
+            ocio.setChecked(true);
+        }
+        ocio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(ocio.getText().toString());
+                    BtnOcio.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(ocio.getText().toString());
+                    BtnOcio.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        admin.close();
+        final Button listo = view1.findViewById(R.id.LISTOBOTON);
+        listo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                //recreate();
+            }
+        });
+
+        final Switch dengue = view1.findViewById(R.id.SWITCHDENGUE);
+        dengue.setVisibility(View.GONE);
+        final Switch inspeccionEcterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
+        inspeccionEcterior.setVisibility(View.GONE);
+        final Switch serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
+        serviciosBasicos.setVisibility(View.GONE);
+        final Switch vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
+        vivienda.setVisibility(View.GONE);
+
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -780,7 +1202,6 @@ public class Persona extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 // SECCION DE LAS VISTA DE LAS VACUNAS
-
 
     public void Educacion(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -2333,7 +2754,7 @@ public class Persona extends AppCompatActivity {
             }
         }
 
-        final Button guardar = view1.findViewById(R.id.GUARDARADICCIONES);
+        final Button guardar = view1.findViewById(R.id.GUARDARTRANSTORNOSMENTALES);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2408,7 +2829,7 @@ public class Persona extends AppCompatActivity {
             }
         });
 
-        final Button cancelar = view1.findViewById(R.id.CANCELARADICCIONES);
+        final Button cancelar = view1.findViewById(R.id.CANCELARTRASTORNOSMENTALES);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -61,6 +61,8 @@ public class ObjetoFamilia implements Serializable {
     public String TotalIspeccionado;
     public String Larvicida;
     public String Destruidos;
+    public String HieloCalle;
+    public String PerrosCalle;
 
     public ObjetoFamilia(ArrayList<String> aux) {
         cabeceraFamilia = aux;
@@ -83,6 +85,8 @@ public class ObjetoFamilia implements Serializable {
         Arboles="";
         Baño="";
         BañoTiene="";
+        HieloCalle="";
+        PerrosCalle="";
 
         // Dengue
         Tanques = ";;";
@@ -196,6 +200,14 @@ public class ObjetoFamilia implements Serializable {
             if(BañoTiene.length()!=0){
                 cabecera.add(cabeceraFamilia.get(18));
                 datosIngresados.put(cabeceraFamilia.get(18), BañoTiene);
+            }
+            if(HieloCalle.length()!=0){
+                cabecera.add(cabeceraFamilia.get(19));
+                datosIngresados.put(cabeceraFamilia.get(19), HieloCalle);
+            }
+            if(PerrosCalle.length()!=0){
+              cabecera.add(cabeceraFamilia.get(20));
+               datosIngresados.put(cabeceraFamilia.get(20), HieloCalle);
             }
         return cabecera;
     }

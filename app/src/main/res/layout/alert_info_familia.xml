@@ -65,6 +65,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageButton
+                android:id="@+id/VOLVERANTERIOR"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/button_redondo_blanco"
+                app:srcCompat="@drawable/volver" />
+
             <TextView
                 android:id="@+id/DATOSFAMILIARES"
                 android:layout_width="match_parent"

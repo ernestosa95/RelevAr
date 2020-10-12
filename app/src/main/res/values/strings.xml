@@ -17,8 +17,8 @@
     <string name="nombre">NOMBRE</string>
     <string name="dni" translatable="false">DNI</string>
     <string name="fecha_nacimiento">MES DIA, AÑO</string>
-    <string name="educacion">EDUCACIÓN</string>
-    <string name="ocupacion">OCUPACIÓN</string>
+    <string name="educacion">EDUCACION</string>
+    <string name="ocupacion">OCUPACION</string>
     <string name="contacto">CONTACTO</string>
     <string name="efector">EFECTOR</string>
     <string name="observaciones">OBSERVACIONES</string>
@@ -205,5 +205,13 @@
     <string name="larvicidas" translatable="false">LARVICIDAS</string>
     <string name="sin_intervencion" translatable="false">SIN INTERVENCION</string>
     <string name="info_familiar" translatable="false">INFORMACION FAMILIAR</string>
+    <string name="grupo_familiar" translatable="false">GRUPO FAMILIAR</string>
+    <string name="persona_general" translatable="false">PERSONA GENERAL</string>
+    <string name="persona_estado_fisico" translatable="false">PERSONA ESTADO FISICO</string>
+    <string name="persona_psico_social" translatable="false">PERSONA PSICO SOCIAL</string>
+
+    <string name="hielo" translatable="false">NIEVE Y/O HIELO EN LA CALLE</string>
+    <string name="perros_sueltos" translatable="false">PERROS SUELTOS</string>
+    <string name="numero_cartografia" translatable="false">NUMERO SEGUN CARTOGRAFIA</string>
 
 </resources>

@@ -18,19 +18,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/fondo2"
         app:layout_constraintBottom_toTopOf="@+id/bac"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Button
             android:id="@+id/TERMINAR"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:background="@drawable/button1"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/button_redondo_celeste"
             android:onClick="TerminarRecorrido"
             android:text="@string/iniciar_recorrido"
             android:textSize="15sp"
@@ -43,26 +42,41 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bac"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:background="@drawable/fondo3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ImageButton
+            android:id="@+id/MIUBICACION"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_redondo_celeste"
+            android:src="@drawable/mi_ubicacion"
+            app:layout_constraintBottom_toBottomOf="@+id/EMPEZAR2"
+            app:layout_constraintEnd_toStartOf="@+id/EMPEZAR2"
+            app:layout_constraintHorizontal_bias="0.156"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/EMPEZAR2"
+            app:layout_constraintVertical_bias="1.0" />
+
         <Button
             android:id="@+id/EMPEZAR2"
-            android:layout_width="300dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
 
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:background="@drawable/button1"
             android:onClick="NuevaFamilia"
             android:text="@string/cargar_familia"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,43 +85,45 @@
         android:layout_height="50dp"
         android:background="#69A4D1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_redondo_blanco"
+            app:layout_constraintBottom_toBottomOf="@+id/COMPARTIR"
+            app:layout_constraintEnd_toStartOf="@+id/COMPARTIR"
+            app:layout_constraintHorizontal_bias="0.114"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/COMPARTIR"
+            app:layout_constraintVertical_bias="0.6">
+
+            <Spinner
+                android:id="@+id/FECHAS"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ImageButton
             android:id="@+id/COMPARTIR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
 
             android:layout_margin="10dp"
-            android:background="@drawable/button1"
+            android:background="@drawable/button_redondo_azul"
             android:onClick="MostrarArchivos"
             android:src="@android:drawable/ic_menu_share"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/MIUBICACION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_margin="10dp"
-            android:background="@drawable/button1"
-            android:src="@drawable/mi_ubicacion"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/COMPARTIR"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/FECHAS"
-            android:layout_width="225dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.346" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -98,10 +98,10 @@ public class Familia extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
     ObjetoFamilia familia;
-    ConstraintLayout BtnInspeccionExterior;
+    ConstraintLayout BtnInspeccionExterior, BtnDengue;
     ConstraintLayout BtnServiciosBasicos, BtnVivienda;
-    ConstraintLayout CLVivienda, CLServiciosBasicos, CLExteriorVivienda;
-    TextView avanceVivienda, avanceServiciosBasicos, avanceExteriorVivienda;
+    ConstraintLayout CLVivienda, CLServiciosBasicos, CLExteriorVivienda, CLDengue;
+    TextView avanceVivienda, avanceServiciosBasicos, avanceExteriorVivienda, avanceDengue;
     LinearLayout BotonesFamilia;
 
 
@@ -155,6 +155,8 @@ public class Familia extends AppCompatActivity {
         familiaCabecera.add(getString(R.string.arboles));
         familiaCabecera.add(getString(R.string.baño));
         familiaCabecera.add(getString(R.string.baño_tiene));
+        familiaCabecera.add(getString(R.string.hielo));
+        familiaCabecera.add(getString(R.string.perros_sueltos));
         familia=new ObjetoFamilia(familiaCabecera);
 
         //
@@ -219,6 +221,17 @@ public class Familia extends AppCompatActivity {
         }
         else {
             BtnVivienda.setVisibility(View.VISIBLE);
+        }
+
+        //
+        BtnDengue = (ConstraintLayout) findViewById(R.id.BTNDENGUE);
+        CLDengue = (ConstraintLayout) findViewById(R.id.AVANCEDENGUE);
+        avanceDengue = (TextView) findViewById(R.id.COMPLETADODENGUE);
+        if(!admin.EstadoBoton("DENGUE")){
+            BtnDengue.setVisibility(View.GONE);
+        }
+        else {
+            BtnDengue.setVisibility(View.VISIBLE);
         }
         admin.close();
     }
@@ -288,6 +301,23 @@ public class Familia extends AppCompatActivity {
             }
         });
 
+        final Switch dengue = view1.findViewById(R.id.SWITCHDENGUE);
+        if(admin.EstadoBoton("DENGUE")){
+            dengue.setChecked(true);
+        }
+        dengue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(dengue.getText().toString());
+                    BtnDengue.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(dengue.getText().toString());
+                    BtnDengue.setVisibility(View.GONE);
+                }
+            }
+        });
+
         admin.close();
         final Button listo = view1.findViewById(R.id.LISTOBOTON);
         listo.setOnClickListener(new View.OnClickListener() {
@@ -308,9 +338,28 @@ public class Familia extends AppCompatActivity {
         efector.setVisibility(View.GONE);
         final Switch observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
         observaciones.setVisibility(View.GONE);
+
         final Switch factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
         factores_riesgo.setVisibility(View.GONE);
+        final Switch discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
+        discapacidad.setVisibility(View.GONE);
+        final Switch embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
+        embarazo.setVisibility(View.GONE);
+        final Switch vitamina_d = view1.findViewById(R.id.SWITCHVITAMINAD);
+        vitamina_d.setVisibility(View.GONE);
 
+        final Switch acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
+        acompañamiento.setVisibility(View.GONE);
+        final Switch transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
+        transtornos_niños.setVisibility(View.GONE);
+        final Switch transtornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
+        transtornos_mentales.setVisibility(View.GONE);
+        final Switch adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
+        adicciones.setVisibility(View.GONE);
+        final Switch violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
+        violencia.setVisibility(View.GONE);
+        final Switch ocio = view1.findViewById(R.id.SWITCHOCIO);
+        ocio.setVisibility(View.GONE);
 
     }
 
@@ -731,7 +780,7 @@ public class Familia extends AppCompatActivity {
         }
     }
 
-    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // SERVICIOS BASICOS
     public void Dengue(View view){
@@ -877,6 +926,12 @@ public class Familia extends AppCompatActivity {
         final EditText CantArboles = view1.findViewById(R.id.EDTARBOLES);
         if(familia.Arboles.length()!=0){CantArboles.setText(familia.Arboles);}
 
+        final RadioButton siHielo = view1.findViewById(R.id.SINIEVEHIELO);
+        final RadioButton noHielo = view1.findViewById(R.id.NONIEVEHIELO);
+
+        final RadioButton siPerros = view1.findViewById(R.id.SIPERROSSUELTOS);
+        final RadioButton noPerros = view1.findViewById(R.id.NOPERROSSUELTOS);
+
         final Button guardar = view1.findViewById(R.id.GUARDAREXTERIOR);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -887,6 +942,10 @@ public class Familia extends AppCompatActivity {
                 if(NoRevoque.isChecked()){familia.Revoque="NO";}
                 familia.Techo = Techo.getSelectedItem().toString();
                 familia.Arboles = CantArboles.getText().toString();
+                if(siHielo.isChecked()){familia.HieloCalle="SI";}
+                if(noHielo.isChecked()){familia.HieloCalle="NO";}
+                if(siPerros.isChecked()){familia.PerrosCalle="SI";}
+                if(noPerros.isChecked()){familia.PerrosCalle="NO";}
                 dialog.dismiss();
                 ColorAvanceExteriorVivienda();
             }
@@ -920,17 +979,23 @@ public class Familia extends AppCompatActivity {
         if (familia.Arboles.length()!=0){
             avance+=1;
         }
+        if (familia.HieloCalle.length()!=0){
+            avance+=1;
+        }
+        if (familia.PerrosCalle.length()!=0){
+            avance+=1;
+        }
 
-        if(avance>0 && avance<5){
+        if(avance>0 && avance<7){
             CLExteriorVivienda.setBackgroundResource(R.drawable.amarillo);
-            double porcentaje = Math.round((avance/5)*100);
+            double porcentaje = Math.round((avance/7)*100);
             //Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
             String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
             avanceExteriorVivienda.setText(aux);
             //AvContacto.setText(aux);
             //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
         }
-        if(avance==5){
+        if(avance==7){
             CLExteriorVivienda.setBackgroundResource(R.drawable.verde);
             avanceExteriorVivienda.setText(getString(R.string.completado)+" 100%");
             //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
@@ -1344,74 +1409,77 @@ public class Familia extends AppCompatActivity {
     // GUARDAR GRUPO FAMILIAR
     public void Guardar2(View view){
 
-        //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
-        // Inicio la obtencion de datos de ubicacion del GPS
-        //LatLong();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater Inflater = getLayoutInflater();
-        View view_alert = Inflater.inflate(R.layout.alert_guardar_familia, null);
-        builder.setView(view_alert);
-        builder.setCancelable(false);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
 
-        Button cancelar = view_alert.findViewById(R.id.CANCELAR1);
-        cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        final String[] codigoColor = {"V"};
-        final ImageView rojo = view_alert.findViewById(R.id.ICONOROJO);
-        final ImageView amarillo = view_alert.findViewById(R.id.ICONOAMARILLO);
-        final ImageView verde = view_alert.findViewById(R.id.ICONOVERDE);
-        rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-        amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-        verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-
-        rojo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                codigoColor[0] = "R";
-                rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-                amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-            }
-        });
-
-        amarillo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                codigoColor[0] = "A";
-                amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-                rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-            }
-        });
-
-        verde.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                codigoColor[0] = "V";
-                verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
-                amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-                rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-            }
-        });
-
-        ObjetoPersona auxPersona = new ObjetoPersona(null);
-        if(familia.SituacionVivienda.equals("X")){
-            MiembrosFamiliares.add(auxPersona);
-            Toast.makeText(this, "ENTRO", Toast.LENGTH_SHORT).show();
-        }
 
         if(MiembrosFamiliares.size()!=0) {
+
+            //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
+            // Inicio la obtencion de datos de ubicacion del GPS
+            //LatLong();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater Inflater = getLayoutInflater();
+            View view_alert = Inflater.inflate(R.layout.alert_guardar_familia, null);
+            builder.setView(view_alert);
+            builder.setCancelable(false);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            Button cancelar = view_alert.findViewById(R.id.CANCELAR1);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            final String[] codigoColor = {"V"};
+            final ImageView rojo = view_alert.findViewById(R.id.ICONOROJO);
+            final ImageView amarillo = view_alert.findViewById(R.id.ICONOAMARILLO);
+            final ImageView verde = view_alert.findViewById(R.id.ICONOVERDE);
+            rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+
+            rojo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    codigoColor[0] = "R";
+                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                }
+            });
+
+            amarillo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    codigoColor[0] = "A";
+                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                }
+            });
+
+            verde.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    codigoColor[0] = "V";
+                    verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+                    amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                    rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+                }
+            });
+
+            ObjetoPersona auxPersona = new ObjetoPersona(null);
+            if(familia.SituacionVivienda.equals("X")){
+                MiembrosFamiliares.add(auxPersona);
+                Toast.makeText(this, "ENTRO", Toast.LENGTH_SHORT).show();
+            }
 
             final EditText edtCalle = view_alert.findViewById(R.id.CALLE);
             final EditText edtNumero = view_alert.findViewById(R.id.NUMERO);
             final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
+            final EditText edtnumerocartografia = view_alert.findViewById(R.id.NUMEROSEGUNCARTOGRAFIA);
             NumerosPersonas = MiembrosFamiliares.size();
             cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
@@ -1497,12 +1565,14 @@ public class Familia extends AppCompatActivity {
                         }
 
                         /* Solicito los datos cargados tanto en la persona como en la familia*/
-                        String datosGuardar = "";
+
                         String coordenadas = Latitud + " " + Longitud;
                         String calle = edtCalle.getText().toString();
                         String numero = edtNumero.getText().toString();
+                        String numerocartografia = edtnumerocartografia.getText().toString();
                         HashMap<String, String> datosFamilia = familia.DatosIngresados();
                         for (int i = 0; i < MiembrosFamiliares.size(); i++) {
+                            String datosGuardar = "";
                             HashMap<String, String> auxHash = new HashMap<>();
                             auxHash.putAll(datosFamilia);
                             auxHash.put("COORDENADAS", coordenadas);
@@ -1510,6 +1580,7 @@ public class Familia extends AppCompatActivity {
                             auxHash.put("GRUPO FAMILIAR", Integer.toString(NumerosPersonas));
                             auxHash.put("NUMERO", numero);
                             auxHash.put("CALLE", calle.toUpperCase());
+                            auxHash.put("NUMERO CASA CARTOGRAFIA", numerocartografia);
                             auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
                             for (int j = 0; j < datosCabeceraCsv.size() - 1; j++) {
                                 if (auxHash.get(datosCabeceraCsv.get(j)) != null) {

@@ -7,14 +7,14 @@
     android:background="#4A4A4A">
 
     <TextView
-        android:id="@+id/textefector"
+        android:id="@+id/ENCABEZADOMODULOS"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="#0E5891"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/modulos"
         android:textColor="#FFFFFF"
-        android:textSize="25sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
         app:layout_constraintBottom_toTopOf="@+id/LISTOBOTON"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textefector">
+        app:layout_constraintTop_toBottomOf="@+id/ENCABEZADOMODULOS">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,6 +68,14 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/vivienda"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHDENGUE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/dengue"
                 android:textSize="22sp" />
 
             <Switch
@@ -116,6 +124,78 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="@string/factores_riesgo"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHDISCAPACIDAD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/discapacidad"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHEMBARAZO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/embarazo"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHACOMPAÑAMIENTO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/acompañamiento"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHTRANSTORNOSENNIÑOS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/transtornos_en_niños"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHTRANSTORNOSMENTALES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/transtornos_mentales"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHADICCIONES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/adicciones"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHVIOLENCIA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/violencia"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHVITAMINAD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/vitamina"
+                android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHOCIO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/ocio"
                 android:textSize="22sp" />
         </LinearLayout>
     </ScrollView>

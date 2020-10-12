@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/CANCELARTRASTORNOSNIÑOS"
+        android:id="@+id/CANCELARTRASTORNOSMENTALES"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -33,17 +33,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/GUARDARTRANSTORNOSNIÑOS"
+        android:id="@+id/GUARDARTRANSTORNOSMENTALES"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button1"
         android:text="@string/guardar"
         android:textColor="#4A4A4A"
-        app:layout_constraintBottom_toBottomOf="@+id/CANCELARTRASTORNOSNIÑOS"
+        app:layout_constraintBottom_toBottomOf="@+id/CANCELARTRASTORNOSMENTALES"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.869"
-        app:layout_constraintStart_toEndOf="@+id/CANCELARTRASTORNOSNIÑOS"
-        app:layout_constraintTop_toTopOf="@+id/CANCELARTRASTORNOSNIÑOS" />
+        app:layout_constraintStart_toEndOf="@+id/CANCELARTRASTORNOSMENTALES"
+        app:layout_constraintTop_toTopOf="@+id/CANCELARTRASTORNOSMENTALES" />
 
     <ScrollView
         android:layout_width="match_parent"
