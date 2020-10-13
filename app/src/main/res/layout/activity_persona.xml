@@ -73,6 +73,331 @@
                 android:background="#4A4A4A">
 
                 <LinearLayout
+                    android:id="@+id/FISICO"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:foregroundGravity="center_horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/OBSERVACION2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/fecha">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/BTNENFERMEDADCRONICA"
+                                android:layout_width="130dp"
+                                android:layout_height="200dp"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/fondo2"
+                                android:onClick="EnfermedadesCronicas">
+
+                                <ImageView
+                                    android:id="@+id/ICONOENFERMEDADCRONICA"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:layout_constraintBottom_toTopOf="@+id/TXTFACTORES"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/enfermedad_cronica" />
+
+                                <TextView
+                                    android:id="@+id/COMPLETADOENFERMEDADCRONICA"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="@string/completado_cero"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="10sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEENFERMEDADCRONICA"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.985"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/TXTFACTORES"
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:foregroundGravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/enfermedad_cronica"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOENFERMEDADCRONICA"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/AVANCEENFERMEDADCRONICA"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/rojo"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent">
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/BTNFACTORES"
+                                android:layout_width="130dp"
+                                android:layout_height="200dp"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/fondo2"
+                                android:onClick="TipoFactores"
+                                app:layout_constraintBottom_toTopOf="@+id/EMPEZAR2"
+                                app:layout_constraintStart_toStartOf="@+id/EMPEZAR2"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:id="@+id/mascara"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:layout_constraintBottom_toTopOf="@+id/factores"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/medico" />
+
+                                <TextView
+                                    android:id="@+id/COMPLETADOFACTORES"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="@string/completado_cero"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="10sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEFACTORES"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.985"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/factores"
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:foregroundGravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/factores_riesgo"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOFACTORES"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/AVANCEFACTORES"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/rojo"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent">
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/BTNDISCAPACIDAD"
+                                android:layout_width="130dp"
+                                android:layout_height="200dp"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/fondo2"
+                                android:onClick="Discapacidad">
+
+                                <ImageView
+                                    android:id="@+id/ICONODISCAPACIDAD"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:layout_constraintBottom_toTopOf="@+id/DISCAPACIDAD"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.454"
+                                    app:srcCompat="@drawable/discapacitado" />
+
+                                <TextView
+                                    android:id="@+id/COMPLETADODISCAPACIDAD"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="@string/completado_cero"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="10sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEDISCAPACIDAD"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.985"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/DISCAPACIDAD"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="@string/discapacidad"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADODISCAPACIDAD"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/AVANCEDISCAPACIDAD"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/rojo"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent">
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/BTNEMBARAZO"
+                                android:layout_width="130dp"
+                                android:layout_height="200dp"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/fondo2"
+                                android:onClick="Embarazo">
+
+                                <ImageView
+                                    android:id="@+id/ICONOEMBARAZO"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:layout_constraintBottom_toTopOf="@+id/EMBARAZO"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.454"
+                                    app:srcCompat="@drawable/embarazada" />
+
+                                <TextView
+                                    android:id="@+id/COMPLETADOEMBARAZO"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="@string/completado_cero"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="10sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEEMBARAZO"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.985"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/EMBARAZO"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="@string/embarazo"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOEMBARAZO"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/AVANCEEMBARAZO"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/rojo"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent">
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/BTNVITAMINA"
+                                android:layout_width="130dp"
+                                android:layout_height="200dp"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/fondo2"
+                                android:onClick="VitaminaD">
+
+                                <ImageView
+                                    android:id="@+id/ICONOVITAMINA"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:layout_constraintBottom_toTopOf="@+id/VITAMINA"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.454"
+                                    app:srcCompat="@drawable/cuentagotas" />
+
+                                <TextView
+                                    android:id="@+id/COMPLETADOVITAMINA"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="@string/completado_cero"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="10sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEVITAMINA"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.985"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/VITAMINA"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="@string/vitamina"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="15sp"
+                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOVITAMINA"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/AVANCEVITAMINA"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/rojo"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent">
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+
+                        >
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/PSICO"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -440,272 +765,6 @@
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/AVANCEOCIO"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="20dp"
-                                    android:background="@drawable/rojo"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </LinearLayout>
-
-                        >
-                    </HorizontalScrollView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/FISICO"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:foregroundGravity="center_horizontal"
-                        app:layout_constraintBottom_toTopOf="@+id/OBSERVACION2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/fecha">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="10dp"
-                            android:orientation="horizontal">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/BTNFACTORES"
-                                android:layout_width="130dp"
-                                android:layout_height="200dp"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/fondo2"
-                                android:onClick="TipoFactores"
-                                app:layout_constraintBottom_toTopOf="@+id/EMPEZAR2"
-                                app:layout_constraintStart_toStartOf="@+id/EMPEZAR2"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <ImageView
-                                    android:id="@+id/mascara"
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    app:layout_constraintBottom_toTopOf="@+id/factores"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:srcCompat="@drawable/medico" />
-
-                                <TextView
-                                    android:id="@+id/COMPLETADOFACTORES"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@string/completado_cero"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="10sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEFACTORES"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="0.985"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/factores"
-                                    android:layout_width="100dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:foregroundGravity="center_horizontal"
-                                    android:gravity="center_horizontal"
-                                    android:text="@string/factores_riesgo"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="15sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOFACTORES"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/AVANCEFACTORES"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="20dp"
-                                    android:background="@drawable/rojo"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/BTNDISCAPACIDAD"
-                                android:layout_width="130dp"
-                                android:layout_height="match_parent"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/fondo2"
-                                android:onClick="Discapacidad">
-
-                                <ImageView
-                                    android:id="@+id/ICONODISCAPACIDAD"
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    app:layout_constraintBottom_toTopOf="@+id/DISCAPACIDAD"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.454"
-                                    app:srcCompat="@drawable/discapacitado" />
-
-                                <TextView
-                                    android:id="@+id/COMPLETADODISCAPACIDAD"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@string/completado_cero"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="10sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEDISCAPACIDAD"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="0.985"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/DISCAPACIDAD"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:text="@string/discapacidad"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="15sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADODISCAPACIDAD"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/AVANCEDISCAPACIDAD"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="20dp"
-                                    android:background="@drawable/rojo"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/BTNEMBARAZO"
-                                android:layout_width="130dp"
-                                android:layout_height="200dp"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/fondo2"
-                                android:onClick="Embarazo">
-
-                                <ImageView
-                                    android:id="@+id/ICONOEMBARAZO"
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    app:layout_constraintBottom_toTopOf="@+id/EMBARAZO"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.454"
-                                    app:srcCompat="@drawable/embarazada" />
-
-                                <TextView
-                                    android:id="@+id/COMPLETADOEMBARAZO"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@string/completado_cero"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="10sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEEMBARAZO"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="0.985"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/EMBARAZO"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:text="@string/embarazo"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="15sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOEMBARAZO"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/AVANCEEMBARAZO"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="20dp"
-                                    android:background="@drawable/rojo"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/BTNVITAMINA"
-                                android:layout_width="130dp"
-                                android:layout_height="200dp"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/fondo2"
-                                android:onClick="VitaminaD">
-
-                                <ImageView
-                                    android:id="@+id/ICONOVITAMINA"
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    app:layout_constraintBottom_toTopOf="@+id/VITAMINA"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.454"
-                                    app:srcCompat="@drawable/cuentagotas" />
-
-                                <TextView
-                                    android:id="@+id/COMPLETADOVITAMINA"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@string/completado_cero"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="10sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/AVANCEVITAMINA"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="0.985"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/VITAMINA"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:text="@string/vitamina"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="15sp"
-                                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOVITAMINA"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent" />
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/AVANCEVITAMINA"
                                     android:layout_width="wrap_content"
                                     android:layout_height="20dp"
                                     android:background="@drawable/rojo"

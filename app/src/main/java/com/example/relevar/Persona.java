@@ -108,10 +108,10 @@ public class Persona extends AppCompatActivity {
     ObjetoPersona Persona;
     ConstraintLayout factores, contacto, observaciones, efector, layout_ocupacion, layout_educacion, layout_vitamina,
                 layout_embarazo, layout_discapacidad, layout_acompañamiento, layout_trastornosniños, layout_adicciones,
-                layout_ocio, layout_violencia, layout_trastornosmentales;
+                layout_ocio, layout_violencia, layout_trastornosmentales, layout_enfermedades_cronicas;
     TextView avancefactores, avancecontacto, avanceobservaciones, avanceefector, avanceocupacion, avanceeducacion,
                 avancevitamina, avanceembarazo, avancediscapacidad, avanceacompañamiento, avancetrastornosniños,
-                avanceadicciones, avanceocio, avanceviolencia, avancetrastornosmentales;
+                avanceadicciones, avanceocio, avanceviolencia, avancetrastornosmentales, avanceenfermedadescronicas;
 
     AutoCompleteTextView autoEfector;
 
@@ -123,7 +123,7 @@ public class Persona extends AppCompatActivity {
     //private String date="DD-MM-AAAA";
 
     ConstraintLayout BtnEducacion, BtnOcupacion, BtnContacto, BtnEfector, BtnObservaciones;
-    ConstraintLayout BtnFactoresRiesgo, BtnDiscapacidad, BtnEmbarazo, VitaminaD;
+    ConstraintLayout BtnFactoresRiesgo, BtnDiscapacidad, BtnEmbarazo, BtnVitaminaD, BtnEnfermedadesCronicas;
     ConstraintLayout BtnAcompañamiento, BtnTranstornosNiños, BtnTranstornosMentales, BtnAdicciones, BtnViolencia, BtnOcio;
 
 //--------------------------------------------------------------------------------------------------
@@ -522,6 +522,17 @@ public class Persona extends AppCompatActivity {
         else{
             BtnOcio.setVisibility(View.VISIBLE);
         }
+
+        // PARA EL AVANCE DEL ACOMPAÑAMIENTO
+        layout_enfermedades_cronicas = (ConstraintLayout) findViewById(R.id.AVANCEENFERMEDADCRONICA);
+        avanceenfermedadescronicas = (TextView) findViewById(R.id.COMPLETADOENFERMEDADCRONICA);
+        BtnEnfermedadesCronicas = (ConstraintLayout) findViewById(R.id.BTNENFERMEDADCRONICA);
+        if(!admin.EstadoBoton("ENFERMEDADES CRONICAS")){
+            BtnEnfermedadesCronicas.setVisibility(View.GONE);
+        }
+        else{
+            BtnEnfermedadesCronicas.setVisibility(View.VISIBLE);
+        }
         admin.close();
     }
 
@@ -795,6 +806,23 @@ public class Persona extends AppCompatActivity {
                 } else {
                     admin.DesactivarBoton(ocio.getText().toString());
                     BtnOcio.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final Switch enfermedadcronica = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
+        if(admin.EstadoBoton("ENFERMEDADES CRONICAS")){
+            enfermedadcronica.setChecked(true);
+        }
+        enfermedadcronica.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(enfermedadcronica.getText().toString());
+                    BtnEnfermedadesCronicas.setVisibility(View.VISIBLE);
+                } else {
+                    admin.DesactivarBoton(enfermedadcronica.getText().toString());
+                    BtnEnfermedadesCronicas.setVisibility(View.GONE);
                 }
             }
         });
@@ -3143,6 +3171,108 @@ public class Persona extends AppCompatActivity {
             String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
             avanceviolencia.setText(aux);
         }
+
+        if(avance==2){
+            layout_violencia.setBackgroundResource(R.drawable.verde);
+            avanceviolencia.setText(getString(R.string.completado)+" 100%");
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // SERVICIOS BASICOS
+    public void EnfermedadesCronicas(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_enfermedades_cronicas, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        final CheckBox cancer =  view1.findViewById(R.id.CANCER);
+        final CheckBox diabetes = view1.findViewById(R.id.DIABETES);
+        final CheckBox cardiovasculares = view1.findViewById(R.id.ENFERMEDADESCARDIOVASCULARES);
+        final CheckBox respiratorias = view1.findViewById(R.id.ENFERMEDADESRESPIRATORIAS);
+
+        String[] vac = Persona.EnfermedadCronica.split(",");
+        for (int x = 0; x < vac.length; x++) {
+            if (vac[x].equals(cancer.getText().toString())){
+                cancer.setChecked(true);
+            }
+            if (vac[x].equals(diabetes.getText().toString())){
+                diabetes.setChecked(true);
+            }
+            if (vac[x].equals(cardiovasculares.getText().toString())){
+                cardiovasculares.setChecked(true);
+            }
+            if (vac[x].equals(respiratorias.getText().toString())){
+                respiratorias.setChecked(true);
+            }
+        }
+
+        final Button guardar = view1.findViewById(R.id.GUARDARENFERMEDADESCRONICAS);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String enfermedadcronica = null;
+                if (cancer.isChecked()){
+                    if (enfermedadcronica==null){
+                        enfermedadcronica=cancer.getText().toString();
+                    } else {
+                        enfermedadcronica+=","+cancer.getText().toString();}}
+                if (diabetes.isChecked()){
+                    if (enfermedadcronica==null){
+                        enfermedadcronica=diabetes.getText().toString();
+                    } else {
+                        enfermedadcronica+=","+diabetes.getText().toString();}}
+                if (cardiovasculares.isChecked()){
+                    if (enfermedadcronica==null){
+                        enfermedadcronica=cardiovasculares.getText().toString();
+                    } else {
+                        enfermedadcronica+=","+cardiovasculares.getText().toString();}}
+                if (respiratorias.isChecked()){
+                    if (enfermedadcronica==null){
+                        enfermedadcronica=respiratorias.getText().toString();
+                    } else {
+                        enfermedadcronica+=","+respiratorias.getText().toString();}}
+                if(enfermedadcronica!=null){Persona.EnfermedadCronica = enfermedadcronica;}
+                else{Persona.EnfermedadCronica="";}
+                ColorAvanceEnfermedadCronica();
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELARENFERMEDADCRONICA);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // Cambia los colores de los botones de llenado de contacto
+    private void ColorAvanceEnfermedadCronica(){
+        // Cambio los colores de avance
+        float avance = 0;
+        if (Persona.EnfermedadCronica.length()!=0){
+            avance+=1;
+        }
+
+
+        if(avance==0){
+            layout_violencia.setBackgroundResource(R.drawable.rojo);
+            avanceviolencia.setText(getString(R.string.completado)+" 00%");
+        }
+
+        /*if(avance>0 && avance<2){
+            layout_violencia.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/2)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceviolencia.setText(aux);
+        }*/
 
         if(avance==2){
             layout_violencia.setBackgroundResource(R.drawable.verde);

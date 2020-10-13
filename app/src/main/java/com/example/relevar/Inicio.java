@@ -114,6 +114,7 @@ public class Inicio extends AppCompatActivity {
         botones.add("DISCAPACIDAD");
         botones.add("EMBARAZO");
         botones.add("VITAMINA D");
+        botones.add("ENFERMEDADES CRONICAS");
 
         // Botones de la persona: psico-social
         botones.add("ACOMPAÑAMIENTO");

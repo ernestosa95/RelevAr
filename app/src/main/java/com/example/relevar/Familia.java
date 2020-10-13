@@ -347,6 +347,8 @@ public class Familia extends AppCompatActivity {
         embarazo.setVisibility(View.GONE);
         final Switch vitamina_d = view1.findViewById(R.id.SWITCHVITAMINAD);
         vitamina_d.setVisibility(View.GONE);
+        final Switch encabezadadescronicas = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
+        encabezadadescronicas.setVisibility(View.GONE);
 
         final Switch acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
         acompañamiento.setVisibility(View.GONE);

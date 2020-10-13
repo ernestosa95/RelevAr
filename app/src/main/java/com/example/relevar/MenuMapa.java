@@ -997,6 +997,19 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         ocio.setVisibility(View.GONE);
 
+        final Switch enfermedadescronicas = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
+        enfermedadescronicas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(enfermedadescronicas.getText().toString());
+                } else {
+                    admin.DesactivarBoton(enfermedadescronicas.getText().toString());
+                }
+            }
+        });
+        enfermedadescronicas.setVisibility(View.GONE);
+
         admin.close();
         final Button listo = view1.findViewById(R.id.LISTOBOTON);
         listo.setOnClickListener(new View.OnClickListener() {
@@ -1032,6 +1045,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         discapacidad.setVisibility(View.VISIBLE);
                         embarazo.setVisibility(View.VISIBLE);
                         vitamina_D.setVisibility(View.VISIBLE);
+                        enfermedadescronicas.setVisibility(View.VISIBLE);
+
                         pantallas[0] +=1;
                         break;
                     case 2:
@@ -1039,6 +1054,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         discapacidad.setVisibility(View.GONE);
                         embarazo.setVisibility(View.GONE);
                         vitamina_D.setVisibility(View.GONE);
+                        enfermedadescronicas.setVisibility(View.GONE);
 
                         encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_psico_social));
 

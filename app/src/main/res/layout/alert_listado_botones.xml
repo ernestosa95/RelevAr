@@ -197,6 +197,14 @@
                 android:layout_margin="10dp"
                 android:text="@string/ocio"
                 android:textSize="22sp" />
+
+            <Switch
+                android:id="@+id/SWITCHENFERMEDADCRONICA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/enfermedad_cronica"
+                android:textSize="22sp" />
         </LinearLayout>
     </ScrollView>
 

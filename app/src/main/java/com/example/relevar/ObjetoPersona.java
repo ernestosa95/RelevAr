@@ -67,6 +67,7 @@ public class ObjetoPersona implements Serializable {
     public String TipoViolencia;
     public String ModalidadViolencia;
     public String TrastornosMentales;
+    public String EnfermedadCronica;
 
     private ArrayList<String> cabeceraPersona = new ArrayList<>();
     private HashMap<String,String> datosIngresados = new HashMap<>();
@@ -119,7 +120,7 @@ public class ObjetoPersona implements Serializable {
         TipoViolencia="";
         ModalidadViolencia="";
         TrastornosMentales="";
-
+        EnfermedadCronica="";
 
     }
 

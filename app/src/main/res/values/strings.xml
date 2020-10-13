@@ -214,4 +214,12 @@
     <string name="perros_sueltos" translatable="false">PERROS SUELTOS</string>
     <string name="numero_cartografia" translatable="false">NUMERO SEGUN CARTOGRAFIA</string>
 
+    <string name="tipo_enfermedad" translatable="false">TIPO DE ENFERMEDAD CRONICAS</string>
+    <string name="enfermedad_cronica" translatable="false">ENFERMEDADES CRONICAS</string>
+    <string name="cancer" translatable="false">CANCER</string>
+    <string name="diabetes" translatable="false">DIABETES</string>
+    <string name="enfermedades_crdiovasculares" translatable="false">ENFERMEDADES CARDIOVASCULARES</string>
+    <string name="enfermedades_respiratorias" translatable="false">ENFERMEDADES RESPIRATORIAS</string>
+    <string name="otro_tipo_enfermedad" translatable="false">OTRO TIPO DE ENEFERMEDAD NO TRANSMISIBLE</string>
+
 </resources>
