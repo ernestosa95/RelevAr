@@ -89,15 +89,15 @@ public class ObjetoFamilia implements Serializable {
         PerrosCalle="";
 
         // Dengue
-        Tanques = ";;";
-        Piletas = ";;";
-        Cubiertas = ";;";
-        Canaleta = ";;";
-        Hueco = ";;";
-        Macetas = ";;";
-        RecipientesPlasticos = ";;";
-        Botellas = ";;";
-        ElementosDesuso = ";;";
+        Tanques = "0;0;0";
+        Piletas = "0;0;0";
+        Cubiertas = "0;0;0";
+        Canaleta = "0;0;0";
+        Hueco = "0;0;0";
+        Macetas = "0;0;0";
+        RecipientesPlasticos = "0;0;0";
+        Botellas = "0;0;0";
+        ElementosDesuso = "0;0;0";
         SituacionVivienda = "";
         TipoTrabajo="";
         TotalFocoAedico="";

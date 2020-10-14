@@ -41,6 +41,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -121,6 +122,13 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     ArrayList<String> DatosMiembrosFamiliares = new ArrayList<>();
     ArrayList<String> categoriasPersona = new ArrayList<>();
     ArrayList<String> familiaCabecera = new ArrayList<>();
+
+    private  Switch serviciosBasicos, vivienda, dengue, educacion, ocupacion, contacto, efector, observaciones,
+            factores_riesgo, discapacidad, embarazo, vitamina_D, acompañamiento, transtornos_niños,
+            trastornos_mentales, adicciones, violencia, ocio, enfermedadescronicas, inspeccionExterior;
+    TextView encabezado;
+    ImageView volver;
+    int [] pantallas = {1};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -531,12 +539,44 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        final Handler handlerMarker = new Handler();
+        handlerMarker.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                map.clear();
+                if (encuestador.Marcadores(fechas.getSelectedItem().toString()).size()!=0){
+                    ArrayList<LatLng> marcadores = encuestador.Marcadores(fechas.getSelectedItem().toString());
+                    ArrayList<String> codigoColores = encuestador.CodigoColores(fechas.getSelectedItem().toString());
+                    //ArrayList<String> codigoCartografia = encuestador.CodigoCartografia(fechas.getSelectedItem().toString());
+                    for(int i=0; i<encuestador.Marcadores(fechas.getSelectedItem().toString()).size(); i++){
+
+                        MarkerOptions mo1 = new MarkerOptions();
+                        mo1.position(marcadores.get(i));
+                        /*if(codigoCartografia.get(i).length()!=0){
+                            mo1.title("CARTOGRAFIA "+codigoCartografia.get(i));
+                        }
+                        else {mo1.title("SIN CODIGO");}*/
+                        //mo1.icon(BitmapDescriptorFactory.fromResource(getBitmap(R.id)));
+                        Bitmap drawableBitmap = null;
+                        if(codigoColores.get(i).equals("R")){
+                            drawableBitmap = getBitmap(R.drawable.icono_mapa_rojo);}
+                        if(codigoColores.get(i).equals("A")){
+                            drawableBitmap = getBitmap(R.drawable.icono_mapa_amarilla);}
+                        if(codigoColores.get(i).equals("V")){
+                            drawableBitmap = getBitmap(R.drawable.icono_mapa_verde);}
+                        mo1.icon(BitmapDescriptorFactory.fromBitmap(drawableBitmap));
+                        map.addMarker(mo1);
+                    }}
+                handlerMarker.postDelayed(this, 2000);
+            }
+        }, 0);
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 //LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver, new IntentFilter("recorridos"));
-                map.clear();
+                //map.clear();
                 ruta = map.addPolyline(new PolylineOptions()
                         .clickable(true).color(Color.parseColor("#69A4D1")));
                 int ultimo = recorrido.size();
@@ -544,7 +584,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 //map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
                 ruta.setPoints(recorrido);
 
-                if (encuestador.Marcadores(fechas.getSelectedItem().toString()).size()!=0){
+                /*if (encuestador.Marcadores(fechas.getSelectedItem().toString()).size()!=0){
                     ArrayList<LatLng> marcadores = encuestador.Marcadores(fechas.getSelectedItem().toString());
                     ArrayList<String> codigoColores = encuestador.CodigoColores(fechas.getSelectedItem().toString());
                     for(int i=0; i<encuestador.Marcadores(fechas.getSelectedItem().toString()).size(); i++){
@@ -564,7 +604,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         map.addMarker(mo1);
 
                     }
-                }}
+                }*/}
 
                 handler.postDelayed(this, 15000);
             }
@@ -744,15 +784,13 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        final int[] pantallas = {0};
-
-        final TextView encabezado = view1.findViewById(R.id.ENCABEZADOMODULOS);
+        encabezado = view1.findViewById(R.id.ENCABEZADOMODULOS);
         encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.grupo_familiar));
 
         final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         admin.DesactivarBotones();
 
-        final Switch inspeccionExterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
+        inspeccionExterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
         inspeccionExterior.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -763,8 +801,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
         });
+        //inspeccionExterior.setVisibility(View.GONE);
 
-        final Switch serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
+        serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
         serviciosBasicos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -775,8 +814,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
         });
+        //serviciosBasicos.setVisibility(View.GONE);
 
-        final Switch vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
+        vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
         vivienda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -787,8 +827,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
         });
+        //vivienda.setVisibility(View.GONE);
 
-        final Switch dengue = view1.findViewById(R.id.SWITCHDENGUE);
+        dengue = view1.findViewById(R.id.SWITCHDENGUE);
         dengue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -799,8 +840,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
         });
+        //dengue.setVisibility(View.GONE);
 
-        final Switch educacion = view1.findViewById(R.id.SWITCHEDUCACION);
+        educacion = view1.findViewById(R.id.SWITCHEDUCACION);
         educacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -813,7 +855,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         educacion.setVisibility(View.GONE);
 
-        final Switch ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
+        ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
         ocupacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -826,7 +868,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         ocupacion.setVisibility(View.GONE);
 
-        final Switch contacto = view1.findViewById(R.id.SWITCHCONTACTO);
+        contacto = view1.findViewById(R.id.SWITCHCONTACTO);
         contacto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -839,7 +881,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         contacto.setVisibility(View.GONE);
 
-        final Switch efector = view1.findViewById(R.id.SWITCHEFECTOR);
+        efector = view1.findViewById(R.id.SWITCHEFECTOR);
         efector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -852,7 +894,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         efector.setVisibility(View.GONE);
 
-        final Switch observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
+        observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
         observaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -866,7 +908,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         observaciones.setVisibility(View.GONE);
 
         // ESTADO RIESGO
-        final Switch factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
+        factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
         factores_riesgo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -879,7 +921,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         factores_riesgo.setVisibility(View.GONE);
 
-        final Switch discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
+        discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
         discapacidad.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -892,7 +934,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         discapacidad.setVisibility(View.GONE);
 
-        final Switch embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
+        embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
         embarazo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -905,7 +947,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         embarazo.setVisibility(View.GONE);
 
-        final Switch vitamina_D = view1.findViewById(R.id.SWITCHVITAMINAD);
+        vitamina_D = view1.findViewById(R.id.SWITCHVITAMINAD);
         vitamina_D.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -919,7 +961,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         vitamina_D.setVisibility(View.GONE);
 
         // ESTADO PSICO-SOCIAL
-        final Switch acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
+        acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
         acompañamiento.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -932,7 +974,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         acompañamiento.setVisibility(View.GONE);
 
-        final Switch transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
+        transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
         transtornos_niños.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -945,7 +987,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         transtornos_niños.setVisibility(View.GONE);
 
-        final Switch trastornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
+        trastornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
         trastornos_mentales.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -958,7 +1000,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         trastornos_mentales.setVisibility(View.GONE);
 
-        final Switch adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
+        adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
         adicciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -971,7 +1013,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         adicciones.setVisibility(View.GONE);
 
-        final Switch violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
+        violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
         violencia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -984,7 +1026,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         violencia.setVisibility(View.GONE);
 
-        final Switch ocio = view1.findViewById(R.id.SWITCHOCIO);
+        ocio = view1.findViewById(R.id.SWITCHOCIO);
         ocio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -997,7 +1039,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
         ocio.setVisibility(View.GONE);
 
-        final Switch enfermedadescronicas = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
+        enfermedadescronicas = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
         enfermedadescronicas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1015,63 +1057,117 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         listo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (pantallas[0]){
-                    case 0:
-                        inspeccionExterior.setVisibility(View.GONE);
-                        serviciosBasicos.setVisibility(View.GONE);
-                        vivienda.setVisibility(View.GONE);
-                        dengue.setVisibility(View.GONE);
+              OpcionesPantallaBoton(dialog);
+            }
+        });
 
-                        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_general));
-
-                        educacion.setVisibility(View.VISIBLE);
-                        ocupacion.setVisibility(View.VISIBLE);
-                        contacto.setVisibility(View.VISIBLE);
-                        efector.setVisibility(View.VISIBLE);
-                        observaciones.setVisibility(View.VISIBLE);
-
-                        pantallas[0] +=1;
-                        break;
-                    case 1:
-                        educacion.setVisibility(View.GONE);
-                        ocupacion.setVisibility(View.GONE);
-                        contacto.setVisibility(View.GONE);
-                        efector.setVisibility(View.GONE);
-                        observaciones.setVisibility(View.GONE);
-
-                        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_estado_fisico));
-
-                        factores_riesgo.setVisibility(View.VISIBLE);
-                        discapacidad.setVisibility(View.VISIBLE);
-                        embarazo.setVisibility(View.VISIBLE);
-                        vitamina_D.setVisibility(View.VISIBLE);
-                        enfermedadescronicas.setVisibility(View.VISIBLE);
-
-                        pantallas[0] +=1;
-                        break;
-                    case 2:
-                        factores_riesgo.setVisibility(View.GONE);
-                        discapacidad.setVisibility(View.GONE);
-                        embarazo.setVisibility(View.GONE);
-                        vitamina_D.setVisibility(View.GONE);
-                        enfermedadescronicas.setVisibility(View.GONE);
-
-                        encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_psico_social));
-
-                        acompañamiento.setVisibility(View.VISIBLE);
-                        transtornos_niños.setVisibility(View.VISIBLE);
-                        trastornos_mentales.setVisibility(View.VISIBLE);
-                        adicciones.setVisibility(View.VISIBLE);
-                        violencia.setVisibility(View.VISIBLE);
-                        ocio.setVisibility(View.VISIBLE);
-                        pantallas[0] +=1;
-                        break;
-                    case 3:
-                        dialog.dismiss();
-                        break;
+        volver = view1.findViewById(R.id.VOLVER);
+        volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pantallas[0]>0){
+                    int aux = pantallas[0]-1;
+                    pantallas[0]-=2;
+                    //Toast.makeText(getBaseContext(), Integer.toString(aux), Toast.LENGTH_SHORT).show();
+                    OpcionesPantallaBoton(dialog);
                 }
             }
         });
+        volver.setVisibility(View.GONE);
+
+
+    }
+
+    private void OpcionesPantallaBoton(AlertDialog dialog){
+        switch (pantallas[0]){
+            case 0:
+                educacion.setVisibility(View.GONE);
+                ocupacion.setVisibility(View.GONE);
+                contacto.setVisibility(View.GONE);
+                efector.setVisibility(View.GONE);
+                observaciones.setVisibility(View.GONE);
+
+                inspeccionExterior.setVisibility(View.VISIBLE);
+                serviciosBasicos.setVisibility(View.VISIBLE);
+                vivienda.setVisibility(View.VISIBLE);
+                dengue.setVisibility(View.VISIBLE);
+                //Toast.makeText(getBaseContext(), Integer.toString(pantallas[0]), Toast.LENGTH_SHORT).show();
+
+                encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.grupo_familiar));
+
+                pantallas[0] +=1;
+                break;
+            case 1:
+                volver.setVisibility(View.VISIBLE);
+                inspeccionExterior.setVisibility(View.GONE);
+                serviciosBasicos.setVisibility(View.GONE);
+                vivienda.setVisibility(View.GONE);
+                dengue.setVisibility(View.GONE);
+                factores_riesgo.setVisibility(View.GONE);
+                discapacidad.setVisibility(View.GONE);
+                embarazo.setVisibility(View.GONE);
+                vitamina_D.setVisibility(View.GONE);
+                enfermedadescronicas.setVisibility(View.GONE);
+
+                //Toast.makeText(getBaseContext(), Integer.toString(pantallas[0]), Toast.LENGTH_SHORT).show();
+
+                encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_general));
+
+                educacion.setVisibility(View.VISIBLE);
+                ocupacion.setVisibility(View.VISIBLE);
+                contacto.setVisibility(View.VISIBLE);
+                efector.setVisibility(View.VISIBLE);
+                observaciones.setVisibility(View.VISIBLE);
+
+                pantallas[0] +=1;
+                break;
+            case 2:
+                volver.setVisibility(View.VISIBLE);
+                educacion.setVisibility(View.GONE);
+                ocupacion.setVisibility(View.GONE);
+                contacto.setVisibility(View.GONE);
+                efector.setVisibility(View.GONE);
+                observaciones.setVisibility(View.GONE);
+                acompañamiento.setVisibility(View.GONE);
+                transtornos_niños.setVisibility(View.GONE);
+                trastornos_mentales.setVisibility(View.GONE);
+                adicciones.setVisibility(View.GONE);
+                violencia.setVisibility(View.GONE);
+                ocio.setVisibility(View.GONE);
+
+                encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_estado_fisico));
+
+                factores_riesgo.setVisibility(View.VISIBLE);
+                discapacidad.setVisibility(View.VISIBLE);
+                embarazo.setVisibility(View.VISIBLE);
+                vitamina_D.setVisibility(View.VISIBLE);
+                enfermedadescronicas.setVisibility(View.VISIBLE);
+
+                pantallas[0] +=1;
+                break;
+            case 3:
+                volver.setVisibility(View.VISIBLE);
+                factores_riesgo.setVisibility(View.GONE);
+                discapacidad.setVisibility(View.GONE);
+                embarazo.setVisibility(View.GONE);
+                vitamina_D.setVisibility(View.GONE);
+                enfermedadescronicas.setVisibility(View.GONE);
+
+                encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.persona_psico_social));
+
+                acompañamiento.setVisibility(View.VISIBLE);
+                transtornos_niños.setVisibility(View.VISIBLE);
+                trastornos_mentales.setVisibility(View.VISIBLE);
+                adicciones.setVisibility(View.VISIBLE);
+                violencia.setVisibility(View.VISIBLE);
+                ocio.setVisibility(View.VISIBLE);
+                pantallas[0] +=1;
+
+                break;
+            case 4:
+                dialog.dismiss();
+                break;
+        }
     }
 
 //--------------------------------------------------------------------------------------------------

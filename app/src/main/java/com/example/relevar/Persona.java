@@ -165,6 +165,7 @@ public class Persona extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.tipo_violencia));
         categoriasPersona.add(getString(R.string.modalidad_violencia));
         categoriasPersona.add(getString(R.string.trastornos_mentales));
+        categoriasPersona.add(getString(R.string.enfermedad_cronica));
 
         Persona = new ObjetoPersona(categoriasPersona);
         // Eliminar el action bar
@@ -3211,6 +3212,8 @@ public class Persona extends AppCompatActivity {
             }
         }
 
+        final EditText otrasEnfermedades = view1.findViewById(R.id.EDTOTRASENFERMEDADES);
+
         final Button guardar = view1.findViewById(R.id.GUARDARENFERMEDADESCRONICAS);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3237,6 +3240,11 @@ public class Persona extends AppCompatActivity {
                         enfermedadcronica=respiratorias.getText().toString();
                     } else {
                         enfermedadcronica+=","+respiratorias.getText().toString();}}
+                if (otrasEnfermedades.getText().toString().length()!=0){
+                    if (enfermedadcronica==null){
+                        enfermedadcronica=otrasEnfermedades.getText().toString();
+                    } else {
+                        enfermedadcronica+=","+otrasEnfermedades.getText().toString();}}
                 if(enfermedadcronica!=null){Persona.EnfermedadCronica = enfermedadcronica;}
                 else{Persona.EnfermedadCronica="";}
                 ColorAvanceEnfermedadCronica();
@@ -3263,8 +3271,8 @@ public class Persona extends AppCompatActivity {
 
 
         if(avance==0){
-            layout_violencia.setBackgroundResource(R.drawable.rojo);
-            avanceviolencia.setText(getString(R.string.completado)+" 00%");
+            layout_enfermedades_cronicas.setBackgroundResource(R.drawable.rojo);
+            avanceenfermedadescronicas.setText(getString(R.string.completado)+" 00%");
         }
 
         /*if(avance>0 && avance<2){
@@ -3274,9 +3282,9 @@ public class Persona extends AppCompatActivity {
             avanceviolencia.setText(aux);
         }*/
 
-        if(avance==2){
-            layout_violencia.setBackgroundResource(R.drawable.verde);
-            avanceviolencia.setText(getString(R.string.completado)+" 100%");
+        if(avance==1){
+            layout_enfermedades_cronicas.setBackgroundResource(R.drawable.verde);
+            avanceenfermedadescronicas.setText(getString(R.string.completado)+" 100%");
         }
     }
 //--------------------------------------------------------------------------------------------------

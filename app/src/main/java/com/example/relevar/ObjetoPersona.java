@@ -274,6 +274,10 @@ public class ObjetoPersona implements Serializable {
             cabecera.add(cabeceraPersona.get(24));
             datosIngresados.put(cabeceraPersona.get(24), TrastornosMentales);
         }
+        if(EnfermedadCronica.length()!=0){
+            cabecera.add(cabeceraPersona.get(25));
+            datosIngresados.put(cabeceraPersona.get(25), EnfermedadCronica);
+        }
         return cabecera;
     }
 

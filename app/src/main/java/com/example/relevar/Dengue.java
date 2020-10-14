@@ -90,7 +90,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.ElementosDesuso = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.ElementosDesuso.equals(";;")){
+                if(!datosDengue.ElementosDesuso.equals("0;0;0")){
                     layout_desuso.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_desuso.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -135,7 +135,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Botellas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Botellas.equals(";;")){
+                if(!datosDengue.Botellas.equals("0;0;0")){
                     layout_botellas.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_botellas.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -180,7 +180,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.RecipientesPlasticos = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.RecipientesPlasticos.equals(";;")){
+                if(!datosDengue.RecipientesPlasticos.equals("0;0;0")){
                 layout_recipientes.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_recipientes.setBackgroundResource(R.drawable.edit_text_1);}
                 //Toast.makeText(getApplicationContext(),datosDengue.RecipientesPlasticos, Toast.LENGTH_SHORT).show();
@@ -226,7 +226,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Macetas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Macetas.equals(";;")){
+                if(!datosDengue.Macetas.equals("0;0;0")){
                     layout_maceta.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_maceta.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -271,7 +271,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Hueco = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Hueco.equals(";;")){
+                if(!datosDengue.Hueco.equals("0;0;0")){
                     layout_hueco.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_hueco.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -316,7 +316,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Canaleta = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Canaleta.equals(";;")){
+                if(!datosDengue.Canaleta.equals("0;0;0")){
                     layout_canaleta.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_canaleta.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -361,7 +361,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Cubiertas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Cubiertas.equals(";;")){
+                if(!datosDengue.Cubiertas.equals("0;0;0")){
                     layout_cubierta.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_cubierta.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -451,7 +451,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Tanques = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Tanques.equals(";;")){
+                if(!datosDengue.Tanques.equals("0;0;0")){
                     layout_tanquesbajos.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_tanquesbajos.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -492,7 +492,9 @@ public class Dengue extends AppCompatActivity {
         datosDengue.TotalFocoAedico = Integer.toString(focoaedicoTotal);
 
         final EditText destruidos = findViewById(R.id.EDTDESTRUIDOS);
-        datosDengue.Destruidos = destruidos.getText().toString();
+        if(destruidos.getText().toString().length()!=0){
+        datosDengue.Destruidos = destruidos.getText().toString();}
+        else {datosDengue.Destruidos="0";}
 
         final RadioButton siLarvicida = findViewById(R.id.SILARVICIDA);
         final RadioButton noLarvicida = findViewById(R.id.NOLARVICIDA);

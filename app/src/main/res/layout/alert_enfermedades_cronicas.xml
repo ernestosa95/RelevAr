@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:text="cancer"
+                        android:text="@string/cancer"
                         android:textSize="18sp" />
 
                     <CheckBox
@@ -77,6 +77,15 @@
                         android:text="@string/enfermedades_respiratorias"
                         android:textSize="18sp" />
 
+                    <EditText
+                        android:id="@+id/EDTOTRASENFERMEDADES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:ems="10"
+                        android:hint="@string/otros"
+                        android:inputType="textPersonName" />
+
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,7 +100,7 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/enfermedad_cronica"
         android:textColor="#FFFFFF"
-        android:textSize="25sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

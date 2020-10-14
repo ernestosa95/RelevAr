@@ -28,8 +28,7 @@
         android:text="@string/listo"
         android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -207,5 +206,15 @@
                 android:textSize="22sp" />
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/VOLVER"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_redondo_blanco"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/volver" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
