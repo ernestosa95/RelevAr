@@ -96,8 +96,6 @@ public class Persona extends AppCompatActivity {
     // Defino el Interfaz para ingresar la fecha
     private DatePickerDialog.OnDateSetListener Date;
     private DatePickerDialog.OnDateSetListener Date2, Date1;
-    // Defino el Spinner que va a contener los efectores
-    private Spinner Sp1;
 
     // Defino los Array que contienen conjunto de informacion
     private ArrayList<String> categoriasPersona = new ArrayList<>();
@@ -166,6 +164,7 @@ public class Persona extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.modalidad_violencia));
         categoriasPersona.add(getString(R.string.trastornos_mentales));
         categoriasPersona.add(getString(R.string.enfermedad_cronica));
+        categoriasPersona.add(getString(R.string.plan_social));
 
         Persona = new ObjetoPersona(categoriasPersona);
         // Eliminar el action bar
@@ -185,9 +184,9 @@ public class Persona extends AppCompatActivity {
                 //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
                 date=day+"-"+mes+"-"+year;
-                txtNacimientoEditar.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
+                txtNacimientoEditar.setText(Integer.toString(day)+"/"+Integer.toString(mes)+"/"+Integer.toString(year));
                 Persona.Nacimiento = date;
-                Persona.CalcularEdad(year, month, day);
+                //Persona.CalcularEdad(year, month, day);
                 }
         };
 
@@ -373,7 +372,7 @@ public class Persona extends AppCompatActivity {
         layout_ocupacion = (ConstraintLayout) findViewById(R.id.AVANCETRABAJO);
         avanceocupacion = (TextView) findViewById(R.id.COMPLETADOTRABAJO);
         BtnOcupacion = (ConstraintLayout) findViewById(R.id.BTNTRABAJO);
-        if(!admin.EstadoBoton("OCUPACION")){
+        if(!admin.EstadoBoton("INGRESO Y OCUPACION")){
             BtnOcupacion.setVisibility(View.GONE);
         }
         else{
@@ -2060,25 +2059,37 @@ public class Persona extends AppCompatActivity {
                 autocomplete.setText(Persona.Ocupacion);
             }}
 
+        final EditText edtPlanSocial = view1.findViewById(R.id.EDTTXTPLANSOCIAL);
+        if(Persona.PlanSocial.length()!=0){
+            edtPlanSocial.setText(Persona.PlanSocial);
+        }
 
         Button guardar = view1.findViewById(R.id.GUARDAR3);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!RbtSITrabajo.isChecked() && !RbtNOTrabajo.isChecked()){
+                    Toast.makeText(getApplicationContext(), "DEBE COMPLETAR SI LA PERSONA TIENE O NO OCUPACION", Toast.LENGTH_SHORT).show();
+                }else{
                 if(RbtSITrabajo.isChecked()){
                     if(autocomplete.getText().toString().length()!=0){
                         Persona.Ocupacion=autocomplete.getText().toString();
+                        Persona.PlanSocial = edtPlanSocial.getText().toString();
                         dialog.dismiss();
                     }
                     else{
                         Toast.makeText(getApplicationContext(), "INGRESE UNA OCUPACIÓN", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if(RbtNOTrabajo.isChecked()){
+                if (RbtNOTrabajo.isChecked()){
                     Persona.Ocupacion = "DESOCUPADO";
+                    Persona.PlanSocial = edtPlanSocial.getText().toString();
                     dialog.dismiss();
-                }
+                }}
+
+
                 ColorAvanceOcupacion();
+
             }
         });
 
@@ -2108,12 +2119,25 @@ public class Persona extends AppCompatActivity {
             avance+=1;
         }
 
-        if(avance==1){
+        if(Persona.PlanSocial.length()!=0){
+            avance+=1;
+        }
+
+        if(avance==0){
+            layout_ocupacion.setBackgroundResource(R.drawable.rojo);
+            avanceocupacion.setText(getString(R.string.completado)+" 00%");
+        }
+
+        if(avance>0 && avance<2){
+            layout_ocupacion.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/3)*100);
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceocupacion.setText(aux);
+        }
+
+        if(avance==2){
             layout_ocupacion.setBackgroundResource(R.drawable.verde);
             avanceocupacion.setText(getString(R.string.completado)+" 100%");
-            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
-            //AvContacto.setText("3/3");
-            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
         }
     }
 
@@ -2234,7 +2258,7 @@ public class Persona extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int  year, int month, int day) {
                 //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
-                fechaDeParto.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
+                fechaDeParto.setText(Integer.toString(day)+"/"+Integer.toString(mes)+"/"+Integer.toString(year));
             }
         };
 
@@ -2245,7 +2269,7 @@ public class Persona extends AppCompatActivity {
                 //Log.d(TAG, "onDateSet: date:"+year+"/"+month+"/"+day);
                 int mes = month + 1;
                 ColorAvanceEmbarazo();
-                ultimoControl.setText(Integer.toString(mes)+" "+Integer.toString(day)+", "+Integer.toString(year));
+                ultimoControl.setText(Integer.toString(day)+"/"+Integer.toString(mes)+"/"+Integer.toString(year));
             }
         };
 

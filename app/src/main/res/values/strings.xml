@@ -16,9 +16,9 @@
     <string name="apellido">APELLIDO</string>
     <string name="nombre">NOMBRE</string>
     <string name="dni" translatable="false">DNI</string>
-    <string name="fecha_nacimiento">MES DIA, AÑO</string>
+    <string name="fecha_nacimiento">DIA/MES/AÑO</string>
     <string name="educacion">EDUCACION</string>
-    <string name="ocupacion">OCUPACION</string>
+    <string name="ocupacion">INGRESO Y OCUPACION</string>
     <string name="contacto">CONTACTO</string>
     <string name="efector">EFECTOR</string>
     <string name="observaciones">OBSERVACIONES</string>
@@ -221,5 +221,6 @@
     <string name="enfermedades_crdiovasculares" translatable="false">ENFERMEDADES CARDIOVASCULARES</string>
     <string name="enfermedades_respiratorias" translatable="false">ENFERMEDADES RESPIRATORIAS</string>
     <string name="otro_tipo_enfermedad" translatable="false">OTRO TIPO DE ENEFERMEDAD NO TRANSMISIBLE</string>
+    <string name="plan_social" translatable="false">PLAN SOCIAL</string>
 
 </resources>

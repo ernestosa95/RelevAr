@@ -23,14 +23,14 @@
         android:id="@+id/CANCELAR3"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button1"
         android:text="@string/cancelar"
         android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/AutoTrabajos"
-        app:layout_constraintTop_toBottomOf="@+id/AGREGARMANUALMENTE" />
+        app:layout_constraintTop_toBottomOf="@+id/EDTTXTPLANSOCIAL" />
 
     <Button
         android:id="@+id/GUARDAR3"
@@ -114,5 +114,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/EDTTXTPLANSOCIAL"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_1"
+        android:ems="10"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="@string/plan_social"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AGREGARMANUALMENTE" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

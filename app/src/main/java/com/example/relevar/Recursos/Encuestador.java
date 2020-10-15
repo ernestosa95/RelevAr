@@ -58,7 +58,9 @@ public class Encuestador {
         segundos = calendario.get(Calendar.SECOND);
 
         if(Latitud!=null && Longitud!=null){
-            String cabecera = Integer.toString(hora)+":"+Integer.toString(minutos)+":"+Integer.toString(segundos)+";"+Latitud+" "+Longitud+";"+ID+"\n";
+
+            String cabecera = Integer.toString(hora)+":"+Integer.toString(minutos)+":"+Integer.toString(segundos)+";"+Latitud+" "+Longitud+";"
+                    +";"+CantidadRegistros()+";"+ID+"\n";
             try {
                 FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
                 // que se agreguen los datos al final sin perder los datos anteriores
@@ -70,6 +72,41 @@ public class Encuestador {
             } catch (IOException e){
                 e.printStackTrace();
             }}
+    }
+
+    private String CantidadRegistros(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-"+fecha+".csv";
+
+        int cant = 0;
+        String linea = "";
+        try {
+            File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+            nuevaCarpeta.mkdirs();
+            File dir = new File(nuevaCarpeta, NombreArchivo);
+            String strLine = "";
+            // leer datos
+            String myData = "";
+
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            linea = br.readLine();
+
+            while((linea =br.readLine())!= null){
+                cant++;
+            }
+
+            br.close();
+            in.close();
+            fis.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Integer.toString(cant);
     }
 
     public ArrayList<LatLng> Marcadores (String fechaVisualizacion){

@@ -104,7 +104,7 @@ public class Inicio extends AppCompatActivity {
 
         // Botones de la persona: general
         botones.add("EDUCACION");
-        botones.add("OCUPACION");
+        botones.add("INGRESO Y OCUPACION");
         botones.add("CONTACTO");
         botones.add("EFECTOR");
         botones.add("OBSERVACIONES");
