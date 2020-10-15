@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -1412,10 +1413,12 @@ public class Familia extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR
     public void Guardar2(View view){
+        CheckBox deshabitada = findViewById(R.id.CHECKVIVIENDADESHABITADA);
 
-
-
-        if(MiembrosFamiliares.size()!=0) {
+        if(deshabitada.isChecked()){
+            MiembrosFamiliares.add(new ObjetoPersona(null));
+        }
+        if(MiembrosFamiliares.size()!=0 || familia.SituacionVivienda.length()!=0) {
 
             //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
             // Inicio la obtencion de datos de ubicacion del GPS
@@ -1484,7 +1487,12 @@ public class Familia extends AppCompatActivity {
             final EditText edtNumero = view_alert.findViewById(R.id.NUMERO);
             final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
             final EditText edtnumerocartografia = view_alert.findViewById(R.id.NUMEROSEGUNCARTOGRAFIA);
-            NumerosPersonas = MiembrosFamiliares.size();
+
+            if(deshabitada.isChecked()){
+                NumerosPersonas = 0;
+            }else{
+            NumerosPersonas = MiembrosFamiliares.size();}
+
             cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
             ImageView mas = view_alert.findViewById(R.id.MAS);
@@ -1518,6 +1526,7 @@ public class Familia extends AppCompatActivity {
 
                         /* De cada persona cuales son los datos cargados*/
                         ArrayList<String> CategoriaPersonas = new ArrayList<>();
+
                         CategoriaPersonas = MiembrosFamiliares.get(0).DatosCargadosCsv();
 
                         /* Creo una lista de datos unificada para todas la personas de la misma

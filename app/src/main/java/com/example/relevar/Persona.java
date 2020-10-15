@@ -82,7 +82,7 @@ public class Persona extends AppCompatActivity {
             dt, antigripal, vcn23, vcn13, tetravalente, ipv, sabin;
     CheckBox calendario, embarazo, puerperio, personalsalud, personalesencial, viajeros,
             inmunocomprometidos, cadiologicos, respiratorios, diabeticos, prematuros, asplenicos,
-            obesidad, inmunodeficiencia, conviviente,HTA, otros;
+            obesidad, inmunodeficiencia, conviviente,HTA, oncologicos, otros;
     CheckBox SD, Jardin, EscuelaEspecial, PrimariaCursando, PrimarioIncompleto, PrimariaCompleta, SecundariaCursando,
     SecundariaImcompleto, SecundariaCompleto, TerciarioCursando, TerciarioImcompleto, TerciarioCompleto,
     UniersidadCursando, UniversidadImcompleto, UniversidadCompleto;
@@ -1432,7 +1432,8 @@ public class Persona extends AppCompatActivity {
         inmunodeficiencia = PersonalCheck(mainLayout,"INMUNODEFICIENCIA", TamañoLetra, ColorImpares, AltoContenedor);
         conviviente = PersonalCheck(mainLayout,"CONVIVIENTE INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
         HTA = PersonalCheck(mainLayout,"HIPERTENSO", TamañoLetra, ColorImpares, AltoContenedor);
-        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorPares, AltoContenedor);
+        oncologicos = PersonalCheck(mainLayout,"ONCOLOGICOS", TamañoLetra, ColorPares, AltoContenedor);
+        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorImpares, AltoContenedor);
 
         // En el caso de editar un registro
         // Necesito que me ponga seleccionado todos aquellos que ya se habian seleeccionado antes
@@ -1561,6 +1562,14 @@ public class Persona extends AppCompatActivity {
                         riesgos+=",HIPERTENSO";
                         //codigoriesgo+="";
                         }}
+                if (oncologicos.isChecked()){
+                    if (riesgos==null){
+                        riesgos="ONCOLOGICO";
+                        //codigoriesgo="";
+                    } else {
+                        riesgos+=",ONCOLOGICO";
+                        //codigoriesgo+="";
+                    }}
                 if (otros.isChecked()){
                     if (riesgos==null){
                         riesgos="OTROS";
@@ -1674,6 +1683,9 @@ public class Persona extends AppCompatActivity {
             }
             if (vac[x].equals("PREMATUROS")){
                 prematuros.setChecked(true);
+            }
+            if (vac[x].equals("ONCOLOGICO")){
+                oncologicos.setChecked(true);
             }
         }
     }}
