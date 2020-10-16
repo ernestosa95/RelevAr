@@ -168,11 +168,11 @@
     <string name="actividades_ocio" translatable="false">ACTIVIDADES DE OCIO</string>
 
     <string name="trastornos_mentales" translatable="false">TRASTORNOS MENTALES</string>
-    <string name="organicos" translatable="false">Trastornos mentales orgánicos, incluidos los trastornos sintomáticos</string>
+    <string name="organicos" translatable="false">Trastornos mentales organicos (incluidos los trastornos sintomaticos)</string>
     <string name="sustancias_psicoactivas" translatable="false">Trastornos mentales y del comportamiento debido a sustancias psicoactivas</string>
-    <string name="esquizofrenia" translatable="false">Esquizofrenia, trastornos esquizotípicos y trastornos delirantes</string>
+    <string name="esquizofrenia" translatable="false">Esquizofrenia - trastornos esquizotipicos y trastornos delirantes</string>
     <string name="trastornos_humor" translatable="false">Trastornos del humor</string>
-    <string name="estres" translatable="false">Trastornos neuróticos, trastornos relacionados con el estrés y trastornos somatomorfos</string>
+    <string name="estres" translatable="false">Trastornos neuróticos - trastornos relacionados con el estrés y trastornos somatomorfos</string>
     <string name="sindromes_comportamiento" translatable="false">Síndromes del comportamiento asociados con alteraciones fisiológicas y factores físicos</string>
     <string name="trastornos_personalidad" translatable="false">Trastornos de la personalidad y del comportamiento en adultos</string>
     <string name="retraso_mental" translatable="false">Retraso mental</string>

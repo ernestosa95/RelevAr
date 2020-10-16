@@ -2784,6 +2784,7 @@ public class Persona extends AppCompatActivity {
 
         String[] vac = Persona.TrastornosMentales.split(",");
         for (int x = 0; x < vac.length; x++) {
+            //Toast.makeText(getApplicationContext(), vac[0], Toast.LENGTH_SHORT).show();
             if (vac[x].equals(organicos.getText().toString())){
                 organicos.setChecked(true);
             }
@@ -2891,6 +2892,7 @@ public class Persona extends AppCompatActivity {
 
                 if(trastornosMentales!=null){Persona.TrastornosMentales = trastornosMentales;}
                 else{Persona.TrastornosMentales="";}
+
 
                 ColorAvanceTrastornosMentales();
                 dialog.dismiss();
