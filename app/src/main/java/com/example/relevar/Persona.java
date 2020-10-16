@@ -566,7 +566,7 @@ public class Persona extends AppCompatActivity {
         });
 
         final Switch ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
-        if(admin.EstadoBoton("OCUPACION")){
+        if(admin.EstadoBoton("INGRESO Y OCUPACION")){
             ocupacion.setChecked(true);
         }
         ocupacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -1287,7 +1287,8 @@ public class Persona extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RadioButton rb = (RadioButton) Educacion.findViewById(Educacion.getCheckedRadioButtonId());
-                Persona.Educacion = rb.getText().toString();
+                if(Educacion.findViewById(Educacion.getCheckedRadioButtonId())!=null){
+                Persona.Educacion = rb.getText().toString();}
                 dialog.dismiss();
                 ColorAvanceEducacion();
             }
@@ -2538,6 +2539,7 @@ public class Persona extends AppCompatActivity {
                         acompañamiento+=","+institucion.getText().toString();}}
 
                 if(acompañamiento!=null){Persona.Acompañamiento = acompañamiento;}
+                else{Persona.Acompañamiento="";}
 
                 ColorAvanceAcompañamiento();
                 dialog.dismiss();
@@ -2621,6 +2623,7 @@ public class Persona extends AppCompatActivity {
                         trastornosNiños+=","+trastornosConducta.getText().toString();}}
 
                 if(trastornosNiños!=null){Persona.TrastornoNiños = trastornosNiños;}
+                else{Persona.TrastornoNiños = "";}
                 ColorAvanceTrastornosNiños();
                 dialog.dismiss();
             }
@@ -2779,7 +2782,7 @@ public class Persona extends AppCompatActivity {
         final CheckBox no_especificados = view1.findViewById(R.id.TRASTORNOSNOESPECIFICADO);
         final CheckBox lesiones_autoinflijidas = view1.findViewById(R.id.LESIONESAUTOINFLIJIDAS);
 
-        String[] vac = Persona.Adicciones.split(",");
+        String[] vac = Persona.TrastornosMentales.split(",");
         for (int x = 0; x < vac.length; x++) {
             if (vac[x].equals(organicos.getText().toString())){
                 organicos.setChecked(true);
@@ -3090,7 +3093,8 @@ public class Persona extends AppCompatActivity {
         final CheckBox institucional = view1.findViewById(R.id.INSTITUCIONAL);
         final CheckBox reproductiva = view1.findViewById(R.id.REPRODUCTIVA);
         final CheckBox obstetrica = view1.findViewById(R.id.OBSTETRICA);
-        vac = Persona.TipoViolencia.split(",");
+        final CheckBox mediatica = view1.findViewById(R.id.MEDIATICA);
+        vac = Persona.ModalidadViolencia.split(",");
         for (int x = 0; x < vac.length; x++) {
             if (vac[x].equals(domestica.getText().toString())){
                 domestica.setChecked(true);
@@ -3106,6 +3110,9 @@ public class Persona extends AppCompatActivity {
             }
             if (vac[x].equals(obstetrica.getText().toString())){
                 obstetrica.setChecked(true);
+            }
+            if (vac[x].equals(mediatica.getText().toString())){
+                mediatica.setChecked(true);
             }
         }
 
@@ -3169,6 +3176,11 @@ public class Persona extends AppCompatActivity {
                         modalidadViolencia=obstetrica.getText().toString();
                     } else {
                         modalidadViolencia+=","+obstetrica.getText().toString();}}
+                if (mediatica.isChecked()){
+                    if (modalidadViolencia==null){
+                        modalidadViolencia=mediatica.getText().toString();
+                    } else {
+                        modalidadViolencia+=","+mediatica.getText().toString();}}
                 if(modalidadViolencia!=null){Persona.ModalidadViolencia = modalidadViolencia;}
                 else{Persona.ModalidadViolencia="";}
                 ColorAvanceViolencia();

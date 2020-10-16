@@ -413,8 +413,14 @@ public class Familia extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
+        CheckBox deshabitada = findViewById(R.id.CHECKVIVIENDADESHABITADA);
+        if(!deshabitada.isChecked()){
         Intent Modif= new Intent (this, Persona.class);
         startActivityForResult(Modif, 1);}
+        else{
+            Toast.makeText(this, "SI LA VIVIENDA ESTA DESHABITADA NO SE PUEDEN AGREGAR PERSONAS", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void ListeVer(){
 
@@ -1128,7 +1134,7 @@ public class Familia extends AppCompatActivity {
 
         OpcCocinar.add("");
         OpcCocinar.add("CON INSTALACION DE AGUA Y DESAGUE");
-        OpcCocinar.add("CON INSTALCION DE AGUA SIN DESAGUE");
+        OpcCocinar.add("CON INSTALACION DE AGUA SIN DESAGUE");
         OpcCocinar.add("SIN INSTALACION DE AGUA");
         OpcCocinar.add("NO TIENE LUGAR O CUARTO PARA COCINAR");
 
@@ -1184,7 +1190,7 @@ public class Familia extends AppCompatActivity {
         ArrayList<String> OpcPiso = new ArrayList<>();
 
         OpcPiso.add("");
-        OpcPiso.add("CERAMICA, BALDOZA, MOSAICO, MADERA O CEMENTO ALISADO");
+        OpcPiso.add("CERAMICA, BALDOSA, MOSAICO, MADERA O CEMENTO ALISADO");
         OpcPiso.add("CARPETA, COMTRAPISO O LADRILLO FIJO");
         OpcPiso.add("TIERRA O LADRILLO SUELTO");
         OpcPiso.add("OTRO");
@@ -1480,7 +1486,7 @@ public class Familia extends AppCompatActivity {
             ObjetoPersona auxPersona = new ObjetoPersona(null);
             if(familia.SituacionVivienda.equals("X")){
                 MiembrosFamiliares.add(auxPersona);
-                Toast.makeText(this, "ENTRO", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "ENTRO", Toast.LENGTH_SHORT).show();
             }
 
             final EditText edtCalle = view_alert.findViewById(R.id.CALLE);

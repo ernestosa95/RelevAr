@@ -95,6 +95,14 @@ public class Dengue extends AppCompatActivity {
                 else{layout_desuso.setBackgroundResource(R.drawable.edit_text_1);}
             }
         });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void BotellasVarias(View view){
@@ -138,6 +146,13 @@ public class Dengue extends AppCompatActivity {
                 if(!datosDengue.Botellas.equals("0;0;0")){
                     layout_botellas.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_botellas.setBackgroundResource(R.drawable.edit_text_1);}
+            }
+        });
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
     }
@@ -186,6 +201,14 @@ public class Dengue extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),datosDengue.RecipientesPlasticos, Toast.LENGTH_SHORT).show();
             }
         });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void Maceta(View view){
@@ -229,6 +252,13 @@ public class Dengue extends AppCompatActivity {
                 if(!datosDengue.Macetas.equals("0;0;0")){
                     layout_maceta.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_maceta.setBackgroundResource(R.drawable.edit_text_1);}
+            }
+        });
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
     }
@@ -276,6 +306,13 @@ public class Dengue extends AppCompatActivity {
                 else{layout_hueco.setBackgroundResource(R.drawable.edit_text_1);}
             }
         });
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void Canaleta(View view){
@@ -319,6 +356,13 @@ public class Dengue extends AppCompatActivity {
                 if(!datosDengue.Canaleta.equals("0;0;0")){
                     layout_canaleta.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_canaleta.setBackgroundResource(R.drawable.edit_text_1);}
+            }
+        });
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
     }
@@ -366,6 +410,14 @@ public class Dengue extends AppCompatActivity {
                 else{layout_cubierta.setBackgroundResource(R.drawable.edit_text_1);}
             }
         });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void Piletas(View view){
@@ -411,6 +463,14 @@ public class Dengue extends AppCompatActivity {
                 else{layout_pileta.setBackgroundResource(R.drawable.edit_text_1);}
             }
         });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void TanquesBajosAltos(View view){
@@ -454,6 +514,14 @@ public class Dengue extends AppCompatActivity {
                 if(!datosDengue.Tanques.equals("0;0;0")){
                     layout_tanquesbajos.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_tanquesbajos.setBackgroundResource(R.drawable.edit_text_1);}
+            }
+        });
+
+        final Button cancelar = view1.findViewById(R.id.CANCELAROPCIONESDENGUE);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
     }
@@ -568,4 +636,5 @@ public class Dengue extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 }

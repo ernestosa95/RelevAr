@@ -36,15 +36,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/otro_tipo_enfermedad"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
                     <CheckBox
                         android:id="@+id/CANCER"
                         android:layout_width="match_parent"
@@ -79,7 +70,7 @@
 
                     <EditText
                         android:id="@+id/EDTOTRASENFERMEDADES"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:ems="10"
