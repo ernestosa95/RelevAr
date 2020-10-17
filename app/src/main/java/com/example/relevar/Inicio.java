@@ -123,6 +123,8 @@ public class Inicio extends AppCompatActivity {
         botones.add("ADICCIONES");
         botones.add("VIOLENCIA");
         botones.add("OCIO");
+        botones.add("xx33333");
+        botones.add("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,6 +258,12 @@ public class Inicio extends AppCompatActivity {
                     String nombre = encuestadores.getSelectedItem().toString().split(",")[0];
                     String apellido = encuestadores.getSelectedItem().toString().split(",")[1];
                     admin.ActivarUsuario(nombre,apellido);
+
+                    // Creo y actualizo principalmente la botonera en segundo plano las bases de
+                    // datos correspondientes a este encuestador
+                    BdEfectores bdEfectores = new BdEfectores();
+                    bdEfectores.execute();
+
                     Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
                     startActivityForResult(Modif, 1);
                     dialog.dismiss();}
@@ -401,6 +409,7 @@ public class Inicio extends AppCompatActivity {
                 DataInputStream in = new DataInputStream(fis);
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 SQLiteDatabase Bd1 = admin.getWritableDatabase();
+                if(SPProvincias!=null){
                 if (!admin.ExisteEfectores(SPProvincias.getSelectedItem().toString())) {
                     while ((myData = br.readLine()) != null) {
 
@@ -416,7 +425,7 @@ public class Inicio extends AppCompatActivity {
                     in.close();
                     fis.close();
 
-                }
+                }}
             } catch (IOException e) {
                 Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
             }
@@ -441,12 +450,12 @@ public class Inicio extends AppCompatActivity {
 
 
                     }
-                    for(int i=0; i<botones.size(); i++){
+                    /*for(int i=0; i<botones.size(); i++){
                         ContentValues botonesValores = new ContentValues();
                         botonesValores.put("BOTON", botones.get(i));
                         botonesValores.put("ACTIVO", false);
                         Bd1.insert("BOTONES", null, botonesValores);
-                    }
+                    }*/
                     Bd1.close();
                     br.close();
                     in.close();
@@ -455,6 +464,35 @@ public class Inicio extends AppCompatActivity {
             }
             catch (IOException e){
                 Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();}
+
+            /* Obtengo el listado de botones de la base de datos si no tiene alguno de los botone
+            * que estan listado en en el arraylist lo agrego*/
+            SQLiteDatabase Bd1 = admin.getWritableDatabase();
+            ArrayList<String> botonesActuales = admin.Botones();
+
+            for(int i=0; i<botones.size(); i++) {
+                if (Bd1 == null || !Bd1.isOpen())
+                {
+                    Bd1 = admin.getWritableDatabase();
+                }
+                if(botonesActuales.size()!=0){
+                if (!botonesActuales.contains(botones.get(i))) {
+                    ContentValues botonesValores = new ContentValues();
+                    botonesValores.put("BOTON", botones.get(i));
+                    botonesValores.put("ACTIVO", false);
+                    Bd1.insert("BOTONES", null, botonesValores);
+                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA"+botones.get(i));
+                }}
+                else{
+                    ContentValues botonesValores = new ContentValues();
+                    botonesValores.put("BOTON", botones.get(i));
+                    botonesValores.put("ACTIVO", false);
+                    Bd1.insert("BOTONES", null, botonesValores);
+
+                }
+            }
+            Bd1.close();
+
             return null;
         }
 
