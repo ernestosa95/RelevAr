@@ -143,7 +143,7 @@ public class Familia extends AppCompatActivity {
         familiaCabecera.add(getString(R.string.lugar_cocinar));
         familiaCabecera.add(getString(R.string.usa_para_cocinar));
         familiaCabecera.add(getString(R.string.paredes));
-        familiaCabecera.add(getString(R.string.revoque));
+        familiaCabecera.add(getString(R.string.revestimiento));
         familiaCabecera.add(getString(R.string.pisos));
         familiaCabecera.add(getString(R.string.cielorraso));
         familiaCabecera.add(getString(R.string.techo));
@@ -600,6 +600,8 @@ public class Familia extends AppCompatActivity {
                 familia.TotalTratados = aux.TotalTratados;
                 familia.Larvicida = aux.Larvicida;
                 familia.Destruidos = aux.Destruidos;
+
+                ColorAvanceDengue();
             }
 
                 ListeVer();
@@ -796,9 +798,95 @@ public class Familia extends AppCompatActivity {
     // SERVICIOS BASICOS
     public void Dengue(View view){
         Intent Modif= new Intent (this, Dengue.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("DATOSDENGUE", familia);
+        Modif.putExtras(bundle);
         startActivityForResult(Modif, 1);
     }
 
+    private void ColorAvanceDengue(){
+        // Cambio los colores de avance
+
+        float avance = 0;
+        if (!familia.Tanques.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.Piletas.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.Cubiertas.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.Canaleta.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.Hueco.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.Macetas.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.RecipientesPlasticos.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.Botellas.equals("0;0;0")){
+            avance+=1;
+        }
+        if (!familia.ElementosDesuso.equals("0;0;0")){
+            avance+=1;
+        }
+        if (familia.SituacionVivienda.length()!=0){
+            avance+=1;
+        }
+        if (familia.TipoTrabajo.length()!=0){
+            avance+=1;
+        }
+        if (familia.TotalTratados.length()!=0){
+            avance+=1;
+        }
+        if (familia.TotalFocoAedico.length()!=0){
+            avance+=1;
+        }
+        if (familia.TotalIspeccionado.length()!=0){
+            avance+=1;
+        }
+        if (familia.Larvicida.length()!=0){
+            avance+=1;
+        }
+        if (familia.Destruidos.length()!=0){
+            avance+=1;
+        }
+        if (familia.HieloCalle.length()!=0){
+            avance+=1;
+        }
+        if (familia.PerrosCalle.length()!=0){
+            avance+=1;
+        }
+
+        if(avance>0 && avance<18){
+            CLDengue.setBackgroundResource(R.drawable.amarillo);
+            double porcentaje = Math.round((avance/18)*100);
+            //Toast.makeText(getApplicationContext(), Double.toString(porcentaje), Toast.LENGTH_SHORT).show();
+            String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
+            avanceDengue.setText(aux);
+            //AvContacto.setText(aux);
+            //AvContacto.setBackgroundColor(Color.parseColor("#FFA07A"));
+        }
+        if(avance==18){
+            CLDengue.setBackgroundResource(R.drawable.verde);
+            avanceDengue.setText(getString(R.string.completado)+" 100%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+        if(avance==0){
+            CLDengue.setBackgroundResource(R.drawable.rojo);
+            avanceDengue.setText(getString(R.string.completado)+" 00%");
+            //Contacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+            //AvContacto.setText("3/3");
+            //AvContacto.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // EXTERIOR VIVIENDA

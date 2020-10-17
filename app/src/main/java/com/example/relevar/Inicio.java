@@ -123,8 +123,6 @@ public class Inicio extends AppCompatActivity {
         botones.add("ADICCIONES");
         botones.add("VIOLENCIA");
         botones.add("OCIO");
-        botones.add("xx33333");
-        botones.add("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 
 //--------------------------------------------------------------------------------------------------

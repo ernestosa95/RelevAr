@@ -217,7 +217,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         familiaCabecera.add(getString(R.string.lugar_cocinar));
         familiaCabecera.add(getString(R.string.usa_para_cocinar));
         familiaCabecera.add(getString(R.string.paredes));
-        familiaCabecera.add(getString(R.string.revoque));
+        familiaCabecera.add(getString(R.string.revestimiento));
         familiaCabecera.add(getString(R.string.pisos));
         familiaCabecera.add(getString(R.string.cielorraso));
         familiaCabecera.add(getString(R.string.techo));

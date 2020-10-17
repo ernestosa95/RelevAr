@@ -1383,8 +1383,9 @@ public class Persona extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                if(completitud.findViewById(completitud.getCheckedRadioButtonId())!=null){
                 RadioButton rb = (RadioButton) completitud.findViewById(completitud.getCheckedRadioButtonId());
-                Persona.Educacion = nivel +" "+ rb.getText().toString();
+                Persona.Educacion = nivel +" "+ rb.getText().toString();}
                 ColorAvanceEducacion();
             }
         });
@@ -2143,7 +2144,7 @@ public class Persona extends AppCompatActivity {
 
         if(avance>0 && avance<2){
             layout_ocupacion.setBackgroundResource(R.drawable.amarillo);
-            double porcentaje = Math.round((avance/3)*100);
+            double porcentaje = Math.round((avance/2)*100);
             String aux = getString(R.string.completado)+" "+ Double.toString(porcentaje)+"%";
             avanceocupacion.setText(aux);
         }

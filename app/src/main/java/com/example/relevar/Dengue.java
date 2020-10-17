@@ -29,6 +29,11 @@ public class Dengue extends AppCompatActivity {
 
     int inspeccionadosTotal=0, tratadosTotal=0, focoaedicoTotal=0;
     ObjetoFamilia datosDengue = new ObjetoFamilia(null);
+
+    CheckBox Inspeccion, Tratamientos, Fumigacion, sinIntervencion, cerrada;
+    EditText destruidos;
+    RadioButton siLarvicida, noLarvicida;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,16 +43,81 @@ public class Dengue extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Dengue");
 
-        layout_desuso = findViewById(R.id.ELEMENTOENDESUSO);
-        layout_botellas = findViewById(R.id.BOTELLASVARIAS);
-        layout_recipientes = findViewById(R.id.RECIPIENTEPLASTICOS);
-        layout_maceta = findViewById(R.id.MACETA);
-        layout_hueco = findViewById(R.id.HUECO);
-        layout_canaleta = findViewById(R.id.CANALETA);
-        layout_cubierta = findViewById(R.id.CUBIERTAS);
-        layout_pileta = findViewById(R.id.PILETAS);
-        layout_tanquesbajos =findViewById(R.id.TANQUES);
+        if(getIntent().getExtras()!=null){
+            Bundle bundle = getIntent().getExtras();
+            if(bundle!=null){
+                datosDengue = (ObjetoFamilia) bundle.getSerializable("DATOSDENGUE");
+        }}
 
+
+
+        layout_desuso = findViewById(R.id.ELEMENTOENDESUSO);
+        if(!datosDengue.ElementosDesuso.equals("0;0;0")){
+        layout_desuso.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_botellas = findViewById(R.id.BOTELLASVARIAS);
+        if(!datosDengue.Botellas.equals("0;0;0")){
+            layout_botellas.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_recipientes = findViewById(R.id.RECIPIENTEPLASTICOS);
+        if(!datosDengue.RecipientesPlasticos.equals("0;0;0")){
+            layout_recipientes.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_maceta = findViewById(R.id.MACETA);
+        if(!datosDengue.Macetas.equals("0;0;0")){
+            layout_maceta.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_hueco = findViewById(R.id.HUECO);
+        if(!datosDengue.Hueco.equals("0;0;0")){
+            layout_hueco.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_canaleta = findViewById(R.id.CANALETA);
+        if(!datosDengue.Canaleta.equals("0;0;0")){
+            layout_canaleta.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_cubierta = findViewById(R.id.CUBIERTAS);
+        if(!datosDengue.Cubiertas.equals("0;0;0")){
+            layout_cubierta.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_pileta = findViewById(R.id.PILETAS);
+        if(!datosDengue.Piletas.equals("0;0;0")){
+            layout_pileta.setBackgroundResource(R.drawable.cuadrado_verde);}
+        layout_tanquesbajos =findViewById(R.id.TANQUES);
+        if(!datosDengue.Tanques.equals("0;0;0")){
+            layout_tanquesbajos.setBackgroundResource(R.drawable.cuadrado_verde);}
+
+        Inspeccion = findViewById(R.id.INSPECCIONDOMICILIARIA);
+        Tratamientos = findViewById(R.id.TRATAMIENTOS);
+        Fumigacion = findViewById(R.id.FUMIGACION);
+        sinIntervencion = findViewById(R.id.SININTERVENCION);
+
+        String[] tipoTrabajo = datosDengue.TipoTrabajo.split(",");
+        for(int i=0; i<tipoTrabajo.length; i++){
+            if(tipoTrabajo[i].equals("INSPECCION DOMICILIARIA")){
+                Inspeccion.setChecked(true);
+            }
+            if(tipoTrabajo[i].equals("TRATAMIENTOS")){
+                Tratamientos.setChecked(true);
+            }
+            if(tipoTrabajo[i].equals("FUMIGACION")){
+                Fumigacion.setChecked(true);
+            }
+            if(tipoTrabajo[i].equals("-")){
+                sinIntervencion.setChecked(true);
+            }
+        }
+
+        destruidos = findViewById(R.id.EDTDESTRUIDOS);
+        if(!datosDengue.Destruidos.equals("0")){
+            destruidos.setText(datosDengue.Destruidos);
+        }
+
+        siLarvicida = findViewById(R.id.SILARVICIDA);
+        noLarvicida = findViewById(R.id.NOLARVICIDA);
+        if(datosDengue.Larvicida.equals("SI")){
+            siLarvicida.setChecked(true);
+        }
+        if(datosDengue.Larvicida.equals("NO")){
+            noLarvicida.setChecked(true);
+        }
+
+        cerrada = findViewById(R.id.CERRADA);
+        if(datosDengue.SituacionVivienda.equals("X")){
+            cerrada.setChecked(true);
+        }
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,15 +138,23 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.ElementosDesuso.equals("0;0;0")) {
+            String[] valores = datosDengue.ElementosDesuso.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+
                 String[] auxGuardar = new String[3];
                 auxGuardar[0]="0";
                 auxGuardar[1]="0";
                 auxGuardar[2]="0";
+
                 if(I.getText().toString().length()!=0){
                     auxGuardar[0]=I.getText().toString();
                     inspeccionadosTotal+=Integer.parseInt(I.getText().toString());
@@ -86,13 +164,14 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.ElementosDesuso = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
                 if(!datosDengue.ElementosDesuso.equals("0;0;0")){
                     layout_desuso.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_desuso.setBackgroundResource(R.drawable.edit_text_1);}
+                dialog.dismiss();
             }
         });
 
@@ -121,6 +200,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Botellas.equals("0;0;0")) {
+            String[] valores = datosDengue.Botellas.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +225,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Botellas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -173,6 +259,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.RecipientesPlasticos.equals("0;0;0")) {
+            String[] valores = datosDengue.RecipientesPlasticos.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +284,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.RecipientesPlasticos = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -227,6 +320,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Macetas.equals("0;0;0")) {
+            String[] valores = datosDengue.Macetas.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,7 +345,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Macetas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -279,6 +379,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Hueco.equals("0;0;0")) {
+            String[] valores = datosDengue.Hueco.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,7 +404,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Hueco = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -331,6 +438,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Canaleta.equals("0;0;0")) {
+            String[] valores = datosDengue.Canaleta.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -349,7 +463,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Canaleta = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -383,6 +497,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Cubiertas.equals("0;0;0")) {
+            String[] valores = datosDengue.Cubiertas.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -401,7 +522,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Cubiertas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -436,6 +557,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Piletas.equals("0;0;0")) {
+            String[] valores = datosDengue.Piletas.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -454,7 +582,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Piletas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -489,6 +617,13 @@ public class Dengue extends AppCompatActivity {
         final EditText T = view1.findViewById(R.id.EDTTRATADOS);
         final EditText FA = view1.findViewById(R.id.EDTFOCOAEDICO);
 
+        if(!datosDengue.Tanques.equals("0;0;0")) {
+            String[] valores = datosDengue.Tanques.split(";");
+            I.setText(valores[0]);
+            T.setText(valores[1]);
+            FA.setText(valores[2]);
+        }
+
         final Button guardar = view1.findViewById(R.id.GUARDAROPCIONESDENGUE);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -507,7 +642,7 @@ public class Dengue extends AppCompatActivity {
                     tratadosTotal+=Integer.parseInt(T.getText().toString());
                 }
                 if(FA.getText().toString().length()!=0){
-                    auxGuardar[2]=I.getText().toString();
+                    auxGuardar[2]=FA.getText().toString();
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Tanques = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
@@ -528,13 +663,7 @@ public class Dengue extends AppCompatActivity {
 
     public void Guardar(View view){
 
-        final CheckBox cerrada = findViewById(R.id.CERRADA);
         if(cerrada.isChecked()){datosDengue.SituacionVivienda = "X";}
-
-        final CheckBox Inspeccion = findViewById(R.id.INSPECCIONDOMICILIARIA);
-        final CheckBox Tratamientos = findViewById(R.id.TRATAMIENTOS);
-        final CheckBox Fumigacion = findViewById(R.id.FUMIGACION);
-        final CheckBox sinIntervencion = findViewById(R.id.SININTERVENCION);
 
         if (Inspeccion.isChecked()){
             if (datosDengue.TipoTrabajo==""){
@@ -559,13 +688,10 @@ public class Dengue extends AppCompatActivity {
         datosDengue.TotalIspeccionado = Integer.toString(inspeccionadosTotal);
         datosDengue.TotalFocoAedico = Integer.toString(focoaedicoTotal);
 
-        final EditText destruidos = findViewById(R.id.EDTDESTRUIDOS);
         if(destruidos.getText().toString().length()!=0){
         datosDengue.Destruidos = destruidos.getText().toString();}
         else {datosDengue.Destruidos="0";}
 
-        final RadioButton siLarvicida = findViewById(R.id.SILARVICIDA);
-        final RadioButton noLarvicida = findViewById(R.id.NOLARVICIDA);
         if(siLarvicida.isChecked()){datosDengue.Larvicida = "SI";}
         if(noLarvicida.isChecked()){datosDengue.Larvicida = "NO";}
 
