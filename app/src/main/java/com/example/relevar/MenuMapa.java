@@ -307,7 +307,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             if(archivo.isFile()){
                 String ubicacion = archivo.getAbsolutePath();
                 //Toast.makeText(getBaseContext(), "es un archivo", 6000).show();
-                compartir(archivo.getName());
+                //compartir(archivo.getName());
+                compartir(listaRutasArchivos.get(p1));
             } else {
                 buscar(listaRutasArchivos.get(p1));
             }
@@ -327,8 +328,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
 
-        File dir = new File(nuevaCarpeta, nombreArchivo);
+        //File dir = new File(nuevaCarpeta, nombreArchivo);
 
+        File dir = new File(nombreArchivo);
         Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
@@ -533,6 +535,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
                 LatLng position = marker.getPosition();
                 String pos = Double.toString(position.latitude)+" "+Double.toString(position.longitude);
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(position,15));
                 //Toast.makeText(getBaseContext(),pos, Toast.LENGTH_SHORT).show();
                 InfoFamilia(pos);
                 return false;
@@ -544,6 +547,14 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void run() {
                 map.clear();
+
+                ruta = map.addPolyline(new PolylineOptions()
+                        .clickable(true).color(Color.parseColor("#69A4D1")));
+                int ultimo = recorrido.size();
+                if(ultimo!=0){
+                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
+                    ruta.setPoints(recorrido);}
+
                 if (encuestador.Marcadores(fechas.getSelectedItem().toString()).size()!=0){
                     ArrayList<LatLng> marcadores = encuestador.Marcadores(fechas.getSelectedItem().toString());
                     ArrayList<String> codigoColores = encuestador.CodigoColores(fechas.getSelectedItem().toString());
@@ -571,7 +582,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         }, 0);
 
-        final Handler handler = new Handler();
+        /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -604,12 +615,12 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         map.addMarker(mo1);
 
                     }
-                }*/}
+                }}
 
                 handler.postDelayed(this, 15000);
             }
 
-        }, 0);
+        }, 0);*/
     }
 
     /* Transformo los xml de los iconos en un bitmap para que puedan ser graficados */
