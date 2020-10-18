@@ -784,6 +784,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
+        pantallas[0]=1;
+
         encabezado = view1.findViewById(R.id.ENCABEZADOMODULOS);
         encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.grupo_familiar));
 

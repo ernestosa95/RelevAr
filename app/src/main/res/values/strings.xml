@@ -222,6 +222,7 @@
     <string name="enfermedades_respiratorias" translatable="false">ENFERMEDADES RESPIRATORIAS</string>
     <string name="otro_tipo_enfermedad" translatable="false">OTRO TIPO DE ENEFERMEDAD NO TRANSMISIBLE</string>
     <string name="plan_social" translatable="false">PLAN SOCIAL</string>
-    <string name="vivienda_deshabitada" translatable="false">VIVIENDA DESHABITADA</string>
+    <string name="vivienda_deshabitada" translatable="false">DESHABITADA</string>
+    <string name="vivienda_renuente" translatable="false">RENUENTE</string>
 
 </resources>

@@ -1508,9 +1508,15 @@ public class Familia extends AppCompatActivity {
     // GUARDAR GRUPO FAMILIAR
     public void Guardar2(View view){
         CheckBox deshabitada = findViewById(R.id.CHECKVIVIENDADESHABITADA);
+        CheckBox renuente = findViewById(R.id.CHECKVIVIENDARENUENTE);
 
         if(deshabitada.isChecked()){
             MiembrosFamiliares.add(new ObjetoPersona(null));
+        }
+        if(renuente.isChecked()){
+            ObjetoPersona aux = new ObjetoPersona(null);
+            aux.setInfoPersonal("RENUENTE","","");
+            MiembrosFamiliares.add(aux);
         }
         if(MiembrosFamiliares.size()!=0 || familia.SituacionVivienda.length()!=0) {
 
@@ -1586,6 +1592,10 @@ public class Familia extends AppCompatActivity {
                 NumerosPersonas = 0;
             }else{
             NumerosPersonas = MiembrosFamiliares.size();}
+            if(renuente.isChecked()){
+                NumerosPersonas = 0;
+            }else{
+                NumerosPersonas = MiembrosFamiliares.size();}
 
             cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 

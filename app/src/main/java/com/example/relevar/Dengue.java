@@ -586,7 +586,7 @@ public class Dengue extends AppCompatActivity {
                     focoaedicoTotal+=Integer.parseInt(FA.getText().toString());
                 }
                 datosDengue.Piletas = auxGuardar[0]+";"+auxGuardar[1]+";"+auxGuardar[2];
-                if(!datosDengue.Piletas.equals(";;")){
+                if(!datosDengue.Piletas.equals("0;0;0")){
                     layout_pileta.setBackgroundResource(R.drawable.cuadrado_verde);}
                 else{layout_pileta.setBackgroundResource(R.drawable.edit_text_1);}
             }
@@ -663,26 +663,29 @@ public class Dengue extends AppCompatActivity {
 
     public void Guardar(View view){
 
-        if(cerrada.isChecked()){datosDengue.SituacionVivienda = "X";}
+        String situacionVivienda = "";
+        if(cerrada.isChecked()){situacionVivienda="X";}
+        datosDengue.SituacionVivienda = situacionVivienda;
 
+        String tipoTrabajo = "";
         if (Inspeccion.isChecked()){
-            if (datosDengue.TipoTrabajo==""){
-                datosDengue.TipoTrabajo="INSPECCION DOMICILIARIA";
+            if (tipoTrabajo==""){
+                tipoTrabajo="INSPECCION DOMICILIARIA";
             } else {
-                datosDengue.TipoTrabajo+=",INSPECCION DOMICILIARIA";}}
+                tipoTrabajo+=",INSPECCION DOMICILIARIA";}}
         if (Tratamientos.isChecked()){
-            if (datosDengue.TipoTrabajo==""){
-                datosDengue.TipoTrabajo="TRATAMIENTOS";
+            if (tipoTrabajo==""){
+                tipoTrabajo="TRATAMIENTOS";
             } else {
-                datosDengue.TipoTrabajo+=",TRATAMIENTOS";}}
+                tipoTrabajo+=",TRATAMIENTOS";}}
         if (Fumigacion.isChecked()){
-            if (datosDengue.TipoTrabajo==""){
-                datosDengue.TipoTrabajo="FUMIGACION";
+            if (tipoTrabajo==""){
+                tipoTrabajo="FUMIGACION";
             } else {
-                datosDengue.TipoTrabajo+=",FUMIGACION";}}
-        if (sinIntervencion.isChecked()){
-            if (datosDengue.TipoTrabajo==""){
-                datosDengue.TipoTrabajo="-";}}
+                tipoTrabajo+=",FUMIGACION";}}
+        if (sinIntervencion.isChecked()){tipoTrabajo="-";}
+
+        datosDengue.TipoTrabajo = tipoTrabajo;
 
         datosDengue.TotalTratados = Integer.toString(tratadosTotal);
         datosDengue.TotalIspeccionado = Integer.toString(inspeccionadosTotal);
