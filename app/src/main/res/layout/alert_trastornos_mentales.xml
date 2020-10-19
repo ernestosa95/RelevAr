@@ -53,7 +53,7 @@
         android:layout_height="300dp"
         android:layout_margin="10dp"
         android:background="@drawable/edit_text_1"
-        app:layout_constraintBottom_toTopOf="@+id/CANCELARTRASTORNOSNIÑOS"
+        app:layout_constraintBottom_toTopOf="@+id/CANCELARTRASTORNOSMENTALES"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textvitamina">
