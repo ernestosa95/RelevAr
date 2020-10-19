@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static com.example.relevar.R.drawable.abc_ic_menu_copy_mtrl_am_alpha;
 import static com.example.relevar.R.drawable.cuadrado_verde;
 
 public class Dengue extends AppCompatActivity {
@@ -31,9 +32,10 @@ public class Dengue extends AppCompatActivity {
     ObjetoFamilia datosDengue = new ObjetoFamilia(null);
 
     CheckBox Inspeccion, Tratamientos, Fumigacion, sinIntervencion, cerrada;
+    CheckBox BTI, temephos, metoprene;
     EditText destruidos;
     RadioButton siLarvicida, noLarvicida;
-
+    EditText edtOtroLArvicida;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,19 +101,31 @@ public class Dengue extends AppCompatActivity {
                 sinIntervencion.setChecked(true);
             }
         }
-
+        edtOtroLArvicida = findViewById(R.id.OTROLARVICIDA);
         destruidos = findViewById(R.id.EDTDESTRUIDOS);
         if(!datosDengue.Destruidos.equals("0")){
             destruidos.setText(datosDengue.Destruidos);
         }
 
-        siLarvicida = findViewById(R.id.SILARVICIDA);
-        noLarvicida = findViewById(R.id.NOLARVICIDA);
-        if(datosDengue.Larvicida.equals("SI")){
-            siLarvicida.setChecked(true);
+        metoprene = findViewById(R.id.METOPRENE);
+        BTI = findViewById(R.id.BTI);
+        temephos = findViewById(R.id.TEMEPHOS);
+
+        String[] tipoLarvicida = datosDengue.Larvicida.split(",");
+        for(int i=0; i<tipoLarvicida.length; i++){
+            if(tipoLarvicida[i].equals(metoprene.getText().toString())){
+                metoprene.setChecked(true);
+            }
+            if(tipoLarvicida[i].equals(BTI.getText().toString())){
+                BTI.setChecked(true);
+            }
+            if(tipoLarvicida[i].equals(temephos.getText().toString())){
+                temephos.setChecked(true);
+            }
         }
-        if(datosDengue.Larvicida.equals("NO")){
-            noLarvicida.setChecked(true);
+
+        if(!metoprene.isChecked() && !BTI.isChecked() && !temephos.isChecked() && datosDengue.Larvicida.length()!=0){
+            edtOtroLArvicida.setText(datosDengue.Larvicida);
         }
 
         cerrada = findViewById(R.id.CERRADA);
@@ -684,8 +698,33 @@ public class Dengue extends AppCompatActivity {
             } else {
                 tipoTrabajo+=",FUMIGACION";}}
         if (sinIntervencion.isChecked()){tipoTrabajo="-";}
-
         datosDengue.TipoTrabajo = tipoTrabajo;
+
+        String tipoLarvicida = "";
+        if (metoprene.isChecked()){
+            if (tipoLarvicida==""){
+                tipoLarvicida=metoprene.getText().toString();
+            } else {
+                tipoLarvicida+=","+metoprene.getText().toString();}}
+        if (BTI.isChecked()){
+            if (tipoLarvicida==""){
+                tipoLarvicida=BTI.getText().toString();
+            } else {
+                tipoLarvicida+=","+BTI.getText().toString();}}
+        if (temephos.isChecked()){
+            if (tipoLarvicida==""){
+                tipoLarvicida=temephos.getText().toString();
+            } else {
+                tipoLarvicida+=","+temephos.getText().toString();}}
+        if(edtOtroLArvicida.getText().toString().length()!=0){
+            if (tipoLarvicida==""){
+                tipoLarvicida=edtOtroLArvicida.getText().toString();
+            } else {
+                tipoLarvicida+=","+edtOtroLArvicida.getText().toString();}
+        }
+
+        datosDengue.Larvicida = tipoLarvicida;
+
 
         datosDengue.TotalTratados = Integer.toString(tratadosTotal);
         datosDengue.TotalIspeccionado = Integer.toString(inspeccionadosTotal);
@@ -695,8 +734,6 @@ public class Dengue extends AppCompatActivity {
         datosDengue.Destruidos = destruidos.getText().toString();}
         else {datosDengue.Destruidos="0";}
 
-        if(siLarvicida.isChecked()){datosDengue.Larvicida = "SI";}
-        if(noLarvicida.isChecked()){datosDengue.Larvicida = "NO";}
 
         if(datosDengue.TipoTrabajo.length()!=0){
         Intent Modif1= new Intent (this, Familia.class);

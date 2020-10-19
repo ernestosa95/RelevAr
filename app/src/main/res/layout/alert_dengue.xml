@@ -135,6 +135,50 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/edit_text_1">
 
+                <LinearLayout
+                    android:id="@+id/OPCIONESLARVICIDA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <CheckBox
+                        android:id="@+id/BTI"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/bti"
+                        android:textSize="18sp" />
+
+                    <CheckBox
+                        android:id="@+id/TEMEPHOS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/temephos"
+                        android:textSize="18sp" />
+
+                    <CheckBox
+                        android:id="@+id/METOPRENE"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/metoprene"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/OTROLARVICIDA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/otros"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/TXTLARVICIDA"
                     android:layout_width="wrap_content"
@@ -142,35 +186,10 @@
                     android:layout_margin="5dp"
                     android:text="@string/larvicidas"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/OPCIONESLARVICIDA"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/TXTLARVICIDA">
-
-                    <RadioButton
-                        android:id="@+id/SILARVICIDA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:text="@string/si"
-                        android:textSize="18sp" />
-
-                    <RadioButton
-                        android:id="@+id/NOLARVICIDA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:text="@string/no"
-                        android:textSize="18sp" />
-                </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

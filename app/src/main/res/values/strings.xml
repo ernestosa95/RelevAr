@@ -225,4 +225,8 @@
     <string name="vivienda_deshabitada" translatable="false">DESHABITADA</string>
     <string name="vivienda_renuente" translatable="false">RENUENTE</string>
 
+    <string name="bti" translatable="false">BTI</string>
+    <string name="temephos" translatable="false">TEMEPHOS</string>
+    <string name="metoprene" translatable="false">METOPRENE</string>
+
 </resources>
