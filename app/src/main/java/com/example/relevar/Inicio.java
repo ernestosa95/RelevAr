@@ -175,7 +175,7 @@ public class Inicio extends AppCompatActivity {
         * la cabecera, la primer palabra que debe aparecer es la palbra "CALLE"*/
         if (strLine.equals("CALLE") != true) {
             //String cab = getString(R.string.encabezado);
-            String cab = "CALLE;NUMERO;COORDENADAS;ESTADO;GRUPO FAMILIAR;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;NUMERO CASA CARTOGRAFIA\n";
+            String cab = "CALLE;NUMERO;COORDENADAS;ESTADO;GRUPO FAMILIAR;MENORES;MAYORES;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;NUMERO CASA CARTOGRAFIA\n";
             try {
                 //el true es para que se agreguen los datos al final sin perder los datos anteriores
                 FileOutputStream fOut = new FileOutputStream(dir, true);

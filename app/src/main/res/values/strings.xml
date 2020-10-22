@@ -229,4 +229,7 @@
     <string name="temephos" translatable="false">TEMEPHOS</string>
     <string name="metoprene" translatable="false">METOPRENE</string>
 
+    <string name="mayores" translatable="false">MAYORES</string>
+    <string name="menores" translatable="false">MENORES</string>
+
 </resources>

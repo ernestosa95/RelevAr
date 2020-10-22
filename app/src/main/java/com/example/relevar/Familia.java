@@ -1619,116 +1619,136 @@ public class Familia extends AppCompatActivity {
                 }
             });
 
+            final EditText menores = view_alert.findViewById(R.id.EDTXTMENORES);
+            final EditText mayores = view_alert.findViewById(R.id.EDTXTMAYORES);
+
             Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
             guardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (Latitudenviar != 0.0) {
+
+                        NumerosPersonas = Integer.parseInt(cantidadintegrantes.getText().toString());
+                        int cantMenores = 0;
+                        int cantMAyores = 0;
+                        if(menores.getText().toString().length()!=0) {
+                            cantMenores = Integer.parseInt(menores.getText().toString());
+                        }
+                        if(mayores.getText().toString().length()!=0){
+                            cantMAyores = Integer.parseInt(mayores.getText().toString());
+                        }
+
+                        if((cantMAyores+cantMenores)==NumerosPersonas || (cantMAyores+cantMenores)==0) {
                         /* Cuales son los datos que cargo el usuario, primero agrego los datos de la
                          familia y luego unifico los datos de las personas cargadas */
-                        ArrayList<String> CategoriasDatos = familia.DatosCargadosCsv();
+                            ArrayList<String> CategoriasDatos = familia.DatosCargadosCsv();
 
-                        /* De cada persona cuales son los datos cargados*/
-                        ArrayList<String> CategoriaPersonas = new ArrayList<>();
+                            /* De cada persona cuales son los datos cargados*/
+                            ArrayList<String> CategoriaPersonas = new ArrayList<>();
 
-                        CategoriaPersonas = MiembrosFamiliares.get(0).DatosCargadosCsv();
+                            CategoriaPersonas = MiembrosFamiliares.get(0).DatosCargadosCsv();
 
-                        /* Creo una lista de datos unificada para todas la personas de la misma
-                         * familia */
-                        for (int i = 1; i < MiembrosFamiliares.size(); i++) {
-                            ArrayList<String> auxDatosCargados = MiembrosFamiliares.get(i).DatosCargadosCsv();
-                            for (int j = 0; j < auxDatosCargados.size(); j++) {
-                                if (!CategoriaPersonas.contains(auxDatosCargados.get(j))) {
-                                    CategoriaPersonas.add(auxDatosCargados.get(j));
+                            /* Creo una lista de datos unificada para todas la personas de la misma
+                             * familia */
+                            for (int i = 1; i < MiembrosFamiliares.size(); i++) {
+                                ArrayList<String> auxDatosCargados = MiembrosFamiliares.get(i).DatosCargadosCsv();
+                                for (int j = 0; j < auxDatosCargados.size(); j++) {
+                                    if (!CategoriaPersonas.contains(auxDatosCargados.get(j))) {
+                                        CategoriaPersonas.add(auxDatosCargados.get(j));
+                                    }
                                 }
                             }
-                        }
 
-                        // Unifico las dos listas
-                        CategoriasDatos.addAll(CategoriaPersonas);
+                            // Unifico las dos listas
+                            CategoriasDatos.addAll(CategoriaPersonas);
 
-                        // Leo la cabecera para comparar los datos
-                        ArrayList<String> datosCabeceraCsv = DatosCabeceraCsv();
+                            // Leo la cabecera para comparar los datos
+                            ArrayList<String> datosCabeceraCsv = DatosCabeceraCsv();
 
-                        /* Comparo el conjunto de datos cargados con los de la cabecera csv */
-                        for (int i = 0; i < CategoriasDatos.size(); i++) {
-                            if (!datosCabeceraCsv.contains(CategoriasDatos.get(i))) {
-                                datosCabeceraCsv.add(CategoriasDatos.get(i));
+                            /* Comparo el conjunto de datos cargados con los de la cabecera csv */
+                            for (int i = 0; i < CategoriasDatos.size(); i++) {
+                                if (!datosCabeceraCsv.contains(CategoriasDatos.get(i))) {
+                                    datosCabeceraCsv.add(CategoriasDatos.get(i));
+                                }
                             }
-                        }
 
-                        // Crear un string que es la nueva cabecera
-                        String cabecera = "";
-                        for (int i = 0; i < datosCabeceraCsv.size() - 1; i++) {
-                            cabecera += datosCabeceraCsv.get(i) + ";";
-                        }
-                        cabecera += datosCabeceraCsv.get(datosCabeceraCsv.size() - 1);
-                        //cabecera +="\n";
+                            // Crear un string que es la nueva cabecera
+                            String cabecera = "";
+                            for (int i = 0; i < datosCabeceraCsv.size() - 1; i++) {
+                                cabecera += datosCabeceraCsv.get(i) + ";";
+                            }
+                            cabecera += datosCabeceraCsv.get(datosCabeceraCsv.size() - 1);
+                            //cabecera +="\n";
 
-                        // Creo el string de la vieja cabecera
-                        String viejaCabecera = "";
-                        CategoriaPersonas = DatosCabeceraCsv();
-                        for (int i = 0; i < CategoriaPersonas.size() - 1; i++) {
-                            viejaCabecera += CategoriaPersonas.get(i) + ";";
-                        }
-                        viejaCabecera += CategoriaPersonas.get(CategoriaPersonas.size() - 1);
-                        //viejaCabecera +="\n";
+                            // Creo el string de la vieja cabecera
+                            String viejaCabecera = "";
+                            CategoriaPersonas = DatosCabeceraCsv();
+                            for (int i = 0; i < CategoriaPersonas.size() - 1; i++) {
+                                viejaCabecera += CategoriaPersonas.get(i) + ";";
+                            }
+                            viejaCabecera += CategoriaPersonas.get(CategoriaPersonas.size() - 1);
+                            //viejaCabecera +="\n";
 
-                        // Reemplazo la cabecera por una nueva
-                        try {
-                            ReemplazarCabecera(viejaCabecera, cabecera);
-                        } catch (IOException e) {
-                            makeText(getBaseContext(), "ERROR NO SE PUDO CARGAR LA CABECERA", LENGTH_SHORT).show();
-                        }
+                            // Reemplazo la cabecera por una nueva
+                            try {
+                                ReemplazarCabecera(viejaCabecera, cabecera);
+                            } catch (IOException e) {
+                                makeText(getBaseContext(), "ERROR NO SE PUDO CARGAR LA CABECERA", LENGTH_SHORT).show();
+                            }
 
-                        /* Solicito los datos cargados tanto en la persona como en la familia*/
+                            /* Solicito los datos cargados tanto en la persona como en la familia*/
 
-                        String coordenadas = Latitud + " " + Longitud;
-                        String calle = edtCalle.getText().toString();
-                        String numero = edtNumero.getText().toString();
-                        String numerocartografia = edtnumerocartografia.getText().toString();
-                        HashMap<String, String> datosFamilia = familia.DatosIngresados();
-                        for (int i = 0; i < MiembrosFamiliares.size(); i++) {
-                            String datosGuardar = "";
-                            HashMap<String, String> auxHash = new HashMap<>();
-                            auxHash.putAll(datosFamilia);
-                            auxHash.put("COORDENADAS", coordenadas);
-                            auxHash.put("ESTADO", codigoColor[0]);
-                            auxHash.put("GRUPO FAMILIAR", Integer.toString(NumerosPersonas));
-                            auxHash.put("NUMERO", numero);
-                            auxHash.put("CALLE", calle.toUpperCase());
-                            auxHash.put("NUMERO CASA CARTOGRAFIA", numerocartografia);
-                            auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
-                            for (int j = 0; j < datosCabeceraCsv.size() - 1; j++) {
-                                if (auxHash.get(datosCabeceraCsv.get(j)) != null) {
-                                    datosGuardar += auxHash.get(datosCabeceraCsv.get(j)) + ";";
+                            String coordenadas = Latitud + " " + Longitud;
+                            String calle = edtCalle.getText().toString();
+                            String numero = edtNumero.getText().toString();
+                            String numerocartografia = edtnumerocartografia.getText().toString();
+                            HashMap<String, String> datosFamilia = familia.DatosIngresados();
+                            for (int i = 0; i < MiembrosFamiliares.size(); i++) {
+                                String datosGuardar = "";
+                                HashMap<String, String> auxHash = new HashMap<>();
+                                auxHash.putAll(datosFamilia);
+                                auxHash.put("COORDENADAS", coordenadas);
+                                auxHash.put("ESTADO", codigoColor[0]);
+                                auxHash.put("GRUPO FAMILIAR", Integer.toString(NumerosPersonas));
+                                auxHash.put("MENORES", Integer.toString(cantMenores));
+                                auxHash.put("MAYORES", Integer.toString(cantMAyores));
+                                auxHash.put("NUMERO", numero);
+                                auxHash.put("CALLE", calle.toUpperCase());
+                                auxHash.put("NUMERO CASA CARTOGRAFIA", numerocartografia);
+                                auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
+                                for (int j = 0; j < datosCabeceraCsv.size() - 1; j++) {
+                                    if (auxHash.get(datosCabeceraCsv.get(j)) != null) {
+                                        datosGuardar += auxHash.get(datosCabeceraCsv.get(j)) + ";";
+                                    } else {
+                                        datosGuardar += ";";
+                                    }
+                                }
+                                if (auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) != null) {
+                                    datosGuardar += auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) + "\n";
                                 } else {
-                                    datosGuardar += ";";
+                                    datosGuardar += "\n";
                                 }
-                            }
-                            if (auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) != null) {
-                                datosGuardar += auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) + "\n";
-                            } else {
-                                datosGuardar += "\n";
+
+                                /* guardo el string de la persona agregando una linea */
+                                GuardarPersona(datosGuardar);
                             }
 
-                            /* guardo el string de la persona agregando una linea */
-                            GuardarPersona(datosGuardar);
+                            /* Guardo Dengue si es que se cargaron datos en este modulo*/
+                            if (familia.TipoTrabajo.length() != 0) {
+                                GuardarDengue(calle, numero, Integer.toString(NumerosPersonas), MiembrosFamiliares.get(0));
+                            }
+
+                            // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
+                            Intent intent = new Intent(getBaseContext(), MenuMapa.class);
+                            LatLng position = new LatLng(Latitudenviar, Longitudenviar); // Boa Vista
+                            Bundle args = new Bundle();
+                            args.putParcelable("from_position", position);
+                            //intent.putExtra("MARCADOR", position);
+                            intent.putExtra("bundle", args);
+                            setResult(RESULT_OK, intent);
+                        }else{
+                            Toast.makeText(getBaseContext(), "LA SUMA DE MENORES Y MAYORES NO COINCIDE CON EL TOTAL", Toast.LENGTH_SHORT).show();
                         }
-
-                        /* Guardo Dengue si es que se cargaron datos en este modulo*/
-                        if(familia.TipoTrabajo.length()!=0){
-                        GuardarDengue(calle, numero, Integer.toString(NumerosPersonas), MiembrosFamiliares.get(0));}
-
-                        // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                        Intent intent = new Intent(getBaseContext(), MenuMapa.class);
-                        LatLng position = new LatLng(Latitudenviar, Longitudenviar); // Boa Vista
-                        Bundle args = new Bundle();
-                        args.putParcelable("from_position", position);
-                        //intent.putExtra("MARCADOR", position);
-                        intent.putExtra("bundle", args);
-                        setResult(RESULT_OK, intent);
-
                     } else {
                         makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();
                     }
