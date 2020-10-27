@@ -82,7 +82,7 @@ public class Persona extends AppCompatActivity {
             dt, antigripal, vcn23, vcn13, tetravalente, ipv, sabin;
     CheckBox calendario, embarazo, puerperio, personalsalud, personalesencial, viajeros,
             inmunocomprometidos, cadiologicos, respiratorios, diabeticos, prematuros, asplenicos,
-            obesidad, inmunodeficiencia, conviviente,HTA, oncologicos, otros;
+            obesidad, inmunodeficiencia, conviviente,HTA, oncologicos, mayor60, otros;
     CheckBox SD, Jardin, EscuelaEspecial, PrimariaCursando, PrimarioIncompleto, PrimariaCompleta, SecundariaCursando,
     SecundariaImcompleto, SecundariaCompleto, TerciarioCursando, TerciarioImcompleto, TerciarioCompleto,
     UniersidadCursando, UniversidadImcompleto, UniversidadCompleto;
@@ -205,7 +205,7 @@ public class Persona extends AppCompatActivity {
         //Toast.makeText(this, Persona.Nacimiento, Toast.LENGTH_SHORT).show();
         if(Persona.Nacimiento!=""){
         txtNacimiento.setText(Persona.Nacimiento);}
-        else {fecha.setText("DD-MM-AAAA");}
+        else {txtNacimiento.setText("DD-MM-AAAA");}
 
         //Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
         }
@@ -1435,7 +1435,8 @@ public class Persona extends AppCompatActivity {
         conviviente = PersonalCheck(mainLayout,"CONVIVIENTE INMUNOCOMPROMETIDOS", TamañoLetra, ColorPares, AltoContenedor);
         HTA = PersonalCheck(mainLayout,"HIPERTENSO", TamañoLetra, ColorImpares, AltoContenedor);
         oncologicos = PersonalCheck(mainLayout,"ONCOLOGICOS", TamañoLetra, ColorPares, AltoContenedor);
-        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorImpares, AltoContenedor);
+        mayor60 = PersonalCheck(mainLayout,"MAYOR DE 60", TamañoLetra, ColorImpares, AltoContenedor);
+        otros = PersonalCheck(mainLayout,"OTROS", TamañoLetra, ColorPares, AltoContenedor);
 
         // En el caso de editar un registro
         // Necesito que me ponga seleccionado todos aquellos que ya se habian seleeccionado antes
@@ -1572,6 +1573,14 @@ public class Persona extends AppCompatActivity {
                         riesgos+=",ONCOLOGICO";
                         //codigoriesgo+="";
                     }}
+                if (mayor60.isChecked()){
+                    if (riesgos==null){
+                        riesgos="MAYOR DE 60";
+                        //codigoriesgo="";
+                    } else {
+                        riesgos+=",MAYOR DE 60";
+                        //codigoriesgo+="";
+                    }}
                 if (otros.isChecked()){
                     if (riesgos==null){
                         riesgos="OTROS";
@@ -1688,6 +1697,12 @@ public class Persona extends AppCompatActivity {
             }
             if (vac[x].equals("ONCOLOGICO")){
                 oncologicos.setChecked(true);
+            }
+            if (vac[x].equals("MAYOR DE 60")){
+                mayor60.setChecked(true);
+            }
+            if (vac[x].equals("HIPERTENSO")){
+                HTA.setChecked(true);
             }
         }
     }}

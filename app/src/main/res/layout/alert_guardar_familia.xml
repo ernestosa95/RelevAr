@@ -71,7 +71,7 @@
         android:ems="10"
         android:gravity="center_horizontal|center_vertical"
         android:hint="@string/numero"
-        android:inputType="textPersonName"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"

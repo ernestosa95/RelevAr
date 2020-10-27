@@ -1070,6 +1070,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         listo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(pantallas[0]<0){
+                    pantallas[0]=0;
+                }
               OpcionesPantallaBoton(dialog);
             }
         });
@@ -1094,6 +1097,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private void OpcionesPantallaBoton(AlertDialog dialog){
         switch (pantallas[0]){
             case 0:
+                volver.setVisibility(View.INVISIBLE);
                 educacion.setVisibility(View.GONE);
                 ocupacion.setVisibility(View.GONE);
                 contacto.setVisibility(View.GONE);
@@ -1284,9 +1288,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 String datosMostrar = "";
                 if(Datos[2].equals(coordenadas)){
                     String identificacion="";
-                    if(Datos.length>=6){identificacion+=Datos[5]+",";}
-                    if(Datos.length>=7){identificacion+=Datos[6]+",";}
                     if(Datos.length>=8){identificacion+=Datos[7]+",";}
+                    if(Datos.length>=9){identificacion+=Datos[8]+",";}
+                    if(Datos.length>=10){identificacion+=Datos[9]+",";}
 
                     MiembrosFamiliares.add(identificacion);
                     // Tengo datos fijos de los cuales conozco la ubicacion

@@ -39,6 +39,7 @@
             android:background="@drawable/button1"
             android:onClick="Guardar2"
             android:text="@string/terminar_grupo_familiar"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -162,6 +163,66 @@
             android:layout_margin="10dp"
             android:orientation="horizontal">
 
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/BTNGENERAL"
+                android:layout_width="130dp"
+                android:layout_height="180dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/fondo2"
+                android:onClick="FamiliaGeneral">
+
+                <ImageView
+                    android:id="@+id/ICONOSGENERAL"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/familia" />
+
+                <TextView
+                    android:id="@+id/COMPLETADOGENERAL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/completado_cero"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toTopOf="@+id/AVANCEGENERAL"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.985"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/GENERAL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/familia_general"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/COMPLETADOGENERAL"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ICONOSGENERAL" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/AVANCEGENERAL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@drawable/rojo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BTNDENGUE"
