@@ -232,5 +232,6 @@
     <string name="mayores" translatable="false">MAYORES</string>
     <string name="menores" translatable="false">MENORES</string>
     <string name="familia_general" translatable="false">FAMILIA GENERAL</string>
+    <string name="telefono_familiar" translatable="false">TELEFONO FAMILIAR</string>
 
 </resources>

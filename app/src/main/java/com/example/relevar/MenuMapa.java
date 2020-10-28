@@ -114,7 +114,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     ArrayList<LatLng> recorrido = new ArrayList<>();
     Polyline ruta;
     TextView txt;
-    private ArrayList<LatLng> latlngs = new ArrayList<>();
+    //private ArrayList<LatLng> latlngs = new ArrayList<>();
     String directorioraiz;
     Spinner fechas;
     ObjetoFamilia familia = new ObjetoFamilia(null);
@@ -232,6 +232,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         familiaCabecera.add(getString(R.string.baño_tiene));
         familiaCabecera.add(getString(R.string.hielo));
         familiaCabecera.add(getString(R.string.perros_sueltos));
+        familiaCabecera.add(getString(R.string.telefono_familiar));
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -489,7 +490,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         return false;
     }
 
-    // FUNCION QUE ESPERA EL RESULTADO DE LOS SERVICIOS DE GPS
+    /*// FUNCION QUE ESPERA EL RESULTADO DE LOS SERVICIOS DE GPS
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -499,7 +500,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 latlngs.add(position);
             }
         }
-    }
+    }*/
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

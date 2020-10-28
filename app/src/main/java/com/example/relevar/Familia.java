@@ -161,6 +161,7 @@ public class Familia extends AppCompatActivity {
         familiaCabecera.add(getString(R.string.baño_tiene));
         familiaCabecera.add(getString(R.string.hielo));
         familiaCabecera.add(getString(R.string.perros_sueltos));
+        familiaCabecera.add(getString(R.string.telefono_familiar));
         familia=new ObjetoFamilia(familiaCabecera);
 
         //
@@ -1461,6 +1462,11 @@ public class Familia extends AppCompatActivity {
             edtnumerocartografia.setText(numerocartografia);
         }
 
+        final EditText edtTelefonoFamiliar = view_alert.findViewById(R.id.TELEFONOFAMILIAR);
+        if(familia.TelefonoFamiliar.length()!=0){
+            edtnumerocartografia.setText(familia.TelefonoFamiliar);
+        }
+
         cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
         ImageView mas = view_alert.findViewById(R.id.MAS);
@@ -1500,6 +1506,7 @@ public class Familia extends AppCompatActivity {
                 calle = edtCalle.getText().toString();
                 numero = edtNumero.getText().toString();
                 numerocartografia = edtnumerocartografia.getText().toString();
+                familia.TelefonoFamiliar = edtTelefonoFamiliar.getText().toString();
                 if((cantMAyores+cantMenores)==NumerosPersonas || (cantMAyores+cantMenores)==0) {
                 ColorAvanceGeneralFamilia();
                 dialog.dismiss();
@@ -1530,6 +1537,10 @@ public class Familia extends AppCompatActivity {
         }
         if (numerocartografia.length()!=0){
             avance+=1;
+        }
+
+        if (familia.TelefonoFamiliar.length()!=0){
+        avance+=1;
         }
 
         if(avance>0 && avance<3){
@@ -1675,6 +1686,7 @@ public class Familia extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR
     public void Guardar2(View view){
+
         CheckBox deshabitada = findViewById(R.id.CHECKVIVIENDADESHABITADA);
         CheckBox renuente = findViewById(R.id.CHECKVIVIENDARENUENTE);
 
@@ -1801,7 +1813,7 @@ public class Familia extends AppCompatActivity {
             guardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Latitudenviar != 0.0) {
+                    if (Latitudenviar != 0.0 && Latitudenviar!=null) {
 
                         /*NumerosPersonas = Integer.parseInt(cantidadintegrantes.getText().toString());
                         int cantMenores = 0;
@@ -1914,13 +1926,13 @@ public class Familia extends AppCompatActivity {
                             }
 
                             // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                            Intent intent = new Intent(getBaseContext(), MenuMapa.class);
-                            LatLng position = new LatLng(Latitudenviar, Longitudenviar); // Boa Vista
+                            /*Intent intent = new Intent(getBaseContext(), MenuMapa.class);
+                            LatLng position = new LatLng(Latitudenviar, Longitudenviar);
                             Bundle args = new Bundle();
                             args.putParcelable("from_position", position);
                             //intent.putExtra("MARCADOR", position);
                             intent.putExtra("bundle", args);
-                            setResult(RESULT_OK, intent);
+                            setResult(RESULT_OK, intent);*/
                         //}else{
                         //    Toast.makeText(getBaseContext(), "LA SUMA DE MENORES Y MAYORES NO COINCIDE CON EL TOTAL", Toast.LENGTH_SHORT).show();
                         //}

@@ -3377,7 +3377,7 @@ public class Persona extends AppCompatActivity {
         if(Persona.Observaciones==null){Persona.Observaciones="";}
 
         // Si dni es distinto a null le permito guardar la persona
-        if(Persona.DNI!=""){
+        //if(Persona.DNI!=""){
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("PERSONA", Persona);
@@ -3387,8 +3387,8 @@ public class Persona extends AppCompatActivity {
         Toast.makeText(this, "PERSONA CARGADA", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, Modif1);
         finish();
-        }
-        else{Toast.makeText(this, "FALTA DNI", Toast.LENGTH_SHORT).show();}
+        //}
+        //else{Toast.makeText(this, "FALTA DNI", Toast.LENGTH_SHORT).show();}
     }
     // Para que se una funcion disparada por el Button de regreso de forma private
 

@@ -23,6 +23,7 @@ import static android.widget.Toast.makeText;
 
 public class ObjetoFamilia implements Serializable {
     public String TipoVivienda;
+    public String TelefonoFamiliar;
     public String DueñoVivienda;
     public String CantidadPiezas;
     public String LugarCocinar;
@@ -87,6 +88,7 @@ public class ObjetoFamilia implements Serializable {
         BañoTiene="";
         HieloCalle="";
         PerrosCalle="";
+        TelefonoFamiliar="";
 
         // Dengue
         Tanques = "0;0;0";
@@ -208,6 +210,10 @@ public class ObjetoFamilia implements Serializable {
             if(PerrosCalle.length()!=0){
               cabecera.add(cabeceraFamilia.get(20));
                datosIngresados.put(cabeceraFamilia.get(20), HieloCalle);
+            }
+            if(TelefonoFamiliar.length()!=0){
+               cabecera.add(cabeceraFamilia.get(21));
+               datosIngresados.put(cabeceraFamilia.get(21), TelefonoFamiliar);
             }
         return cabecera;
     }
