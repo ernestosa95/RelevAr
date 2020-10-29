@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
 
                 final EditText calle = view_alert.findViewById(R.id.CALLE);
                 final EditText numero = view_alert.findViewById(R.id.NUMERO);
-                final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
+                /*final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
                 NumerosPersonas = MiembrosFamiliares.size();
                 cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
                         NumerosPersonas-=1;
                         cantidadintegrantes.setText(Integer.toString(NumerosPersonas));}
                     }
-                });
+                });*/
 
                 Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
                 guardar.setOnClickListener(new View.OnClickListener() {

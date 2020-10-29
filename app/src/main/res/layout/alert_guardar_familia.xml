@@ -44,8 +44,6 @@
         android:text="@string/cancelar"
         android:textColor="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/MAS"
-        app:layout_constraintHorizontal_bias="0.056"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -119,7 +117,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout6"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@drawable/fondo1"
@@ -140,27 +138,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/CANTIDADMIEMBROSFAMILIARES"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/CANTIDADMIEMBROSFAMILIARES">
+            app:layout_constraintTop_toBottomOf="@+id/textView10">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/MENORES"
@@ -185,13 +172,15 @@
                     <EditText
                         android:id="@+id/EDTXTMENORES"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edit_text_1"
                         android:ems="10"
                         android:gravity="center_horizontal|center_vertical"
                         android:hint="-"
                         android:inputType="number"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#FFFFFF" />
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:textSize="30sp" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -218,40 +207,20 @@
                     <EditText
                         android:id="@+id/EDTXTMAYORES"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edit_text_1"
                         android:ems="10"
                         android:gravity="center_horizontal|center_vertical"
                         android:hint="-"
                         android:inputType="number"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#FFFFFF" />
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:textSize="30sp" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/MAS"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_redondo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayout6"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout6"
-        app:srcCompat="@drawable/more" />
-
-    <ImageView
-        android:id="@+id/MENOS"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_redondo"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
-        app:layout_constraintHorizontal_bias="0.535"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout6"
-        app:srcCompat="@drawable/menos" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -266,24 +235,24 @@
 
         <ImageView
             android:id="@+id/ICONOROJO"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/icono_mapa_rojo" />
 
         <ImageView
             android:id="@+id/ICONOAMARILLO"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/icono_mapa_amarilla" />
 
         <ImageView
             android:id="@+id/ICONOVERDE"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/icono_mapa_verde" />

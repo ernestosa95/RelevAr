@@ -1456,7 +1456,7 @@ public class Familia extends AppCompatActivity {
         if(numero.length()!=0){
             edtNumero.setText(numero);
         }
-        final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
+        //final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
         final EditText edtnumerocartografia = view_alert.findViewById(R.id.NUMEROSEGUNCARTOGRAFIA);
         if(numerocartografia.length()!=0){
             edtnumerocartografia.setText(numerocartografia);
@@ -1467,7 +1467,7 @@ public class Familia extends AppCompatActivity {
             edtnumerocartografia.setText(familia.TelefonoFamiliar);
         }
 
-        cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
+        /*cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
         ImageView mas = view_alert.findViewById(R.id.MAS);
         mas.setOnClickListener(new View.OnClickListener() {
@@ -1487,21 +1487,30 @@ public class Familia extends AppCompatActivity {
                     cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
                 }
             }
-        });
+        });*/
 
         final EditText menores = view_alert.findViewById(R.id.EDTXTMENORES);
+        if (cantMenores!=0) {
+          menores.setText(Integer.toString(cantMenores));
+        }
         final EditText mayores = view_alert.findViewById(R.id.EDTXTMAYORES);
+        if (cantMAyores!=0) {
+            mayores.setText(Integer.toString(cantMAyores));
+        }
 
         final Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NumerosPersonas = Integer.parseInt(cantidadintegrantes.getText().toString());
+                //NumerosPersonas = Integer.parseInt(cantidadintegrantes.getText().toString());
+                NumerosPersonas = 0;
                 if(menores.getText().toString().length()!=0) {
                     cantMenores = Integer.parseInt(menores.getText().toString());
+                    NumerosPersonas += cantMenores;
                 }
                 if(mayores.getText().toString().length()!=0){
                     cantMAyores = Integer.parseInt(mayores.getText().toString());
+                    NumerosPersonas += cantMAyores;
                 }
                 calle = edtCalle.getText().toString();
                 numero = edtNumero.getText().toString();
@@ -1594,7 +1603,7 @@ public class Familia extends AppCompatActivity {
 
                 final EditText calle = view_alert.findViewById(R.id.CALLE);
                 final EditText numero = view_alert.findViewById(R.id.NUMERO);
-                final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
+                /*final EditText cantidadintegrantes = view_alert.findViewById(R.id.CANTIDADMIEMBROSFAMILIARES);
                 NumerosPersonas = MiembrosFamiliares.size();
                 cantidadintegrantes.setText(Integer.toString(NumerosPersonas));
 
@@ -1615,7 +1624,7 @@ public class Familia extends AppCompatActivity {
                         NumerosPersonas-=1;
                         cantidadintegrantes.setText(Integer.toString(NumerosPersonas));}
                     }
-                });
+                });*/
 
                 Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
                 guardar.setOnClickListener(new View.OnClickListener() {
