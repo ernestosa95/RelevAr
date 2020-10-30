@@ -1698,6 +1698,7 @@ public class Familia extends AppCompatActivity {
                             auxHash.put("NUMERO", numero);
                             auxHash.put("CALLE", calle.toUpperCase());
                             auxHash.put("NUMERO CASA CARTOGRAFIA", numerocartografia);
+                            auxHash.put("ENCUESTADOR", encuestador.getID());
                             auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
                             for (int j = 0; j < datosCabeceraCsv.size() - 1; j++) {
                                 if (auxHash.get(datosCabeceraCsv.get(j)) != null) {
@@ -1721,13 +1722,13 @@ public class Familia extends AppCompatActivity {
                         GuardarDengue(calle, numero, Integer.toString(NumerosPersonas), MiembrosFamiliares.get(0));}
 
                         // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                        Intent intent = new Intent(getBaseContext(), MenuMapa.class);
+                        /*Intent intent = new Intent(getBaseContext(), MenuMapa.class);
                         LatLng position = new LatLng(Latitudenviar, Longitudenviar); // Boa Vista
                         Bundle args = new Bundle();
                         args.putParcelable("from_position", position);
                         //intent.putExtra("MARCADOR", position);
                         intent.putExtra("bundle", args);
-                        setResult(RESULT_OK, intent);
+                        setResult(RESULT_OK, intent);*/
 
                     } else {
                         makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();

@@ -490,7 +490,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     // FUNCION QUE ESPERA EL RESULTADO DE LOS SERVICIOS DE GPS
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    /*protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
@@ -499,7 +499,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 latlngs.add(position);
             }
         }
-    }
+    }*/
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
@@ -1083,6 +1083,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                     pantallas[0]-=2;
                     //Toast.makeText(getBaseContext(), Integer.toString(aux), Toast.LENGTH_SHORT).show();
                     OpcionesPantallaBoton(dialog);
+                    if(pantallas[0]<0){
+                        pantallas[0]=0;
+                    }
                 }
             }
         });

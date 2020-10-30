@@ -205,7 +205,7 @@ public class Persona extends AppCompatActivity {
         //Toast.makeText(this, Persona.Nacimiento, Toast.LENGTH_SHORT).show();
         if(Persona.Nacimiento!=""){
         txtNacimiento.setText(Persona.Nacimiento);}
-        else {fecha.setText("DD-MM-AAAA");}
+        else {txtNacimiento.setText("DD-MM-AAAA");}
 
         //Sp1.setSelection(ObtenerPosicion(Sp1, Persona.Efector));
         }
