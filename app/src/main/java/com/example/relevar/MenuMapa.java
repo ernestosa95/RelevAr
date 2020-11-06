@@ -366,7 +366,15 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
             TextView txt1 = view1.findViewById(R.id.CONSULTA);
             txt1.setText("¿Iniciar recorrido?");
-            Botones();
+            //Botones();
+
+            // FIJO LOS BOTONES PARA EL PLAN DETECTAR
+            final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            admin.DesactivarBotones();
+            admin.ActivarBoton("FACTORES DE RIESGO");
+            admin.ActivarBoton("CONTACTO");
+            admin.ActivarBoton("OBSERVACIONES");
+            admin.close();
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -456,7 +464,15 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
             TextView txt1 = view1.findViewById(R.id.CONSULTA);
             txt1.setText("¿Iniciar recorrido?");
-            Botones();
+            //Botones();
+
+            // FIJO LOS BOTONES PARA EL PLAN DETECTAR
+            final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            admin.DesactivarBotones();
+            admin.ActivarBoton("FACTORES DE RIESGO");
+            admin.ActivarBoton("CONTACTO");
+            admin.ActivarBoton("OBSERVACIONES");
+            admin.close();
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {

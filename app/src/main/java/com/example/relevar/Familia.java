@@ -107,7 +107,7 @@ public class Familia extends AppCompatActivity {
 
     int cantMenores = 0;
     int cantMAyores = 0;
-    String[] codigoColor = {"V"};
+    String[] codigoColor = {""};
     String calle="", numero="", numerocartografia="";
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -1410,13 +1410,36 @@ public class Familia extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
         dialog.show();
 
+        if (codigoColor[0].length()==0){
+            codigoColor[0]="V";
+        }
+
         //final String[] codigoColor = {"V"};
+
         final ImageView rojo = view_alert.findViewById(R.id.ICONOROJO);
         final ImageView amarillo = view_alert.findViewById(R.id.ICONOAMARILLO);
         final ImageView verde = view_alert.findViewById(R.id.ICONOVERDE);
-        rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-        amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
-        verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+        //rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        //amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        //verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+
+        if (codigoColor[0]=="V"){
+            verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+            amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        }
+
+        if (codigoColor[0]=="R"){
+            rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+            amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        }
+
+        if (codigoColor[0]=="A"){
+            amarillo.setBackground(getResources().getDrawable(R.drawable.button_redondo_blanco));
+            rojo.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+            verde.setBackground(getResources().getDrawable(R.drawable.button_redondo_gris));
+        }
 
         rojo.setOnClickListener(new View.OnClickListener() {
             @Override
