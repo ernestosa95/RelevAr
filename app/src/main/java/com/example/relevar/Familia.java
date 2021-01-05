@@ -420,7 +420,7 @@ public class Familia extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
-        CheckBox deshabitada = findViewById(R.id.CHECKVIVIENDADESHABITADA);
+        RadioButton deshabitada = findViewById(R.id.CHECKDESHABITADA);
         if(!deshabitada.isChecked()){
         Intent Modif= new Intent (this, Persona.class);
         startActivityForResult(Modif, 1);}
@@ -1719,8 +1719,11 @@ public class Familia extends AppCompatActivity {
     // GUARDAR GRUPO FAMILIAR
     public void Guardar2(View view){
 
-        CheckBox deshabitada = findViewById(R.id.CHECKVIVIENDADESHABITADA);
-        CheckBox renuente = findViewById(R.id.CHECKVIVIENDARENUENTE);
+        if(codigoColor[0]==""){
+            codigoColor[0]="V";
+        }
+        RadioButton deshabitada = findViewById(R.id.CHECKDESHABITADA);
+        RadioButton renuente = findViewById(R.id.CHECKRENUENTE);
 
         if(deshabitada.isChecked()){
             MiembrosFamiliares.add(new ObjetoPersona(null));
@@ -1735,6 +1738,12 @@ public class Familia extends AppCompatActivity {
             NumerosPersonas = MiembrosFamiliares.size();
         }
         if(MiembrosFamiliares.size()!=0 || familia.SituacionVivienda.length()!=0) {
+
+            // Cuando se selecciona deshabitada o renuente es necesario poner en 0 la
+            // cantidad total de miembros familiares
+            if(deshabitada.isChecked() || renuente.isChecked()){
+                NumerosPersonas=0;
+            }
 
             //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
             // Inicio la obtencion de datos de ubicacion del GPS

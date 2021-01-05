@@ -68,27 +68,28 @@
 
         </ListView>
 
-        <CheckBox
-            android:id="@+id/CHECKVIVIENDADESHABITADA"
+        <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/vivienda_deshabitada"
-            android:textColor="#000000"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout2">
 
-        <CheckBox
-            android:id="@+id/CHECKVIVIENDARENUENTE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/vivienda_renuente"
-            android:textColor="#000000"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/CHECKVIVIENDADESHABITADA"
-            app:layout_constraintStart_toStartOf="parent" />
+            <RadioButton
+                android:id="@+id/CHECKRENUENTE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vivienda_renuente"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/CHECKDESHABITADA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vivienda_deshabitada"
+                android:textSize="15sp" />
+        </RadioGroup>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
