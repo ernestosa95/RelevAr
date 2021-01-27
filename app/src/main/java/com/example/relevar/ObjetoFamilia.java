@@ -42,6 +42,10 @@ public class ObjetoFamilia implements Serializable {
     public String Arboles;
     public String Baño;
     public String BañoTiene;
+
+    public HashMap<String,String> Valores = new HashMap<>();
+    public ArrayList<String> DatosEnviar = new ArrayList<>();
+
     private ArrayList<String> cabeceraFamilia = new ArrayList<String>();
     private HashMap<String, String> datosIngresados = new HashMap<>();
 
@@ -89,6 +93,37 @@ public class ObjetoFamilia implements Serializable {
         HieloCalle="";
         PerrosCalle="";
         TelefonoFamiliar="";
+
+
+        Valores.put("COORDENADAS","");
+        Valores.put("MENORES","");
+        Valores.put("MAYORES","");
+
+        DatosEnviar.add("TIPO DE VIVIENDA");
+        DatosEnviar.add("DUEÑO DE LA VIVIENDA");
+        DatosEnviar.add("CANTIDAD DE PIEZAS");
+        DatosEnviar.add("LUGAR PARA COCINAR");
+        DatosEnviar.add("USA PARA COCINAR");
+        DatosEnviar.add("MATERIAL PREDOMINANTE EN LAS PAREDES");
+        DatosEnviar.add("REVESTIMIENTO EXTERNO O REVOQUE");
+        DatosEnviar.add("MATERIAL DE LOS PISOS");
+        DatosEnviar.add("CIELORRASO");
+        DatosEnviar.add("MATERIAL PREDOMINANTE EN LA CUBIERTA EXTERIOR");
+        DatosEnviar.add("AGUA");
+        DatosEnviar.add("ORIGEN AGUA");
+        DatosEnviar.add("EXCRETAS");
+        DatosEnviar.add("ELECTRICIDAD");
+        DatosEnviar.add("GAS");
+        DatosEnviar.add("ALMACENA AGUA DE LLUVIA");
+        DatosEnviar.add("ÁRBOLES");
+        DatosEnviar.add("BAÑO");
+        DatosEnviar.add("EL BAÑO TIENE");
+        DatosEnviar.add("NIEVE Y/O HIELO EN LA CALLE");
+        DatosEnviar.add("PERROS SUELTOS");
+
+        for (int i=0; i<DatosEnviar.size(); i++){
+            Valores.put(DatosEnviar.get(i),"");
+        }
 
         // Dengue
         Tanques = "0;0;0";

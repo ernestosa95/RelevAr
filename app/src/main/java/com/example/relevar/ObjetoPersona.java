@@ -70,6 +70,9 @@ public class ObjetoPersona implements Serializable {
     public String EnfermedadCronica;
     public String PlanSocial;
 
+    public HashMap<String, String> Valores = new HashMap<>();
+    ArrayList<String> DatosEnviar = new ArrayList<>();
+
     private ArrayList<String> cabeceraPersona = new ArrayList<>();
     private HashMap<String,String> datosIngresados = new HashMap<>();
     public void setInfoPersonal(String nombre, String apellido, String dni){
@@ -124,6 +127,35 @@ public class ObjetoPersona implements Serializable {
         EnfermedadCronica="";
         PlanSocial="";
 
+        // Para centralizacion
+        Valores.put("COORDENADAS","");
+        Valores.put("EDAD","");
+        Valores.put("SEXO","");
+
+        DatosEnviar.add("FACTORES_DE_RIESGO");
+        DatosEnviar.add("EFECTOR");
+        DatosEnviar.add("OBSERVACIONES");
+        DatosEnviar.add("INGRESO_Y_OCUPACION");
+        DatosEnviar.add("EDUCACION");
+        DatosEnviar.add("VITAMINA_D");
+        DatosEnviar.add("ULTIMO_CONTROL");
+        DatosEnviar.add("ENFERMEDAD_ASOCIADA_AL_EMBARAZO");
+        DatosEnviar.add("CERTIFICADO_UNICO_DE_DISCAPACIDAD");
+        DatosEnviar.add("TIPO_DE_DISCAPACIDAD");
+        DatosEnviar.add("ACOMPAÑAMIENTO");
+        DatosEnviar.add("TRASTORNOS_EN_NIÑOS");
+        DatosEnviar.add("ADICCIONES");
+        DatosEnviar.add("ACTIVIDADES_DE_OCIO");
+        DatosEnviar.add("DONDE_REALIZA_LAS_ACTIVIDADES");
+        DatosEnviar.add("TIPO_DE_VIOLENCIA");
+        DatosEnviar.add("MODALIDAD_DE_LA_VIOLENCIA");
+        DatosEnviar.add("TRASTORNOS_MENTALES");
+        DatosEnviar.add("ENFERMEDADES_CRONICAS");
+        DatosEnviar.add("PLAN_SOCIAL");
+
+        for (int i=0; i<DatosEnviar.size(); i++){
+            Valores.put(DatosEnviar.get(i),"");
+        }
     }
 
     public String FormatoGuardar(){

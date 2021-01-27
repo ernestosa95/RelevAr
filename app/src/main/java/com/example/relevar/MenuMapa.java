@@ -52,6 +52,7 @@ import com.example.relevar.MySQL.ConexionSQLiteHelper;
 import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
 import com.example.relevar.Recursos.ServicioGPS;
+import com.google.android.gms.common.api.Response;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -77,10 +78,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 // Descripcion de la Activity:
 /*      Esta activity es la pantalla inicial de la App, su principal función es la de preparar los
@@ -91,6 +114,8 @@ import static android.widget.Toast.makeText;
 //--------------------------------------------------------------------------------------------------
 
 //  - Oncreate()
+//  - BroadcastReceiver()
+//  - Buscar(), Compartir()
 //  -
 
 public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
@@ -129,6 +154,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     TextView encabezado;
     ImageView volver;
     int [] pantallas = {1};
+
+    ArrayList<ObjetoFamilia> datosFamilias = new ArrayList<>();
+    ArrayList<ObjetoPersona> datosPersonas = new ArrayList<>();
+    String[] respuesta = {"OK"};
+    ArrayList<ArrayList<String>> datos = new ArrayList<ArrayList<String>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,6 +263,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         familiaCabecera.add(getString(R.string.hielo));
         familiaCabecera.add(getString(R.string.perros_sueltos));
         familiaCabecera.add(getString(R.string.telefono_familiar));
+
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,15 +331,12 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     adaptador = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, listaNombresArchivos);
     lv1.setAdapter(adaptador);
 
-    //realizar accion con el listview
+    // Realizar accion con el listview
     lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int p1, long id) {
             File archivo = new File(listaRutasArchivos.get(p1));
             if(archivo.isFile()){
-                String ubicacion = archivo.getAbsolutePath();
-                //Toast.makeText(getBaseContext(), "es un archivo", 6000).show();
-                //compartir(archivo.getName());
                 compartir(listaRutasArchivos.get(p1));
             } else {
                 buscar(listaRutasArchivos.get(p1));
@@ -328,8 +356,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private void compartir(String nombreArchivo){
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
-
-        //File dir = new File(nuevaCarpeta, nombreArchivo);
 
         File dir = new File(nombreArchivo);
         Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
@@ -1339,6 +1365,233 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         //Toast.makeText(this, datosFamilia, Toast.LENGTH_SHORT).show();
         return datosFamilia;
+    }
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // Subir archivos a servidor
+    public void probar(View view){
+        ArrayList<String> aux = ListadoFechas();
+        String a="";
+        for(int i=0; i<aux.size();i++){
+            a+=aux.get(i);
+        }
+        //Toast.makeText(getApplicationContext(),"aca", Toast.LENGTH_SHORT).show();
+
+        DatosEnviar();
+    }
+
+    // Listao de fechas de las cuales se tienen archivos
+    private ArrayList<String> ListadoFechas(){
+        ArrayList<String> fechas = new ArrayList<>();
+
+        listaNombresArchivos = new ArrayList<String>();
+        listaRutasArchivos = new ArrayList<String>();
+
+        File directorioactual = new File("/storage/emulated/0/RelevAr");
+        File[] listaArchivos = directorioactual.listFiles();
+        for(File archivo : listaArchivos){
+            listaRutasArchivos.add(archivo.getPath());
+        }
+
+        Collections.sort(listaRutasArchivos, String.CASE_INSENSITIVE_ORDER);
+
+        for(int i=0; i<listaRutasArchivos.size(); i++){
+            File archivo = new File(listaRutasArchivos.get(i));
+            if(archivo.isFile()){
+                String[] aux=archivo.getName().split("-");
+                String aux1=aux[1]+"-"+aux[2]+"-"+aux[3];
+                String aux2 =aux1.replace(".csv", "");
+                fechas.add(aux2);}
+        }
+        return fechas;
+    }
+
+    //Recupero los datos de los .csv
+    private void DatosEnviar(){
+
+
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        fecha="2021-01-27";
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        String[] cabecera;
+        String datosFamilia="";
+        try {
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            //
+            cabecera = br.readLine().split(";");
+
+            String myData;
+            while ((myData=br.readLine())!=null){
+                String[] Datos = myData.split(";");
+                ObjetoFamilia objetoFamilia = new ObjetoFamilia(familiaCabecera);
+
+                datosPersonas.add(new ObjetoPersona(categoriasPersona));
+
+                objetoFamilia.Valores.put("COORDENADAS", Datos[2]);
+                datosPersonas.get(datosPersonas.size()-1).Valores.put("COORDENADAS", Datos[2]);
+
+                objetoFamilia.Valores.put("MENORES", Datos[5]);
+                objetoFamilia.Valores.put("MAYORES", Datos[6]);
+
+                datosPersonas.get(datosPersonas.size()-1).Valores.put("EDAD", Datos[10]);
+                datosPersonas.get(datosPersonas.size()-1).Valores.put("SEXO", Datos[11]);
+
+                if(Datos.length>12){
+                for (int i=13; i<Datos.length;i++){
+                    if (EsDeFamilia(cabecera[i])){
+                        if (!Datos[i].equals("")){
+                        objetoFamilia.Valores.put(cabecera[i],Datos[i]);}
+                    }
+                    if (EsDePersona(cabecera[i])){
+                        if (!Datos[i].equals("")){
+                            String aux=cabecera[i].replace(" ", "_");
+                            aux=aux.replace("¿","");
+                            aux=aux.replace("?","");
+                            datosPersonas.get(datosPersonas.size()-1).Valores.put(aux, Datos[i]);
+                        }
+                    }
+                }
+                }
+                datosFamilias.add(objetoFamilia);
+            }
+
+            //Toast.makeText(this, datosPersonas.get(0).Valores.get("COORDENADAS")+datosPersonas.get(1).Valores.get("COORDENADAS"), Toast.LENGTH_LONG).show();
+
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        ArrayList<HashMap<String,String>> DatosEnviarPersona = new ArrayList<>();
+        for (int i=0; i<datosPersonas.size();i++){
+            DatosEnviarPersona.add(datosPersonas.get(i).Valores);
+        }
+        String data = new Gson().toJson(DatosEnviarPersona);
+        //Toast.makeText(this,datosPersonas.get(1).Valores.get("DONDE_REALIZA_ACTIVIDADES"), Toast.LENGTH_LONG).show();
+
+        POST_DATA_PERSONA_JSON("http://192.168.1.5:8080/prueba/cargar_datos_persona_aux.php", DatosEnviarPersona);
+        //for (int i=0; i<datosPersonas.size(); i++){
+            //POST_DATA_PERSONA("http://192.168.0.102:8080/prueba/cargar_datos_persona.php", datosPersonas.get(i).Valores);
+            //Toast.makeText(this, Integer.toString(i), Toast.LENGTH_SHORT).show();
+        //}
+
+        //Toast.makeText(this,Integer.toString(datosPersonas.size()), Toast.LENGTH_SHORT).show();
+
+        datosPersonas.clear();
+        datosFamilias.clear();
+    }
+
+    // Corroborar si el dato corresponde a un dato de la familia
+    private boolean EsDeFamilia(String valor){
+        boolean devolver = false;
+        ObjetoFamilia aux = new ObjetoFamilia(familiaCabecera);
+        for(int i=0; i<aux.DatosEnviar.size();i++){
+            if(valor.equals(aux.DatosEnviar.get(i))){
+                devolver = true;
+            }
+        }
+        return devolver;
+    }
+
+    // Corroborar si el dato corresponde a un dato de la persona
+    private boolean EsDePersona(String valor){
+        valor=valor.replace(" ", "_");
+        valor=valor.replace("¿","");
+        valor=valor.replace("?","");
+        boolean devolver = false;
+        ObjetoPersona aux = new ObjetoPersona(categoriasPersona);
+        for(int i=0; i<aux.DatosEnviar.size();i++){
+            if(valor.equals(aux.DatosEnviar.get(i))){
+                devolver = true;
+            }
+        }
+        return devolver;
+    }
+
+    /*private void POST_DATA_PERSONA(String URL, final HashMap<String,String> enviar){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getBaseContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                String data = new Gson().toJson();
+                params.put("terms", data);
+                return params;
+            }
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parametros = new HashMap<String, String>();
+                //
+                parametros.put("COORDENADAS", enviar.get("COORDENADAS"));
+                parametros.put("FACTORES_DE_RIESGO",enviar.get("FACTORES DE RIESGO"));
+                parametros.put("EFECTOR", enviar.get("EFECTOR"));
+                parametros.put("OBSERVACIONES"," ");
+                parametros.put("EDUCACION", " ");
+                parametros.put("VITAMINA_D", " ");
+                parametros.put("ULTIMO_CONTROL", " ");
+                parametros.put("ENFERMEDAD_ASOCIADA_EMBARAZO", " ");
+                parametros.put("CERTIFICADO_DISCAPACIDAD", " ");
+                parametros.put("TIPO_DE_DISCAPACIDAD", " ");
+                parametros.put("ACOMPAÑAMIENTO", " ");
+                parametros.put("TRASTORNOS_EN_NIÑOS", " ");
+                parametros.put("ADICCIONES", " ");
+                parametros.put("ACTIVIDADES_DE_OCIO"," ");
+                parametros.put("OCIO_DONDE", " ");
+                parametros.put("TIPO_DE_VIOLENCIA"," ");
+                parametros.put("MODALIDAD_VIOLENCIA", " ");
+                parametros.put("TRASTORNOS_MENTALES"," ");
+                parametros.put("ENFERMEDADES_CRONICAS", " ");
+                parametros.put("PLAN_SOCIAL"," " );
+                return parametros;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }*/
+
+    private void POST_DATA_PERSONA_JSON(String URL, final ArrayList<HashMap<String,String>> enviar){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getBaseContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                String data = new Gson().toJson(enviar);
+                params.put("terms", data);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

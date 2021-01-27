@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private int STORAGE_PERMISSION_CODE =1;
 
     // Definicion de String para contener informacion
-    private String Latitud, Longitud, IDencuestador="";
+    private String Latitud, Longitud;
     private Double Latitudenviar, Longitudenviar;
 
     // Encuestador
@@ -72,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener;
 
-    String auxLat;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED); //evita la rotacion
+
+        // Evita la rotacion
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         setContentView(R.layout.activity_main);
 
         // Seteo el titulo de la action bar del activity
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 Longitud=Double.toString(location.getLongitude());
                 Latitudenviar = location.getLatitude();
                 Longitudenviar = location.getLongitude();
-                //System.out.println(Latitud+Longitud+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
