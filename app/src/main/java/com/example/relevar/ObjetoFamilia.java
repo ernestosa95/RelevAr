@@ -96,30 +96,31 @@ public class ObjetoFamilia implements Serializable {
 
 
         Valores.put("COORDENADAS","");
+        Valores.put("FECHA_REGISTRO","");
         Valores.put("MENORES","");
         Valores.put("MAYORES","");
 
-        DatosEnviar.add("TIPO DE VIVIENDA");
-        DatosEnviar.add("DUEÑO DE LA VIVIENDA");
-        DatosEnviar.add("CANTIDAD DE PIEZAS");
-        DatosEnviar.add("LUGAR PARA COCINAR");
-        DatosEnviar.add("USA PARA COCINAR");
-        DatosEnviar.add("MATERIAL PREDOMINANTE EN LAS PAREDES");
-        DatosEnviar.add("REVESTIMIENTO EXTERNO O REVOQUE");
-        DatosEnviar.add("MATERIAL DE LOS PISOS");
+        DatosEnviar.add("TIPO_DE_VIVIENDA");
+        DatosEnviar.add("DUEÑO_DE_LA_VIVIENDA");
+        DatosEnviar.add("CANTIDAD_DE_PIEZAS");
+        DatosEnviar.add("LUGAR_PARA_COCINAR");
+        DatosEnviar.add("USA_PARA_COCINAR");
+        DatosEnviar.add("MATERIAL_PREDOMINANTE_EN_LAS_PAREDES");
+        DatosEnviar.add("REVESTIMIENTO_EXTERNO_O_REVOQUE");
+        DatosEnviar.add("MATERIAL_DE_LOS_PISOS");
         DatosEnviar.add("CIELORRASO");
-        DatosEnviar.add("MATERIAL PREDOMINANTE EN LA CUBIERTA EXTERIOR");
+        DatosEnviar.add("MATERIAL_PREDOMINANTE_EN_LA_CUBIERTA_EXTERIOR");
         DatosEnviar.add("AGUA");
-        DatosEnviar.add("ORIGEN AGUA");
+        DatosEnviar.add("ORIGEN_AGUA");
         DatosEnviar.add("EXCRETAS");
         DatosEnviar.add("ELECTRICIDAD");
         DatosEnviar.add("GAS");
-        DatosEnviar.add("ALMACENA AGUA DE LLUVIA");
+        DatosEnviar.add("ALMACENA_AGUA_DE_LLUVIA");
         DatosEnviar.add("ÁRBOLES");
         DatosEnviar.add("BAÑO");
-        DatosEnviar.add("EL BAÑO TIENE");
-        DatosEnviar.add("NIEVE Y/O HIELO EN LA CALLE");
-        DatosEnviar.add("PERROS SUELTOS");
+        DatosEnviar.add("EL_BAÑO_TIENE");
+        DatosEnviar.add("NIEVE_Y_O_HIELO_EN_LA_CALLE");
+        DatosEnviar.add("PERROS_SUELTOS");
 
         for (int i=0; i<DatosEnviar.size(); i++){
             Valores.put(DatosEnviar.get(i),"");

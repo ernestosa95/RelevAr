@@ -134,7 +134,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     Encuestador encuestador = new Encuestador();
     // Mapa
     private MapView mapView;
-    private GoogleMap map;
     LatLng latLng;
     ArrayList<LatLng> recorrido = new ArrayList<>();
     Polyline ruta;
@@ -142,7 +141,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     //private ArrayList<LatLng> latlngs = new ArrayList<>();
     String directorioraiz;
     Spinner fechas;
-    ObjetoFamilia familia = new ObjetoFamilia(null);
     ArrayList<String> MiembrosFamiliares = new ArrayList<>();
     ArrayList<String> DatosMiembrosFamiliares = new ArrayList<>();
     ArrayList<String> categoriasPersona = new ArrayList<>();
@@ -157,8 +155,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     ArrayList<ObjetoFamilia> datosFamilias = new ArrayList<>();
     ArrayList<ObjetoPersona> datosPersonas = new ArrayList<>();
-    String[] respuesta = {"OK"};
-    ArrayList<ArrayList<String>> datos = new ArrayList<ArrayList<String>>();
+    ArrayList<String> fechas_disponibles = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1370,14 +1368,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 //--------------------------------------------------------------------------------------------------
     // Subir archivos a servidor
     public void probar(View view){
-        ArrayList<String> aux = ListadoFechas();
-        String a="";
-        for(int i=0; i<aux.size();i++){
-            a+=aux.get(i);
-        }
+
         //Toast.makeText(getApplicationContext(),"aca", Toast.LENGTH_SHORT).show();
 
-        DatosEnviar();
+        //DatosEnviar();
+        GET_USER_ACCESS("http://192.168.1.5:8080/prueba/consultar_usuario.php?documento=","38770338");
     }
 
     // Listao de fechas de las cuales se tienen archivos
@@ -1407,16 +1402,15 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     //Recupero los datos de los .csv
-    private void DatosEnviar(){
-
-
+    private void DatosEnviar(ArrayList<String> fechas){
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        fecha="2021-01-27";
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //Date date1 = new Date();
+        //String fecha = dateFormat.format(date1);
+
+        for (int j=0; j<fechas.size();j++){
+        String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
         String[] cabecera;
@@ -1432,15 +1426,18 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             String myData;
             while ((myData=br.readLine())!=null){
                 String[] Datos = myData.split(";");
-                ObjetoFamilia objetoFamilia = new ObjetoFamilia(familiaCabecera);
 
                 datosPersonas.add(new ObjetoPersona(categoriasPersona));
+                datosFamilias.add(new ObjetoFamilia(familiaCabecera));
 
-                objetoFamilia.Valores.put("COORDENADAS", Datos[2]);
+                datosFamilias.get(datosFamilias.size()-1).Valores.put("COORDENADAS", Datos[2]);
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("COORDENADAS", Datos[2]);
 
-                objetoFamilia.Valores.put("MENORES", Datos[5]);
-                objetoFamilia.Valores.put("MAYORES", Datos[6]);
+                datosFamilias.get(datosFamilias.size()-1).Valores.put("FECHA_REGISTRO", fechas.get(j));
+                datosFamilias.get(datosFamilias.size()-1).Valores.put("DNI", "38770338");
+
+                datosPersonas.get(datosPersonas.size()-1).Valores.put("MENORES", Datos[5]);
+                datosPersonas.get(datosPersonas.size()-1).Valores.put("MAYORES", Datos[6]);
 
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("EDAD", Datos[10]);
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("SEXO", Datos[11]);
@@ -1449,7 +1446,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 for (int i=13; i<Datos.length;i++){
                     if (EsDeFamilia(cabecera[i])){
                         if (!Datos[i].equals("")){
-                        objetoFamilia.Valores.put(cabecera[i],Datos[i]);}
+                            String aux=cabecera[i].replace(" ", "_");
+                            aux=aux.replace("/","_");
+                            datosPersonas.get(datosPersonas.size()-1).Valores.put(aux, Datos[i]);
+                        }
                     }
                     if (EsDePersona(cabecera[i])){
                         if (!Datos[i].equals("")){
@@ -1461,7 +1461,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                     }
                 }
                 }
-                datosFamilias.add(objetoFamilia);
             }
 
             //Toast.makeText(this, datosPersonas.get(0).Valores.get("COORDENADAS")+datosPersonas.get(1).Valores.get("COORDENADAS"), Toast.LENGTH_LONG).show();
@@ -1471,16 +1470,22 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             fis.close();
         } catch (IOException e) {
             //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        }}
 
         ArrayList<HashMap<String,String>> DatosEnviarPersona = new ArrayList<>();
         for (int i=0; i<datosPersonas.size();i++){
             DatosEnviarPersona.add(datosPersonas.get(i).Valores);
         }
-        String data = new Gson().toJson(DatosEnviarPersona);
-        //Toast.makeText(this,datosPersonas.get(1).Valores.get("DONDE_REALIZA_ACTIVIDADES"), Toast.LENGTH_LONG).show();
 
-        POST_DATA_PERSONA_JSON("http://192.168.1.5:8080/prueba/cargar_datos_persona_aux.php", DatosEnviarPersona);
+        ArrayList<HashMap<String,String>> DatosEnviarFamilia = new ArrayList<>();
+        for (int i=0; i<datosFamilias.size();i++) {
+            DatosEnviarFamilia.add(datosFamilias.get(i).Valores);
+        }
+
+
+        //Toast.makeText(this,Integer.toString(datosPersonas.size()), Toast.LENGTH_LONG).show();
+
+        POST_DATA("http://192.168.1.5:8080/prueba/cargar_datos.php", DatosEnviarPersona, DatosEnviarFamilia);
         //for (int i=0; i<datosPersonas.size(); i++){
             //POST_DATA_PERSONA("http://192.168.0.102:8080/prueba/cargar_datos_persona.php", datosPersonas.get(i).Valores);
             //Toast.makeText(this, Integer.toString(i), Toast.LENGTH_SHORT).show();
@@ -1494,6 +1499,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     // Corroborar si el dato corresponde a un dato de la familia
     private boolean EsDeFamilia(String valor){
+        valor=valor.replace(" ", "_");
+        valor=valor.replace("/","");
         boolean devolver = false;
         ObjetoFamilia aux = new ObjetoFamilia(familiaCabecera);
         for(int i=0; i<aux.DatosEnviar.size();i++){
@@ -1519,7 +1526,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         return devolver;
     }
 
-    /*private void POST_DATA_PERSONA(String URL, final HashMap<String,String> enviar){
+    private void POST_DATA(String URL, final ArrayList<HashMap<String,String>> enviarPersonas, final ArrayList<HashMap<String,String>> enviarFamiliares){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1534,58 +1541,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                String data = new Gson().toJson();
-                params.put("terms", data);
-                return params;
-            }
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
-                //
-                parametros.put("COORDENADAS", enviar.get("COORDENADAS"));
-                parametros.put("FACTORES_DE_RIESGO",enviar.get("FACTORES DE RIESGO"));
-                parametros.put("EFECTOR", enviar.get("EFECTOR"));
-                parametros.put("OBSERVACIONES"," ");
-                parametros.put("EDUCACION", " ");
-                parametros.put("VITAMINA_D", " ");
-                parametros.put("ULTIMO_CONTROL", " ");
-                parametros.put("ENFERMEDAD_ASOCIADA_EMBARAZO", " ");
-                parametros.put("CERTIFICADO_DISCAPACIDAD", " ");
-                parametros.put("TIPO_DE_DISCAPACIDAD", " ");
-                parametros.put("ACOMPAÑAMIENTO", " ");
-                parametros.put("TRASTORNOS_EN_NIÑOS", " ");
-                parametros.put("ADICCIONES", " ");
-                parametros.put("ACTIVIDADES_DE_OCIO"," ");
-                parametros.put("OCIO_DONDE", " ");
-                parametros.put("TIPO_DE_VIOLENCIA"," ");
-                parametros.put("MODALIDAD_VIOLENCIA", " ");
-                parametros.put("TRASTORNOS_MENTALES"," ");
-                parametros.put("ENFERMEDADES_CRONICAS", " ");
-                parametros.put("PLAN_SOCIAL"," " );
-                return parametros;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }*/
-
-    private void POST_DATA_PERSONA_JSON(String URL, final ArrayList<HashMap<String,String>> enviar){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getBaseContext(), response, Toast.LENGTH_SHORT).show();
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                String data = new Gson().toJson(enviar);
-                params.put("terms", data);
+                String personas = new Gson().toJson(enviarPersonas);
+                params.put("persona", personas);
+                String familias = new Gson().toJson(enviarFamiliares);
+                params.put("familia", familias);
                 return params;
             }
         };
@@ -1593,6 +1552,66 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+    private void GET_USER_ACCESS(String URL, String dni){
+        fechas_disponibles = ListadoFechas();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, URL+dni, null, new com.android.volley.Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject usuario = response.getJSONObject("usuario");
+                            if(usuario.getString("NOMBRE").equals("NO REGISTRA")){
+                                Toast.makeText(getBaseContext(), "SU USUARIO NO ESTA HABILITADO PARA CARGAR DATOS\nCONTACTESE CON LOS DESARROLLADORES", Toast.LENGTH_LONG).show();
+                            }else{
+                                try {
+                                    ArrayList<String> fechas_cargadas = new ArrayList<>();
+                                    JSONArray fechas = response.getJSONArray("fechas");
+                                    for(int i=0; i<fechas.length(); i++){
+                                        fechas_cargadas.add(fechas.getJSONArray(i).getString(0));
+                                    }
+
+                                    // necesito comparar con las fechas que tengo en el telefono
+
+                                    for (int i=0; i<fechas_disponibles.size(); i++){
+                                        for (int j=0; j<fechas_cargadas.size();j++){
+                                            if(fechas_disponibles.get(i).equals(fechas_cargadas.get(j))){
+                                                fechas_disponibles.remove(i);
+                                            }
+                                        }
+                                    }
+                                    Toast.makeText(getBaseContext(), fechas_cargadas.get(0), Toast.LENGTH_LONG).show();
+                                }catch (JSONException e){
+                                    Toast.makeText(getBaseContext(), "no hay fechas", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getBaseContext(), "ERROR DE LECTURA", Toast.LENGTH_LONG).show();
+                        }
+
+                        // llamo para cargar los datos
+                        if(fechas_disponibles.size()!=0){
+                        DatosEnviar(fechas_disponibles);}
+                        else{
+                            Toast.makeText(getBaseContext(), "YA ESTA TODO ACTUALIZADO", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonObjectRequest);
+    }
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // Desactivo el boton de volver atras
