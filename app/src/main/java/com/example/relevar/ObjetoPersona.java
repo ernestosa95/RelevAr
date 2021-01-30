@@ -71,6 +71,7 @@ public class ObjetoPersona implements Serializable {
     public String PlanSocial;
 
     public HashMap<String, String> Valores = new HashMap<>();
+    public HashMap<String, String> datosEditar = new HashMap<>();
     ArrayList<String> DatosEnviar = new ArrayList<>();
 
     private ArrayList<String> cabeceraPersona = new ArrayList<>();
@@ -86,7 +87,6 @@ public class ObjetoPersona implements Serializable {
         Nombre="";
         Sexo="";
         Apellido="";
-        DNI="";
         Celular="";
         Fijo="";
         Mail="";
@@ -156,6 +156,105 @@ public class ObjetoPersona implements Serializable {
         for (int i=0; i<DatosEnviar.size(); i++){
             Valores.put(DatosEnviar.get(i),"");
         }
+
+        datosEditar.put("DNI","");
+        datosEditar.put("APELLIDO","");
+        datosEditar.put("NOMBRE","");
+        datosEditar.put("FECHA DE NACIMIENTO","");
+        datosEditar.put("SEXO","");
+        for (int i=0; i<cabeceraPersona.size(); i++){
+            datosEditar.put(cabeceraPersona.get(i),"");
+        }
+
+        DNI=datosEditar.get("DNI");
+        Nombre=datosEditar.get("NOMBRE");;
+        Sexo=datosEditar.get("SEXO");;
+        Apellido=datosEditar.get("APELLIDO");;
+        Celular=datosEditar.get("CELULAR");;
+        Fijo=datosEditar.get("FIJO");;
+        Mail=datosEditar.get("MAIL");
+        Edad=datosEditar.get("FECHA DE NACIMIENTO");
+        FactoresDeRiesgo=datosEditar.get("FACTORES DE RIESGO");
+        Vacunas="";
+        LoteVacuna="";
+        CodfigoFactorRiesgo="";
+        UnidadEdad="";
+        Efector=datosEditar.get("EFECTOR");
+        Observaciones=datosEditar.get("OBSERVACIONES");
+        Limpieza="";
+        NombreContacto=datosEditar.get("NOMBRE Y APELLIDO");;
+        TelefonoContacto=datosEditar.get("TELEFONO CONTACTO");
+        ParentezcoContacto=datosEditar.get("PARENTEZCO");;
+        Ocupacion=datosEditar.get("INGRESO Y OCUPACION");;
+        Educacion=datosEditar.get("EDUCACION");;
+        Temperatura="";
+        Tos="";
+        Garganta="";
+        Respiratorio="";
+        Anosmia="";
+        Disgeusia="";
+        Vitamina="";
+        FechaParto=datosEditar.get("DIA/MES/AÑO");
+        UltimoControlEmbarazo=datosEditar.get("ULTIMO CONTROL");
+        EnfermedadEmbarazo=datosEditar.get("ENFERMEDAD ASOCIADA AL EMBARAZO");
+        CertificadoDiscapacidad=datosEditar.get("CERTIFICADO UNICO DE DISCAPACIDAD");
+        TipoDiscapacidad=datosEditar.get("TIPO DE DISCAPACIDAD");;
+        Acompañamiento=datosEditar.get("ACOMPAÑAMIENTO");;
+        TrastornoNiños=datosEditar.get("TRASTORNOS EN NIÑOS");
+        Adicciones=datosEditar.get("ADICCIONES");
+        ActividadesOcio=datosEditar.get("ACTIVIDADES DE OCIO");;
+        LugarOcio=datosEditar.get("¿DONDE REALIZA LAS ACTIVIDADES?");
+        TipoViolencia=datosEditar.get("TIPO DE VIOLENCIA");;
+        ModalidadViolencia=datosEditar.get("MODALIDAD DE LA VIOLENCIA");;
+        TrastornosMentales=datosEditar.get("TRASTORNOS MENTALES");;
+        EnfermedadCronica=datosEditar.get("ENFERMEDADES CRONICAS");;
+        PlanSocial=datosEditar.get("PLAN SOCIAL");;
+    }
+
+    public void cargar_datos(){
+        DNI=datosEditar.get("DNI");
+        Nombre=datosEditar.get("NOMBRE");;
+        Sexo=datosEditar.get("SEXO");;
+        Apellido=datosEditar.get("APELLIDO");;
+        Celular=datosEditar.get("CELULAR");;
+        Fijo=datosEditar.get("FIJO");;
+        Mail=datosEditar.get("MAIL");
+        Edad=datosEditar.get("FECHA DE NACIMIENTO");
+        FactoresDeRiesgo=datosEditar.get("FACTORES DE RIESGO");
+        Vacunas="";
+        LoteVacuna="";
+        CodfigoFactorRiesgo="";
+        UnidadEdad="";
+        Efector=datosEditar.get("EFECTOR");
+        Observaciones=datosEditar.get("OBSERVACIONES");
+        Limpieza="";
+        NombreContacto=datosEditar.get("NOMBRE Y APELLIDO");;
+        TelefonoContacto=datosEditar.get("TELEFONO CONTACTO");
+        ParentezcoContacto=datosEditar.get("PARENTEZCO");;
+        Ocupacion=datosEditar.get("INGRESO Y OCUPACION");;
+        Educacion=datosEditar.get("EDUCACION");;
+        Temperatura="";
+        Tos="";
+        Garganta="";
+        Respiratorio="";
+        Anosmia="";
+        Disgeusia="";
+        Vitamina="";
+        FechaParto=datosEditar.get("DIA/MES/AÑO");
+        UltimoControlEmbarazo=datosEditar.get("ULTIMO CONTROL");
+        EnfermedadEmbarazo=datosEditar.get("ENFERMEDAD ASOCIADA AL EMBARAZO");
+        CertificadoDiscapacidad=datosEditar.get("CERTIFICADO UNICO DE DISCAPACIDAD");
+        TipoDiscapacidad=datosEditar.get("TIPO DE DISCAPACIDAD");;
+        Acompañamiento=datosEditar.get("ACOMPAÑAMIENTO");;
+        TrastornoNiños=datosEditar.get("TRASTORNOS EN NIÑOS");
+        Adicciones=datosEditar.get("ADICCIONES");
+        ActividadesOcio=datosEditar.get("ACTIVIDADES DE OCIO");;
+        LugarOcio=datosEditar.get("¿DONDE REALIZA LAS ACTIVIDADES?");
+        TipoViolencia=datosEditar.get("TIPO DE VIOLENCIA");;
+        ModalidadViolencia=datosEditar.get("MODALIDAD DE LA VIOLENCIA");;
+        TrastornosMentales=datosEditar.get("TRASTORNOS MENTALES");;
+        EnfermedadCronica=datosEditar.get("ENFERMEDADES CRONICAS");;
+        PlanSocial=datosEditar.get("PLAN SOCIAL");;
     }
 
     public String FormatoGuardar(){

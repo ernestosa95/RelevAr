@@ -48,6 +48,7 @@ public class ObjetoFamilia implements Serializable {
 
     private ArrayList<String> cabeceraFamilia = new ArrayList<String>();
     private HashMap<String, String> datosIngresados = new HashMap<>();
+    public HashMap<String, String> datosEditar = new HashMap<>();
 
     // Datos de dengue
     public String Tanques;
@@ -71,29 +72,6 @@ public class ObjetoFamilia implements Serializable {
 
     public ObjetoFamilia(ArrayList<String> aux) {
         cabeceraFamilia = aux;
-        TipoVivienda="";
-        DueñoVivienda="";
-        CantidadPiezas="";
-        LugarCocinar="";
-        UsaParaCocinar="";
-        Paredes="";
-        Revoque="";
-        Pisos="";
-        Cielorraso="";
-        Techo="";
-        Agua="";
-        AguaOrigen="";
-        Excretas="";
-        Electricidad="";
-        Gas="";
-        AguaLluvia="";
-        Arboles="";
-        Baño="";
-        BañoTiene="";
-        HieloCalle="";
-        PerrosCalle="";
-        TelefonoFamiliar="";
-
 
         Valores.put("COORDENADAS","");
         Valores.put("FECHA_REGISTRO","");
@@ -126,6 +104,43 @@ public class ObjetoFamilia implements Serializable {
             Valores.put(DatosEnviar.get(i),"");
         }
 
+        datosEditar.put("CALLE","");
+        datosEditar.put("NUMERO","");
+        datosEditar.put("COORDENADAS","");
+        datosEditar.put("ESTADO","");
+        datosEditar.put("GRUPO FAMILIAR","");
+        datosEditar.put("MENORES","");
+        datosEditar.put("MAYORES","");
+        datosEditar.put("NUMERO CASA CARTOGRAFIA","");
+
+        for (int i=0; i<cabeceraFamilia.size(); i++){
+            datosEditar.put(cabeceraFamilia.get(i),"");
+        }
+
+        TipoVivienda=datosEditar.get("TIPO DE VIVIENDA");
+        DueñoVivienda=datosEditar.get("DUEÑO DE LA VIVIENDA");
+        CantidadPiezas=datosEditar.get("CANTIDAD DE PIEZAS");
+        LugarCocinar=datosEditar.get("LUGAR PARA COCINAR");
+        UsaParaCocinar=datosEditar.get("USA PARA COCINAR...");
+        Paredes=datosEditar.get("MATERIAL PREDOMINANTE EN LAS PAREDES EXTERIORES");
+        Revoque=datosEditar.get("REVESTIMIENTO EXTERNO O REVOQUE");
+        Pisos=datosEditar.get("MATERIAL DE LOS PISOS");
+        Cielorraso=datosEditar.get("CIELORRASO");
+        Techo=datosEditar.get("MATERIAL PREDOMINANTE EN LA CUBIERTA EXTERIOR DEL TECHO");
+        Agua=datosEditar.get("AGUA");
+        AguaOrigen=datosEditar.get("ORIGEN AGUA");
+        Excretas=datosEditar.get("EXCRETAS");
+        Electricidad=datosEditar.get("ELECTRICIDAD");
+        Gas=datosEditar.get("GAS");
+        AguaLluvia=datosEditar.get("ALMACENA AGUA DE LLUVIA");
+        Arboles=datosEditar.get("ÁRBOLES");
+        Baño=datosEditar.get("BAÑO");
+        BañoTiene=datosEditar.get("EL BAÑO TIENE");
+        HieloCalle=datosEditar.get("NIEVE Y/O HIELO EN LA CALLE");
+        PerrosCalle=datosEditar.get("PERROS SUELTOS");
+        TelefonoFamiliar=datosEditar.get("TELEFONO FAMILIAR");
+
+
         // Dengue
         Tanques = "0;0;0";
         Piletas = "0;0;0";
@@ -143,6 +158,31 @@ public class ObjetoFamilia implements Serializable {
         TotalTratados="";
         Larvicida="";
         Destruidos="";
+    }
+
+    public void cargar_datos(){
+        TipoVivienda=datosEditar.get("TIPO DE VIVIENDA");
+        DueñoVivienda=datosEditar.get("DUEÑO DE LA VIVIENDA");
+        CantidadPiezas=datosEditar.get("CANTIDAD DE PIEZAS");
+        LugarCocinar=datosEditar.get("LUGAR PARA COCINAR");
+        UsaParaCocinar=datosEditar.get("USA PARA COCINAR...");
+        Paredes=datosEditar.get("MATERIAL PREDOMINANTE EN LAS PAREDES EXTERIORES");
+        Revoque=datosEditar.get("REVESTIMIENTO EXTERNO O REVOQUE");
+        Pisos=datosEditar.get("MATERIAL DE LOS PISOS");
+        Cielorraso=datosEditar.get("CIELORRASO");
+        Techo=datosEditar.get("MATERIAL PREDOMINANTE EN LA CUBIERTA EXTERIOR DEL TECHO");
+        Agua=datosEditar.get("AGUA");
+        AguaOrigen=datosEditar.get("ORIGEN AGUA");
+        Excretas=datosEditar.get("EXCRETAS");
+        Electricidad=datosEditar.get("ELECTRICIDAD");
+        Gas=datosEditar.get("GAS");
+        AguaLluvia=datosEditar.get("ALMACENA AGUA DE LLUVIA");
+        Arboles=datosEditar.get("ÁRBOLES");
+        Baño=datosEditar.get("BAÑO");
+        BañoTiene=datosEditar.get("EL BAÑO TIENE");
+        HieloCalle=datosEditar.get("NIEVE Y/O HIELO EN LA CALLE");
+        PerrosCalle=datosEditar.get("PERROS SUELTOS");
+        TelefonoFamiliar=datosEditar.get("TELEFONO FAMILIAR");
     }
 
     public String FormatoGuardar(){

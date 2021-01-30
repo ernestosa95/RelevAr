@@ -133,7 +133,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     ListView lv1;
     // Inicio de toma de ubicacion
     EditText Nencuestador;
-    ImageButton BtnCompartir;
+
     // Creo al encuestador
     Encuestador encuestador = new Encuestador();
     // Mapa
@@ -141,7 +141,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     LatLng latLng;
     ArrayList<LatLng> recorrido = new ArrayList<>();
     Polyline ruta;
-    TextView txt;
     //private ArrayList<LatLng> latlngs = new ArrayList<>();
     String directorioraiz;
     Spinner fechas;
@@ -256,6 +255,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         categoriasPersona.add(getString(R.string.tipo_violencia));
         categoriasPersona.add(getString(R.string.modalidad_violencia));
         categoriasPersona.add(getString(R.string.trastornos_mentales));
+        categoriasPersona.add(getString(R.string.enfermedad_cronica));
+        categoriasPersona.add(getString(R.string.plan_social));
 
         familiaCabecera.add(getString(R.string.tipo_de_vivienda));
         familiaCabecera.add(getString(R.string.dueño_vivienda));
@@ -1316,10 +1317,31 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
-        final Button cancelar = view.findViewById(R.id.CANCELARINFOFMAILIA);
+        final ImageButton cancelar = view.findViewById(R.id.CANCELARINFOFMAILIA);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                dialog.dismiss();
+            }
+        });
+
+        // NECESITO CREAR UNA LISTA DE PERSONAS EN DETERMINADA COORDENDA Y UN OBJETO FAMILIA PARA
+        // PASARLE A LA PARTE DE CARGAR DATOS
+        final Button editar = view.findViewById(R.id.EDITARREGISTRO);
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = datosPersonas.get(0).datosEditar.get("DNI");
+                Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
+
+                Intent Modif= new Intent (getBaseContext(), Familia.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("FAMILIA", datosFamilias.get(0));
+                Modif.putExtra("PERSONAS", datosPersonas);
+                Modif.putExtras(bundle);
+                startActivity(Modif);
                 dialog.dismiss();
             }
         });
@@ -1328,6 +1350,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private String LeerInfo(String coordenadas){
         MiembrosFamiliares.clear();
         DatosMiembrosFamiliares.clear();
+
+        datosFamilias.clear();
+        datosFamilias.add(new ObjetoFamilia(familiaCabecera));
+        datosPersonas.clear();
 
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
@@ -1369,6 +1395,17 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                             }
                         }
                     }
+
+                    // CREO LOS OBJETOS PARA EDITAR LOS VALORES
+                    for (int i=0; i<Datos.length; i++){
+                        datosFamilias.get(0).datosEditar.put(cabecera[i],Datos[i]);
+                    }
+
+                    datosPersonas.add(new ObjetoPersona(categoriasPersona));
+                    for (int i=0; i<Datos.length; i++){
+                        datosPersonas.get(datosPersonas.size()-1).datosEditar.put(cabecera[i],Datos[i]);
+                    }
+
                 DatosMiembrosFamiliares.add(datosMostrar);
                 //Toast.makeText(this, Integer.toString(MiembrosFamiliares.size()), Toast.LENGTH_SHORT).show();
 
@@ -1423,6 +1460,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     //Recupero los datos de los .csv
     private void DatosEnviar(ArrayList<String> fechas){
+
+        datosPersonas.clear();
+        datosFamilias.clear();
+
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         String DNIencuestador = admin.ObtenerDniActivado();
 

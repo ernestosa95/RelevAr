@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -192,6 +193,33 @@ public class Familia extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.trastornos_mentales));
         categoriasPersona.add(getString(R.string.enfermedad_cronica));
         categoriasPersona.add(getString(R.string.plan_social));
+
+        // RECIBO LOS DATOS SI ES QUE SE ORIGINO EN UNA EDICION
+        if(getIntent().getSerializableExtra("PERSONAS")!=null) {
+            ObjetoFamilia familiaedit = new ObjetoFamilia(familiaCabecera);
+            Bundle bundle = getIntent().getExtras();
+            if(bundle!=null){
+                familiaedit = (ObjetoFamilia) bundle.getSerializable("FAMILIA");
+                familiaedit.cargar_datos();
+            }
+            ArrayList<ObjetoPersona> personasEdit = (ArrayList<ObjetoPersona>) getIntent().getSerializableExtra("PERSONAS");
+            for(int i=0;i<personasEdit.size(); i++){
+                personasEdit.get(i).cargar_datos();
+            }
+            String msg = personasEdit.get(0).datosEditar.get("PLAN SOCIAL");
+            //String msg = familiaedit.BañoTiene;
+            Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
+            // IGUALO LOS VALORES QUE LLEGARON PARA SER EDITADOS
+            familia = familiaedit;
+            MiembrosFamiliares = personasEdit;
+            for (int i=0; i<MiembrosFamiliares.size();i++){
+            names.add("DNI: "+MiembrosFamiliares.get(i).DNI+", "+MiembrosFamiliares.get(i).Apellido+" "+MiembrosFamiliares.get(i).Nombre);}
+            ListeVer();
+            ColorAvanceExteriorVivienda();
+            ColorAvanceGeneralFamilia();
+            ColorAvanceServiciosBasicos();
+            ColorAvanceVivienda();
+        }
     }
 
     private void CrearBotonera(){
@@ -1654,6 +1682,7 @@ public class Familia extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if(Latitudenviar!=0.0){
+
                         // The user clicked OK
                         // Agrego la cabecera en .csv
                         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
@@ -1805,7 +1834,7 @@ public class Familia extends AppCompatActivity {
                 }
             });*/
 
-            ObjetoPersona auxPersona = new ObjetoPersona(null);
+            ObjetoPersona auxPersona = new ObjetoPersona(categoriasPersona);
             if(familia.SituacionVivienda.equals("X")){
                 MiembrosFamiliares.add(auxPersona);
                 //Toast.makeText(this, "ENTRO", Toast.LENGTH_SHORT).show();
@@ -1856,6 +1885,12 @@ public class Familia extends AppCompatActivity {
                 public void onClick(View view) {
                     if (Latitudenviar != 0.0 && Latitudenviar!=null) {
 
+                        String coordenadas="";
+                        if(familia.datosEditar.get("COORDENADAS").length()!=0){
+                            coordenadas=familia.datosEditar.get("COORDENADAS");
+                            BorrarRegistroPorCoordenadas(coordenadas);
+                        }else {
+                            coordenadas = Latitud + " " + Longitud;}
                         /*NumerosPersonas = Integer.parseInt(cantidadintegrantes.getText().toString());
                         int cantMenores = 0;
                         int cantMAyores = 0;
@@ -1925,8 +1960,6 @@ public class Familia extends AppCompatActivity {
                             }
 
                             /* Solicito los datos cargados tanto en la persona como en la familia*/
-
-                            String coordenadas = Latitud + " " + Longitud;
                             /*String calle = edtCalle.getText().toString();
                             String numero = edtNumero.getText().toString();
                             String numerocartografia = edtnumerocartografia.getText().toString();*/
@@ -2146,5 +2179,80 @@ public class Familia extends AppCompatActivity {
 
     }
 
+    private void BorrarRegistroPorCoordenadas(String coordendas_borrar){
+        // LEO TODOS LOS REGISTROS
+        ArrayList<ArrayList<String>> registros = new ArrayList<>();
+
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        String[] cabecera;
+        try {
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            //cabecera = br.readLine().split(";");
+            String myData;
+            while ((myData=br.readLine())!=null){
+                String[] Datos = myData.split(";");
+                if(!coordendas_borrar.equals(Datos[2])){
+                ArrayList<String> aux = new ArrayList<>();
+                for (int i=0; i<Datos.length;i++){
+                    aux.add(Datos[i]);
+                }
+                registros.add(aux);}
+            }
+            Toast.makeText(this, registros.get(1).get(2), Toast.LENGTH_SHORT).show();
+
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
+        }
+
+        //dir.delete();
+        //guardar_registros(registros);
+    }
+
+    private void guardar_registros(ArrayList<ArrayList<String>> Listado){
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        try {
+
+            FileOutputStream fOut = new FileOutputStream(dir, true); //el true es para
+            // que se agreguen los datos al final sin perder los datos anteriores
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+
+            for (int i=0; i<Listado.size(); i++){
+                String aux = "";
+                for (int j=0; j<Listado.size(); j++){
+                    aux += Listado.get(i).get(j) +";";
+                }
+                aux+="\n";
+                myOutWriter.append(aux);
+            }
+            //Toast.makeText(this, Integer.toString(i), Toast.LENGTH_SHORT).show();}
+            myOutWriter.close();
+            fOut.close();
+            //finish();
+            //Toast.makeText(this, "DATOS GUARDADOS", Toast.LENGTH_SHORT).show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            //Toast.makeText(this, "Datos NO guardados", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
