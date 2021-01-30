@@ -192,6 +192,16 @@ public class SQLitePpal extends SQLiteOpenHelper {
         return encuestador;
     }
 
+    public String ObtenerDniActivado(){
+        String encuestador="";
+        SQLiteDatabase db = this.getReadableDatabase();
+        String consulta ="SELECT DNI FROM ENCUESTADOR WHERE ACTIVO=1";
+        Cursor a = db.rawQuery(consulta, null);
+        a.moveToFirst();
+        encuestador = a.getString(0);
+        return encuestador;
+    }
+
     public void DesactivarBotones(){
         SQLiteDatabase dbRead = this.getReadableDatabase();
         String cantidad = "SELECT DISTINCT * FROM BOTONES";

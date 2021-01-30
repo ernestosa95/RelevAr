@@ -10,6 +10,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,6 +30,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -52,6 +54,7 @@ import com.example.relevar.MySQL.ConexionSQLiteHelper;
 import com.example.relevar.MySQL.SQLitePpal;
 import com.example.relevar.Recursos.Encuestador;
 import com.example.relevar.Recursos.ServicioGPS;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.api.Response;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -70,6 +73,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,6 +103,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -128,7 +133,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     ListView lv1;
     // Inicio de toma de ubicacion
     EditText Nencuestador;
-    Button PararServicio;
     ImageButton BtnCompartir;
     // Creo al encuestador
     Encuestador encuestador = new Encuestador();
@@ -156,6 +160,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     ArrayList<ObjetoFamilia> datosFamilias = new ArrayList<>();
     ArrayList<ObjetoPersona> datosPersonas = new ArrayList<>();
     ArrayList<String> fechas_disponibles = new ArrayList<>();
+
+    FloatingActionButton ITrecorrido , Compartir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,20 +194,32 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         /* Creo y asigno tareas al boton para iniciar o terminar la toma de datos del recorrido por
         medio del GPS*/
-        PararServicio = (Button) findViewById(R.id.TERMINAR);
+       // PararServicio = (Button) findViewById(R.id.TERMINAR);
+
+        ITrecorrido = (FloatingActionButton) findViewById(R.id.recorrido);
+        ITrecorrido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TerminarRecorrido();
+            }
+        });
+
         boolean estado = isMyServiceRunning(ServicioGPS.class);
         if (estado == true) {
-            PararServicio.setText(getString(R.string.terminar_recorrido));
+         //   PararServicio.setText(getString(R.string.terminar_recorrido));
+            ITrecorrido.setTitle(getString(R.string.terminar_recorrido));
         } else {
-            PararServicio.setText(getString(R.string.iniciar_recorrido));
+            //PararServicio.setText(getString(R.string.iniciar_recorrido));
+            ITrecorrido.setTitle(getString(R.string.iniciar_recorrido));
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
 
         /* Creo y asigno funciones para compartir los arcivos .csv*/
         directorioraiz = "/storage/emulated/0/RelevAr";
-        BtnCompartir = findViewById(R.id.COMPARTIR);
-        BtnCompartir.setOnClickListener(new View.OnClickListener() {
+
+        Compartir = (FloatingActionButton) findViewById(R.id.compartir);
+        Compartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buscar(directorioraiz);
@@ -409,7 +427,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                     * cargar los datos de una familia*/
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     startService(intent);
-                    PararServicio.setText(getString(R.string.terminar_recorrido));
+                    //PararServicio.setText(getString(R.string.terminar_recorrido));
+                    ITrecorrido.setTitle(getString(R.string.terminar_recorrido));
                     dialog.dismiss();
 
                     Intent Modif = new Intent(getBaseContext(), Familia.class);
@@ -437,7 +456,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     // TERMINAR RECORRIDO
-    public void TerminarRecorrido(View view) {
+    public void TerminarRecorrido() {
 
         /* Consulto la situacion del gps*/
         boolean estado = isMyServiceRunning(ServicioGPS.class);
@@ -463,7 +482,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     stopService(intent);
-                    PararServicio.setText(getString(R.string.reiniciar_recorrido));
+                    ITrecorrido.setTitle(getString(R.string.reiniciar_recorrido));
                     dialog.dismiss();
                 }
             });
@@ -504,7 +523,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 public void onClick(View view) {
                     Intent intent = new Intent(getBaseContext(), ServicioGPS.class);
                     startService(intent);
-                    PararServicio.setText(getString(R.string.terminar_recorrido));
+                    //PararServicio.setText(getString(R.string.terminar_recorrido));
+                    ITrecorrido.setTitle(getString(R.string.terminar_recorrido));
                     dialog.dismiss();
                 }
             });
@@ -556,7 +576,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         LatLng posinicial = new LatLng(-34.891920, -63.719044);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(posinicial,3));
 
-        ImageButton centrar = findViewById(R.id.MIUBICACION);
+        //ImageButton centrar = findViewById(R.id.MIUBICACION);
+        FloatingActionButton centrar = (FloatingActionButton) findViewById(R.id.centrar);
         centrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1369,10 +1390,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     // Subir archivos a servidor
     public void probar(View view){
 
-        //Toast.makeText(getApplicationContext(),"aca", Toast.LENGTH_SHORT).show();
+        EnviarDatosServidor enviarDatosServidor = new EnviarDatosServidor();
+        enviarDatosServidor.execute();
 
-        //DatosEnviar();
-        GET_USER_ACCESS("http://192.168.1.5:8080/prueba/consultar_usuario.php?documento=","38770338");
     }
 
     // Listao de fechas de las cuales se tienen archivos
@@ -1403,6 +1423,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     //Recupero los datos de los .csv
     private void DatosEnviar(ArrayList<String> fechas){
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        String DNIencuestador = admin.ObtenerDniActivado();
+
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
         //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -1434,7 +1457,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("COORDENADAS", Datos[2]);
 
                 datosFamilias.get(datosFamilias.size()-1).Valores.put("FECHA_REGISTRO", fechas.get(j));
-                datosFamilias.get(datosFamilias.size()-1).Valores.put("DNI", "38770338");
+                datosFamilias.get(datosFamilias.size()-1).Valores.put("DNI", DNIencuestador);
 
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("MENORES", Datos[5]);
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("MAYORES", Datos[6]);
@@ -1482,16 +1505,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             DatosEnviarFamilia.add(datosFamilias.get(i).Valores);
         }
 
-
-        //Toast.makeText(this,Integer.toString(datosPersonas.size()), Toast.LENGTH_LONG).show();
-
-        POST_DATA("http://192.168.1.5:8080/prueba/cargar_datos.php", DatosEnviarPersona, DatosEnviarFamilia);
-        //for (int i=0; i<datosPersonas.size(); i++){
-            //POST_DATA_PERSONA("http://192.168.0.102:8080/prueba/cargar_datos_persona.php", datosPersonas.get(i).Valores);
-            //Toast.makeText(this, Integer.toString(i), Toast.LENGTH_SHORT).show();
-        //}
-
-        //Toast.makeText(this,Integer.toString(datosPersonas.size()), Toast.LENGTH_SHORT).show();
+        POST_DATA("http://192.168.0.102:8080/prueba/cargar_datos.php", DatosEnviarPersona, DatosEnviarFamilia);
 
         datosPersonas.clear();
         datosFamilias.clear();
@@ -1581,22 +1595,25 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                                             }
                                         }
                                     }
-                                    Toast.makeText(getBaseContext(), fechas_cargadas.get(0), Toast.LENGTH_LONG).show();
+                                //    Toast.makeText(getBaseContext(), fechas_cargadas.get(0), Toast.LENGTH_LONG).show();
                                 }catch (JSONException e){
                                     Toast.makeText(getBaseContext(), "no hay fechas", Toast.LENGTH_LONG).show();
                                 }
+
+                                // llamo para cargar los datos
+                                if(fechas_disponibles.size()!=0){
+                                    //Toast.makeText(getBaseContext(), Integer.toString(fec), Toast.LENGTH_LONG).show();
+                                    DatosEnviar(fechas_disponibles);}
+                                else{
+                                    Toast.makeText(getBaseContext(), "YA ESTA TODO ACTUALIZADO", Toast.LENGTH_LONG).show();
+                                }
+
                             }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getBaseContext(), "ERROR DE LECTURA", Toast.LENGTH_LONG).show();
-                        }
-
-                        // llamo para cargar los datos
-                        if(fechas_disponibles.size()!=0){
-                        DatosEnviar(fechas_disponibles);}
-                        else{
-                            Toast.makeText(getBaseContext(), "YA ESTA TODO ACTUALIZADO", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -1612,6 +1629,48 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         requestQueue.add(jsonObjectRequest);
     }
 
+    private class EnviarDatosServidor extends AsyncTask<Void, Void, Void> {
+
+        // Creo un progress dialog para mostrar mientras se ejecuta este codigo
+        ProgressDialog pd;
+
+        /*Antes de comenzar la ejecucion se inicia el progress dialog con los siguientes atributos*/
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(MenuMapa.this);
+            pd.setMessage("Enviando datos, aguarde");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        /* Este es el codigo que se ejecuta en segundo plano mientras el usuario ve un cartel de
+         * cargando datos*/
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            String DNIencuestador = admin.ObtenerDniActivado();
+            GET_USER_ACCESS("http://192.168.0.102:8080/prueba/consultar_usuario.php?documento=",DNIencuestador);
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        /* Despues de la ejecucion del codigo en segundo plano debo detener el alert que me indica
+         * que se estan cargando los datos*/
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (pd != null)
+            {
+                pd.dismiss();
+            }
+        }
+
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // Desactivo el boton de volver atras
