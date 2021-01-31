@@ -1333,8 +1333,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String msg = datosPersonas.get(0).datosEditar.get("DNI");
-                Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
+                //String msg = datosPersonas.get(0).datosEditar.get("DNI");
+                //Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
 
                 Intent Modif= new Intent (getBaseContext(), Familia.class);
                 Bundle bundle = new Bundle();

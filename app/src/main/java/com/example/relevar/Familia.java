@@ -208,7 +208,7 @@ public class Familia extends AppCompatActivity {
             }
             String msg = personasEdit.get(0).datosEditar.get("PLAN SOCIAL");
             //String msg = familiaedit.BañoTiene;
-            Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
             // IGUALO LOS VALORES QUE LLEGARON PARA SER EDITADOS
             familia = familiaedit;
             MiembrosFamiliares = personasEdit;
@@ -1630,7 +1630,7 @@ public class Familia extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // GUARDAR GRUPO FAMILIAR
-    public void Guardar(View view){
+    /*public void Guardar(View view){
 
         //final String CantidadGrupoFamiliar=grupofamiliar.getText().toString();
         // Inicio la obtencion de datos de ubicacion del GPS
@@ -1675,7 +1675,7 @@ public class Familia extends AppCompatActivity {
                         NumerosPersonas-=1;
                         cantidadintegrantes.setText(Integer.toString(NumerosPersonas));}
                     }
-                });*/
+                });
 
                 Button guardar = view_alert.findViewById(R.id.GUARDARFAMILIA);
                 guardar.setOnClickListener(new View.OnClickListener() {
@@ -1699,7 +1699,7 @@ public class Familia extends AppCompatActivity {
                             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
                         /*BufferedWriter writer = null;
                         writer = new BufferedWriter( new OutputStreamWriter(
-                                new FileOutputStream( dir ),"UTF-8"));*/
+                                new FileOutputStream( dir ),"UTF-8"));
                             String guardar = null;
                             for (int x = 0; x < MiembrosFamiliares.size(); x++) {
                                 guardar = calle.getText().toString() + ";" + numero.getText().toString() + ";" + Latitud +" "+ Longitud + ";" + Integer.toString(NumerosPersonas);
@@ -1731,7 +1731,7 @@ public class Familia extends AppCompatActivity {
                         else{makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();}
                 }});
     } else {makeText(getBaseContext(), "NO HAY PERSONAS CARGADAS", LENGTH_SHORT).show();}
-    }
+    }*/
 
     // Boton atras
     @Override
@@ -2181,7 +2181,7 @@ public class Familia extends AppCompatActivity {
 
     private void BorrarRegistroPorCoordenadas(String coordendas_borrar){
         // LEO TODOS LOS REGISTROS
-        ArrayList<ArrayList<String>> registros = new ArrayList<>();
+        ArrayList<String> registros = new ArrayList<String>();
 
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
@@ -2191,7 +2191,9 @@ public class Familia extends AppCompatActivity {
         String NombreArchivo = "RelevAr-" + fecha + ".csv";
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
-        String[] cabecera;
+        //int j=0;
+        //String msg="";
+        //String[] cabecera;
         try {
             FileInputStream fis = new FileInputStream(dir);
             DataInputStream in = new DataInputStream(fis);
@@ -2199,28 +2201,34 @@ public class Familia extends AppCompatActivity {
             //cabecera = br.readLine().split(";");
             String myData;
             while ((myData=br.readLine())!=null){
+
                 String[] Datos = myData.split(";");
-                if(!coordendas_borrar.equals(Datos[2])){
-                ArrayList<String> aux = new ArrayList<>();
-                for (int i=0; i<Datos.length;i++){
-                    aux.add(Datos[i]);
+                if(!coordendas_borrar.equals(Datos[2])) {
+                //    j++;
+                    //ArrayList<String> aux = new ArrayList<>();
+                //for (int i=0; i<Datos.length;i++){
+                //    aux.add(Datos[i]);
+
+                //}
+                registros.add(myData);
                 }
-                registros.add(aux);}
             }
-            Toast.makeText(this, registros.get(1).get(2), Toast.LENGTH_SHORT).show();
+            //msg=registros.get(1);
+            //Toast.makeText(this, Integer.toString(registros.size()), LENGTH_LONG).show();
+            //Toast.makeText(this, msg,LENGTH_LONG).show();
 
             br.close();
             in.close();
             fis.close();
         } catch (IOException e) {
-            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
         }
 
-        //dir.delete();
-        //guardar_registros(registros);
+        dir.delete();
+        guardar_registros(registros);
     }
 
-    private void guardar_registros(ArrayList<ArrayList<String>> Listado){
+    private void guardar_registros(ArrayList<String> Listado){
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -2237,9 +2245,7 @@ public class Familia extends AppCompatActivity {
 
             for (int i=0; i<Listado.size(); i++){
                 String aux = "";
-                for (int j=0; j<Listado.size(); j++){
-                    aux += Listado.get(i).get(j) +";";
-                }
+                aux += Listado.get(i);
                 aux+="\n";
                 myOutWriter.append(aux);
             }
