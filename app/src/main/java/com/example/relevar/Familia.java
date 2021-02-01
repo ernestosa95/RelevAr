@@ -2068,8 +2068,12 @@ public class Familia extends AppCompatActivity {
         nuevaCarpeta.mkdirs();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        String NombreArchivo = "";
+        if(fecha.length()!=0){
+            NombreArchivo = "RelevAr-" + fecha;
+        }else{
+            String fecha_aux = dateFormat.format(date1);
+            NombreArchivo = "RelevAr-" + fecha_aux + ".csv";}
         //File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
