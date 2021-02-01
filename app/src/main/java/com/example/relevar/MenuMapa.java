@@ -587,10 +587,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 Criteria criteria = new Criteria();
                 String provider = service.getBestProvider(criteria, false);
                 Location location = service.getLastKnownLocation(provider);
-                LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude());
-                if(userLocation.toString().length()!=0){
+                try{
+                    LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude());
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,17));}
-                else{
+                catch (Exception e) {
                     Toast.makeText(getBaseContext(), "AGUARDE, EL GPS SE ESTA LOCALIZANDO" , Toast.LENGTH_SHORT).show();
                 }
             }
