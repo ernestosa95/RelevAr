@@ -588,7 +588,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 String provider = service.getBestProvider(criteria, false);
                 Location location = service.getLastKnownLocation(provider);
                 LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude());
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,17));
+                if(userLocation.toString().length()!=0){
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,17));}
+                else{
+                    Toast.makeText(getBaseContext(), "AGUARDE, EL GPS SE ESTA LOCALIZANDO" , Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
