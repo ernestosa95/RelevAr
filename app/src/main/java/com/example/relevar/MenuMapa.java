@@ -1340,6 +1340,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("FAMILIA", datosFamilias.get(0));
                 Modif.putExtra("PERSONAS", datosPersonas);
+                Modif.putExtra("FECHA", fechas.getSelectedItem().toString());
                 Modif.putExtras(bundle);
                 startActivity(Modif);
                 dialog.dismiss();
@@ -1360,6 +1361,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date1 = new Date();
         String fecha = dateFormat.format(date1);
+        //fecha = fechas.getSelectedItem().toString();
         String NombreArchivo = "RelevAr-" + fechas.getSelectedItem().toString();//+ fecha + ".csv";
         File dir = new File(nuevaCarpeta, NombreArchivo);
 

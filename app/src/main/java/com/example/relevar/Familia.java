@@ -109,7 +109,7 @@ public class Familia extends AppCompatActivity {
     int cantMenores = 0;
     int cantMAyores = 0;
     String[] codigoColor = {""};
-    String calle="", numero="", numerocartografia="";
+    String calle="", numero="", numerocartografia="", fecha="";
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +194,10 @@ public class Familia extends AppCompatActivity {
         categoriasPersona.add(getString(R.string.enfermedad_cronica));
         categoriasPersona.add(getString(R.string.plan_social));
 
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //Date date1 = new Date();
+        //fecha = dateFormat.format(date1);
+
         // RECIBO LOS DATOS SI ES QUE SE ORIGINO EN UNA EDICION
         if(getIntent().getSerializableExtra("PERSONAS")!=null) {
             ObjetoFamilia familiaedit = new ObjetoFamilia(familiaCabecera);
@@ -203,12 +207,13 @@ public class Familia extends AppCompatActivity {
                 familiaedit.cargar_datos();
             }
             ArrayList<ObjetoPersona> personasEdit = (ArrayList<ObjetoPersona>) getIntent().getSerializableExtra("PERSONAS");
+            fecha = getIntent().getStringExtra("FECHA");
             for(int i=0;i<personasEdit.size(); i++){
                 personasEdit.get(i).cargar_datos();
             }
-            String msg = personasEdit.get(0).datosEditar.get("PLAN SOCIAL");
+            //String msg = personasEdit.get(0).datosEditar.get("PLAN SOCIAL");
             //String msg = familiaedit.BañoTiene;
-            //Toast.makeText(getBaseContext(), msg , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), fecha , Toast.LENGTH_SHORT).show();
             // IGUALO LOS VALORES QUE LLEGARON PARA SER EDITADOS
             familia = familiaedit;
             MiembrosFamiliares = personasEdit;
@@ -2099,8 +2104,12 @@ public class Familia extends AppCompatActivity {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        String NombreArchivo = "";
+        if(fecha.length()!=0){
+            NombreArchivo = "RelevAr-" + fecha;
+        }else{
+        String fecha_aux = dateFormat.format(date1);
+        NombreArchivo = "RelevAr-" + fecha_aux + ".csv";}
 
         File dir = new File(nuevaCarpeta, NombreArchivo);
         try {
@@ -2185,10 +2194,10 @@ public class Familia extends AppCompatActivity {
 
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //Date date1 = new Date();
+        //String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha;
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
         //int j=0;
@@ -2231,10 +2240,10 @@ public class Familia extends AppCompatActivity {
     private void guardar_registros(ArrayList<String> Listado){
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //Date date1 = new Date();
+        //String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha;
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
         try {
