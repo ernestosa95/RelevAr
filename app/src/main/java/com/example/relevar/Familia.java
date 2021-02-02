@@ -230,7 +230,6 @@ public class Familia extends AppCompatActivity {
     private void CrearBotonera(){
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
 
-        //
         BtnInspeccionExterior = (ConstraintLayout) findViewById(R.id.BTNEXTERIOR);
         CLExteriorVivienda = (ConstraintLayout) findViewById(R.id.AVANCEXTERIOR);
         avanceExteriorVivienda = (TextView) findViewById(R.id.COMPLETADOEXTERIOR);

@@ -412,12 +412,12 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             //Botones();
 
             // FIJO LOS BOTONES PARA EL PLAN DETECTAR
-            final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            /*final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
             admin.DesactivarBotones();
             admin.ActivarBoton("FACTORES DE RIESGO");
             admin.ActivarBoton("CONTACTO");
             admin.ActivarBoton("OBSERVACIONES");
-            admin.close();
+            admin.close();*/
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -511,12 +511,12 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             //Botones();
 
             // FIJO LOS BOTONES PARA EL PLAN DETECTAR
-            final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            /*final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
             admin.DesactivarBotones();
             admin.ActivarBoton("FACTORES DE RIESGO");
             admin.ActivarBoton("CONTACTO");
             admin.ActivarBoton("OBSERVACIONES");
-            admin.close();
+            admin.close();*/
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -853,7 +853,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 //--------------------------------------------------------------------------------------------------
     // Muestro la check list de los botones
 
-    private void Botones(){
+    public void Botones(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
         View view1 = Inflater.inflate(R.layout.alert_listado_botones, null);
@@ -868,9 +868,13 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.grupo_familiar));
 
         final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-        admin.DesactivarBotones();
+        //admin.DesactivarBotones();
 
         inspeccionExterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
+        if(admin.EstadoBoton("INSPECCION EXTERIOR")){
+            inspeccionExterior.setChecked(true);
+        }
+
         inspeccionExterior.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -884,6 +888,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         //inspeccionExterior.setVisibility(View.GONE);
 
         serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
+        if(admin.EstadoBoton("SERVICIOS BASICOS")){
+            serviciosBasicos.setChecked(true);
+        }
+
         serviciosBasicos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -897,6 +905,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         //serviciosBasicos.setVisibility(View.GONE);
 
         vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
+        if(admin.EstadoBoton("VIVIENDA")){
+            vivienda.setChecked(true);
+        }
+
         vivienda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -910,6 +922,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         //vivienda.setVisibility(View.GONE);
 
         dengue = view1.findViewById(R.id.SWITCHDENGUE);
+        if(admin.EstadoBoton("DENGUE")){
+            dengue.setChecked(true);
+        }
+
         dengue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -923,6 +939,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         //dengue.setVisibility(View.GONE);
 
         educacion = view1.findViewById(R.id.SWITCHEDUCACION);
+        if(admin.EstadoBoton("EDUCACION")){
+            educacion.setChecked(true);
+        }
+
         educacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -936,6 +956,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         educacion.setVisibility(View.GONE);
 
         ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
+        if(admin.EstadoBoton("INGRESO Y OCUPACION")){
+            ocupacion.setChecked(true);
+        }
+
         ocupacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -949,6 +973,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         ocupacion.setVisibility(View.GONE);
 
         contacto = view1.findViewById(R.id.SWITCHCONTACTO);
+        if(admin.EstadoBoton("CONTACTO")){
+            contacto.setChecked(true);
+        }
         contacto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -962,6 +989,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         contacto.setVisibility(View.GONE);
 
         efector = view1.findViewById(R.id.SWITCHEFECTOR);
+        if(admin.EstadoBoton("EFECTOR")){
+            efector.setChecked(true);
+        }
         efector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -975,6 +1005,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         efector.setVisibility(View.GONE);
 
         observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
+        if(admin.EstadoBoton("OBSERVACIONES")){
+            observaciones.setChecked(true);
+        }
+
         observaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -989,6 +1023,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         // ESTADO RIESGO
         factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
+        if(admin.EstadoBoton("FACTORES DE RIESGO")){
+            factores_riesgo.setChecked(true);
+        }
+
         factores_riesgo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1002,6 +1040,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         factores_riesgo.setVisibility(View.GONE);
 
         discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
+        if(admin.EstadoBoton("DISCAPACIDAD")){
+            discapacidad.setChecked(true);
+        }
+
         discapacidad.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1015,6 +1057,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         discapacidad.setVisibility(View.GONE);
 
         embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
+        if(admin.EstadoBoton("EMBARAZO")){
+            embarazo.setChecked(true);
+        }
         embarazo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1028,6 +1073,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         embarazo.setVisibility(View.GONE);
 
         vitamina_D = view1.findViewById(R.id.SWITCHVITAMINAD);
+        if(admin.EstadoBoton("VITAMINA D")){
+            vitamina_D.setChecked(true);
+        }
+
         vitamina_D.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1042,6 +1091,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         // ESTADO PSICO-SOCIAL
         acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
+        if(admin.EstadoBoton("ACOMPAÑAMIENTO")){
+            acompañamiento.setChecked(true);
+        }
+
         acompañamiento.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1055,6 +1108,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         acompañamiento.setVisibility(View.GONE);
 
         transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
+        if(admin.EstadoBoton("TRASTORNOS EN NIÑOS")){
+            transtornos_niños.setChecked(true);
+        }
+
         transtornos_niños.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1068,6 +1125,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         transtornos_niños.setVisibility(View.GONE);
 
         trastornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
+        if(admin.EstadoBoton("TRASTORNOS MENTALES")){
+            trastornos_mentales.setChecked(true);
+        }
+
         trastornos_mentales.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1081,6 +1142,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         trastornos_mentales.setVisibility(View.GONE);
 
         adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
+        if(admin.EstadoBoton("ADICCIONES")){
+            adicciones.setChecked(true);
+        }
+
         adicciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1094,6 +1159,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         adicciones.setVisibility(View.GONE);
 
         violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
+        if(admin.EstadoBoton("VIOLENCIA")){
+            violencia.setChecked(true);
+        }
+
         violencia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1107,6 +1176,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         violencia.setVisibility(View.GONE);
 
         ocio = view1.findViewById(R.id.SWITCHOCIO);
+        if(admin.EstadoBoton("OCIO")){
+            ocio.setChecked(true);
+        }
+
         ocio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1120,6 +1193,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         ocio.setVisibility(View.GONE);
 
         enfermedadescronicas = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
+        if(admin.EstadoBoton("ENFERMEDADES CRONICAS")){
+            enfermedadescronicas.setChecked(true);
+        }
+
         enfermedadescronicas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("WrongConstant")
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
