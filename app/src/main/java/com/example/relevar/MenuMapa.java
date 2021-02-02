@@ -1721,6 +1721,39 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    //Función para desplegar información de la app al clickear el logo de RelevAr
+    public void mostrarInfoGeneral (View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        TextView txt1 = view1.findViewById(R.id.CONSULTA);
+        txt1.setText("RelevAr - Versión 2.1 \n \n" +
+                "Acerca de RelevAr:\n" +
+                "La aplicación está destinada al relevamiento georreferenciado de información sociosanitaria. La misma le permitirá recolectar datos tanto de personas, como de las viviendas y su entorno. Usando RelevAr usted podrá personalizar los registros activando los módulos que desee, además de guardar, editar y compartir los datos relevados con su equipo de trabajo y al mismo tiempo mantenerlos almacenados y accesibles desde la misma aplicación para consultas.\n" +
+                "\n" +
+                "Por cualquier problema o consulta sobre la aplicación póngase en contacto con el equipo de RelevAr.\n \n" +
+                "Teléfonos de contacto\n" +
+                "+54 9 3455 53-4522 \n" +
+                "+54 9 3404 52-7870\n \n" +
+                "Argentina - 2021");
+        Button No= view1.findViewById(R.id.BTNNO);
+        No.setVisibility(View.INVISIBLE);
+        Button Si= view1.findViewById(R.id.BTNSI);
+        Si.setText("Volver");
+        Si.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
     // Desactivo el boton de volver atras
     @Override
     public void onBackPressed()
