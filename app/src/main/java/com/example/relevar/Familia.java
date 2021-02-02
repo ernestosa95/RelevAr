@@ -1067,9 +1067,13 @@ public class Familia extends AppCompatActivity {
 
         final RadioButton siHielo = view1.findViewById(R.id.SINIEVEHIELO);
         final RadioButton noHielo = view1.findViewById(R.id.NONIEVEHIELO);
+        if(familia.HieloCalle=="SI"){siHielo.setChecked(true);}
+        if(familia.HieloCalle=="NO"){noHielo.setChecked(true);}
 
         final RadioButton siPerros = view1.findViewById(R.id.SIPERROSSUELTOS);
         final RadioButton noPerros = view1.findViewById(R.id.NOPERROSSUELTOS);
+        if(familia.PerrosCalle=="SI"){siPerros.setChecked(true);}
+        if(familia.PerrosCalle=="NO"){noPerros.setChecked(true);}
 
         final Button guardar = view1.findViewById(R.id.GUARDAREXTERIOR);
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -2038,8 +2042,12 @@ public class Familia extends AppCompatActivity {
          * la fecha actual al dispositivo, si este no existe se debe crear*/
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        String NombreArchivo = "";
+        if(fecha.length()!=0){
+            NombreArchivo = "RelevAr-" + fecha;
+        }else{
+            String fecha_aux = dateFormat.format(date1);
+            NombreArchivo = "RelevAr-" + fecha_aux + ".csv";}
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
         /* Una vez tenemos el archivo dir con la ruta correcta, necesitamos leer los datos conenidos
