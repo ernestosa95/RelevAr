@@ -1370,7 +1370,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         File dir = new File(nuevaCarpeta, NombreArchivo);
 
         String[] cabecera;
-        String datosFamilia="";
+        String datosFamilia_string="";
         try {
             FileInputStream fis = new FileInputStream(dir);
             DataInputStream in = new DataInputStream(fis);
@@ -1378,6 +1378,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             cabecera = br.readLine().split(";");
             String myData;
             while ((myData=br.readLine())!=null){
+                datosFamilia_string="";
                 String[] Datos = myData.split(";");
                 String datosMostrar = "";
                 if(Datos[2].equals(coordenadas)){
@@ -1396,7 +1397,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         }
                         for (int k=0; k < familiaCabecera.size(); k++){
                             if (cabecera[i].equals(familiaCabecera.get(k))){
-                                datosFamilia += familiaCabecera.get(k)+": "+ Datos[i]+ "\n";
+                                datosFamilia_string += familiaCabecera.get(k)+": "+ Datos[i]+ "\n";
                                 //Toast.makeText(this, Datos[i], Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -1426,7 +1427,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         //Toast.makeText(this, datosFamilia, Toast.LENGTH_SHORT).show();
-        return datosFamilia;
+        return datosFamilia_string;
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

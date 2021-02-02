@@ -20,6 +20,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import static com.example.relevar.R.drawable.abc_ic_menu_copy_mtrl_am_alpha;
 import static com.example.relevar.R.drawable.cuadrado_verde;
 
@@ -29,13 +31,14 @@ public class Dengue extends AppCompatActivity {
             layout_canaleta, layout_cubierta, layout_pileta, layout_tanquesbajos;
 
     int inspeccionadosTotal=0, tratadosTotal=0, focoaedicoTotal=0;
-    ObjetoFamilia datosDengue = new ObjetoFamilia(null);
+    ObjetoFamilia datosDengue;
 
     CheckBox Inspeccion, Tratamientos, Fumigacion, sinIntervencion, cerrada;
     CheckBox BTI, temephos, metoprene;
     EditText destruidos;
     RadioButton siLarvicida, noLarvicida;
     EditText edtOtroLArvicida;
+    ArrayList<String> familiaCabecera = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +48,36 @@ public class Dengue extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Dengue");
 
+        // Lleno y paso el array de la cabecera
+        familiaCabecera.add(getString(R.string.tipo_de_vivienda));
+        familiaCabecera.add(getString(R.string.dueño_vivienda));
+        familiaCabecera.add(getString(R.string.cantidad_piezas));
+        familiaCabecera.add(getString(R.string.lugar_cocinar));
+        familiaCabecera.add(getString(R.string.usa_para_cocinar));
+        familiaCabecera.add(getString(R.string.paredes));
+        familiaCabecera.add(getString(R.string.revestimiento));
+        familiaCabecera.add(getString(R.string.pisos));
+        familiaCabecera.add(getString(R.string.cielorraso));
+        familiaCabecera.add(getString(R.string.techo));
+        familiaCabecera.add(getString(R.string.agua));
+        familiaCabecera.add(getString(R.string.origenagua));
+        familiaCabecera.add(getString(R.string.excretas));
+        familiaCabecera.add(getString(R.string.electricidad));
+        familiaCabecera.add(getString(R.string.gas));
+        familiaCabecera.add(getString(R.string.agua_lluvia));
+        familiaCabecera.add(getString(R.string.arboles));
+        familiaCabecera.add(getString(R.string.baño));
+        familiaCabecera.add(getString(R.string.baño_tiene));
+        familiaCabecera.add(getString(R.string.hielo));
+        familiaCabecera.add(getString(R.string.perros_sueltos));
+        familiaCabecera.add(getString(R.string.telefono_familiar));
+        datosDengue =new ObjetoFamilia(familiaCabecera);
+
         if(getIntent().getExtras()!=null){
             Bundle bundle = getIntent().getExtras();
             if(bundle!=null){
                 datosDengue = (ObjetoFamilia) bundle.getSerializable("DATOSDENGUE");
         }}
-
-
 
         layout_desuso = findViewById(R.id.ELEMENTOENDESUSO);
         if(!datosDengue.ElementosDesuso.equals("0;0;0")){
