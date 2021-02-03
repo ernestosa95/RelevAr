@@ -162,6 +162,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     FloatingActionButton ITrecorrido , Compartir;
 
+    String direccion = "http://relevar.ddns.net:1492";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1511,9 +1513,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     // Subir archivos a servidor
     public void probar(View view){
 
-        EnviarDatosServidor enviarDatosServidor = new EnviarDatosServidor();
-        enviarDatosServidor.execute();
-
+        //EnviarDatosServidor enviarDatosServidor = new EnviarDatosServidor();
+        //enviarDatosServidor.execute();
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        String DNIencuestador = admin.ObtenerDniActivado();
+        GET_USER_ACCESS(direccion+"/prueba/consultar_usuario.php?documento=",DNIencuestador);
     }
 
     // Listao de fechas de las cuales se tienen archivos
@@ -1630,7 +1634,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             DatosEnviarFamilia.add(datosFamilias.get(i).Valores);
         }
 
-        POST_DATA("http://192.168.0.102:8080/prueba/cargar_datos.php", DatosEnviarPersona, DatosEnviarFamilia);
+        //POST_DATA("http://192.168.0.102:8080/prueba/cargar_datos.php", DatosEnviarPersona, DatosEnviarFamilia);
+        POST_DATA(direccion+"/prueba/cargar_datos.php", DatosEnviarPersona, DatosEnviarFamilia);
 
         datosPersonas.clear();
         datosFamilias.clear();
@@ -1701,6 +1706,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject usuario = response.getJSONObject("usuario");
+                            //Toast.makeText(getBaseContext(), usuario.toString(), Toast.LENGTH_LONG).show();
                             if(usuario.getString("NOMBRE").equals("NO REGISTRA")){
                                 Toast.makeText(getBaseContext(), "SU USUARIO NO ESTA HABILITADO PARA CARGAR DATOS\nCONTACTESE CON LOS DESARROLLADORES", Toast.LENGTH_LONG).show();
                             }else{
@@ -1720,7 +1726,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                                             }
                                         }
                                     }
-                                //    Toast.makeText(getBaseContext(), fechas_cargadas.get(0), Toast.LENGTH_LONG).show();
                                 }catch (JSONException e){
                                     Toast.makeText(getBaseContext(), "no hay fechas", Toast.LENGTH_LONG).show();
                                 }
@@ -1737,7 +1742,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
                             Toast.makeText(getBaseContext(), "ERROR DE LECTURA", Toast.LENGTH_LONG).show();
                         }
 
@@ -1775,11 +1780,12 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         protected Void doInBackground(Void... voids) {
             SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
             String DNIencuestador = admin.ObtenerDniActivado();
-            GET_USER_ACCESS("http://192.168.0.102:8080/prueba/consultar_usuario.php?documento=",DNIencuestador);
+            //GET_USER_ACCESS("http://192.168.0.102:8080/prueba/consultar_usuario.php?documento=",DNIencuestador);
+            GET_USER_ACCESS(direccion+"/prueba/consultar_usuario.php?documento=",DNIencuestador);
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Toast.makeText(getBaseContext(), "aca", Toast.LENGTH_LONG).show();
             }
             return null;
         }
