@@ -617,7 +617,7 @@ public class Familia extends AppCompatActivity {
                 names.add("DNI: "+Persona.DNI+", "+Persona.Apellido+" "+Persona.Nombre);}
 
             if(resultCode == 3){
-                ObjetoFamilia aux = new ObjetoFamilia(null);
+                ObjetoFamilia aux = new ObjetoFamilia(familiaCabecera);
                 Bundle bundle = data.getExtras();
                 if(bundle!=null){
                     aux = (ObjetoFamilia) bundle.getSerializable("DENGUE");
