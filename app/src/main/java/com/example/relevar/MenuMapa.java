@@ -163,6 +163,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     FloatingActionButton ITrecorrido , Compartir;
 
     String direccion = "http://relevar.ddns.net:1492";
+    //String direccion = "http://192.168.0.102:1492";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1600,7 +1601,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         if (!Datos[i].equals("")){
                             String aux=cabecera[i].replace(" ", "_");
                             aux=aux.replace("/","_");
-                            datosPersonas.get(datosPersonas.size()-1).Valores.put(aux, Datos[i]);
+                            datosFamilias.get(datosFamilias.size()-1).Valores.put(aux, Datos[i]);
                         }
                     }
                     if (EsDePersona(cabecera[i])){
@@ -1615,7 +1616,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
 
-            //Toast.makeText(this, datosPersonas.get(0).Valores.get("COORDENADAS")+datosPersonas.get(1).Valores.get("COORDENADAS"), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, datosPersonas.get(0).Valores.get("ENFERMEDAD ASOCIADA AL EMBARAZO"), Toast.LENGTH_LONG).show();
 
             br.close();
             in.close();
@@ -1688,6 +1689,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 String personas = new Gson().toJson(enviarPersonas);
                 params.put("persona", personas);
                 String familias = new Gson().toJson(enviarFamiliares);
+                //Toast.makeText(getBaseContext(), familias, Toast.LENGTH_SHORT).show();
                 params.put("familia", familias);
                 return params;
             }
