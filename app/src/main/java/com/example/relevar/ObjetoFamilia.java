@@ -83,7 +83,7 @@ public class ObjetoFamilia implements Serializable {
         DatosEnviar.add("CANTIDAD_DE_PIEZAS");
         DatosEnviar.add("LUGAR_PARA_COCINAR");
         DatosEnviar.add("USA_PARA_COCINAR");
-        DatosEnviar.add("MATERIAL_PREDOMINANTE_EN_LAS_PAREDES");
+        DatosEnviar.add("MATERIAL_PREDOMINANTE_EN_LAS_PAREDES_EXTERIORES");
         DatosEnviar.add("REVESTIMIENTO_EXTERNO_O_REVOQUE");
         DatosEnviar.add("MATERIAL_DE_LOS_PISOS");
         DatosEnviar.add("CIELORRASO");
@@ -99,6 +99,8 @@ public class ObjetoFamilia implements Serializable {
         DatosEnviar.add("EL_BAÑO_TIENE");
         DatosEnviar.add("NIEVE_Y_O_HIELO_EN_LA_CALLE");
         DatosEnviar.add("PERROS_SUELTOS");
+        DatosEnviar.add("MENORES");
+        DatosEnviar.add("MAYORES");
 
         for (int i=0; i<DatosEnviar.size(); i++){
             Valores.put(DatosEnviar.get(i),"");

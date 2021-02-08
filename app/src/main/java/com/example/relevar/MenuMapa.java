@@ -1589,8 +1589,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 datosFamilias.get(datosFamilias.size()-1).Valores.put("FECHA_REGISTRO", fechas.get(j));
                 datosFamilias.get(datosFamilias.size()-1).Valores.put("DNI", DNIencuestador);
 
-                datosPersonas.get(datosPersonas.size()-1).Valores.put("MENORES", Datos[5]);
-                datosPersonas.get(datosPersonas.size()-1).Valores.put("MAYORES", Datos[6]);
+                datosFamilias.get(datosFamilias.size()-1).Valores.put("MENORES", Datos[5]);
+                datosFamilias.get(datosFamilias.size()-1).Valores.put("MAYORES", Datos[6]);
 
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("EDAD", Datos[10]);
                 datosPersonas.get(datosPersonas.size()-1).Valores.put("SEXO", Datos[11]);
@@ -1601,6 +1601,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                         if (!Datos[i].equals("")){
                             String aux=cabecera[i].replace(" ", "_");
                             aux=aux.replace("/","_");
+                            aux=aux.replace("...","");
                             datosFamilias.get(datosFamilias.size()-1).Valores.put(aux, Datos[i]);
                         }
                     }
@@ -1646,6 +1647,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     private boolean EsDeFamilia(String valor){
         valor=valor.replace(" ", "_");
         valor=valor.replace("/","");
+        valor=valor.replace("...","");
         boolean devolver = false;
         ObjetoFamilia aux = new ObjetoFamilia(familiaCabecera);
         for(int i=0; i<aux.DatosEnviar.size();i++){
