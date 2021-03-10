@@ -2228,8 +2228,9 @@ public class Persona extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RadioButton selec = vitamina.findViewById(vitamina.getCheckedRadioButtonId());
+                if(selec!=null){
                 String seleccionado = selec.getText().toString();
-                Persona.Vitamina = seleccionado;
+                Persona.Vitamina = seleccionado;}
                 //Toast.makeText(getApplicationContext(), seleccionado, Toast.LENGTH_SHORT).show();
                 ColorAvanceVitamina();
                 dialog.dismiss();
@@ -2427,8 +2428,9 @@ public class Persona extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RadioButton selec = discapacidad.findViewById(discapacidad.getCheckedRadioButtonId());
+                if(selec!=null){
                 String seleccionado = selec.getText().toString();
-                Persona.CertificadoDiscapacidad = seleccionado;
+                Persona.CertificadoDiscapacidad = seleccionado;}
 
                 String discapacidad = null;
                 if (defFisicaMotor.isChecked()){

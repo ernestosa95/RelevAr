@@ -222,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="@string/gas"
+                    android:text="GAS DE RED"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

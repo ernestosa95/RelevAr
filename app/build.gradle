@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.relevar"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName '2.1'

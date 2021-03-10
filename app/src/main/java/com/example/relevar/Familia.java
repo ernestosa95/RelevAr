@@ -225,6 +225,7 @@ public class Familia extends AppCompatActivity {
             ColorAvanceServiciosBasicos();
             ColorAvanceVivienda();
         }
+
     }
 
     private void CrearBotonera(){
@@ -452,12 +453,70 @@ public class Familia extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // AGREGAR, EDITAR O ELIMINAR UNA PERSONA Y VISUALIZARLAS
     public void NuevaPersona(View view){
-        RadioButton deshabitada = findViewById(R.id.CHECKDESHABITADA);
+        final RadioButton deshabitada = findViewById(R.id.CHECKDESHABITADA);
+        final RadioButton renuente = findViewById(R.id.CHECKRENUENTE);
         if(!deshabitada.isChecked()){
+            if(!renuente.isChecked()){
         Intent Modif= new Intent (this, Persona.class);
         startActivityForResult(Modif, 1);}
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                LayoutInflater Inflater = getLayoutInflater();
+                final View view_alert = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
+                builder.setView(view_alert);
+                builder.setCancelable(false);
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                final TextView msg = view_alert.findViewById(R.id.CONSULTA);
+                msg.setText("NO SE PUEDE CARGAR UNA PERSONA SI\nESTA SELECCIONADO RENUENTE\n¿DESEA BORRAR LA SELECCION?");
+
+                final Button SI = view_alert.findViewById(R.id.BTNSI);
+                SI.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        renuente.setChecked(false);
+                        dialog.dismiss();
+                    }
+                });
+
+                final Button NO = view_alert.findViewById(R.id.BTNNO);
+                NO.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        }
         else{
-            Toast.makeText(this, "SI LA VIVIENDA ESTA DESHABITADA NO SE PUEDEN AGREGAR PERSONAS", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater Inflater = getLayoutInflater();
+            final View view_alert = Inflater.inflate(R.layout.alert_iniciar_terminar_recorrido, null);
+            builder.setView(view_alert);
+            builder.setCancelable(false);
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            final TextView msg = view_alert.findViewById(R.id.CONSULTA);
+            msg.setText("NO SE PUEDE CARGAR UNA PERSONA SI\nESTA SELECCIONADO DESHABITADA\n¿DESEA BORRAR LA SELECCION?");
+
+            final Button SI = view_alert.findViewById(R.id.BTNSI);
+            SI.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deshabitada.setChecked(false);
+                    dialog.dismiss();
+                }
+            });
+
+            final Button NO = view_alert.findViewById(R.id.BTNNO);
+            NO.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
         }
     }
 
@@ -740,18 +799,18 @@ public class Familia extends AppCompatActivity {
 
         final RadioButton SiElectricidad = view1.findViewById(R.id.SIELECTRICIDAD);
         final RadioButton NoElectricidad = view1.findViewById(R.id.NOELECTRICIDAD);
-        if(familia.Electricidad=="SI"){SiElectricidad.setChecked(true);}
-        if(familia.Electricidad=="NO"){NoElectricidad.setChecked(true);}
+        if(familia.Electricidad.equals("SI")){SiElectricidad.setChecked(true);}
+        if(familia.Electricidad.equals("NO")){NoElectricidad.setChecked(true);}
 
         final RadioButton SiGas = view1.findViewById(R.id.SIGAS);
         final RadioButton NoGas = view1.findViewById(R.id.NOGAS);
-        if(familia.Gas=="SI"){SiGas.setChecked(true);}
-        if(familia.Gas=="NO"){NoGas.setChecked(true);}
+        if(familia.Gas.equals("SI")){SiGas.setChecked(true);}
+        if(familia.Gas.equals("NO")){NoGas.setChecked(true);}
 
         final RadioButton SiAguaLluvia = view1.findViewById(R.id.SIAGUALLUVIA);
         final RadioButton NoAguaLluvia = view1.findViewById(R.id.NOAGUALLUVIA);
-        if(familia.AguaLluvia=="SI"){SiAguaLluvia.setChecked(true);}
-        if(familia.AguaLluvia=="NO"){NoAguaLluvia.setChecked(true);}
+        if(familia.AguaLluvia.equals("SI")){SiAguaLluvia.setChecked(true);}
+        if(familia.AguaLluvia.equals("NO")){NoAguaLluvia.setChecked(true);}
 
         final Button guardar = view1.findViewById(R.id.GUARDARSERVICIOBASICOS);
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -1763,10 +1822,10 @@ public class Familia extends AppCompatActivity {
         RadioButton renuente = findViewById(R.id.CHECKRENUENTE);
 
         if(deshabitada.isChecked()){
-            MiembrosFamiliares.add(new ObjetoPersona(null));
+            MiembrosFamiliares.add(new ObjetoPersona(categoriasPersona));
         }
         if(renuente.isChecked()){
-            ObjetoPersona aux = new ObjetoPersona(null);
+            ObjetoPersona aux = new ObjetoPersona(categoriasPersona);
             aux.setInfoPersonal("RENUENTE","","");
             MiembrosFamiliares.add(aux);
         }
