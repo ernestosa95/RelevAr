@@ -29,6 +29,7 @@ public class ObjetoPersona implements Serializable {
     public String Apellido;
     public String DNI;
     public String Sexo;
+    public String QR;
     public String Celular;
     public String Fijo;
     public String Mail;
@@ -87,6 +88,7 @@ public class ObjetoPersona implements Serializable {
         Nombre="";
         Sexo="";
         Apellido="";
+        QR="";
         Celular="";
         Fijo="";
         Mail="";
@@ -425,6 +427,7 @@ public class ObjetoPersona implements Serializable {
         datosIngresados.put("APELLIDO", Apellido);
         datosIngresados.put("FECHA DE NACIMIENTO", Nacimiento);
         datosIngresados.put("SEXO", Sexo);
+        datosIngresados.put("QR", QR);
 
         return datosIngresados;
     }

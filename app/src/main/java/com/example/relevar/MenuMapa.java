@@ -370,6 +370,13 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             dialog.dismiss();
         }
     });
+    final Button EnviarGNU = view1.findViewById(R.id.enviarGNU);
+    EnviarGNU.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            CrearUnificado();
+        }
+    });
 }
 
     // FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
@@ -412,15 +419,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
             TextView txt1 = view1.findViewById(R.id.CONSULTA);
             txt1.setText("¿Iniciar recorrido?");
-            //Botones();
-
-            // FIJO LOS BOTONES PARA EL PLAN DETECTAR
-            /*final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-            admin.DesactivarBotones();
-            admin.ActivarBoton("FACTORES DE RIESGO");
-            admin.ActivarBoton("CONTACTO");
-            admin.ActivarBoton("OBSERVACIONES");
-            admin.close();*/
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -459,6 +457,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // RECORRIDO
     // TERMINAR RECORRIDO
     public void TerminarRecorrido() {
 
@@ -511,15 +512,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
             TextView txt1 = view1.findViewById(R.id.CONSULTA);
             txt1.setText("¿Iniciar recorrido?");
-            //Botones();
-
-            // FIJO LOS BOTONES PARA EL PLAN DETECTAR
-            /*final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-            admin.DesactivarBotones();
-            admin.ActivarBoton("FACTORES DE RIESGO");
-            admin.ActivarBoton("CONTACTO");
-            admin.ActivarBoton("OBSERVACIONES");
-            admin.close();*/
 
             Button si = view1.findViewById(R.id.BTNSI);
             si.setOnClickListener(new View.OnClickListener() {
@@ -554,22 +546,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         return false;
     }
 
-    /*// FUNCION QUE ESPERA EL RESULTADO DE LOS SERVICIOS DE GPS
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Bundle bundle = data.getParcelableExtra("bundle");
-                LatLng position = bundle.getParcelable("from_position");
-                latlngs.add(position);
-            }
-        }
-    }*/
-
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-
-    // PARA EL MAPA
+    // MAPA
     @Override
     public void onMapReady(final GoogleMap map) {
 
@@ -580,7 +559,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         LatLng posinicial = new LatLng(-34.891920, -63.719044);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(posinicial,3));
 
-        //ImageButton centrar = findViewById(R.id.MIUBICACION);
+        // Funcion que le da al boton centrar la funcionalidad
         FloatingActionButton centrar = (FloatingActionButton) findViewById(R.id.centrar);
         centrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -599,6 +578,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        // funcionalidad de los ioconos de marcado para que cuando se los toca se centre el mapa sobre
+        // ellos y se despliegue la ventana secundaria de informacion
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -612,6 +593,9 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
+        // Este handler (lo que hace es ejecutar cada cierto tiempo el codigo que tiene adentro),
+        // borra y vuelve a dibujar los marcadores para mantener actualizado el mapa, cada vez que
+        // se carga una nueva familia
         final Handler handlerMarker = new Handler();
         handlerMarker.postDelayed(new Runnable() {
             @Override
@@ -652,60 +636,17 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         }, 0);
 
-        /*final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                //LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(mMessageReceiver, new IntentFilter("recorridos"));
-                //map.clear();
-                ruta = map.addPolyline(new PolylineOptions()
-                        .clickable(true).color(Color.parseColor("#69A4D1")));
-                int ultimo = recorrido.size();
-                if(ultimo!=0){
-                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(recorrido.get(ultimo-1),17));
-                ruta.setPoints(recorrido);
-
-                /*if (encuestador.Marcadores(fechas.getSelectedItem().toString()).size()!=0){
-                    ArrayList<LatLng> marcadores = encuestador.Marcadores(fechas.getSelectedItem().toString());
-                    ArrayList<String> codigoColores = encuestador.CodigoColores(fechas.getSelectedItem().toString());
-                    for(int i=0; i<encuestador.Marcadores(fechas.getSelectedItem().toString()).size(); i++){
-
-                        MarkerOptions mo1 = new MarkerOptions();
-                        mo1.position(marcadores.get(i));
-                        mo1.title("REGISTRO "+Integer.toString(i+1));
-                        //mo1.icon(BitmapDescriptorFactory.fromResource(getBitmap(R.id)));
-                        Bitmap drawableBitmap = null;
-                        if(codigoColores.get(i).equals("R")){
-                        drawableBitmap = getBitmap(R.drawable.icono_mapa_rojo);}
-                        if(codigoColores.get(i).equals("A")){
-                            drawableBitmap = getBitmap(R.drawable.icono_mapa_amarilla);}
-                        if(codigoColores.get(i).equals("V")){
-                            drawableBitmap = getBitmap(R.drawable.icono_mapa_verde);}
-                        mo1.icon(BitmapDescriptorFactory.fromBitmap(drawableBitmap));
-                        map.addMarker(mo1);
-
-                    }
-                }}
-
-                handler.postDelayed(this, 15000);
-            }
-
-        }, 0);*/
     }
 
     /* Transformo los xml de los iconos en un bitmap para que puedan ser graficados */
     private Bitmap getBitmap(int drawableRes){
         Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();
-        //Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Bitmap bitmap = Bitmap.createBitmap( (int)getResources().getDimension(R.dimen.ancho_map), (int)getResources().getDimension(R.dimen.alto_map), Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bitmap);
-        //drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         drawable.setBounds(0, 0, (int)getResources().getDimension(R.dimen.alto_icono),
                 (int)getResources().getDimension(R.dimen.ancho_icono));
-
         drawable.draw(canvas);
-
         return bitmap;
     }
 
@@ -750,7 +691,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
-
+    /*
     // FUNCION DE ENCUESTADORES, muestra los encuestadores cargados y la posibilidad de crear un
     // nuevo encuestador
     private void Encuestador(){
@@ -850,11 +791,11 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(selectedUri, "application/*");
         startActivity(Intent.createChooser(intent, "Open folder"));
-    }
+    }*/
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // Muestro la check list de los botones
+    // MENU DE ACTIVACION DE BOTONES
 
     public void Botones(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1336,7 +1277,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // Comparar mapas
+    // NAVEGACION DE ARCHIVOS
+    // Obtener listado de archivos disponibles
     private ArrayList<String> FechasArchivos (){
         /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
          * RelevAr*/
@@ -1369,6 +1311,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
      return listaFechasArchivos;
     }
 
+    // Asigno la informacion a los diferentes widgets
     private void InfoFamilia(String coordenadas){
         AlertDialog.Builder builder = new AlertDialog.Builder(MenuMapa.this);
         LayoutInflater Inflater = getLayoutInflater();
@@ -1405,8 +1348,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 dialog.dismiss();
             }
         });
@@ -1432,6 +1373,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
+    // Busco la info de la familia con las coordenadas
     private String LeerInfo(String coordenadas){
         MiembrosFamiliares.clear();
         DatosMiembrosFamiliares.clear();
@@ -1511,6 +1453,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    // CENTRALIZACION
     // Subir archivos a servidor
     public void probar(View view){
 
@@ -1558,9 +1501,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
-        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        //Date date1 = new Date();
-        //String fecha = dateFormat.format(date1);
 
         for (int j=0; j<fechas.size();j++){
         String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
@@ -1808,6 +1748,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+    // INFORMACION
     //Función para desplegar información de la app al clickear el logo de RelevAr
     public void mostrarInfoGeneral (View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1838,6 +1779,92 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 dialog.dismiss();
             }
         });
+    }
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    private void CrearUnificado(){
+
+        ArrayList<String> fechas = ListadoFechas();
+
+        datosPersonas.clear();
+        datosFamilias.clear();
+
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        String DNIencuestador = admin.ObtenerDniActivado();
+
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        for (int j=0; j<fechas.size();j++){
+            String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
+            File dir = new File(nuevaCarpeta, NombreArchivo);
+            String[] cabecera;
+            String datosFamilia="";
+            try {
+                FileInputStream fis = new FileInputStream(dir);
+                DataInputStream in = new DataInputStream(fis);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+                //
+                cabecera = br.readLine().split(";");
+
+                String myData;
+                while ((myData=br.readLine())!=null){
+
+                    String[] Datos = myData.split(";");
+
+                    datosPersonas.add(new ObjetoPersona(categoriasPersona));
+                    datosFamilias.add(new ObjetoFamilia(familiaCabecera));
+
+                    datosFamilias.get(datosFamilias.size()-1).Valores.put("COORDENADAS", Datos[2]);
+                    datosPersonas.get(datosPersonas.size()-1).Valores.put("COORDENADAS", Datos[2]);
+
+                    datosFamilias.get(datosFamilias.size()-1).Valores.put("FECHA_REGISTRO", fechas.get(j));
+                    datosFamilias.get(datosFamilias.size()-1).Valores.put("DNI", DNIencuestador);
+
+                    datosFamilias.get(datosFamilias.size()-1).Valores.put("MENORES", Datos[5]);
+                    datosFamilias.get(datosFamilias.size()-1).Valores.put("MAYORES", Datos[6]);
+
+                    datosPersonas.get(datosPersonas.size()-1).Valores.put("EDAD", Datos[10]);
+                    datosPersonas.get(datosPersonas.size()-1).Valores.put("SEXO", Datos[11]);
+                    //Toast.makeText(this,datosPersonas.get(0).Valores.get("EDAD"), Toast.LENGTH_LONG).show();
+
+                    if(Datos.length>12){
+                        for (int i=13; i<Datos.length;i++){
+                            if (EsDeFamilia(cabecera[i])){
+                                if (!Datos[i].equals("")){
+                                    String aux=cabecera[i].replace(" ", "_");
+                                    aux=aux.replace("/","_");
+                                    aux=aux.replace("...","");
+                                    datosFamilias.get(datosFamilias.size()-1).Valores.put(aux, Datos[i]);
+                                }
+                            }
+                            if (EsDePersona(cabecera[i])){
+                                if (!Datos[i].equals("")){
+                                    String aux=cabecera[i].replace(" ", "_");
+                                    aux=aux.replace("¿","");
+                                    aux=aux.replace("?","");
+                                    datosPersonas.get(datosPersonas.size()-1).Valores.put(aux, Datos[i]);
+                                }
+                            }
+                        }
+                    // Datos completa de una persona
+                    // Agregar al archivo unificado los datos necesarios, es necesario ya tenerlo abierto
+                    // y con la cabecera que va a ser fija
+                    }
+                }
+
+                br.close();
+                in.close();
+                fis.close();
+            } catch (IOException e) {
+                //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        //HASTA ACA LEI TODOS LOS DATOS DE UN ARCHIVO
+
+        }
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------

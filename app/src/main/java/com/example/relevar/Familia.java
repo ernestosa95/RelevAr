@@ -1958,17 +1958,7 @@ public class Familia extends AppCompatActivity {
                             BorrarRegistroPorCoordenadas(coordenadas);
                         }else {
                             coordenadas = Latitud + " " + Longitud;}
-                        /*NumerosPersonas = Integer.parseInt(cantidadintegrantes.getText().toString());
-                        int cantMenores = 0;
-                        int cantMAyores = 0;
-                        if(menores.getText().toString().length()!=0) {
-                            cantMenores = Integer.parseInt(menores.getText().toString());
-                        }
-                        if(mayores.getText().toString().length()!=0){
-                            cantMAyores = Integer.parseInt(mayores.getText().toString());
-                        }*/
 
-                        //if((cantMAyores+cantMenores)==NumerosPersonas || (cantMAyores+cantMenores)==0) {
                         /* Cuales son los datos que cargo el usuario, primero agrego los datos de la
                          familia y luego unifico los datos de las personas cargadas */
                             ArrayList<String> CategoriasDatos = familia.DatosCargadosCsv();
@@ -2008,7 +1998,6 @@ public class Familia extends AppCompatActivity {
                                 cabecera += datosCabeceraCsv.get(i) + ";";
                             }
                             cabecera += datosCabeceraCsv.get(datosCabeceraCsv.size() - 1);
-                            //cabecera +="\n";
 
                             // Creo el string de la vieja cabecera
                             String viejaCabecera = "";
@@ -2017,7 +2006,6 @@ public class Familia extends AppCompatActivity {
                                 viejaCabecera += CategoriaPersonas.get(i) + ";";
                             }
                             viejaCabecera += CategoriaPersonas.get(CategoriaPersonas.size() - 1);
-                            //viejaCabecera +="\n";
 
                             // Reemplazo la cabecera por una nueva
                             try {
@@ -2027,9 +2015,6 @@ public class Familia extends AppCompatActivity {
                             }
 
                             /* Solicito los datos cargados tanto en la persona como en la familia*/
-                            /*String calle = edtCalle.getText().toString();
-                            String numero = edtNumero.getText().toString();
-                            String numerocartografia = edtnumerocartografia.getText().toString();*/
                             HashMap<String, String> datosFamilia = familia.DatosIngresados();
                             for (int i = 0; i < MiembrosFamiliares.size(); i++) {
                                 String datosGuardar = "";
@@ -2066,17 +2051,6 @@ public class Familia extends AppCompatActivity {
                                 GuardarDengue(calle, numero, Integer.toString(NumerosPersonas), MiembrosFamiliares.get(0));
                             }
 
-                            // ENVIO LA UBICACION PARA AGREGAR UN MARCADOR
-                            /*Intent intent = new Intent(getBaseContext(), MenuMapa.class);
-                            LatLng position = new LatLng(Latitudenviar, Longitudenviar);
-                            Bundle args = new Bundle();
-                            args.putParcelable("from_position", position);
-                            //intent.putExtra("MARCADOR", position);
-                            intent.putExtra("bundle", args);
-                            setResult(RESULT_OK, intent);*/
-                        //}else{
-                        //    Toast.makeText(getBaseContext(), "LA SUMA DE MENORES Y MAYORES NO COINCIDE CON EL TOTAL", Toast.LENGTH_SHORT).show();
-                        //}
                     } else {
                         makeText(getBaseContext(), "ESPERE UNOS SEGUNDOS E INTENTE DE NUEVO, EL GPS SE ESTA UBICANDO", LENGTH_SHORT).show();
                     }

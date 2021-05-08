@@ -306,6 +306,7 @@ public class Persona extends AppCompatActivity {
                     Persona.Nacimiento = data.getStringExtra("FECHA_NACIMIENTO_ESCANEADO");
                     Persona.Sexo = data.getStringExtra("SEXO_ESCANEADO");
                     txtSexo.setText(data.getStringExtra("SEXO_ESCANEADO"));
+                    Persona.QR = Boolean.toString(true);
                     int año, mes, dia;
                     String[] convertir = Persona.Nacimiento.split("/");
                     dia = Integer.parseInt(convertir[0]);
@@ -3370,6 +3371,7 @@ public class Persona extends AppCompatActivity {
         if(txtApellido.getText().toString()!=null){Persona.Apellido=txtApellido.getText().toString();}
         if(txtDni.getText().toString()!=null){Persona.DNI=txtDni.getText().toString();}
         if(txtSexo.getText().toString()!=null){Persona.Sexo=txtSexo.getText().toString();}
+        if(Persona.QR!=Boolean.toString(true)){Persona.QR = Boolean.toString(false);}
         //if(Efector.getText().toString()!=null){Persona.Efector=Efector.getText().toString();}
 
         // Si uno de los campos listados abajo es nulo lo reemplazo por S/D
