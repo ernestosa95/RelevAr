@@ -1885,8 +1885,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 br.close();
                 in.close();
                 fis.close();
-
-
             } catch (IOException e) {
                 //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }

@@ -1937,7 +1937,7 @@ public class Persona extends AppCompatActivity {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
 
         // Entrega de productos de limpieza
-        LinearLayout layoutlimp       = new LinearLayout(this);
+        /*LinearLayout layoutlimp       = new LinearLayout(this);
         layoutlimp.setOrientation(LinearLayout.HORIZONTAL);
         layoutlimp.setVerticalGravity(Gravity.CENTER_VERTICAL);
         layoutlimp.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
@@ -1951,11 +1951,11 @@ public class Persona extends AppCompatActivity {
         limp.setTextColor(Color.WHITE);
         limp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         layoutlimp.addView(limp);
-        mainLayout.addView(layoutlimp);
+        mainLayout.addView(layoutlimp);*/
 
         // Defino el Layaout que va a contener los radiobutton
         //LinearLayout mainLayout1       = new LinearLayout(this);
-        RadioGroup mainLayout1 = new RadioGroup(this);
+        /*RadioGroup mainLayout1 = new RadioGroup(this);
         mainLayout1.setOrientation(LinearLayout.HORIZONTAL);
         mainLayout1.setGravity(Gravity.CENTER_HORIZONTAL);
         mainLayout1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -1977,7 +1977,7 @@ public class Persona extends AppCompatActivity {
 
         mainLayout1.addView(rb1);
         mainLayout1.addView(rb2);
-        mainLayout.addView(mainLayout1);
+        mainLayout.addView(mainLayout1);*/
 
         // Defino los parametros
         int TamañoLetra =20;
@@ -1994,7 +1994,7 @@ public class Persona extends AppCompatActivity {
         obs.setTextSize(TamañoLetra);
         obs.setTextColor(Color.WHITE);
         obs.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        layout0.setMinimumHeight(200);
+        layout0.setMinimumHeight(400);
         layout0.addView(obs);
 
 

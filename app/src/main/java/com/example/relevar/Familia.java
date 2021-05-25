@@ -2031,13 +2031,13 @@ public class Familia extends AppCompatActivity {
                                 auxHash.putAll(MiembrosFamiliares.get(i).DatosIgresados());
                                 for (int j = 0; j < datosCabeceraCsv.size() - 1; j++) {
                                     if (auxHash.get(datosCabeceraCsv.get(j)) != null) {
-                                        datosGuardar += auxHash.get(datosCabeceraCsv.get(j)) + ";";
+                                        datosGuardar += auxHash.get(datosCabeceraCsv.get(j)).replace("\n","") + ";";
                                     } else {
                                         datosGuardar += ";";
                                     }
                                 }
                                 if (auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) != null) {
-                                    datosGuardar += auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1)) + "\n";
+                                    datosGuardar += auxHash.get(datosCabeceraCsv.get(datosCabeceraCsv.size() - 1).replace("\n","")) + "\n";
                                 } else {
                                     datosGuardar += "\n";
                                 }
