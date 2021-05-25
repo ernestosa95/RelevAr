@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class SQLitePpal extends SQLiteOpenHelper {
     final String CREAR_TABLA_EFECTORES = "CREATE TABLE EFECTORES (NOMBRE TEXT, PROVINCIA TEXT)";
     final String CREAR_TABLA_TRABAJOS = "CREATE TABLE TRABAJOS (TRABAJO TEXT)";
+    final String CREAR_TABLA_UNIFICADOS = "CREATE TABLE UNIFICADOS (FECHA TEXT)";
     final String CREAR_TABLA_BOTONES = "CREATE TABLE BOTONES (BOTON TEXT, ACTIVO BOOLEAN)";
     final String CREAR_TABLA_ENCUESTADORES = "CREATE TABLE ENCUESTADOR (ID TEXT,APELLIDO TEXT,PROVINCIA TEXT,DNI TEXT, ACTIVO BOOLEAN)";
 
@@ -29,7 +30,7 @@ public class SQLitePpal extends SQLiteOpenHelper {
         db.execSQL(CREAR_TABLA_TRABAJOS);
         db.execSQL(CREAR_TABLA_ENCUESTADORES);
         db.execSQL(CREAR_TABLA_BOTONES);
-
+        db.execSQL(CREAR_TABLA_UNIFICADOS);
     }
 
     @Override
@@ -39,9 +40,15 @@ public class SQLitePpal extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS TRABAJOS");
         db.execSQL("DROP TABLE IF EXISTS ENCUESTADOR");
         db.execSQL("DROP TABLE IF EXISTS BOTONES");
+        db.execSQL("DROP TABLE IF EXISTS UNIFICADOS");
         onCreate(db);
     }
 
+    public void CrearTablaUnificados(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("CREATE TABLE IF NOT EXISTS UNIFICADOS (FECHA TEXT)");
+        db.close();
+    }
 
     public ArrayList<String> Buscar_Registros(String Nombre){
         datos.clear();
@@ -271,4 +278,19 @@ public class SQLitePpal extends SQLiteOpenHelper {
         return botones;
     }
 
+    public boolean ExisteFechaUnificados(String Fecha){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //String aux1 = "SELECT name FROM sqlite_master WHERE name='TRABAJOS'";
+        String aux2 = "SELECT * FROM UNIFICADOS WHERE FECHA='"+Fecha+"'";
+
+        Cursor registros = db.rawQuery(aux2, null);
+
+        if(registros.getCount()==0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }

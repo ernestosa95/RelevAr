@@ -72,9 +72,12 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1783,7 +1786,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    private void CrearUnificado(){
+    private void CrearUnificado() {
 
         ArrayList<String> fechas = ListadoFechas();
 
@@ -1791,16 +1794,35 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         datosFamilias.clear();
 
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        admin.CrearTablaUnificados();
+        SQLiteDatabase Bd1 = admin.getWritableDatabase();
         String DNIencuestador = admin.ObtenerDniActivado();
 
         File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
         nuevaCarpeta.mkdirs();
 
-        for (int j=0; j<fechas.size();j++){
-            String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
+        File nuevaCarpetaUnificado = new File(getExternalStorageDirectory(), "RelevAr/RECORRIDOS");
+        nuevaCarpetaUnificado.mkdirs();
+        String NombreArchivoUnificado = "UNIFICADO.csv";
+        File dirUnificado = new File(nuevaCarpetaUnificado, NombreArchivoUnificado);
+        if(dirUnificado.exists()){
+            dirUnificado.delete();
+        }
+        String cabUnificado = "CALLE;NUMERO;COORDENADAS;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;QR\n";
+        String [] vectorCabeceraUnificado = cabUnificado.split(";");
+        //el true es para que se agreguen los datos al final sin perder los datos anteriores
+
+        try {
+            FileOutputStream fOutUnificado = new FileOutputStream(dirUnificado, true);
+            OutputStreamWriter myOutWriterUnificado = new OutputStreamWriter(fOutUnificado);
+            myOutWriterUnificado.append(cabUnificado);
+
+        for (int j=0; j<fechas.size();j++) {
+            if (!admin.ExisteFechaUnificados(fechas.get(j))){
+                String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
             File dir = new File(nuevaCarpeta, NombreArchivo);
             String[] cabecera;
-            String datosFamilia="";
+            //String datosFamilia="";
             try {
                 FileInputStream fis = new FileInputStream(dir);
                 DataInputStream in = new DataInputStream(fis);
@@ -1810,61 +1832,107 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 cabecera = br.readLine().split(";");
 
                 String myData;
-                while ((myData=br.readLine())!=null){
+                while ((myData = br.readLine()) != null) {
 
                     String[] Datos = myData.split(";");
 
                     datosPersonas.add(new ObjetoPersona(categoriasPersona));
                     datosFamilias.add(new ObjetoFamilia(familiaCabecera));
 
-                    datosFamilias.get(datosFamilias.size()-1).Valores.put("COORDENADAS", Datos[2]);
-                    datosPersonas.get(datosPersonas.size()-1).Valores.put("COORDENADAS", Datos[2]);
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("CALLE", Datos[0]);
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("NUMERO", Datos[1]);
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("COORDENADAS", Datos[2]);
 
-                    datosFamilias.get(datosFamilias.size()-1).Valores.put("FECHA_REGISTRO", fechas.get(j));
-                    datosFamilias.get(datosFamilias.size()-1).Valores.put("DNI", DNIencuestador);
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("FECHA_REGISTRO", fechas.get(j));
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("DNI", DNIencuestador);
 
-                    datosFamilias.get(datosFamilias.size()-1).Valores.put("MENORES", Datos[5]);
-                    datosFamilias.get(datosFamilias.size()-1).Valores.put("MAYORES", Datos[6]);
+                    //datosFamilias.get(datosFamilias.size()-1).Valores.put("MENORES", Datos[5]);
+                    //datosFamilias.get(datosFamilias.size()-1).Valores.put("MAYORES", Datos[6]);
 
-                    datosPersonas.get(datosPersonas.size()-1).Valores.put("EDAD", Datos[10]);
-                    datosPersonas.get(datosPersonas.size()-1).Valores.put("SEXO", Datos[11]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("APELLIDO", Datos[8]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("NOMBRE", Datos[9]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("FECHA DE NACIMIENTO", Datos[10]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("SEXO", Datos[11]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("QR", Datos[12]);
                     //Toast.makeText(this,datosPersonas.get(0).Valores.get("EDAD"), Toast.LENGTH_LONG).show();
 
-                    if(Datos.length>12){
-                        for (int i=13; i<Datos.length;i++){
-                            if (EsDeFamilia(cabecera[i])){
-                                if (!Datos[i].equals("")){
-                                    String aux=cabecera[i].replace(" ", "_");
-                                    aux=aux.replace("/","_");
-                                    aux=aux.replace("...","");
-                                    datosFamilias.get(datosFamilias.size()-1).Valores.put(aux, Datos[i]);
+                    if (Datos.length > 12) {
+                        for (int i = 13; i < Datos.length; i++) {
+                            if (EsDeFamilia(cabecera[i])) {
+                                if (!Datos[i].equals("")) {
+                                    String aux = cabecera[i].replace(" ", "_");
+                                    aux = aux.replace("/", "_");
+                                    aux = aux.replace("...", "");
+                                    datosFamilias.get(datosFamilias.size() - 1).Valores.put(aux, Datos[i]);
                                 }
                             }
-                            if (EsDePersona(cabecera[i])){
-                                if (!Datos[i].equals("")){
-                                    String aux=cabecera[i].replace(" ", "_");
-                                    aux=aux.replace("¿","");
-                                    aux=aux.replace("?","");
-                                    datosPersonas.get(datosPersonas.size()-1).Valores.put(aux, Datos[i]);
+                            if (EsDePersona(cabecera[i])) {
+                                if (!Datos[i].equals("")) {
+                                    String aux = cabecera[i].replace(" ", "_");
+                                    aux = aux.replace("¿", "");
+                                    aux = aux.replace("?", "");
+                                    datosPersonas.get(datosPersonas.size() - 1).Valores.put(aux, Datos[i]);
                                 }
                             }
                         }
-                    // Datos completa de una persona
-                    // Agregar al archivo unificado los datos necesarios, es necesario ya tenerlo abierto
-                    // y con la cabecera que va a ser fija
+                        // Datos completa de una persona
+                        // Agregar al archivo unificado los datos necesarios, es necesario ya tenerlo abierto
+                        // y con la cabecera que va a ser fija
+
                     }
                 }
 
                 br.close();
                 in.close();
                 fis.close();
+
+
             } catch (IOException e) {
                 //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
-        //HASTA ACA LEI TODOS LOS DATOS DE UN ARCHIVO
-
+            //HASTA ACA LEI TODOS LOS DATOS DE UN ARCHIVO
+            HashMap<String, String> unificado = new HashMap<>();
+            for (int k = 0; k < datosFamilias.size(); k++) {
+                unificado.putAll(datosPersonas.get(k).Valores);
+                unificado.putAll(datosFamilias.get(k).Valores);
+                String escribir = "";
+                for (int l = 0; l < vectorCabeceraUnificado.length - 1; l++) {
+                    escribir += unificado.get(vectorCabeceraUnificado[l]) + ";";
+                }
+                escribir += unificado.get(vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1].replace("\n", ""));
+                Toast.makeText(this, vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1], Toast.LENGTH_SHORT).show();
+                myOutWriterUnificado.append(escribir + "\n");
+            }
+                ContentValues registro = new ContentValues();
+                registro.put("FECHA", fechas.get(j));
+                Bd1.insert("UNIFICADOS", null, registro);
         }
+        }
+            myOutWriterUnificado.close();
+            fOutUnificado.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        compartirUnificado();
+    }
+
+    // FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
+    private void compartirUnificado(){
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr/RECORRIDOS");
+        nuevaCarpeta.mkdirs();
+
+        File dir = new File(nuevaCarpeta,"UNIFICADO.csv");
+        Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "UNIFICADO.csv");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        this.startActivity(Intent.createChooser(emailIntent, "SUBIR ARCHIVO"));
     }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
