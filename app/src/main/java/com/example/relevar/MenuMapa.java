@@ -1811,7 +1811,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         String cabUnificado = "CALLE;NUMERO;COORDENADAS;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;QR\n";
         String [] vectorCabeceraUnificado = cabUnificado.split(";");
         //el true es para que se agreguen los datos al final sin perder los datos anteriores
-
+        String escribir = "";
         try {
             FileOutputStream fOutUnificado = new FileOutputStream(dirUnificado, true);
             OutputStreamWriter myOutWriterUnificado = new OutputStreamWriter(fOutUnificado);
@@ -1894,19 +1894,23 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             for (int k = 0; k < datosFamilias.size(); k++) {
                 unificado.putAll(datosPersonas.get(k).Valores);
                 unificado.putAll(datosFamilias.get(k).Valores);
-                String escribir = "";
                 for (int l = 0; l < vectorCabeceraUnificado.length - 1; l++) {
                     escribir += unificado.get(vectorCabeceraUnificado[l]) + ";";
                 }
                 escribir += unificado.get(vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1].replace("\n", ""));
                 Toast.makeText(this, vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1], Toast.LENGTH_SHORT).show();
-                myOutWriterUnificado.append(escribir + "\n");
+                escribir+="\n";
+
             }
+                datosFamilias.clear();
+                datosPersonas.clear();
+
                 ContentValues registro = new ContentValues();
                 registro.put("FECHA", fechas.get(j));
                 Bd1.insert("UNIFICADOS", null, registro);
         }
         }
+            myOutWriterUnificado.append(escribir);
             myOutWriterUnificado.close();
             fOutUnificado.close();
         } catch (IOException e) {
