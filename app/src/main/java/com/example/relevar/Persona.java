@@ -2006,8 +2006,8 @@ public class Persona extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // The user clicked OK
                 Persona.Observaciones = obs.getText().toString();
-                if(rb1.isChecked()==true){Persona.Limpieza="SI";}
-                if(rb2.isChecked()==true){Persona.Limpieza="NO";}
+                //if(rb1.isChecked()==true){Persona.Limpieza="SI";}
+                //if(rb2.isChecked()==true){Persona.Limpieza="NO";}
 
                 // Cambio los colores de avance
                 ColorAvanceObservaciones();
@@ -2022,8 +2022,8 @@ public class Persona extends AppCompatActivity {
 
         if(Persona.Observaciones!=null || Persona.Limpieza!=null){
             obs.setText(Persona.Observaciones);
-            if(Persona.Limpieza.equals("SI")){rb1.setChecked(true);}
-            if(Persona.Limpieza.equals("NO")){rb2.setChecked(true);}
+            //if(Persona.Limpieza.equals("SI")){rb1.setChecked(true);}
+            //if(Persona.Limpieza.equals("NO")){rb2.setChecked(true);}
         }
     }
 
@@ -2034,13 +2034,13 @@ public class Persona extends AppCompatActivity {
         if (Persona.Observaciones.length()!=0){
             avance+=1;
         }
-        if (Persona.Limpieza.length()!=0){
+        /*if (Persona.Limpieza.length()!=0){
             avance+=1;
-        }
+        }*/
 
         if(avance==1){
-            observaciones.setBackgroundResource(R.drawable.amarillo);
-            avanceobservaciones.setText(getString(R.string.completado)+" 50%");
+            observaciones.setBackgroundResource(R.drawable.verde);
+            avanceobservaciones.setText(getString(R.string.completado)+" 100%");
             //Observacion.setBackgroundColor(Color.parseColor("#FFA07A"));
             //String aux = Integer.toString(avance)+"/2";
             //AvObs.setText(aux);
