@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -35,6 +36,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,6 +46,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -138,7 +141,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     EditText Nencuestador;
 
     // Creo al encuestador
-    Encuestador encuestador = new Encuestador();
+    Encuestador encuestador;
     // Mapa
     private MapView mapView;
     LatLng latLng;
@@ -183,6 +186,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         // Obtengo el encuestador que esta activado desde la base de datos
+        encuestador = new Encuestador(getApplicationContext());
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         encuestador.setID(admin.ObtenerActivado());
 
@@ -1942,7 +1946,55 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onBackPressed()
     {
-        //thats it
-    }// Desactivo el boton de volver atras
+        // Defino los contenedores
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MiEstiloAlert);
+        TextView textView = new TextView(this);
+        textView.setText("RelevAr");
+        textView.setPadding(20, 30, 20, 30);
+        textView.setTextSize(22F);
+        textView.setBackgroundColor(Color.parseColor("#4588BC"));
+        textView.setTextColor(Color.WHITE);
+        builder.setCustomTitle(textView);
+
+        // Defino el Layaout que va a contener a los Check
+        final LinearLayout mainLayout = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        // Defino los parametros
+        int TamañoLetra =20;
+
+        // Telefono Celular
+        LinearLayout layout0       = new LinearLayout(this);
+        layout0.setOrientation(LinearLayout.HORIZONTAL);
+        layout0.setVerticalGravity(Gravity.CENTER_VERTICAL);
+        final TextView descripcion = new TextView(getApplicationContext());
+        descripcion.setText("Salir y cerrar sesion");
+        descripcion.setGravity(Gravity.CENTER_HORIZONTAL);
+        descripcion.setTextSize(TamañoLetra);
+        descripcion.setTextColor(Color.WHITE);
+        descripcion.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        layout0.setMinimumHeight(100);
+        layout0.addView(descripcion);
+
+        mainLayout.addView(layout0);
+
+        // Add OK and Cancel buttons
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                encuestador.cerrarSesion();
+                finish();
+            }
+        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        builder.setView(mainLayout);
+        // Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }

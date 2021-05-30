@@ -6,21 +6,6 @@
     android:layout_height="match_parent"
     android:background="#0E5891">
 
-    <Button
-        android:id="@+id/EMPEZAR"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button1"
-        android:onClick="NextMenuPrincipal"
-        android:text="@string/cargar_datos"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -32,6 +17,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DATOS DEL USUARIO"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout5" />
 
     <View
         android:id="@+id/divider5"
@@ -67,5 +61,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icono" />
+
+    <Button
+        android:id="@+id/NUEVOUSUARIO"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button1"
+        android:onClick="crearUsuario"
+        android:text="NUEVO USUARIO"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/edit_text_1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <EditText
+            android:id="@+id/NOMBREINGRESADO"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="@string/nombre"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/APELLIDOINGRESADO"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="@string/apellido"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/EMPEZAR"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/button1"
+            android:onClick="Ingresar"
+            android:text="@string/ingresar"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

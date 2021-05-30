@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.solver.SolverVariable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SQLitePpal extends SQLiteOpenHelper {
     final String CREAR_TABLA_EFECTORES = "CREATE TABLE EFECTORES (NOMBRE TEXT, PROVINCIA TEXT)";
@@ -160,7 +161,22 @@ public class SQLitePpal extends SQLiteOpenHelper {
         return encuestadores;
     }
 
-    public void DesactivarUsuario(){
+    public boolean existeEncuestador(String Nombre, String Apellido){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String aux2 = "SELECT * FROM ENCUESTADOR WHERE ID='"+Nombre+"' AND APELLIDO='"+Apellido+"'";
+
+        Cursor registros = db.rawQuery(aux2, null);
+
+        if(registros.getCount()==0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public void desactivarUsuarios(){
         SQLiteDatabase dbRead = this.getReadableDatabase();
         String cantidad = "SELECT DISTINCT * FROM ENCUESTADOR";
         Cursor cant = dbRead.rawQuery(cantidad, null);
@@ -176,12 +192,11 @@ public class SQLitePpal extends SQLiteOpenHelper {
         dbRead.close();
     }
 
-    public void ActivarUsuario(String Nombre, String Apellido){
+    public void activarUsuario(String Nombre, String Apellido){
         SQLiteDatabase db = this.getWritableDatabase();
         //Establecemos los campos-valores a actualizar
         ContentValues valores = new ContentValues();
         valores.put("ACTIVO",Boolean.TRUE);
-
         //Actualizamos el registro en la base de datos
         String[] args = new String[]{Nombre, Apellido};
         db.update("ENCUESTADOR", valores, "ID=? AND APELLIDO=?" , args);
@@ -196,6 +211,21 @@ public class SQLitePpal extends SQLiteOpenHelper {
         a.moveToFirst();
         if(a.getCount()!=0){
         encuestador = a.getString(0)+" "+a.getString(1);}//+" "+a.getString(1);}
+        return encuestador;
+    }
+
+    public HashMap<String, String> encuestadorActivado(){
+        HashMap<String, String> encuestador = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String consulta ="SELECT ID, APELLIDO, PROVINCIA, DNI FROM ENCUESTADOR WHERE ACTIVO=1";
+        Cursor a = db.rawQuery(consulta, null);
+        a.moveToFirst();
+        if(a.getCount()!=0) {
+            encuestador.put("NOMBRE", a.getString(0));
+            encuestador.put("APELLIDO", a.getString(1));
+            encuestador.put("PROVINCIA", a.getString(2));
+            encuestador.put("DNI", a.getString(3));
+        }
         return encuestador;
     }
 

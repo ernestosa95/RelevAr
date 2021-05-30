@@ -67,6 +67,7 @@ public class Inicio extends AppCompatActivity {
     // Widgets
     Button empezar;
     Spinner SPProvincias;
+    EditText Nombre, Apellido;
 
     private ArrayList<String> botones = new ArrayList<>();
     @Override
@@ -77,6 +78,8 @@ public class Inicio extends AppCompatActivity {
         // Boton para comenzar a cargar datos
         empezar = (Button) findViewById(R.id.EMPEZAR);
 
+        Nombre = (EditText) findViewById(R.id.NOMBREINGRESADO);
+        Apellido = (EditText) findViewById(R.id.APELLIDOINGRESADO);
         // Eliminar el action bar
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
@@ -129,14 +132,91 @@ public class Inicio extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
     // PASAR AL MENU PPAL, PRIMERO ELIGIENDO UN USUARIO
 
-    public void NextMenuPrincipal(View view) {
+    public void Ingresar(View view) {
         if(checkIfLocationOpened()) {
             AgregarCabecera();
-            Encuestador();
+            Encuestador encuestador = new Encuestador(getApplicationContext());
+            if(encuestador.existe(Nombre.getText().toString(), Apellido.getText().toString())){
+                encuestador.activarUsuario(Nombre.getText().toString(), Apellido.getText().toString());
+
+                // Creo y actualizo principalmente la botonera en segundo plano las bases de
+                // datos correspondientes a este encuestador
+                //BdEfectores bdEfectores = new BdEfectores();
+                //bdEfectores.execute();
+
+                Intent intent = new Intent(getBaseContext(), MenuMapa.class);
+                startActivityForResult(intent, 1);
+            }
+            else{
+                makeText(getBaseContext(), "NO EXISTE UN USUARIO CON ESE NOMBRE Y APELLIDO", LENGTH_SHORT).show();
+            }
         }
         else{makeText(getBaseContext(), "UBICACION DEL TELEFONO DESACTIVADA, POR FAVOR ACTIVARLA", LENGTH_SHORT).show();}
     }
 
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+    // PERMITO CREAR UN NUEVO USUARIO
+    public void crearUsuario(View view){
+        // Creo el Alert dialog con los recursos layout creados para este alert_crear_encuestador
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view_nuevo_usuario = Inflater.inflate(R.layout.alert_crear_usuario, null);
+        builder.setView(view_nuevo_usuario);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Encuestador encuestador = new Encuestador(getBaseContext());
+
+        SPProvincias = view_nuevo_usuario.findViewById(R.id.PROVINCIA);
+        ArrayAdapter<String> adaptadorProvincias = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, encuestador.Provincias());
+        SPProvincias.setAdapter(adaptadorProvincias);
+
+        // Creo los edittext para ingresar datos de nombre, apellido, dni
+        final EditText NonmbreEncuestador = view_nuevo_usuario.findViewById(R.id.EditCrearEncuestador);
+        final EditText ApellidoEncuestador = view_nuevo_usuario.findViewById(R.id.editApellidoEncuestador);
+        final EditText DNI = view_nuevo_usuario.findViewById(R.id.editDNI);
+
+        /*Creo y asigno las funciones al boton de crear encuentador, corroboro que ninguno de los
+        campos este vacio, desactivo todos los encuestadores y luego inserto en la base de datos el
+        nuevo, activandolo, paso siguiente paso la app a la activity MenuMapa*/
+        Button crear = view_nuevo_usuario.findViewById(R.id.GUARDARCREARENCUESTADOR);
+        crear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    if(DNI.getText().toString().length()!=0) {
+                        if (SPProvincias.getSelectedItem().toString().length() != 0) {
+                            if(NonmbreEncuestador.getText().toString().length()!=0){
+                                if(ApellidoEncuestador.getText().toString().length()!=0){
+
+                                    encuestador.crearUsuario(NonmbreEncuestador.getText().toString(),
+                                                                ApellidoEncuestador.getText().toString(),
+                                                                DNI.getText().toString(),
+                                                                SPProvincias.getSelectedItem().toString());
+
+                            // Creo en segundo plano las bases de datos correspondientes a este
+                            // encuestador
+                            BdEfectores bdEfectores = new BdEfectores();
+                            bdEfectores.execute();
+
+                            Intent Modif = new Intent(getBaseContext(), MenuMapa.class);
+                            startActivityForResult(Modif, 1);
+                            dialog.dismiss();
+                                } else {
+                                    makeText(getBaseContext(), "INGRESE UN APELLIDO", LENGTH_SHORT).show();
+                                }
+                                } else {
+                                    makeText(getBaseContext(), "INGRESE UN NOMBRE", LENGTH_SHORT).show();
+                                }
+                                } else {
+                                    makeText(getBaseContext(), "INGRESE UNA PROVINCIA", LENGTH_SHORT).show();
+                                }
+                    }else{makeText(getBaseContext(), "INGRESE DNI", LENGTH_SHORT).show();}
+            }
+        });
+
+    }
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // AGREGAR CABECERA POR UNICA VEZ A LOS ARCHIVOS DE DATOS
@@ -210,9 +290,9 @@ public class Inicio extends AppCompatActivity {
 
     // ENCUENTADOR, INGRESAR CON UN ENCUESTADOR PRECARGADO O CREAR UNO NUEVO
 
-    private void Encuestador(){
+    /*private void Encuestador(){
         /* Creo un alert dialog y utilizo el recurso layout creado alert_encuestador para poder
-        * mostrar las diferentes opciones y el listado de encuestadores precargados*/
+        * mostrar las diferentes opciones y el listado de encuestadores precargados
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
         View view = Inflater.inflate(R.layout.alert_encuestador, null);
@@ -243,9 +323,9 @@ public class Inicio extends AppCompatActivity {
             }
         });
 
-        /* Creo y le otorgo las funciones al boton ingresar, desactivando todos los usarios,
+         Creo y le otorgo las funciones al boton ingresar, desactivando todos los usarios,
         * seleccionando el nuevo usuario y activando solo a este, una vez realizada estas acciones
-        * se dirije la app a la activity MenuMapa*/
+        * se dirije la app a la activity MenuMapa
         Button ingresar = view.findViewById(R.id.INGRESAR);
         ingresar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,11 +350,11 @@ public class Inicio extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     // FUNCION DE CREAR NUEVO ENCUESTADOR
 
-    private void NuevoEncuestador(){
+    /*private void NuevoEncuestador(){
         // Creo el Alert dialog con los recursos layout creados para este alert_crear_encuestador
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater Inflater = getLayoutInflater();
@@ -324,7 +404,7 @@ public class Inicio extends AppCompatActivity {
 
         /* Creo y asigno las funciones al boton de crear encuentador, corroboro que ninguno de los
         campos este vacio, desactivo todos los encuestadores y luego inserto en la base de datos el
-        nuevo, activandolo, paso siguiente paso la app a la activity MenuMapa*/
+        nuevo, activandolo, paso siguiente paso la app a la activity MenuMapa
         Button nuevo = view.findViewById(R.id.GUARDARCREARENCUESTADOR);
         nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -363,7 +443,7 @@ public class Inicio extends AppCompatActivity {
         });
 
         /* Creo y asigno la posibilidad de cerrar las opciones de cancelar la carga de un nuevo
-        * encuestador, iniciando nuevamente el alert dialog de encuestador*/
+        * encuestador, iniciando nuevamente el alert dialog de encuestador
         Button cancelar = view.findViewById(R.id.CANCELARCREARENCUESTADOR);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -372,7 +452,7 @@ public class Inicio extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-    }
+    }*/
 
     // ESTA ES UNA EXTENSION PARA PODER CREAR LAS BASES DE DATOS EN SEGUNDO PLANO
 

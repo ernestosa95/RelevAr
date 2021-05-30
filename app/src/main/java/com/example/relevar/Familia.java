@@ -82,7 +82,7 @@ public class Familia extends AppCompatActivity {
     private Double Latitudenviar=0.0, Longitudenviar=0.0;
 
     // Encuestador
-    Encuestador encuestador = new Encuestador();
+    Encuestador encuestador;
 
     // Defino Arrays para almacenar datos
     private ArrayList<String> names = new ArrayList<String>();
@@ -125,7 +125,7 @@ public class Familia extends AppCompatActivity {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
-
+        encuestador = new Encuestador(getApplicationContext());
         // Seteo el titulo de la action bar del activity
         //ActionBar actionbar = getSupportActionBar();
         //actionbar.setTitle("Familia");

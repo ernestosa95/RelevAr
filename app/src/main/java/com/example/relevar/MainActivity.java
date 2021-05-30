@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Double Latitudenviar, Longitudenviar;
 
     // Encuestador
-    Encuestador encuestador = new Encuestador();
+    Encuestador encuestador = new Encuestador(getBaseContext());
 
     // Defino Arrays para almacenar datos
     private ArrayList<String> names = new ArrayList<String>();

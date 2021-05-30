@@ -2,13 +2,35 @@ package com.example.relevar.Recursos;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.relevar.Inicio;
+import com.example.relevar.MenuMapa;
+import com.example.relevar.MySQL.SQLitePpal;
+import com.example.relevar.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -17,18 +39,80 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 
-public class Encuestador {
+public class Encuestador extends Activity {
+    // DEFINICIONES DE VARIABLES A UTILIZAR
+    private final List<String> Provincias = Arrays.asList("","ENTRE RÍOS","SANTA FE", "BUENOS AIRES","CABA","CATAMARCA",
+                                    "CÓRDOBA","TIERRA DEL FUEGO","TUCUMÁN","SANTA CRUZ","RÍO NEGRO","CHUBUT",
+                                    "MENDOZA","SAN JUAN","LA PAMPA","CHACO","CORRIENTES","MISIONES","FORMOSA",
+                                    "SANTIAGO DEL ESTERO","SAN LUIS","LA RIOJA","SALTA","JUJUY","NEUQUÉN");
+    private final List<String> Botones = Arrays.asList("INSPECCION EXTERIOR", "SERVICIOS BASICOS","VIVIENDA","DENGUE",
+                                    "EDUCACION","INGRESO Y OCUPACION","CONTACTO","EFECTOR","OBSERVACIONES","FACTORES DE RIESGO",
+                                    "DISCAPACIDAD","EMBARAZO","VITAMINA D","ENFERMEDADES CRONICAS","ACOMPAÑAMIENTO",
+                                    "TRASTORNOS EN NIÑOS","TRASTORNOS MENTALES","ADICCIONES","VIOLENCIA","OCIO");
+
+    public String Nombre, Apellido, DNI, Provincia;
+    private Context context;
+
+    // CONSTRUCTOR: Obtengo los datos del encuestador que esta activado
+    public Encuestador(Context baseContext){
+        context = baseContext;
+        SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
+        HashMap<String, String> encuestador_activado = admin.encuestadorActivado();
+        if (encuestador_activado.size()!=0){
+            Nombre = encuestador_activado.get("NOMBRE");
+            Apellido = encuestador_activado.get("APELLIDO");
+            DNI = encuestador_activado.get("DNI");
+            Provincia = encuestador_activado.get("PROVINCIA");
+        }
+    }
+
+    public boolean existe(String nombre, String apellido){
+        SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
+        return admin.existeEncuestador(nombre,apellido);
+    }
+
+    public void activarUsuario(String nombre, String apellido){
+        SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
+        admin.desactivarUsuarios();
+        admin.activarUsuario(nombre, apellido);
+    }
+
+    public ArrayList<String> Provincias(){
+        return new ArrayList<String>(Provincias);
+    }
+
+    public void crearUsuario(String nombre, String apellido, String dni, String provincia){
+        SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
+        admin.desactivarUsuarios();
+        admin.CrearUsuario(nombre, apellido, dni, provincia);
+    }
+
+    public void cerrarSesion(){
+        SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
+        admin.desactivarUsuarios();
+    }
+
+
+
+
+
     public String ID="";
 
     public void setID(String ID) {this.ID = ID;}

@@ -32,12 +32,13 @@ public class ServicioGPS extends Service {
     String Latitud, Longitud;
     LocationListener locationListenerEncuestador;
     LocationManager locationManagerEncuestador;
-    Encuestador encuestador = new Encuestador();
+    Encuestador encuestador;
     public ServicioGPS() {
     }
 
     @Override
     public void onCreate() {
+        encuestador= new Encuestador(getBaseContext());
         encuestador.setID("");
         System.out.println("El servicio a creado");
 
