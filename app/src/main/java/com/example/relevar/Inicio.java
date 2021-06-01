@@ -23,8 +23,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.relevar.ModuloGeneral.Archivos;
 import com.example.relevar.MySQL.SQLitePpal;
-import com.example.relevar.Recursos.Encuestador;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -45,21 +45,8 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 // Descripcion de la Activity:
-/*      Esta activity es la pantalla inicial de la App, su principal función es la de preparar los
-*       datos necesarios para poder iniciar el uso de la app.*/
-
-// Metodos de la Activity:
 
 //--------------------------------------------------------------------------------------------------
-
-//  - Oncreate()
-//  - NextMenuPrincipal()
-//  - AgregarCabecera()
-//  - checkIfLocationOpened()
-//  - Encuestador()
-//  - NuevoEncuestador()
-//  - Extensión de AsyncTask: BdEfectores
-
 public class Inicio extends AppCompatActivity {
 
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 123;
@@ -68,8 +55,9 @@ public class Inicio extends AppCompatActivity {
     Button empezar;
     Spinner SPProvincias;
     EditText Nombre, Apellido;
+    Encuestador encuestador;
+    Archivos archivos;
 
-    private ArrayList<String> botones = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +65,8 @@ public class Inicio extends AppCompatActivity {
 
         // Boton para comenzar a cargar datos
         empezar = (Button) findViewById(R.id.EMPEZAR);
-
+        encuestador = new Encuestador(getApplicationContext());
+        archivos = new Archivos(getApplicationContext());
         Nombre = (EditText) findViewById(R.id.NOMBREINGRESADO);
         Apellido = (EditText) findViewById(R.id.APELLIDOINGRESADO);
         // Eliminar el action bar
@@ -97,35 +86,6 @@ public class Inicio extends AppCompatActivity {
                         Manifest.permission.CAMERA,
                         Manifest.permission.GET_ACCOUNTS},
                 ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
-
-        // Cargo los botones
-        // Botones de la familia
-        botones.add("INSPECCION EXTERIOR");
-        botones.add("SERVICIOS BASICOS");
-        botones.add("VIVIENDA");
-        botones.add("DENGUE");
-
-        // Botones de la persona: general
-        botones.add("EDUCACION");
-        botones.add("INGRESO Y OCUPACION");
-        botones.add("CONTACTO");
-        botones.add("EFECTOR");
-        botones.add("OBSERVACIONES");
-
-        // Botones de la persona: fisico
-        botones.add("FACTORES DE RIESGO");
-        botones.add("DISCAPACIDAD");
-        botones.add("EMBARAZO");
-        botones.add("VITAMINA D");
-        botones.add("ENFERMEDADES CRONICAS");
-
-        // Botones de la persona: psico-social
-        botones.add("ACOMPAÑAMIENTO");
-        botones.add("TRASTORNOS EN NIÑOS");
-        botones.add("TRASTORNOS MENTALES");
-        botones.add("ADICCIONES");
-        botones.add("VIOLENCIA");
-        botones.add("OCIO");
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -133,16 +93,11 @@ public class Inicio extends AppCompatActivity {
     // PASAR AL MENU PPAL, PRIMERO ELIGIENDO UN USUARIO
 
     public void Ingresar(View view) {
-        if(checkIfLocationOpened()) {
-            AgregarCabecera();
-            Encuestador encuestador = new Encuestador(getApplicationContext());
+        if(encuestador.checkUbicacionGPS(getContentResolver())){
+            archivos.agregarCabecera();
+            //Encuestador encuestador = new Encuestador(getApplicationContext());
             if(encuestador.existe(Nombre.getText().toString(), Apellido.getText().toString())){
                 encuestador.activarUsuario(Nombre.getText().toString(), Apellido.getText().toString());
-
-                // Creo y actualizo principalmente la botonera en segundo plano las bases de
-                // datos correspondientes a este encuestador
-                //BdEfectores bdEfectores = new BdEfectores();
-                //bdEfectores.execute();
 
                 Intent intent = new Intent(getBaseContext(), MenuMapa.class);
                 startActivityForResult(intent, 1);
@@ -157,6 +112,7 @@ public class Inicio extends AppCompatActivity {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
     // PERMITO CREAR UN NUEVO USUARIO
+
     public void crearUsuario(View view){
         // Creo el Alert dialog con los recursos layout creados para este alert_crear_encuestador
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -217,78 +173,170 @@ public class Inicio extends AppCompatActivity {
         });
 
     }
+
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // AGREGAR CABECERA POR UNICA VEZ A LOS ARCHIVOS DE DATOS
 
-    private void AgregarCabecera() {
-        /* Me dirijo a el directorio en la memoria interna del dispositivo para poder acceder a la
-        * carpeta llamada RelevAr donde se almacena de manera publlica la informacion, de no
-        * encontrarla se debe crear la misma*/
-        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
-        nuevaCarpeta.mkdirs();
+    // ESTA ES UNA EXTENSION PARA PODER CREAR LAS BASES DE DATOS EN SEGUNDO PLANO
 
-        /* Necesito abrir el archivo .csv correspondiente al dia actual, por esta razon se solicita
-        * la fecha actual al dispositivo, si este no existe se debe crear*/
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date1 = new Date();
-        String fecha = dateFormat.format(date1);
-        String NombreArchivo = "RelevAr-" + fecha + ".csv";
-        File dir = new File(nuevaCarpeta, NombreArchivo);
+    private class BdEfectores extends AsyncTask<Void, Void, Void> {
 
-        /* Una vez tenemos el archivo dir con la ruta correcta, necesitamos leer los datos conenidos
-        * en este, se va a leer la primera linea que es la que debe contener la cabecera con las categorias*/
-        String strLine = "";
-        try {
-            FileInputStream fis = new FileInputStream(dir);
-            DataInputStream in = new DataInputStream(fis);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            strLine = br.readLine().split(";")[0];
-            br.close();
-            in.close();
-            fis.close();
-        } catch (IOException e) {
-            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
+        // Creo un progress dialog para mostrar mientras se ejecuta este codigo
+        ProgressDialog pd;
+
+        /*Antes de comenzar la ejecucion se inicia el progress dialog con los siguientes atributos*/
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(Inicio.this);
+            pd.setMessage("Cargando datos, aguarde");
+            pd.setCancelable(false);
+            pd.show();
         }
 
-        /* Con los datos de la primer fila es necesario ahora corroborar que esta se corresponda con
-        * la cabecera, la primer palabra que debe aparecer es la palbra "CALLE"*/
-        if (strLine.equals("CALLE") != true) {
-            //String cab = getString(R.string.encabezado);
-            String cab = "CALLE;NUMERO;COORDENADAS;ESTADO;GRUPO FAMILIAR;MENORES;MAYORES;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;QR;NUMERO CASA CARTOGRAFIA\n";
+        /* Este es el codigo que se ejecuta en segundo plano mientras el usuario ve un cartel de
+        * cargando datos*/
+        @Override
+        protected Void doInBackground(Void... voids) {
+            /* Se crea una conexion con la base de datos, se corrobora que los datos de la provincia
+            * seleccionada por el encuestador no esten cargados y se comienza a leer desde efectores.csv
+            * solo eligiendo los efectores correspondientes a esta provincia, posteriomente se los
+            * inserta en la base de datos.
+            * Esta accion se realiza una vez por provincia*/
+            SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+            String myData = "";
             try {
-                //el true es para que se agreguen los datos al final sin perder los datos anteriores
-                FileOutputStream fOut = new FileOutputStream(dir, true);
-                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-                myOutWriter.append(cab);
-                myOutWriter.close();
-                fOut.close();
+                InputStream fis = getResources().openRawResource(R.raw.efectores);//new FileInputStream(R.raw.efectores);
+                DataInputStream in = new DataInputStream(fis);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                SQLiteDatabase Bd1 = admin.getWritableDatabase();
+                if(SPProvincias!=null){
+                if (!admin.ExisteEfectores(SPProvincias.getSelectedItem().toString())) {
+                    while ((myData = br.readLine()) != null) {
 
+                        if (myData.split(",")[2].equals(SPProvincias.getSelectedItem().toString())) {
+                            ContentValues registro = new ContentValues();
+                            registro.put("NOMBRE", myData.split(",")[0]);
+                            registro.put("PROVINCIA", myData.split(",")[2]);
+                            Bd1.insert("EFECTORES", null, registro);
+                        }
+                    }
+                    Bd1.close();
+                    br.close();
+                    in.close();
+                    fis.close();
+
+                }}
             } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, R.string.ocurrio_error+" 2", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
+            }
+
+            /* Como la base de datos de los trabajos solo ejecuta una vez desde la instalacion de la
+            * app aprovecho y tambien cargo la base de datos de los botones*/
+            /* Tambien debo crear la base de datos de los trabajos, esto se hace una vez, jsto despues
+            * de instalar la app, para eso corroboro que la misma no este creada, leo los datos desde
+            * trabajo.csv y los inserto en la base de datos correspondiente*/
+            try{
+                InputStream fis = getResources().openRawResource(R.raw.trabajos);//new FileInputStream(R.raw.efectores);
+                DataInputStream in = new DataInputStream(fis);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                SQLiteDatabase Bd1 = admin.getWritableDatabase();
+                //String myData="";
+                if(!admin.ExisteTrabajos()){
+                    while ((myData=br.readLine())!=null){
+
+                        ContentValues registro = new ContentValues();
+                        registro.put("TRABAJO", myData);
+                        Bd1.insert("TRABAJOS", null, registro);
+
+
+                    }
+                    /*for(int i=0; i<botones.size(); i++){
+                        ContentValues botonesValores = new ContentValues();
+                        botonesValores.put("BOTON", botones.get(i));
+                        botonesValores.put("ACTIVO", false);
+                        Bd1.insert("BOTONES", null, botonesValores);
+                    }*/
+                    Bd1.close();
+                    br.close();
+                    in.close();
+                    fis.close();
+                }
+            }
+            catch (IOException e){
+                Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();}
+
+            /* Obtengo el listado de botones de la base de datos si no tiene alguno de los botone
+            * que estan listado en en el arraylist lo agrego*/
+            SQLiteDatabase Bd1 = admin.getWritableDatabase();
+            ArrayList<String> botonesActuales = admin.Botones();
+
+            for(int i=0; i<encuestador.Botones().size(); i++) {
+                if (Bd1 == null || !Bd1.isOpen())
+                {
+                    Bd1 = admin.getWritableDatabase();
+                }
+                if(botonesActuales.size()!=0){
+                if (!botonesActuales.contains(encuestador.Botones().get(i))) {
+                    ContentValues botonesValores = new ContentValues();
+                    botonesValores.put("BOTON", encuestador.Botones().get(i));
+                    botonesValores.put("ACTIVO", false);
+                    Bd1.insert("BOTONES", null, botonesValores);
+                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA"+encuestador.Botones().get(i));
+                }}
+                else{
+                    ContentValues botonesValores = new ContentValues();
+                    botonesValores.put("BOTON", encuestador.Botones().get(i));
+                    botonesValores.put("ACTIVO", false);
+                    Bd1.insert("BOTONES", null, botonesValores);
+
+                }
+            }
+            Bd1.close();
+
+            return null;
+        }
+
+        /* Despues de la ejecucion del codigo en segundo plano debo detener el alert que me indica
+        * que se estan cargando los datos*/
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (pd != null)
+            {
+                pd.dismiss();
             }
         }
+
     }
 
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-    // CONOCER SI LA UBICACION ESTA ACTIVADA
+}
 
-    private boolean checkIfLocationOpened() {
+
+
+
+
+
+
+
+
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// CONOCER SI LA UBICACION ESTA ACTIVADA
+
+    /*private boolean checkIfLocationOpened() {
     String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
     System.out.println("Provider contains=> " + provider);
     if (provider.contains("gps") || provider.contains("network")){
         return true;
     }
     return false;
-}
+    }*/
 
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-    // FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
+// FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
 
-    // ENCUENTADOR, INGRESAR CON UN ENCUESTADOR PRECARGADO O CREAR UNO NUEVO
+// ENCUENTADOR, INGRESAR CON UN ENCUESTADOR PRECARGADO O CREAR UNO NUEVO
 
     /*private void Encuestador(){
         /* Creo un alert dialog y utilizo el recurso layout creado alert_encuestador para poder
@@ -352,7 +400,7 @@ public class Inicio extends AppCompatActivity {
         });
     }*/
 
-    // FUNCION DE CREAR NUEVO ENCUESTADOR
+// FUNCION DE CREAR NUEVO ENCUESTADOR
 
     /*private void NuevoEncuestador(){
         // Creo el Alert dialog con los recursos layout creados para este alert_crear_encuestador
@@ -454,137 +502,84 @@ public class Inicio extends AppCompatActivity {
         });
     }*/
 
-    // ESTA ES UNA EXTENSION PARA PODER CREAR LAS BASES DE DATOS EN SEGUNDO PLANO
+// Cargo los botones
+// Botones de la familia
+        /*botones.add("INSPECCION EXTERIOR");
+        botones.add("SERVICIOS BASICOS");
+        botones.add("VIVIENDA");
+        botones.add("DENGUE");
 
-    private class BdEfectores extends AsyncTask<Void, Void, Void> {
+        // Botones de la persona: general
+        botones.add("EDUCACION");
+        botones.add("INGRESO Y OCUPACION");
+        botones.add("CONTACTO");
+        botones.add("EFECTOR");
+        botones.add("OBSERVACIONES");
 
-        // Creo un progress dialog para mostrar mientras se ejecuta este codigo
-        ProgressDialog pd;
+        // Botones de la persona: fisico
+        botones.add("FACTORES DE RIESGO");
+        botones.add("DISCAPACIDAD");
+        botones.add("EMBARAZO");
+        botones.add("VITAMINA D");
+        botones.add("ENFERMEDADES CRONICAS");
 
-        /*Antes de comenzar la ejecucion se inicia el progress dialog con los siguientes atributos*/
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(Inicio.this);
-            pd.setMessage("Cargando datos, aguarde");
-            pd.setCancelable(false);
-            pd.show();
+        // Botones de la persona: psico-social
+        botones.add("ACOMPAÑAMIENTO");
+        botones.add("TRASTORNOS EN NIÑOS");
+        botones.add("TRASTORNOS MENTALES");
+        botones.add("ADICCIONES");
+        botones.add("VIOLENCIA");
+        botones.add("OCIO");*/
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// AGREGAR CABECERA POR UNICA VEZ A LOS ARCHIVOS DE DATOS
+
+    /*private void AgregarCabecera() {
+        /* Me dirijo a el directorio en la memoria interna del dispositivo para poder acceder a la
+        * carpeta llamada RelevAr donde se almacena de manera publlica la informacion, de no
+        * encontrarla se debe crear la misma
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        /* Necesito abrir el archivo .csv correspondiente al dia actual, por esta razon se solicita
+        * la fecha actual al dispositivo, si este no existe se debe crear
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date1 = new Date();
+        String fecha = dateFormat.format(date1);
+        String NombreArchivo = "RelevAr-" + fecha + ".csv";
+        File dir = new File(nuevaCarpeta, NombreArchivo);
+
+        /* Una vez tenemos el archivo dir con la ruta correcta, necesitamos leer los datos conenidos
+        * en este, se va a leer la primera linea que es la que debe contener la cabecera con las categorias        String strLine = "";
+        try {
+            FileInputStream fis = new FileInputStream(dir);
+            DataInputStream in = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            strLine = br.readLine().split(";")[0];
+            br.close();
+            in.close();
+            fis.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, getText(R.string.ocurrio_error) + " 1", Toast.LENGTH_SHORT).show();
         }
 
-        /* Este es el codigo que se ejecuta en segundo plano mientras el usuario ve un cartel de
-        * cargando datos*/
-        @Override
-        protected Void doInBackground(Void... voids) {
-            /* Se crea una conexion con la base de datos, se corrobora que los datos de la provincia
-            * seleccionada por el encuestador no esten cargados y se comienza a leer desde efectores.csv
-            * solo eligiendo los efectores correspondientes a esta provincia, posteriomente se los
-            * inserta en la base de datos.
-            * Esta accion se realiza una vez por provincia*/
-            SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-            String myData = "";
+        /* Con los datos de la primer fila es necesario ahora corroborar que esta se corresponda con
+        * la cabecera, la primer palabra que debe aparecer es la palbra "CALLE"
+        if (strLine.equals("CALLE") != true) {
+            //String cab = getString(R.string.encabezado);
+            String cab = "CALLE;NUMERO;COORDENADAS;ESTADO;GRUPO FAMILIAR;MENORES;MAYORES;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;QR;NUMERO CASA CARTOGRAFIA\n";
             try {
-                InputStream fis = getResources().openRawResource(R.raw.efectores);//new FileInputStream(R.raw.efectores);
-                DataInputStream in = new DataInputStream(fis);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                SQLiteDatabase Bd1 = admin.getWritableDatabase();
-                if(SPProvincias!=null){
-                if (!admin.ExisteEfectores(SPProvincias.getSelectedItem().toString())) {
-                    while ((myData = br.readLine()) != null) {
+                //el true es para que se agreguen los datos al final sin perder los datos anteriores
+                FileOutputStream fOut = new FileOutputStream(dir, true);
+                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                myOutWriter.append(cab);
+                myOutWriter.close();
+                fOut.close();
 
-                        if (myData.split(",")[2].equals(SPProvincias.getSelectedItem().toString())) {
-                            ContentValues registro = new ContentValues();
-                            registro.put("NOMBRE", myData.split(",")[0]);
-                            registro.put("PROVINCIA", myData.split(",")[2]);
-                            Bd1.insert("EFECTORES", null, registro);
-                        }
-                    }
-                    Bd1.close();
-                    br.close();
-                    in.close();
-                    fis.close();
-
-                }}
             } catch (IOException e) {
-                Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();
-            }
-
-            /* Como la base de datos de los trabajos solo ejecuta una vez desde la instalacion de la
-            * app aprovecho y tambien cargo la base de datos de los botones*/
-            /* Tambien debo crear la base de datos de los trabajos, esto se hace una vez, jsto despues
-            * de instalar la app, para eso corroboro que la misma no este creada, leo los datos desde
-            * trabajo.csv y los inserto en la base de datos correspondiente*/
-            try{
-                InputStream fis = getResources().openRawResource(R.raw.trabajos);//new FileInputStream(R.raw.efectores);
-                DataInputStream in = new DataInputStream(fis);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                SQLiteDatabase Bd1 = admin.getWritableDatabase();
-                //String myData="";
-                if(!admin.ExisteTrabajos()){
-                    while ((myData=br.readLine())!=null){
-
-                        ContentValues registro = new ContentValues();
-                        registro.put("TRABAJO", myData);
-                        Bd1.insert("TRABAJOS", null, registro);
-
-
-                    }
-                    /*for(int i=0; i<botones.size(); i++){
-                        ContentValues botonesValores = new ContentValues();
-                        botonesValores.put("BOTON", botones.get(i));
-                        botonesValores.put("ACTIVO", false);
-                        Bd1.insert("BOTONES", null, botonesValores);
-                    }*/
-                    Bd1.close();
-                    br.close();
-                    in.close();
-                    fis.close();
-                }
-            }
-            catch (IOException e){
-                Toast.makeText(getBaseContext(), R.string.ocurrio_error, Toast.LENGTH_SHORT).show();}
-
-            /* Obtengo el listado de botones de la base de datos si no tiene alguno de los botone
-            * que estan listado en en el arraylist lo agrego*/
-            SQLiteDatabase Bd1 = admin.getWritableDatabase();
-            ArrayList<String> botonesActuales = admin.Botones();
-
-            for(int i=0; i<botones.size(); i++) {
-                if (Bd1 == null || !Bd1.isOpen())
-                {
-                    Bd1 = admin.getWritableDatabase();
-                }
-                if(botonesActuales.size()!=0){
-                if (!botonesActuales.contains(botones.get(i))) {
-                    ContentValues botonesValores = new ContentValues();
-                    botonesValores.put("BOTON", botones.get(i));
-                    botonesValores.put("ACTIVO", false);
-                    Bd1.insert("BOTONES", null, botonesValores);
-                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA"+botones.get(i));
-                }}
-                else{
-                    ContentValues botonesValores = new ContentValues();
-                    botonesValores.put("BOTON", botones.get(i));
-                    botonesValores.put("ACTIVO", false);
-                    Bd1.insert("BOTONES", null, botonesValores);
-
-                }
-            }
-            Bd1.close();
-
-            return null;
-        }
-
-        /* Despues de la ejecucion del codigo en segundo plano debo detener el alert que me indica
-        * que se estan cargando los datos*/
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            if (pd != null)
-            {
-                pd.dismiss();
+                e.printStackTrace();
+                Toast.makeText(this, R.string.ocurrio_error+" 2", Toast.LENGTH_SHORT).show();
             }
         }
-
-    }
-
-}
+    }*/

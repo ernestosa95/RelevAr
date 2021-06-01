@@ -1,36 +1,13 @@
-package com.example.relevar.Recursos;
+package com.example.relevar;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Environment;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.example.relevar.Inicio;
-import com.example.relevar.MenuMapa;
+import com.example.relevar.ModuloGeneral.Archivos;
+import com.example.relevar.ModuloGeneral.Ubicacion.Ubicacion;
 import com.example.relevar.MySQL.SQLitePpal;
-import com.example.relevar.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -39,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -53,7 +29,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.os.Environment.getExternalStorageDirectory;
-import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 public class Encuestador extends Activity {
@@ -69,10 +44,13 @@ public class Encuestador extends Activity {
 
     public String Nombre, Apellido, DNI, Provincia;
     private Context context;
+    public Ubicacion ubicacion = new Ubicacion();
+    public Archivos archivos;
 
     // CONSTRUCTOR: Obtengo los datos del encuestador que esta activado
     public Encuestador(Context baseContext){
         context = baseContext;
+        archivos = new Archivos(context);
         SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
         HashMap<String, String> encuestador_activado = admin.encuestadorActivado();
         if (encuestador_activado.size()!=0){
@@ -83,6 +61,9 @@ public class Encuestador extends Activity {
         }
     }
 
+    public boolean checkUbicacionGPS(ContentResolver contentResolver){
+        return ubicacion.checkUbicacionGPS(contentResolver);
+    }
     public boolean existe(String nombre, String apellido){
         SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
         return admin.existeEncuestador(nombre,apellido);
@@ -96,6 +77,10 @@ public class Encuestador extends Activity {
 
     public ArrayList<String> Provincias(){
         return new ArrayList<String>(Provincias);
+    }
+
+    public ArrayList<String> Botones(){
+        return new ArrayList<String>(Botones);
     }
 
     public void crearUsuario(String nombre, String apellido, String dni, String provincia){

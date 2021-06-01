@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.relevar.Encuestador;
 import com.example.relevar.MenuMapa;
 import com.example.relevar.R;
 import com.google.android.gms.maps.model.LatLng;

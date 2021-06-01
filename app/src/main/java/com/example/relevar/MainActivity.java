@@ -22,11 +22,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.relevar.Recursos.Encuestador;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;

@@ -1,9 +1,7 @@
 package com.example.relevar;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.FileProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -19,23 +17,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,17 +46,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.relevar.MySQL.ConexionSQLiteHelper;
-import com.example.relevar.MySQL.SQLitePpal;
-import com.example.relevar.Recursos.Encuestador;
+import com.example.relevar.ModuloGeneral.Archivos;
 import com.example.relevar.Recursos.ServicioGPS;
+import com.example.relevar.MySQL.SQLitePpal;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.google.android.gms.common.api.Response;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -75,10 +65,8 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -89,27 +77,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.os.Environment.getExternalStorageDirectory;
-import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -187,6 +164,8 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         // Obtengo el encuestador que esta activado desde la base de datos
         encuestador = new Encuestador(getApplicationContext());
+       
+       
         SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
         encuestador.setID(admin.ObtenerActivado());
 
@@ -224,16 +203,16 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("custom-event-name"));
 
-        /* Creo y asigno funciones para compartir los arcivos .csv*/
+        /* Creo y asigno funciones para compartir los arcivos .csv
         directorioraiz = "/storage/emulated/0/RelevAr";
 
         Compartir = (FloatingActionButton) findViewById(R.id.compartir);
         Compartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buscar(directorioraiz);
+                seleccionCompartir(directorioraiz);
             }
-        });
+        });*/
 
         fechas = findViewById(R.id.FECHAS);
         // Cargo el spinner con los datos de los encuestadores
@@ -308,100 +287,57 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 
-    // BOTON PARA COMPARTIR LOS ARCHIVOS .CSV DESDE LA APP
-    @SuppressLint("WrongConstant")
-    private void buscar(String RutaDirectorio){
-
-    /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
-    * RelevAr*/
-    listaNombresArchivos = new ArrayList<String>();
-    listaRutasArchivos = new ArrayList<String>();
-    File directorioactual = new File(RutaDirectorio);
-    File[] listaArchivos = directorioactual.listFiles();
-
-    int x=0;
-    if(!RutaDirectorio.equals(directorioraiz)){
-        listaNombresArchivos.add("../");
-        listaRutasArchivos.add(directorioactual.getParent());
-        x=1;
+    // COMPARTIR ARCHIVOS
+    public void Compartir(View view){
+        directorioraiz = "/storage/emulated/0/RelevAr";
+        seleccionCompartir(directorioraiz);
     }
 
-    for(File archivo : listaArchivos){
-        listaRutasArchivos.add(archivo.getPath());
-    }
+    private void seleccionCompartir(String rutaDirectorio){
+        listaNombresArchivos = encuestador.archivos.getListaNombresArchivos(rutaDirectorio);
+        listaRutasArchivos = encuestador.archivos.getListaRutasArchivos(rutaDirectorio);
 
-    Collections.sort(listaRutasArchivos, String.CASE_INSENSITIVE_ORDER);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view1 = Inflater.inflate(R.layout.alert_explorador, null);
+        builder.setView(view1);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
-    for(int i=x; i<listaRutasArchivos.size(); i++){
-        File archivo = new File(listaRutasArchivos.get(i));
-        if(archivo.isFile()){
-            listaNombresArchivos.add(archivo.getName());
-        } else{
-            listaNombresArchivos.add("/"+archivo.getName());
-        }
-    }
+        ListView listArchivos = view1.findViewById(R.id.LIDTVIEW1);
+        ArrayAdapter adaptadorListArchivos = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, listaNombresArchivos);
+        listArchivos.setAdapter(adaptadorListArchivos);
 
-    if(listaArchivos.length<1){
-        listaNombresArchivos.add("NO HAY ARCHIVOS");
-        listaRutasArchivos.add(RutaDirectorio);
-    }
-
-    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    LayoutInflater Inflater = getLayoutInflater();
-    View view1 = Inflater.inflate(R.layout.alert_explorador, null);
-    builder.setView(view1);
-    builder.setCancelable(false);
-    final AlertDialog dialog = builder.create();
-    dialog.show();
-
-    lv1 = view1.findViewById(R.id.LIDTVIEW1);
-    adaptador = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, listaNombresArchivos);
-    lv1.setAdapter(adaptador);
-
-    // Realizar accion con el listview
-    lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int p1, long id) {
-            File archivo = new File(listaRutasArchivos.get(p1));
-            if(archivo.isFile()){
-                compartir(listaRutasArchivos.get(p1));
-            } else {
-                buscar(listaRutasArchivos.get(p1));
+        listArchivos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int p1, long id) {
+                File archivo = new File(listaRutasArchivos.get(p1));
+                if(archivo.isFile()){
+                    view1.getContext().startActivity(Intent.createChooser(encuestador.archivos.Compartir(listaRutasArchivos.get(p1)), "SUBIR ARCHIVO"));
+                    //getBaseContext().startActivity(Intent.createChooser(encuestador.archivos.Compartir(listaRutasArchivos.get(p1)), "SUBIR ARCHIVO"));
+                    //encuestador.archivos.Compartir(listaRutasArchivos.get(p1));
+                } else {
+                    seleccionCompartir(listaRutasArchivos.get(p1));
+                }
             }
-        }
-    });
-    final Button cancelar = view1.findViewById(R.id.CANCELAR);
-    cancelar.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            dialog.dismiss();
-        }
-    });
-    final Button EnviarGNU = view1.findViewById(R.id.enviarGNU);
-    EnviarGNU.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            CrearUnificado();
-        }
-    });
-}
+        });
 
-    // FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
-    private void compartir(String nombreArchivo){
-        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
-        nuevaCarpeta.mkdirs();
+        final Button EnviarGNU = view1.findViewById(R.id.enviarGNU);
+        EnviarGNU.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CrearUnificado();
+            }
+        });
 
-        File dir = new File(nombreArchivo);
-        Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-        emailIntent.setType("vnd.android.cursor.dir/email");
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, nombreArchivo);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-        this.startActivity(Intent.createChooser(emailIntent, "SUBIR ARCHIVO"));
+        final Button cancelar = view1.findViewById(R.id.CANCELAR);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -1998,3 +1934,99 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     }
 
 }
+
+// BOTON PARA COMPARTIR LOS ARCHIVOS .CSV DESDE LA APP
+    /*@SuppressLint("WrongConstant")
+    private void buscar(String RutaDirectorio){
+
+    /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
+    * RelevAr
+    listaNombresArchivos = new ArrayList<String>();
+    listaRutasArchivos = new ArrayList<String>();
+    File directorioactual = new File(RutaDirectorio);
+    File[] listaArchivos = directorioactual.listFiles();
+
+    int x=0;
+    if(!RutaDirectorio.equals(directorioraiz)){
+        listaNombresArchivos.add("../");
+        listaRutasArchivos.add(directorioactual.getParent());
+        x=1;
+    }
+
+    for(File archivo : listaArchivos){
+        listaRutasArchivos.add(archivo.getPath());
+    }
+
+    Collections.sort(listaRutasArchivos, String.CASE_INSENSITIVE_ORDER);
+
+    for(int i=x; i<listaRutasArchivos.size(); i++){
+        File archivo = new File(listaRutasArchivos.get(i));
+        if(archivo.isFile()){
+            listaNombresArchivos.add(archivo.getName());
+        } else{
+            listaNombresArchivos.add("/"+archivo.getName());
+        }
+    }
+
+    if(listaArchivos.length<1){
+        listaNombresArchivos.add("NO HAY ARCHIVOS");
+        listaRutasArchivos.add(RutaDirectorio);
+    }
+
+    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    LayoutInflater Inflater = getLayoutInflater();
+    View view1 = Inflater.inflate(R.layout.alert_explorador, null);
+    builder.setView(view1);
+    builder.setCancelable(false);
+    final AlertDialog dialog = builder.create();
+    dialog.show();
+
+    lv1 = view1.findViewById(R.id.LIDTVIEW1);
+    adaptador = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, listaNombresArchivos);
+    lv1.setAdapter(adaptador);
+
+    // Realizar accion con el listview
+    lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int p1, long id) {
+            File archivo = new File(listaRutasArchivos.get(p1));
+            if(archivo.isFile()){
+                compartir(listaRutasArchivos.get(p1));
+            } else {
+                buscar(listaRutasArchivos.get(p1));
+            }
+        }
+    });
+    final Button cancelar = view1.findViewById(R.id.CANCELAR);
+    cancelar.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dialog.dismiss();
+        }
+    });
+    final Button EnviarGNU = view1.findViewById(R.id.enviarGNU);
+    EnviarGNU.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            CrearUnificado();
+        }
+    });
+}*/
+
+// FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
+    /*private void compartir(String nombreArchivo){
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        File dir = new File(nombreArchivo);
+        Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, nombreArchivo);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        this.startActivity(Intent.createChooser(emailIntent, "SUBIR ARCHIVO"));
+    }*/
