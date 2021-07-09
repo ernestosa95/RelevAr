@@ -1,4 +1,4 @@
-package com.example.relevar.Recursos;
+package com.example.relevar.ModuloGeneral.Ubicacion;
 
 import android.Manifest;
 import android.app.Notification;

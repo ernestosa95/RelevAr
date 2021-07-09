@@ -39,7 +39,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
 
-        <service android:name=".Recursos.ServicioGPS" />
+        <service android:name=".ModuloGeneral.Ubicacion.ServicioGPS" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

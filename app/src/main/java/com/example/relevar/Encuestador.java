@@ -1,9 +1,12 @@
 package com.example.relevar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Environment;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.example.relevar.ModuloGeneral.Archivos;
 import com.example.relevar.ModuloGeneral.Ubicacion.Ubicacion;
@@ -44,13 +47,14 @@ public class Encuestador extends Activity {
 
     public String Nombre, Apellido, DNI, Provincia;
     private Context context;
-    public Ubicacion ubicacion = new Ubicacion();
+    public Ubicacion ubicacion;
     public Archivos archivos;
 
     // CONSTRUCTOR: Obtengo los datos del encuestador que esta activado
     public Encuestador(Context baseContext){
         context = baseContext;
         archivos = new Archivos(context);
+        ubicacion = new Ubicacion(context);
         SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
         HashMap<String, String> encuestador_activado = admin.encuestadorActivado();
         if (encuestador_activado.size()!=0){
@@ -64,6 +68,7 @@ public class Encuestador extends Activity {
     public boolean checkUbicacionGPS(ContentResolver contentResolver){
         return ubicacion.checkUbicacionGPS(contentResolver);
     }
+
     public boolean existe(String nombre, String apellido){
         SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
         return admin.existeEncuestador(nombre,apellido);
@@ -94,6 +99,25 @@ public class Encuestador extends Activity {
         admin.desactivarUsuarios();
     }
 
+    // BOTONES
+    public Switch comportamientoSwitch(Switch switch_editar){
+        final SQLitePpal admin = new SQLitePpal(context, "DATA_PRINCIPAL", null, 1);
+        if(admin.EstadoBoton("INSPECCION EXTERIOR")){
+            switch_editar.setChecked(true);
+        }
+
+        switch_editar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(switch_editar.getText().toString());
+                } else {
+                    admin.DesactivarBoton(switch_editar.getText().toString());
+                }
+            }
+        });
+        return switch_editar;
+    }
 
 
 

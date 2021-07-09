@@ -25,6 +25,7 @@ import java.util.Locale;
 import static android.os.Environment.getExternalStorageDirectory;
 
 public class ObjetoPersona implements Serializable {
+
     public String Nombre;
     public String Apellido;
     public String DNI;
@@ -73,10 +74,14 @@ public class ObjetoPersona implements Serializable {
 
     public HashMap<String, String> Valores = new HashMap<>();
     public HashMap<String, String> datosEditar = new HashMap<>();
-    ArrayList<String> DatosEnviar = new ArrayList<>();
+    public ArrayList<String> DatosEnviar = new ArrayList<>();
 
     private ArrayList<String> cabeceraPersona = new ArrayList<>();
     private HashMap<String,String> datosIngresados = new HashMap<>();
+
+
+
+
     public void setInfoPersonal(String nombre, String apellido, String dni){
         Nombre=nombre;
         Apellido=apellido;
@@ -84,6 +89,7 @@ public class ObjetoPersona implements Serializable {
     }
 
     public ObjetoPersona(ArrayList<String> cabeceraPersonaIngresada) {
+
         cabeceraPersona = cabeceraPersonaIngresada;
         Nombre="";
         Sexo="";

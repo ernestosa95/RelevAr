@@ -46,8 +46,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.relevar.ModuloGeneral.Archivos;
-import com.example.relevar.Recursos.ServicioGPS;
+import com.example.relevar.ModuloGeneral.Ubicacion.ServicioGPS;
 import com.example.relevar.MySQL.SQLitePpal;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -192,7 +191,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
             }
         });
 
-        boolean estado = isMyServiceRunning(ServicioGPS.class);
+        boolean estado = encuestador.ubicacion.funcionaServicioGPS(ServicioGPS.class);
         if (estado == true) {
          //   PararServicio.setText(getString(R.string.terminar_recorrido));
             ITrecorrido.setTitle(getString(R.string.terminar_recorrido));
@@ -216,7 +215,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         fechas = findViewById(R.id.FECHAS);
         // Cargo el spinner con los datos de los encuestadores
-        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spiner_personalizado, FechasArchivos());
+        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spiner_personalizado, encuestador.archivos.listadoFechasArchivo());
         fechas.setAdapter(comboAdapter);
 
         categoriasPersona.add(getString(R.string.celular));
@@ -289,11 +288,10 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
     // COMPARTIR ARCHIVOS
     public void Compartir(View view){
-        directorioraiz = "/storage/emulated/0/RelevAr";
-        seleccionCompartir(directorioraiz);
+        seleccionCompartir("/storage/emulated/0/RelevAr");
     }
 
-    private void seleccionCompartir(String rutaDirectorio){
+    public void seleccionCompartir(String rutaDirectorio){
         listaNombresArchivos = encuestador.archivos.getListaNombresArchivos(rutaDirectorio);
         listaRutasArchivos = encuestador.archivos.getListaRutasArchivos(rutaDirectorio);
 
@@ -327,7 +325,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         EnviarGNU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CrearUnificado();
+                encuestador.archivos.compartirUnificado(categoriasPersona,familiaCabecera,view1.getContext());
             }
         });
 
@@ -348,7 +346,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         /* Corroboro el estado del servicio de GPS ya que para tomar datos de la persona debe estar
         * tomando datos de ubicación*/
-        boolean estado = isMyServiceRunning(ServicioGPS.class);
+        boolean estado = encuestador.ubicacion.funcionaServicioGPS(ServicioGPS.class);
         if (estado == false) {
 
             /* Si no esta iniciado el servicio creo una alert para solicitar el inicio del gps*/
@@ -407,7 +405,7 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
     public void TerminarRecorrido() {
 
         /* Consulto la situacion del gps*/
-        boolean estado = isMyServiceRunning(ServicioGPS.class);
+        boolean estado = encuestador.ubicacion.funcionaServicioGPS(ServicioGPS.class);
 
         if (estado == true) {
 
@@ -476,17 +474,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
                 }
             });
         }
-    }
-
-    // CORROBORAR LA SITUACION DEL GPS
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -633,111 +620,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
-    /*
-    // FUNCION DE ENCUESTADORES, muestra los encuestadores cargados y la posibilidad de crear un
-    // nuevo encuestador
-    private void Encuestador(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater Inflater = getLayoutInflater();
-        View view = Inflater.inflate(R.layout.alert_encuestador, null);
-        builder.setView(view);
-        builder.setCancelable(false);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        // Defino el spinner y le agrego los encuestadores guardados
-        final Spinner encuestadores = view.findViewById(R.id.ENCUESTADOR);
-        ArrayList<String> enc = new ArrayList<>();
-
-        // Recupero los encuestadores cargados
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(getBaseContext(), "datos", null, 1);
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String consulta ="SELECT * FROM ENCUESTADOR";
-        Cursor a = db.rawQuery(consulta, null);
-        while (a.moveToNext()){
-            enc.add(a.getString(0));
-        }
-        db.close();
-
-        // Cargo el spinner con los datos
-        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, enc);
-        encuestadores.setAdapter(comboAdapter);
-
-        // Crear nuevo encuestador
-        Button nuevo = view.findViewById(R.id.NUEVOENC);
-        nuevo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            NuevoEncuestador();
-            dialog.dismiss();
-            }
-        });
-
-        // Ingresar con encuestador existente
-        Button ingresar = view.findViewById(R.id.INGRESAR);
-        ingresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (encuestadores.getAdapter().getCount()!=0){
-            encuestador.setID(encuestadores.getSelectedItem().toString());
-            //makeText(getBaseContext(), encuestador.getID(), LENGTH_SHORT).show();
-            dialog.dismiss();}
-                else {makeText(getBaseContext(), "NO HAY ENCUESTADORES", LENGTH_SHORT).show();}
-            }
-        });
-    }
-
-    // FUNCION DE CREAR NUEVO ENCUESTADOR
-    private void NuevoEncuestador(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater Inflater = getLayoutInflater();
-        View view = Inflater.inflate(R.layout.alert_nuevo_encuestador, null);
-        builder.setView(view);
-        builder.setCancelable(false);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        Nencuestador = view.findViewById(R.id.EditNuevoEncuestador);
-        Button nuevo = view.findViewById(R.id.GUARDAR);
-        nuevo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Ingreso datos del encuestador
-                if (Nencuestador.getText().toString().isEmpty()){makeText(getBaseContext(), "INGRESE NOMBRE Y APELLIDO", LENGTH_SHORT).show();}
-                else {
-                ConexionSQLiteHelper conn = new ConexionSQLiteHelper(getBaseContext(), "datos", null, 1);
-                SQLiteDatabase db = conn.getWritableDatabase();
-                String insert ="INSERT INTO ENCUESTADOR (ID) VALUES ('"+Nencuestador.getText().toString()+"')";
-                db.execSQL(insert);
-                db.close();
-
-                // Inicializo el encuestador
-                encuestador.setID(Nencuestador.getText().toString());
-                dialog.dismiss();}
-            }
-        });
-
-        Button cancelar = view.findViewById(R.id.CANCELAR);
-        cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Encuestador();
-                dialog.dismiss();
-            }
-        });
-    }
-
-    // ABRIR EL EXPLORADOR DE ARCHIVOS
-    public void MostrarArchivos(View view){
-        Uri selectedUri = Uri.parse("file:/" + Environment.getExternalStorageDirectory() + "/RelevAr");
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(selectedUri, "application/*");
-        startActivity(Intent.createChooser(intent, "Open folder"));
-    }*/
-
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
     // MENU DE ACTIVACION DE BOTONES
 
     public void Botones(View view){
@@ -754,349 +636,84 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
         encabezado = view1.findViewById(R.id.ENCABEZADOMODULOS);
         encabezado.setText(getString(R.string.modulos)+": "+getString(R.string.grupo_familiar));
 
-        final SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-        //admin.DesactivarBotones();
-
         inspeccionExterior = view1.findViewById(R.id.SWITCHINSPECCIONEXTERIOR);
-        if(admin.EstadoBoton("INSPECCION EXTERIOR")){
-            inspeccionExterior.setChecked(true);
-        }
-
-        inspeccionExterior.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(inspeccionExterior.getText().toString());
-                } else {
-                    admin.DesactivarBoton(inspeccionExterior.getText().toString());
-                }
-            }
-        });
-        //inspeccionExterior.setVisibility(View.GONE);
+        inspeccionExterior = encuestador.comportamientoSwitch(inspeccionExterior);
 
         serviciosBasicos = view1.findViewById(R.id.SWITCHSERVICIOSBASICOS);
-        if(admin.EstadoBoton("SERVICIOS BASICOS")){
-            serviciosBasicos.setChecked(true);
-        }
-
-        serviciosBasicos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(serviciosBasicos.getText().toString());
-                } else {
-                    admin.DesactivarBoton(serviciosBasicos.getText().toString());
-                }
-            }
-        });
-        //serviciosBasicos.setVisibility(View.GONE);
+        serviciosBasicos = encuestador.comportamientoSwitch(serviciosBasicos);
 
         vivienda = view1.findViewById(R.id.SWITCHVIVIENDA);
-        if(admin.EstadoBoton("VIVIENDA")){
-            vivienda.setChecked(true);
-        }
-
-        vivienda.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(vivienda.getText().toString());
-                } else {
-                    admin.DesactivarBoton(vivienda.getText().toString());
-                }
-            }
-        });
-        //vivienda.setVisibility(View.GONE);
+        vivienda = encuestador.comportamientoSwitch(vivienda);
 
         dengue = view1.findViewById(R.id.SWITCHDENGUE);
-        if(admin.EstadoBoton("DENGUE")){
-            dengue.setChecked(true);
-        }
-
-        dengue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(dengue.getText().toString());
-                } else {
-                    admin.DesactivarBoton(dengue.getText().toString());
-                }
-            }
-        });
-        //dengue.setVisibility(View.GONE);
+        dengue = encuestador.comportamientoSwitch(dengue);
 
         educacion = view1.findViewById(R.id.SWITCHEDUCACION);
-        if(admin.EstadoBoton("EDUCACION")){
-            educacion.setChecked(true);
-        }
-
-        educacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(educacion.getText().toString());
-                } else {
-                    admin.DesactivarBoton(educacion.getText().toString());
-                }
-            }
-        });
+        educacion = encuestador.comportamientoSwitch(educacion);
         educacion.setVisibility(View.GONE);
 
         ocupacion = view1.findViewById(R.id.SWITCHOCUPACION);
-        if(admin.EstadoBoton("INGRESO Y OCUPACION")){
-            ocupacion.setChecked(true);
-        }
-
-        ocupacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(ocupacion.getText().toString());
-                } else {
-                    admin.DesactivarBoton(ocupacion.getText().toString());
-                }
-            }
-        });
+        ocupacion = encuestador.comportamientoSwitch(ocupacion);
         ocupacion.setVisibility(View.GONE);
 
         contacto = view1.findViewById(R.id.SWITCHCONTACTO);
-        if(admin.EstadoBoton("CONTACTO")){
-            contacto.setChecked(true);
-        }
-        contacto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(contacto.getText().toString());
-                } else {
-                    admin.DesactivarBoton(contacto.getText().toString());
-                }
-            }
-        });
+        contacto = encuestador.comportamientoSwitch(contacto);
         contacto.setVisibility(View.GONE);
 
         efector = view1.findViewById(R.id.SWITCHEFECTOR);
-        if(admin.EstadoBoton("EFECTOR")){
-            efector.setChecked(true);
-        }
-        efector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(efector.getText().toString());
-                } else {
-                    admin.DesactivarBoton(efector.getText().toString());
-                }
-            }
-        });
+        efector = encuestador.comportamientoSwitch(efector);
         efector.setVisibility(View.GONE);
 
         observaciones = view1.findViewById(R.id.SWITCHOBSERVACIONES);
-        if(admin.EstadoBoton("OBSERVACIONES")){
-            observaciones.setChecked(true);
-        }
-
-        observaciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(observaciones.getText().toString());
-                } else {
-                    admin.DesactivarBoton(observaciones.getText().toString());
-                }
-            }
-        });
+        observaciones = encuestador.comportamientoSwitch(observaciones);
         observaciones.setVisibility(View.GONE);
 
         // ESTADO RIESGO
         factores_riesgo = view1.findViewById(R.id.SWITCHFACTORESRIESGO);
-        if(admin.EstadoBoton("FACTORES DE RIESGO")){
-            factores_riesgo.setChecked(true);
-        }
-
-        factores_riesgo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(factores_riesgo.getText().toString());
-                } else {
-                    admin.DesactivarBoton(factores_riesgo.getText().toString());
-                }
-            }
-        });
+        factores_riesgo = encuestador.comportamientoSwitch(factores_riesgo);
         factores_riesgo.setVisibility(View.GONE);
 
         discapacidad = view1.findViewById(R.id.SWITCHDISCAPACIDAD);
-        if(admin.EstadoBoton("DISCAPACIDAD")){
-            discapacidad.setChecked(true);
-        }
-
-        discapacidad.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(discapacidad.getText().toString());
-                } else {
-                    admin.DesactivarBoton(discapacidad.getText().toString());
-                }
-            }
-        });
+        discapacidad = encuestador.comportamientoSwitch(discapacidad);
         discapacidad.setVisibility(View.GONE);
 
         embarazo = view1.findViewById(R.id.SWITCHEMBARAZO);
-        if(admin.EstadoBoton("EMBARAZO")){
-            embarazo.setChecked(true);
-        }
-        embarazo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(embarazo.getText().toString());
-                } else {
-                    admin.DesactivarBoton(embarazo.getText().toString());
-                }
-            }
-        });
+        embarazo = encuestador.comportamientoSwitch(embarazo);
         embarazo.setVisibility(View.GONE);
 
         vitamina_D = view1.findViewById(R.id.SWITCHVITAMINAD);
-        if(admin.EstadoBoton("VITAMINA D")){
-            vitamina_D.setChecked(true);
-        }
-
-        vitamina_D.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(vitamina_D.getText().toString());
-                } else {
-                    admin.DesactivarBoton(vitamina_D.getText().toString());
-                }
-            }
-        });
+        vitamina_D = encuestador.comportamientoSwitch(vitamina_D);
         vitamina_D.setVisibility(View.GONE);
 
         // ESTADO PSICO-SOCIAL
         acompañamiento = view1.findViewById(R.id.SWITCHACOMPAÑAMIENTO);
-        if(admin.EstadoBoton("ACOMPAÑAMIENTO")){
-            acompañamiento.setChecked(true);
-        }
-
-        acompañamiento.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(acompañamiento.getText().toString());
-                } else {
-                    admin.DesactivarBoton(acompañamiento.getText().toString());
-                }
-            }
-        });
+        acompañamiento =encuestador.comportamientoSwitch(acompañamiento);
         acompañamiento.setVisibility(View.GONE);
 
         transtornos_niños = view1.findViewById(R.id.SWITCHTRANSTORNOSENNIÑOS);
-        if(admin.EstadoBoton("TRASTORNOS EN NIÑOS")){
-            transtornos_niños.setChecked(true);
-        }
-
-        transtornos_niños.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(transtornos_niños.getText().toString());
-                } else {
-                    admin.DesactivarBoton(transtornos_niños.getText().toString());
-                }
-            }
-        });
+        transtornos_niños = encuestador.comportamientoSwitch(transtornos_niños);
         transtornos_niños.setVisibility(View.GONE);
 
         trastornos_mentales = view1.findViewById(R.id.SWITCHTRANSTORNOSMENTALES);
-        if(admin.EstadoBoton("TRASTORNOS MENTALES")){
-            trastornos_mentales.setChecked(true);
-        }
-
-        trastornos_mentales.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(trastornos_mentales.getText().toString());
-                } else {
-                    admin.DesactivarBoton(trastornos_mentales.getText().toString());
-                }
-            }
-        });
+        trastornos_mentales = encuestador.comportamientoSwitch(trastornos_mentales);
         trastornos_mentales.setVisibility(View.GONE);
 
         adicciones = view1.findViewById(R.id.SWITCHADICCIONES);
-        if(admin.EstadoBoton("ADICCIONES")){
-            adicciones.setChecked(true);
-        }
-
-        adicciones.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(adicciones.getText().toString());
-                } else {
-                    admin.DesactivarBoton(adicciones.getText().toString());
-                }
-            }
-        });
+        adicciones = encuestador.comportamientoSwitch(adicciones);
         adicciones.setVisibility(View.GONE);
 
         violencia = view1.findViewById(R.id.SWITCHVIOLENCIA);
-        if(admin.EstadoBoton("VIOLENCIA")){
-            violencia.setChecked(true);
-        }
-
-        violencia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(violencia.getText().toString());
-                } else {
-                    admin.DesactivarBoton(violencia.getText().toString());
-                }
-            }
-        });
+        violencia = encuestador.comportamientoSwitch(violencia);
         violencia.setVisibility(View.GONE);
 
         ocio = view1.findViewById(R.id.SWITCHOCIO);
-        if(admin.EstadoBoton("OCIO")){
-            ocio.setChecked(true);
-        }
-
-        ocio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(ocio.getText().toString());
-                } else {
-                    admin.DesactivarBoton(ocio.getText().toString());
-                }
-            }
-        });
+        ocio = encuestador.comportamientoSwitch(ocio);
         ocio.setVisibility(View.GONE);
 
         enfermedadescronicas = view1.findViewById(R.id.SWITCHENFERMEDADCRONICA);
-        if(admin.EstadoBoton("ENFERMEDADES CRONICAS")){
-            enfermedadescronicas.setChecked(true);
-        }
-
-        enfermedadescronicas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("WrongConstant")
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    admin.ActivarBoton(enfermedadescronicas.getText().toString());
-                } else {
-                    admin.DesactivarBoton(enfermedadescronicas.getText().toString());
-                }
-            }
-        });
+        enfermedadescronicas = encuestador.comportamientoSwitch(enfermedadescronicas);
         enfermedadescronicas.setVisibility(View.GONE);
 
-        admin.close();
         final Button listo = view1.findViewById(R.id.LISTOBOTON);
         listo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1220,39 +837,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    // NAVEGACION DE ARCHIVOS
-    // Obtener listado de archivos disponibles
-    private ArrayList<String> FechasArchivos (){
-        /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
-         * RelevAr*/
-        ArrayList<String> listaFechasArchivos = new ArrayList<String>();
-        ArrayList<String> listaRutasFechasArchivos = new ArrayList<String>();
-        String RutaDirectorio = "/storage/emulated/0/RelevAr";
-        File directorioactual = new File(RutaDirectorio);
-        File[] listaArchivos = directorioactual.listFiles();
-
-        int x=0;
-
-        for(File archivo : listaArchivos){
-            listaRutasFechasArchivos.add(archivo.getPath());
-        }
-
-        Collections.sort(listaRutasFechasArchivos, String.CASE_INSENSITIVE_ORDER);
-
-        for(int i=x; i<listaRutasFechasArchivos.size(); i++){
-            File archivo = new File(listaRutasFechasArchivos.get(i));
-            if(archivo.isFile()){
-                String[] auxCorte = archivo.getName().split("-");
-                String auxNombre = auxCorte[1]+"-"+auxCorte[2]+"-"+auxCorte[3];
-                //auxNombre.replaceAll(".csv", "");
-                listaFechasArchivos.add(auxNombre);
-            } else{
-                //listaFechasArchivos.add("/"+archivo.getName());
-            }
-        }
-        Collections.reverse(listaFechasArchivos);
-     return listaFechasArchivos;
-    }
 
     // Asigno la informacion a los diferentes widgets
     private void InfoFamilia(String coordenadas){
@@ -1726,158 +1310,6 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
-    private void CrearUnificado() {
-
-        ArrayList<String> fechas = ListadoFechas();
-
-        datosPersonas.clear();
-        datosFamilias.clear();
-
-        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
-        admin.CrearTablaUnificados();
-        SQLiteDatabase Bd1 = admin.getWritableDatabase();
-        String DNIencuestador = admin.ObtenerDniActivado();
-
-        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
-        nuevaCarpeta.mkdirs();
-
-        File nuevaCarpetaUnificado = new File(getExternalStorageDirectory(), "RelevAr/RECORRIDOS");
-        nuevaCarpetaUnificado.mkdirs();
-        String NombreArchivoUnificado = "UNIFICADO.csv";
-        File dirUnificado = new File(nuevaCarpetaUnificado, NombreArchivoUnificado);
-        if(dirUnificado.exists()){
-            dirUnificado.delete();
-        }
-        String cabUnificado = "CALLE;NUMERO;COORDENADAS;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;QR\n";
-        String [] vectorCabeceraUnificado = cabUnificado.split(";");
-        //el true es para que se agreguen los datos al final sin perder los datos anteriores
-        String escribir = "";
-        try {
-            FileOutputStream fOutUnificado = new FileOutputStream(dirUnificado, true);
-            OutputStreamWriter myOutWriterUnificado = new OutputStreamWriter(fOutUnificado);
-            myOutWriterUnificado.append(cabUnificado);
-
-        for (int j=0; j<fechas.size();j++) {
-            if (!admin.ExisteFechaUnificados(fechas.get(j))){
-                String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
-            File dir = new File(nuevaCarpeta, NombreArchivo);
-            String[] cabecera;
-            //String datosFamilia="";
-            try {
-                FileInputStream fis = new FileInputStream(dir);
-                DataInputStream in = new DataInputStream(fis);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-                //
-                cabecera = br.readLine().split(";");
-
-                String myData;
-                while ((myData = br.readLine()) != null) {
-
-                    String[] Datos = myData.split(";");
-
-                    datosPersonas.add(new ObjetoPersona(categoriasPersona));
-                    datosFamilias.add(new ObjetoFamilia(familiaCabecera));
-
-                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("CALLE", Datos[0]);
-                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("NUMERO", Datos[1]);
-                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("COORDENADAS", Datos[2]);
-
-                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("FECHA_REGISTRO", fechas.get(j));
-                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("DNI", DNIencuestador);
-
-                    //datosFamilias.get(datosFamilias.size()-1).Valores.put("MENORES", Datos[5]);
-                    //datosFamilias.get(datosFamilias.size()-1).Valores.put("MAYORES", Datos[6]);
-
-                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("APELLIDO", Datos[8]);
-                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("NOMBRE", Datos[9]);
-                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("FECHA DE NACIMIENTO", Datos[10]);
-                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("SEXO", Datos[11]);
-                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("QR", Datos[12]);
-                    //Toast.makeText(this,datosPersonas.get(0).Valores.get("EDAD"), Toast.LENGTH_LONG).show();
-
-                    if (Datos.length > 12) {
-                        for (int i = 13; i < Datos.length; i++) {
-                            if (EsDeFamilia(cabecera[i])) {
-                                if (!Datos[i].equals("")) {
-                                    String aux = cabecera[i].replace(" ", "_");
-                                    aux = aux.replace("/", "_");
-                                    aux = aux.replace("...", "");
-                                    datosFamilias.get(datosFamilias.size() - 1).Valores.put(aux, Datos[i]);
-                                }
-                            }
-                            if (EsDePersona(cabecera[i])) {
-                                if (!Datos[i].equals("")) {
-                                    String aux = cabecera[i].replace(" ", "_");
-                                    aux = aux.replace("¿", "");
-                                    aux = aux.replace("?", "");
-                                    datosPersonas.get(datosPersonas.size() - 1).Valores.put(aux, Datos[i]);
-                                }
-                            }
-                        }
-                        // Datos completa de una persona
-                        // Agregar al archivo unificado los datos necesarios, es necesario ya tenerlo abierto
-                        // y con la cabecera que va a ser fija
-
-                    }
-                }
-
-                br.close();
-                in.close();
-                fis.close();
-            } catch (IOException e) {
-                //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            //HASTA ACA LEI TODOS LOS DATOS DE UN ARCHIVO
-            HashMap<String, String> unificado = new HashMap<>();
-            for (int k = 0; k < datosFamilias.size(); k++) {
-                unificado.putAll(datosPersonas.get(k).Valores);
-                unificado.putAll(datosFamilias.get(k).Valores);
-                for (int l = 0; l < vectorCabeceraUnificado.length - 1; l++) {
-                    escribir += unificado.get(vectorCabeceraUnificado[l]) + ";";
-                }
-                escribir += unificado.get(vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1].replace("\n", ""));
-                Toast.makeText(this, vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1], Toast.LENGTH_SHORT).show();
-                escribir+="\n";
-
-            }
-                datosFamilias.clear();
-                datosPersonas.clear();
-
-                ContentValues registro = new ContentValues();
-                registro.put("FECHA", fechas.get(j));
-                Bd1.insert("UNIFICADOS", null, registro);
-        }
-        }
-            myOutWriterUnificado.append(escribir);
-            myOutWriterUnificado.close();
-            fOutUnificado.close();
-        } catch (IOException e) {
-            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        compartirUnificado();
-    }
-
-    // FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
-    private void compartirUnificado(){
-        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr/RECORRIDOS");
-        nuevaCarpeta.mkdirs();
-
-        File dir = new File(nuevaCarpeta,"UNIFICADO.csv");
-        Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-        emailIntent.setType("vnd.android.cursor.dir/email");
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "UNIFICADO.csv");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-        this.startActivity(Intent.createChooser(emailIntent, "SUBIR ARCHIVO"));
-    }
-//--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
     // Desactivo el boton de volver atras
     @Override
     public void onBackPressed()
@@ -2024,6 +1456,308 @@ public class MenuMapa extends AppCompatActivity implements OnMapReadyCallback {
 
         emailIntent.setType("vnd.android.cursor.dir/email");
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, nombreArchivo);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        this.startActivity(Intent.createChooser(emailIntent, "SUBIR ARCHIVO"));
+    }*/
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// FUNCIONES DE INICIO, CREAR Y SELECCIONAR EL ENCUESTADOR
+    /*
+    // FUNCION DE ENCUESTADORES, muestra los encuestadores cargados y la posibilidad de crear un
+    // nuevo encuestador
+    private void Encuestador(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view = Inflater.inflate(R.layout.alert_encuestador, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Defino el spinner y le agrego los encuestadores guardados
+        final Spinner encuestadores = view.findViewById(R.id.ENCUESTADOR);
+        ArrayList<String> enc = new ArrayList<>();
+
+        // Recupero los encuestadores cargados
+        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(getBaseContext(), "datos", null, 1);
+        SQLiteDatabase db = conn.getReadableDatabase();
+        String consulta ="SELECT * FROM ENCUESTADOR";
+        Cursor a = db.rawQuery(consulta, null);
+        while (a.moveToNext()){
+            enc.add(a.getString(0));
+        }
+        db.close();
+
+        // Cargo el spinner con los datos
+        ArrayAdapter<String> comboAdapter = new ArrayAdapter<String>(this, R.layout.spiner_personalizado, enc);
+        encuestadores.setAdapter(comboAdapter);
+
+        // Crear nuevo encuestador
+        Button nuevo = view.findViewById(R.id.NUEVOENC);
+        nuevo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            NuevoEncuestador();
+            dialog.dismiss();
+            }
+        });
+
+        // Ingresar con encuestador existente
+        Button ingresar = view.findViewById(R.id.INGRESAR);
+        ingresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (encuestadores.getAdapter().getCount()!=0){
+            encuestador.setID(encuestadores.getSelectedItem().toString());
+            //makeText(getBaseContext(), encuestador.getID(), LENGTH_SHORT).show();
+            dialog.dismiss();}
+                else {makeText(getBaseContext(), "NO HAY ENCUESTADORES", LENGTH_SHORT).show();}
+            }
+        });
+    }
+
+    // FUNCION DE CREAR NUEVO ENCUESTADOR
+    private void NuevoEncuestador(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater Inflater = getLayoutInflater();
+        View view = Inflater.inflate(R.layout.alert_nuevo_encuestador, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Nencuestador = view.findViewById(R.id.EditNuevoEncuestador);
+        Button nuevo = view.findViewById(R.id.GUARDAR);
+        nuevo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Ingreso datos del encuestador
+                if (Nencuestador.getText().toString().isEmpty()){makeText(getBaseContext(), "INGRESE NOMBRE Y APELLIDO", LENGTH_SHORT).show();}
+                else {
+                ConexionSQLiteHelper conn = new ConexionSQLiteHelper(getBaseContext(), "datos", null, 1);
+                SQLiteDatabase db = conn.getWritableDatabase();
+                String insert ="INSERT INTO ENCUESTADOR (ID) VALUES ('"+Nencuestador.getText().toString()+"')";
+                db.execSQL(insert);
+                db.close();
+
+                // Inicializo el encuestador
+                encuestador.setID(Nencuestador.getText().toString());
+                dialog.dismiss();}
+            }
+        });
+
+        Button cancelar = view.findViewById(R.id.CANCELAR);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Encuestador();
+                dialog.dismiss();
+            }
+        });
+    }
+
+    // ABRIR EL EXPLORADOR DE ARCHIVOS
+    public void MostrarArchivos(View view){
+        Uri selectedUri = Uri.parse("file:/" + Environment.getExternalStorageDirectory() + "/RelevAr");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(selectedUri, "application/*");
+        startActivity(Intent.createChooser(intent, "Open folder"));
+    }*/
+
+// NAVEGACION DE ARCHIVOS
+// Obtener listado de archivos disponibles
+    /*private ArrayList<String> FechasArchivos (){
+        /* Se crea la lista de los archivos .csv que estan disponibles en la memoria interna en la carpeta
+         * RelevAr
+        ArrayList<String> listaFechasArchivos = new ArrayList<String>();
+        ArrayList<String> listaRutasFechasArchivos = new ArrayList<String>();
+        String RutaDirectorio = "/storage/emulated/0/RelevAr";
+        File directorioactual = new File(RutaDirectorio);
+        File[] listaArchivos = directorioactual.listFiles();
+
+        int x=0;
+
+        for(File archivo : listaArchivos){
+            listaRutasFechasArchivos.add(archivo.getPath());
+        }
+
+        Collections.sort(listaRutasFechasArchivos, String.CASE_INSENSITIVE_ORDER);
+
+        for(int i=x; i<listaRutasFechasArchivos.size(); i++){
+            File archivo = new File(listaRutasFechasArchivos.get(i));
+            if(archivo.isFile()){
+                String[] auxCorte = archivo.getName().split("-");
+                String auxNombre = auxCorte[1]+"-"+auxCorte[2]+"-"+auxCorte[3];
+                //auxNombre.replaceAll(".csv", "");
+                listaFechasArchivos.add(auxNombre);
+            } else{
+                //listaFechasArchivos.add("/"+archivo.getName());
+            }
+        }
+        Collections.reverse(listaFechasArchivos);
+     return listaFechasArchivos;
+    }*/
+
+/*if(admin.EstadoBoton("INSPECCION EXTERIOR")){
+            inspeccionExterior.setChecked(true);
+        }
+
+        inspeccionExterior.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("WrongConstant")
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    admin.ActivarBoton(inspeccionExterior.getText().toString());
+                } else {
+                    admin.DesactivarBoton(inspeccionExterior.getText().toString());
+                }
+            }
+        });*/
+//inspeccionExterior.setVisibility(View.GONE);
+
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+    /*private void CrearUnificado() {
+
+        ArrayList<String> fechas = ListadoFechas();
+
+        datosPersonas.clear();
+        datosFamilias.clear();
+
+        SQLitePpal admin = new SQLitePpal(getBaseContext(), "DATA_PRINCIPAL", null, 1);
+        admin.CrearTablaUnificados();
+        SQLiteDatabase Bd1 = admin.getWritableDatabase();
+        String DNIencuestador = admin.ObtenerDniActivado();
+
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr");
+        nuevaCarpeta.mkdirs();
+
+        File nuevaCarpetaUnificado = new File(getExternalStorageDirectory(), "RelevAr/RECORRIDOS");
+        nuevaCarpetaUnificado.mkdirs();
+        String NombreArchivoUnificado = "UNIFICADO.csv";
+        File dirUnificado = new File(nuevaCarpetaUnificado, NombreArchivoUnificado);
+        if(dirUnificado.exists()){
+            dirUnificado.delete();
+        }
+        String cabUnificado = "CALLE;NUMERO;COORDENADAS;DNI;APELLIDO;NOMBRE;FECHA DE NACIMIENTO;SEXO;QR\n";
+        String [] vectorCabeceraUnificado = cabUnificado.split(";");
+        //el true es para que se agreguen los datos al final sin perder los datos anteriores
+        String escribir = "";
+        try {
+            FileOutputStream fOutUnificado = new FileOutputStream(dirUnificado, true);
+            OutputStreamWriter myOutWriterUnificado = new OutputStreamWriter(fOutUnificado);
+            myOutWriterUnificado.append(cabUnificado);
+
+        for (int j=0; j<fechas.size();j++) {
+            if (!admin.ExisteFechaUnificados(fechas.get(j))){
+                String NombreArchivo = "RelevAr-" + fechas.get(j) + ".csv";
+            File dir = new File(nuevaCarpeta, NombreArchivo);
+            String[] cabecera;
+            //String datosFamilia="";
+            try {
+                FileInputStream fis = new FileInputStream(dir);
+                DataInputStream in = new DataInputStream(fis);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+                //
+                cabecera = br.readLine().split(";");
+
+                String myData;
+                while ((myData = br.readLine()) != null) {
+
+                    String[] Datos = myData.split(";");
+
+                    datosPersonas.add(new ObjetoPersona(categoriasPersona));
+                    datosFamilias.add(new ObjetoFamilia(familiaCabecera));
+
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("CALLE", Datos[0]);
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("NUMERO", Datos[1]);
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("COORDENADAS", Datos[2]);
+
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("FECHA_REGISTRO", fechas.get(j));
+                    datosFamilias.get(datosFamilias.size() - 1).Valores.put("DNI", DNIencuestador);
+
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("APELLIDO", Datos[8]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("NOMBRE", Datos[9]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("FECHA DE NACIMIENTO", Datos[10]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("SEXO", Datos[11]);
+                    datosPersonas.get(datosPersonas.size() - 1).Valores.put("QR", Datos[12]);
+                    //Toast.makeText(this,datosPersonas.get(0).Valores.get("EDAD"), Toast.LENGTH_LONG).show();
+
+                    if (Datos.length > 12) {
+                        for (int i = 13; i < Datos.length; i++) {
+                            if (EsDeFamilia(cabecera[i])) {
+                                if (!Datos[i].equals("")) {
+                                    String aux = cabecera[i].replace(" ", "_");
+                                    aux = aux.replace("/", "_");
+                                    aux = aux.replace("...", "");
+                                    datosFamilias.get(datosFamilias.size() - 1).Valores.put(aux, Datos[i]);
+                                }
+                            }
+                            if (EsDePersona(cabecera[i])) {
+                                if (!Datos[i].equals("")) {
+                                    String aux = cabecera[i].replace(" ", "_");
+                                    aux = aux.replace("¿", "");
+                                    aux = aux.replace("?", "");
+                                    datosPersonas.get(datosPersonas.size() - 1).Valores.put(aux, Datos[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                br.close();
+                in.close();
+                fis.close();
+            } catch (IOException e) {
+                //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            //HASTA ACA LEI TODOS LOS DATOS DE UN ARCHIVO
+            HashMap<String, String> unificado = new HashMap<>();
+            for (int k = 0; k < datosFamilias.size(); k++) {
+                unificado.putAll(datosPersonas.get(k).Valores);
+                unificado.putAll(datosFamilias.get(k).Valores);
+                for (int l = 0; l < vectorCabeceraUnificado.length - 1; l++) {
+                    escribir += unificado.get(vectorCabeceraUnificado[l]) + ";";
+                }
+                escribir += unificado.get(vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1].replace("\n", ""));
+                Toast.makeText(this, vectorCabeceraUnificado[vectorCabeceraUnificado.length - 1], Toast.LENGTH_SHORT).show();
+                escribir+="\n";
+
+            }
+                datosFamilias.clear();
+                datosPersonas.clear();
+
+                ContentValues registro = new ContentValues();
+                registro.put("FECHA", fechas.get(j));
+                Bd1.insert("UNIFICADOS", null, registro);
+        }
+        }
+            myOutWriterUnificado.append(escribir);
+            myOutWriterUnificado.close();
+            fOutUnificado.close();
+        } catch (IOException e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        compartirUnificado();
+    }
+
+    // FUNCION QUE INICIA EL ACTION PARA COMPARTIR (MAIL, DRIVE, WSSP U OTRAS OPCIONES)
+    private void compartirUnificado(){
+        File nuevaCarpeta = new File(getExternalStorageDirectory(), "RelevAr/RECORRIDOS");
+        nuevaCarpeta.mkdirs();
+
+        File dir = new File(nuevaCarpeta,"UNIFICADO.csv");
+        Uri path = FileProvider.getUriForFile(this, "com.example.relevar", dir);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "UNIFICADO.csv");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Valores.");
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 

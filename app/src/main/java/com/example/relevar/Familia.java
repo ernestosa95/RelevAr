@@ -1045,7 +1045,7 @@ public class Familia extends AppCompatActivity {
         OpcParedes.add("CHAPA DE METAL O FIBROCEMENTO");
         OpcParedes.add("ADOBE");
         OpcParedes.add("MADERA");
-        OpcParedes.add("CHORIZO, CARTON, PALMA, PAJA SOLA O MATERIL DE DESECHO");
+        OpcParedes.add("CHORIZO, CARTON, PALMA, PAJA SOLA O MATERIAL DE DESECHO");
         OpcParedes.add("OTRO");
 
         // Cargo el spinner con los datos
